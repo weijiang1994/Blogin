@@ -9,7 +9,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 
 
 class LoginForm(FlaskForm):
@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
     password = StringField(u'登录密码',
                            validators=[DataRequired(message='登录密码不能为空'),
                                        Length(min=8, max=40, message='登录密码必须在8-40位之间')])
-    submit = SubmitField(u'登录', render_kw={'class': 'btn btn-outline-light'})
+    submit = SubmitField(u'登录', render_kw={'cl  ass': 'btn btn-outline-light'})
 
 
 class RegisterForm(FlaskForm):
@@ -39,3 +39,16 @@ class RegisterForm(FlaskForm):
                               validators=[DataRequired(message='用户密码不能为空'),
                                           Length(min=8, max=40, message='用户密码长度限定在8-40位之间')],
                               render_kw={'placeholder': '请输入密码'})
+    submit = SubmitField(u'创建', render_kw={'class': 'btn btn-outline-success'})
+
+    @staticmethod
+    def validate_username(filed):
+        # TODO 需要判断该邮箱是否存在了
+        if 1:
+            raise ValidationError('用户名已存在')
+
+    @staticmethod
+    def validate_email(filed):
+        if 1:
+            raise ValidationError('邮箱已存在')
+
