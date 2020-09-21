@@ -10,7 +10,7 @@ from flask import Flask
 from blogin.extension import db, bootstrap, moment, ckeditor
 from blogin.setting import basedir
 import os
-from blogin.blueprint.front import blog_bp
+from blogin.blueprint.front.blog_bp import blog_bp
 
 
 def create_app(config_name=None):
