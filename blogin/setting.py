@@ -23,15 +23,28 @@ class Operators:
 
 
 class BaseConfig:
+
+    # Paginate configure
     BLOGIN_BLOG_PER_PAGE = 10
     BLOGIN_COMMENT_PER_PAGE = 10
     BLOGIN_PHOTO_PER_PAGE = 12
+    SECRET_KEY = os.getenv('SECRET_KEY')
+
+    # CKEditor configure
+    CKEDITOR_SERVE_LOCAL = True,
+    CKEDITOR_ENABLE_CODESNIPPET = True
+    CKEDITOR_HEIGHT = 500
+    CKEDITOR_CODE_THEME = 'docco'
+    # CKEDITOR_FILE_UPLOADER = 'be_blog_bp.upload'
 
     BLOGIN_UPLOAD_PATH = os.path.join(basedir, 'uploads')
-    BLOGIN_EMAIL_PRE = '[Blogin.] '
 
+    # SQL configure
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True
 
+    # Mail configure
+    BLOGIN_EMAIL_PRE = '[Blogin.] '
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = 465
     MAIL_USE_SSL = True
@@ -41,7 +54,8 @@ class BaseConfig:
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
+    # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://weijiang:1994124@127.0.0.1/Blogin'
     REDIS_URL = "redis://localhost"
 
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block title %}
+    500 Error
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <br>
+            <div class="">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img class="rounded-10" style="width: 50%; height: 50%;" src="/static/img/404.jpg"/>
+                    </div>
+                    <h4 class="text-muted">　<strong>Internal Server Error</strong></h4>
+                    <div class="card-footer ">
+                        <button class="btn btn-info float-right"><a style="color: inherit; text-decoration: none;" href="/">返回首页</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}
+    Home
+{% endblock %}
+{% block content %}
+    <main>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-3 mt-2">
+                        <div class="text-muted card-header ">
+                            <strong>Blogin</strong>的个人资料
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img class="img-fluid rounded " src="/static/img/admin/admin.jpg">
+                                </div>
+                                <div class="col-9">
+                                    <h3><strong>Blogin</strong></h3>
+                                    <p class="text-muted">个人网站: <i class="fa fa-link"></i> <a class="text-muted gray-a" href="http://2dogz.cn" target="_blank">Blogin的个人网站</a></p>
+                                    <p class="text-muted">建站时间: <i class="fa fa-clock-o"></i> 2020-08-27</p>
+                                    <p class="text-muted">联系邮箱: <i class="fa fa-envelope"></i> weijiang1994_1@qq.com</p>
+                                    <p class="text-muted">最近登录: <i class="fa fa-calendar"></i> 2020-09-22 11:08:25</p>
+                                    <br>
+                                    <a href="#" class="btn btn-danger float-right"><i class="fa fa-heart-o"></i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <!-- 每日一句 -->
+                    <div class="card mb-3 mt-2">
+                        <div class="card-header p-2 f-17">
+                            <b><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句【From ONE】</b>
+                        </div>
+                        <div id="oneWord" class="card-body p-2 f-15">
+
+                        </div>
+                    </div>
+                    <!-- 个人空间 -->
+                    <div class="card mb-3 mt-2">
+                        <div class="card-header p-2 f-17">
+                            <strong><i class="fa fa-paper-plane"></i> 个人空间</strong>
+                        </div>
+                        <div class="card-body p-2 f-15">
+                            <div class="row text-center">
+                                <div class="col">
+                                    <a class="gray-a" href="https://github.com/weijiang1994/flask-blog-owner" target="_blank" title="进入博主的Github查看博客源码">
+                                        <img style="max-width:40px" alt="博主的github"
+                                             src="https://tendcode.com/static/blog/img/github.png">
+                                        <p class="mt-2">Github</p>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a class="gray-a" href="/timeline" title="查看网站建站历程">
+                                        <img style="max-width:40px" alt="网站的建站历程"
+                                             src="https://tendcode.com/static/blog/img/blog.png">
+                                        <p class="mt-2">Timeline</p>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 博客分类 -->
+                    <div class="card mb-3 mt-2">
+                        <div class="card-header p-2 f-17">
+                            <strong><i class="fa fa-book"></i> 文章分类</strong>
+                        </div>
+                        <ul class="list-group list-group-flush f-16">
+                            <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+                                <a class="category-item" href="/category/应用部署" title="查看应用部署分类下所有文章">应用部署</a>
+                                <span class="badge badge-pill badge-success" title="当前分类下有3篇文章">3</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 博客标签 -->
+                    <div class="card mb-3 mt-2">
+                        <div class="card-header p-2 f-17">
+                            <strong><i class="fa fa-tag"></i> 标签云</strong>
+                        </div>
+                        <ul class="list-group list-group-flush f-16">
+                            <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+                                <a class="category-item" href="/category/应用部署" title="查看应用部署分类下所有文章">应用部署</a>
+                                <span class="badge badge-pill badge-success" title="当前分类下有3篇文章">3</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 友情链接 -->
+                    <div class="card mb-3 mt-2">
+                        <div class="card-header p-2 f-17">
+                            <strong><i class="fa fa-link"></i> 友情链接</strong>
+                        </div>
+                        <div class="card-body px-0 py-3">
+                            <div class="tool-list">
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://tendcode.com" title="一个基于 Django 开发的博客" target="_blank">
+                                            Tendcode</a>
+                                    </div>
+                                </div>
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://frostming.com" title="一个基于 Flask 开发的博客" target="_blank">
+                                            Frost&#39;s Blog</a>
+                                    </div>
+                                </div>
+
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://zmrenwu.com" title="Django 博客教程分享者" target="_blank">
+                                            追梦人物</a>
+                                    </div>
+                                </div>
+
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://www.dusaiphoto.com/" title="Django 搭建的博客，分享博客教程" target="_blank">
+                                            杜赛的个人网站</a>
+                                    </div>
+                                </div>
+
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://www.jerrycoding.com/" title="Jerry 的个人博客" target="_blank">
+                                            Jerry Coding</a>
+                                    </div>
+                                </div>
+
+                                <div class="w-50 float-left text-center mb-2">
+                                    <div class="mx-2">
+                                        <a href="https://boywithacoin.cn/" title="Stray_Camel的个人技术博客" target="_blank">
+                                            Stray_Camel</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    <script>
+        // 打开页面自动加载
+        $(function () {
+            $(document).ready(function () {
+                getOne();
+            });
+        })
+
+        // 获取每日一句
+        function getOne(){
+            $.ajax({
+                type: "GET",
+                url: "http://api.youngam.cn/api/one.php",
+                dataType: "json",
+                success: function(result){
+                    $("#oneWord").text(result['data'][0]['text']+'  ———— 「ONE · 一个」');
+                    return false;
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

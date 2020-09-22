@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% block head%}
+    {{super()}}
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
+    <script src="/static/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+{% endblock %}
+{% block title %}Black Crow{% endblock %}
+{% block navbar %}
+    <div class="header-page">
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+                <ul class="nav navbar-nav">
+                    <li id="homePageLi"> <a href="/">导航</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            博客管理
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/backend/admin/blog/create/">新增博客</a></li>
+                            <li><a href="/backend/admin/blog/edit/">编辑博客</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            相册管理
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/backend/photo/add/">增加照片</a></li>
+                            <li><a href="/backend/photo/edit/">编辑照片</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            评论管理
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/backend/comment/lookup/">查看评论</a></li>
+                            <li><a href="/backend/comment/edit/">编辑评论</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            其他管理
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/backend/timeline/add/">新增时间线</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
