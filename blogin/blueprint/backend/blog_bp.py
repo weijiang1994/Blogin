@@ -28,7 +28,13 @@ def blog_create():
 
 @be_blog_bp.route('/admin/blog/edit/')
 def blog_edit():
-    return render_template('backend/editBlog.html', data=[])
+    blog_type_datas = []
+    types = BlogType.query.all()
+    print(types)
+    for _type in types:
+        blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
+                                '/backend/editArticleType/' + _type.id])
+    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas)
 
 
 @be_blog_bp.route('/blog/category/add/', methods=['POST'])
