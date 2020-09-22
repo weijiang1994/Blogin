@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% extends "backend/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block head %}
+    {{super()}}
+{% endblock %}
+{% block title %}创建博客{% endblock %}
+{%block content%}
+
+    <body>
+    <div class="container">
+    </div>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{wtf.form_field(form.title)}}
+            <div class="row">
+                <div class="col-md-2">
+                    {{wtf.form_field(form.blog_type)}}
+                </div>
+                <div class="col-md-2">
+                    {{wtf.form_field(form.blog_level)}}
+                </div>
+                <div class="col-md-2">
+                    {{wtf.form_field(form.blog_img_file)}}
+                </div>
+            </div>
+            {{wtf.form_field(form.brief_content)}}<br>
+            {{ form.body }}<br>
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2" style="text-align: right;">
+                    {{ wtf.form_field(form.submit, class="btn btn-info") }}
+                </div>
+            </div>
+        </form>
+    </div>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='body') }}
+    <br>
+    <script>
+
+        $(function () {
+            $(document).ready(function () {
+            });
+        })
+
+        CKEDITOR.on( 'instanceReady', function( evt ) {
+            evt.editor.dataProcessor.htmlFilter.addRules( {
+                elements: {
+                    img: function(el) {
+                        el.addClass('img-fluid center-block');
+                    },
+                    table: function (el){
+                        el.addClass('table');
+                    },
+                    thead: function (el){
+                        el.addClass('thead-light');
+                    }
+                }
+            });
+        });
+
+    </script>
+    </body>
+{% endblock %}

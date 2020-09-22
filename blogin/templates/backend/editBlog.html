@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+{% extends "backend/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block head %}
+    {{super()}}
+{% endblock %}
+{% block title %}博客编辑{% endblock %}
+{% block content %}
+    <style>
+        .contentDiv{
+            background: white;
+            border-radius: 8px;
+            border: #cccccc solid 1px;
+            box-shadow: 10px 10px 5px #888888;
+        }
+    </style>
+    <body>
+    <div style="padding-bottom: 30px; padding-top: 10px;" class="container contentDiv" id="content">
+
+        <ul class="nav nav-pills" role="tablist">
+            <li class="active">
+                <a class="nav-link" data-toggle="pill" href="#articleManage">文章管理</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#typeManage">分类管理</a>
+            </li>
+        </ul>
+        <div  class="tab-content">
+            <div id="typeManage" class="container tab-pane fade">
+                <br>
+                <a href="#category" class="btn btn-success" data-toggle="collapse">添加新类别</a>
+                <div id="category" class="collapse">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="categoryName">类别名:</label>
+                            <input class="form-control" id="categoryName" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="description">描述:</label>
+                            <textarea style="width: 100%;height: 50px;" class="form-control" id="description" type="text"></textarea>
+                            <br>
+                            <button onclick="addCategory()" id="addCategory" class="btn btn-info">添加</button>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+                {% if blog_type_datas %}
+                    <table class="table table-hover">
+                    <caption>已有文章类别</caption>
+                    <thead>
+                    <tr>
+                        <th>类别名</th>
+                        <th>创建时间</th>
+                        <th>文章数量</th>
+                        <th>描述</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in blog_type_datas %}
+                        <tr>
+                            <td>{{ data[1] }}</td>
+                            <td>{{ data[2] }}</td>
+                            <td><span class="label label-success">{{ data[3] }}</span></td>
+                            <td>{{ data[4] }}</td>
+                            <td>
+                                <button class="btn btn-info"><a style="color: white;" href={{ data[5] }}>编辑</a></button>
+                                <button id="{{ data[0] }}" onclick="deleteCategory(this.id)" class="btn btn-danger">删除</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+            <div id="articleManage" class="container tab-pane active">
+                <br>
+                <button class="btn btn-success"><a style="color: white;" href="/backend/createBlog">添加新博客</a></button>
+                <div class="table-responsive">
+                    {% if articles %}
+                        <table class="table table-hover">
+                        <caption>已有博客文章</caption>
+                        <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>类别</th>
+                            <th>简介</th>
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                            <th>阅读次数</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for article in articles %}
+                            <tr>
+                                <td><a href="/detail/article/{{ article[1] }}">{{ article[1] }}</a></td>
+                                <td><span class="label label-info">{{ article[2] }}</span></td>
+                                <td>{{ article[3] }}</td>
+                                <td>{{ article[4] }}</td>
+                                <td>{{ article[5] }}</td>
+                                <td><spa class="label label-success">{{ article[6] }}</spa></td>
+                                <td><span class="label label-default">{{ article[7] }}</span></td>
+                                <td>
+                                    <button class="btn btn-info"><a>编辑</a></button>
+                                    <button class="btn btn-danger">删除</button>
+                                    {% if article[8] %}
+                                        <button class="btn btn-warning">恢复</button>
+                                        <button class="btn btn-danger">清除</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function deleteCategory(categoryId){
+            // TODO 添加删除类别的功能，如果类别中包含有文章，则禁止删除
+            $.ajax({
+                type: 'POST',
+                url: '/backend/deleteCategory',
+                data:{"id": categoryId},
+                success: function (res){
+                    if (res.not_null){
+                        alert("该类别下面存在博文，不能删除~");
+                        return false;
+                    }else {
+                        alert("删除类别成功～");
+                        location.reload();
+                    }
+                }
+            })
+        }
+
+        function addCategory(){
+            let categoryName = $("#categoryName").val();
+            let desc = $("#description").val();
+            if (categoryName == '' || desc == ''){
+                alert("请输入类别的关键信息~");
+                return false;
+            }
+            $.ajax({
+                type:'POST',
+                url: '/backend/blog/category/add/',
+                data: {"name": categoryName,
+                    "desc": desc},
+                success: function (res){
+                    if (res.is_exists){
+                        alert("你所添加的类别已经存在,请修改类别名之后重新添加~");
+                        return false;
+                    }else {
+                        alert("新的类别添加成功~");
+                        location.reload();
+                    }
+                }
+            })
+        }
+    </script>
+    </body>
+{% endblock %}

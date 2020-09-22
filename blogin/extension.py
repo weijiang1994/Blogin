@@ -11,8 +11,10 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_ckeditor import CKEditor
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
+migrate = Migrate()
 bootstrap = Bootstrap()
 moment = Moment()
 ckeditor = CKEditor()
