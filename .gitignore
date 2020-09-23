@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .flaskenv
+uploads/
 .env
 .idea/
 .Python/
@@ -131,3 +132,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/uploads/

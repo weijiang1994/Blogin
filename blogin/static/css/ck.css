@@ -1,0 +1,51 @@
+/*自定义CKEditor 渲染样式*/
+blockquote {
+    font: 14px/22px normal helvetica, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    padding: 10px 10px 10px 15px;
+    border-left: 3px solid #70b8f0;
+    background-color:rgba(0,132,255,.08);
+    border-radius: 0px 8px 8px 0px ;
+}
+
+.marker{
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,.05);
+    border-radius: 6px;
+}
+
+article>h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    padding: 0 10px;
+    border-left: 5px solid #20c997;
+    background-color: #f7f7f7;
+    line-height: 2em;
+}
+
+article>h2 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #28a745;
+}
+
+article>h3 {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #28a745;
+}
+
+blockquote>p {
+    font: 14px/22px normal helvetica, sans-serif;
+    margin: 5px 0px 5px 0px;
+    font-style:italic;
+}

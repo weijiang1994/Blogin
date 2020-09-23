@@ -8,8 +8,8 @@
 """
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
-
-from blogin.extension import db, bootstrap, moment, ckeditor, migrate
+import click
+from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share
 from blogin.setting import basedir
 import os
 from blogin.blueprint.front.blog_bp import blog_bp
@@ -25,6 +25,7 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     register_extension(app)
     register_blueprint(app)
+    register_cmd(app)
     error_execute(app)
     shell_handler(app)
 
@@ -37,6 +38,7 @@ def shell_handler(app: Flask):
         return dict(db=db, User=User, Role=Role, BlogType=BlogType, Blog=Blog)
 
 
+# 错误请求页面处理
 def error_execute(app: Flask):
     @app.errorhandler(404)
     def page_not_found(e):
@@ -63,14 +65,69 @@ def error_execute(app: Flask):
         return render_template('error/400.html', description=e.description), 500
 
 
+# 注册flask拓展
 def register_extension(app: Flask):
     migrate.init_app(app, db)
     db.init_app(app)
     bootstrap.init_app(app)
     moment.init_app(app)
     ckeditor.init_app(app)
+    login_manager.init_app(app)
+    share.init_app(app)
 
 
+# 注册蓝图
 def register_blueprint(app: Flask):
     app.register_blueprint(blog_bp)
     app.register_blueprint(be_blog_bp)
+
+
+def register_cmd(app: Flask):
+    @app.cli.command()
+    @click.option('--drop', is_flag=True, help='Drop database and create a new database')
+    def initdb(drop):
+        """Initialize the database."""
+        if drop:
+            click.confirm('This operation will delete the database, do you want to continue?', abort=True)
+            db.drop_all()
+            click.echo('Drop tables.')
+        db.create_all()
+        click.echo('Initialized database.')
+
+    @app.cli.command()
+    def init():
+        """Initialized Blogin"""
+        click.echo('Initializing the database...')
+        db.drop_all()
+        db.create_all()
+
+        click.echo('Initializing the roles and permissions...')
+        Role.init_role()
+
+        click.echo('Done.')
+
+    @app.cli.command()
+    def admin():
+        try:
+            db.drop_all()
+            db.create_all()
+            Role.init_role()
+            ad = Role.query.filter_by(name='ADMIN').first()
+            username = input('请输入超级管理员用户名:')
+            email = input('请输入超级管理员邮箱:')
+            pwd = input('请输入超级管理员密码:')
+            confirm = input('请确认密码:')
+            if pwd != confirm:
+                click.echo('两次密码不一致')
+                click.echo('退出当前操作')
+                return
+            super_user = User(username=username, email=email, password=pwd, confirm=1,
+                              avatar='/static/img/admin/admin.jpg',
+                              role_id=ad.id)
+            db.session.add(super_user)
+            db.session.commit()
+            click.echo('超级管理员创建成功!')
+            click.echo('程序退出...')
+        except:
+            db.session.rollback()
+            click.echo('操作出现异常,退出...')

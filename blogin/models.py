@@ -9,6 +9,7 @@
 from datetime import datetime
 
 from blogin.extension import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -24,10 +25,16 @@ class User(db.Model):
     role_id = db.Column(db.INTEGER, db.ForeignKey('role.id'))
     create_time = db.Column(db.DateTime, default=datetime.now)
 
-    role = db.relationship('Role', backref=db.backref('user', lazy='dynamic'))
+    roles = db.relationship('Role', back_populates='users')
 
     def __repr__(self):
         return 'username<%s> email<%s> website<%s>' % (self.username, self.email, self.website)
+
+    def set_password(self, pwd):
+        self.password = generate_password_hash(pwd)
+
+    def check_password(self, pwd):
+        return check_password_hash(self.password, pwd)
 
 
 class Role(db.Model):
@@ -36,6 +43,16 @@ class Role(db.Model):
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='role id', autoincrement=True)
     name = db.Column(db.String(50), nullable=False, unique=True, comment='role name')
     permission = db.Column(db.String(50), nullable=False, unique=True)
+
+    users = db.relationship('User', back_populates='roles')
+
+    @staticmethod
+    def init_role():
+        admin = Role(name='ADMIN', permission='ANY')
+        db.session.add(admin)
+        usr = Role(name='USER', permission='SOME')
+        db.session.add(usr)
+        db.session.commit()
 
 
 class Blog(db.Model):
@@ -50,12 +67,13 @@ class Blog(db.Model):
     is_private = db.Column(db.INTEGER, nullable=False, default=0, comment='is private? 0:no 1:yes')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     update_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    read_times = db.Column(db.INTEGER, default=0)
     delete_flag = db.Column(db.INTEGER, nullable=False, default=0, comment='is delete? 0:no 1:yes')
 
     blog_types = db.relationship('BlogType', back_populates='blogs')
 
     def __repr__(self):
-        return '<title> %s <introduce> %s <content> %s' % (self.title, self.introduce, self.content)
+        return '<title> %s <introduce> %s' % (self.title, self.introduce)
 
 
 class BlogType(db.Model):
@@ -85,3 +103,17 @@ class Photo(db.Model):
     description = db.Column(db.String(300), nullable=False, comment='photo description', default='""')
     save_path = db.Column(db.String(200), nullable=False, comment='photo save path')
     create_time = db.Column(db.DateTime, default=datetime.now)
+
+
+class LoveMe(db.Model):
+    __tablename__ ='loveme'
+
+    id = db.Column(db.INTEGER, primary_key=True, comment='primary key id')
+    counts = db.Column(db.INTEGER, nullable=False, default=0)
+
+
+class LoveInfo(db.Model):
+    __tablename__ = 'love_info'
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    user = db.Column(db.String(200), default='""')
+    timestamp = db.Column(db.DateTime, default=datetime.now())
