@@ -14,6 +14,7 @@ from blogin.setting import basedir
 import os
 from blogin.blueprint.front.blog_bp import blog_bp
 from blogin.blueprint.backend.blog_bp import be_blog_bp
+from blogin.blueprint.backend.photo_bp import be_photo_bp
 from blogin.setting import config
 from blogin.models import *
 
@@ -80,6 +81,7 @@ def register_extension(app: Flask):
 def register_blueprint(app: Flask):
     app.register_blueprint(blog_bp)
     app.register_blueprint(be_blog_bp)
+    app.register_blueprint(be_photo_bp)
 
 
 def register_cmd(app: Flask):

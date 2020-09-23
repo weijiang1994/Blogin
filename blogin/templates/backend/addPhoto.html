@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% extends "backend/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+    博客后台管理
+{% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+{%block content%}
+    <body>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{wtf.form_field(form.photo_title)}}
+            {{wtf.form_field(form.photo_desc)}}
+            <div class="row">
+                <div class="col-md-2">
+                    {{ wtf.form_field(form.photo_level) }}
+                </div>
+                <div class="col-md-6">
+                    {{ wtf.form_field(form.tags) }}
+                </div>
+                <div class="col-md-4">
+                    {{wtf.form_field(form.img_file)}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2" style="text-align: right;">
+                    {{ wtf.form_field(form.submit, class="btn btn-info") }}
+                </div>
+            </div>
+        </form>
+    </div>
+    </body>
+{% endblock %}
+</html>
