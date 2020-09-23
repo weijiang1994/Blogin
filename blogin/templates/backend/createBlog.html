@@ -8,9 +8,14 @@
 {%block content%}
 
     <body>
+
     <div class="container">
-    </div>
-    <div class="container">
+        {% for message in get_flashed_messages(with_categories=True) %}
+            <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message[1] }}
+            </div>
+        {% endfor %}
         <form method="post" enctype="multipart/form-data">
             {{ form.csrf_token }}
             {{wtf.form_field(form.title)}}
