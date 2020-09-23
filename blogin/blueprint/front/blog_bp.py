@@ -22,7 +22,11 @@ def index():
     for blog in blogs:
         cates.append(BlogType.query.filter_by(id=blog.type_id).first().name)
     categories = BlogType.query.all()
-    loves = LoveMe.query.first().counts
+    loves = LoveMe.query.first()
+    if loves is None:
+        loves = 0
+    else:
+        loves = loves.counts
     return render_template('main/index.html', blogs=blogs, cates=cates, categories=categories, loves=loves)
 
 
