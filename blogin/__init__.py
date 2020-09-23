@@ -131,5 +131,7 @@ def register_cmd(app: Flask):
             click.echo('超级管理员创建成功!')
             click.echo('程序退出...')
         except:
+            import traceback
+            traceback.print_exc()
             db.session.rollback()
             click.echo('操作出现异常,退出...')
