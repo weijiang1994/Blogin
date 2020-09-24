@@ -17,11 +17,16 @@ from blogin.blueprint.backend.forms import PostForm
 from blogin.models import BlogType, Blog
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path
+from flask_login import login_required
+from blogin.decorators import permission_required, db_exception_handle
+
 
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
 
 @be_blog_bp.route('/admin/index/')
+@login_required
+@permission_required
 def index():
     return render_template('backend/index.html')
 
@@ -72,6 +77,8 @@ def blog_edit():
 
 
 @be_blog_bp.route('/blog/category/add/', methods=['POST'])
+@permission_required
+@db_exception_handle(db)
 def blog_category_add():
     category_name = request.form.get('name')
     desc = request.form.get('desc')
@@ -80,7 +87,6 @@ def blog_category_add():
     cate = BlogType(name=category_name, description=desc)
     db.session.add(cate)
     db.session.commit()
-
     return jsonify({"is_exists": False})
 
 

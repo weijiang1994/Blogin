@@ -178,7 +178,7 @@ main {
 }
 
 .blog-brief-div {
-    cursor: pointer;
+    cursor: auto    ;
     transition: all 0.6s;
     margin: 10px 0px 10px 0px;
 }
@@ -187,14 +187,19 @@ main {
     transform: scale(1.01);
 }
 
-/*.text-info-a{*/
-/*    text-decoration: none;*/
-/*}*/
-
 .text-info-a {
     color: inherit;
 }
 .text-info-a:hover {
     text-decoration: none;
     color: #ea6f5a;
+}
+
+.description h1 {
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f0f0f0;
+}
+.description strong {
+    padding-bottom: 7px;
+    border-bottom: 2px solid #00AAEE;
 }

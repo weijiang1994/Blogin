@@ -1,44 +1,19 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 {% block title %}
-    Home
+    {{ cate.name }}分类下所有文章
 {% endblock %}
 {% block content %}
     <main style="background: #e3e3e3">
         {{ moment.include_moment() }}　　
         {{ moment.locale(auto_detect=True) }}
-        <br>
         <div class="container">
-            {% for message in get_flashed_messages(with_categories=True) %}
-                <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ message[1] }}
-                </div>
-            {% endfor %}
             <div class="row">
-                <div class="col-md-8">
-                    <!-- 网站个人资料 -->
-                    <div class="card mb-3 mt-2">
-                        <div class="text-muted card-header ">
-                            <strong>Blogin</strong>的个人资料
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-3">
-                                    <img class="img-fluid rounded " src="/static/img/admin/admin.jpg">
-                                </div>
-                                <div class="col-9">
-                                    <h3><strong>Blogin</strong></h3>
-                                    <p class="text-muted">个人网站: <i class="fa fa-link"></i> <a class="text-muted gray-a" href="http://2dogz.cn" target="_blank">Blogin的个人网站</a></p>
-                                    <p class="text-muted">建站时间: <i class="fa fa-clock-o"></i> 2020-08-27</p>
-                                    <p class="text-muted">联系邮箱: <i class="fa fa-envelope"></i> weijiang1994_1@qq.com</p>
-                                    <br>
-                                    <a href="/loveme/" title="总共被点赞{{ loves }}次" class="btn btn-danger float-right"><i class="fa fa-heart-o"></i></a>
-                                </div>
-                            </div>
-                        </div>
+                <div style="margin-top: 10px" class="col-md-8">
+                    <div class="description bg-white px-3 pt-3 pb-1">
+                        <p class="float-right mb-0">共<span class="mx-2 text-info">{{ blogs|length }}</span>篇</p>
+                        <h5 class="f-17"><strong>文章分类：{{ cate.name }}</strong></h5>
+                        <p style="padding-top: 8px" class="f-16">{{ cate.description }}</p>
                     </div>
-                    <!-- 博客列表 -->
                     <div class="summary-list">
                         {% for blog in blogs %}
                             <div style="background: white; border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div">
@@ -59,14 +34,14 @@
                                     <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
                                     <div class="text-muted mb-0 f-12">
                                         <a class="text-info" style="text-decoration: none;" href="/blog/cate/{{ blog.type_id }}/" title="查看当前分类下更多文章">
-                                            <span class="badge badge-inverse"><i class="fa fa-book mr-1"></i>{{ cates[loop.index0] }}</span></a>
+                                            <span class="badge badge-inverse"><i class="fa fa-book mr-1"></i>{{ cate.name }}({{ blogs|length }})</span></a>
                                         <span class="badge badge-inverse"><i class="fa fa-eye ml-2 mr-1"></i>{{ blog.read_times }}</span>
                                     </div>
                                 </div>
                             </div>
+
                         {% endfor %}
                     </div>
-
                 </div>
                 <div class="col-md-4">
                     <!-- 每日一句 -->
@@ -169,7 +144,6 @@
                 </div>
             </div>
         </div>
-        </div>
     </main>
     <script>
         // 打开页面自动加载
@@ -192,5 +166,4 @@
             });
         }
     </script>
-
 {% endblock %}

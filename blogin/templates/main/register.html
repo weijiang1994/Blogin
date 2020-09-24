@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+    用户注册
+{% endblock %}
+{% block content %}
+    <main>
+        <br>
+        <div class="container">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-8">
+                        <img src="{{ url_for('static', filename='img/index.jpg') }}" class="rounded img-fluid">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3 w-100 bg-light">
+                            <div class="card-header"><h4>Welcome to Albumy!</h4></div>
+                            <div class="card-body">
+                                <form method="post" action="/auth/register/">
+                                    {{ form.csrf_token }}
+                                    {{ wtf.form_field(form.user_name) }}
+                                    {{ wtf.form_field(form.user_email) }}
+                                    {{ wtf.form_field(form.password) }}
+                                    {{ wtf.form_field(form.confirm_pwd) }}
+                                    {{ form.submit }}
+                                </form>
+                                <hr>
+                                <small>已有账号? <a class="text-info-a" href="{{ url_for('.login') }}">登录.</a>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {#        <div class="container">#}
+        {#            <div class="jumbotron">#}
+        {#                <div class="row">#}
+        {#                    <div class="col-md-8">#}
+        {#                        <img src="/static/images/index.jpg" class="rounded img-fluid">#}
+        {#                    </div>#}
+        {#                    <div class="col-md-4">#}
+        {#                        <div class="card mb-3 w-100 bg-light">#}
+        {#                            <div class="card-header"><h4>欢迎加入Blogin!</h4></div>#}
+        {#                            <div class="card-body">#}
+        {#                                <form method="post" class="form" role="form">#}
+        {#                                    {{ form.csrf_token }}#}
+        {#                                </form>#}
+        {#                                <form action="" method="post" class="form" role="form">#}
+        {#                                    <input id="csrf_token" name="csrf_token" type="hidden" value="ImVlNDUwOWZkZDM5NjY5MTk3MTY5ZjBlZDY4MjY5YzNlOGQ1ODE4OGIi.X2v02w.m6LgASUuk8lgWgU4RpXmbJfITe8">#}
+        {#                                    <div class="form-group required"><label class="form-control-label" for="name">Name</label>#}
+        {#                                        <input class="form-control" id="name" name="name" required="" type="text" value="">#}
+        {#                                    </div>#}
+        {#                                    <div class="form-group required"><label class="form-control-label" for="email">Email</label>#}
+        {#                                        <input class="form-control" id="email" name="email" required="" type="text" value="">#}
+        {#                                    </div>#}
+        {#                                    <div class="form-group required"><label class="form-control-label" for="username">Username</label>#}
+        {#                                        <input class="form-control" id="username" name="username" required="" type="text" value="">#}
+        {#                                    </div>#}
+        {#                                    <div class="form-group required"><label class="form-control-label" for="password">Password</label>#}
+        {#                                        <input class="form-control" id="password" name="password" required="" type="password" value="">#}
+        {#                                    </div>#}
+        {#                                    <div class="form-group required"><label class="form-control-label" for="password2">Confirm password</label>#}
+        {#                                        <input class="form-control" id="password2" name="password2" required="" type="password" value="">#}
+        {#                                    </div>#}
+        {#                                    <input class="btn btn-secondary" id="submit" name="submit" type="submit" value="Submit">#}
+        {#                                </form>#}
+        {#                                <hr>#}
+        {#                                <small>已有账号? <a href="/auth/login">登录.</a>#}
+        {#                                </small>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {##}
+        {#        </div>#}
+    </main>
+{% endblock %}

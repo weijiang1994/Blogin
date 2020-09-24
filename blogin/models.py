@@ -7,25 +7,33 @@
 @Software: PyCharm
 """
 from datetime import datetime
-
+from flask_avatars import Identicon
 from blogin.extension import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='user id', autoincrement=True)
     username = db.Column(db.String(40), unique=True, nullable=False, comment='user name')
     email = db.Column(db.String(40), unique=True, nullable=False, comment='user register email')
-    password = db.Column(db.String(40), nullable=False, comment='user password')
-    website = db.Column(db.String(128), comment='user owner website', default='""')
+    password = db.Column(db.String(128), nullable=False, comment='user password')
+    website = db.Column(db.String(128), comment='user owner website', default='')
     avatar = db.Column(db.String(128), nullable=False, comment='user avatar')
     confirm = db.Column(db.INTEGER, nullable=False, default=0)
     role_id = db.Column(db.INTEGER, db.ForeignKey('role.id'))
     create_time = db.Column(db.DateTime, default=datetime.now)
+    slogan = db.Column(db.String(200), default='')
+    recent_login = db.Column(db.DateTime, default=datetime.now)
 
     roles = db.relationship('Role', back_populates='users')
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        self.generate_avatar()
+        self.set_role()
 
     def __repr__(self):
         return 'username<%s> email<%s> website<%s>' % (self.username, self.email, self.website)
@@ -35,6 +43,20 @@ class User(db.Model):
 
     def check_password(self, pwd):
         return check_password_hash(self.password, pwd)
+
+    def generate_avatar(self):
+        icon = Identicon()
+        files = icon.generate(self.username)
+        self.avatar = '/accounts/avatar/' + files[2]
+        db.session.commit()
+
+    def set_role(self):
+        if self.roles is None:
+            if self.email == '804022023@qq.com' or self.email == 'weijiang1994_1@qq.com':
+                self.roles = Role.query.filter_by(name='ADMIN').first()
+            else:
+                self.roles = Role.query.filter_by(name='USER').first()
+            db.session.commit()
 
 
 class Role(db.Model):
@@ -115,5 +137,6 @@ class LoveMe(db.Model):
 class LoveInfo(db.Model):
     __tablename__ = 'love_info'
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    user = db.Column(db.String(200), default='""')
+    user = db.Column(db.String(200), default='')
+    user_ip = db.Column(db.String(30), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now())

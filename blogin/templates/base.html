@@ -53,24 +53,24 @@
                 <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required="True">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
             </form>
-            {% if not g.normal_user %}
+            {% if not current_user.is_authenticated %}
                 <ul class="navbar-nav f-17">
-                    <li class="nav-item"><a class="nav-link" href="/auth/userLogin">登录</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/auth/register">注册</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/auth/login/">登录</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/auth/register/">注册</a></li>
                 </ul>
             {% else %}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="欢迎回来,{{ g.normal_user_name }}~">
-                            <img class="avatar" src="{{ g.normal_user_avatar }}" alt={{ g.normal_user_name }}>
+                            <img class="avatar" src="{{ current_user.avatar }}" alt={{ current_user.username }}>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mt-0 rounded-0 border-0" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item pl-3" href="/accounts/profile"><i class="fa fa-fw fa-user text-info mr-2"></i>个人资料</a>
+                            <a class="dropdown-item pl-3" href="/accounts/profile/{{ current_user.id }}/"><i class="fa fa-fw fa-user text-info mr-2"></i>个人资料</a>
                             {% if ntf_counts %}
                                 <a href="/accounts/profile" class="dropdown-item pl-3"><i class="fa fa-fw fa-bell text-info mr-2"></i>消息 <span class="badge badge-info">{{ ntf_counts }}</span>
                             {% endif %}
-                            {% if current_user.role== 1 %}
-                                <a class="dropdown-item pl-3" href="/blogin/backend "><i class="fa fa-fw fa-user text-info mr-2"></i>后台管理</a>
+                            {% if current_user.role_id == 1 %}
+                                <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i class="fa fa-fw fa-magnet text-info mr-2"></i>后台管理</a>
                             {% endif %}
                             </a>
                             <a class="dropdown-item pl-3" href="/auth/logout"><i class="fa fa-fw fa-sign-out text-info mr-2"></i>退出</a>

@@ -34,8 +34,8 @@ class BaseConfig:
     CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_ENABLE_CODESNIPPET = True
     CKEDITOR_HEIGHT = 500
-    # CKEDITOR_CODE_THEME = 'docco'
-    CKEDITOR_CODE_THEME = 'monokai'
+    CKEDITOR_CODE_THEME = 'docco'
+    # CKEDITOR_CODE_THEME = 'monokai'
     CKEDITOR_FILE_UPLOADER = 'be_blog_bp.upload'
 
     BLOGIN_UPLOAD_PATH = os.path.join(basedir, 'uploads')
@@ -43,7 +43,10 @@ class BaseConfig:
     # SQL configure
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
-
+    DATABASE_USER = os.getenv('DATABASE_USER', 'root')
+    DATABASE_PWD = os.getenv('DATABASE_PWD')
+    # DEFAULT AVATAR CONFIGURE
+    AVATARS_SAVE_PATH = BLOGIN_UPLOAD_PATH + '/avatars/'
     # Mail configure
     BLOGIN_EMAIL_PRE = '[Blogin.] '
     MAIL_SERVER = os.getenv('MAIL_SERVER')
@@ -56,7 +59,8 @@ class BaseConfig:
 
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1994124@127.0.0.1/blog?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8'.format(BaseConfig.DATABASE_USER,
+                                                                                         BaseConfig.DATABASE_PWD)
     REDIS_URL = "redis://localhost"
 
 
