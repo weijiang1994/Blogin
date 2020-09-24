@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block title %}
-    个人资料编辑
+    {{ current_user.username }}的个人资料编辑
 {% endblock %}
 
 {% block content %}

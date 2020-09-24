@@ -42,7 +42,7 @@ class AddPhotoForm(FlaskForm):
                               render_kw={'class': '', 'rows': 50, 'placeholder': '输入照片标题'})
     photo_desc = TextAreaField(u'相片描述',
                                validators=[DataRequired(), Length(min=3, max=250, message='相片描述长度必须在3到250之间')])
-    img_file = FileField(label=u'博客示例图',
+    img_file = FileField(label=u'相片文件',
                          validators=[DataRequired(), FileAllowed(['png', 'jpg'], '只接收png和jpg图片')],
                          render_kw={'value': "上传", 'class': 'btn btn-default'})
     photo_level = SelectField(label=u'照片权限', choices=[(1, '公开'), (2, '私有')], validators=[DataRequired()],

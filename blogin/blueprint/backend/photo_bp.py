@@ -13,7 +13,10 @@ from blogin.blueprint.backend.forms import AddPhotoForm
 be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend')
 
 
-@be_photo_bp.route('/photo/add/')
+@be_photo_bp.route('/photo/add/', methods=['GET', 'POST'])
 def add_photo():
     form = AddPhotoForm()
+    if form.validate_on_submit():
+
+        pass
     return render_template('backend/addPhoto.html', form=form)
