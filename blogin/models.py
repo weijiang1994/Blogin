@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     recent_login = db.Column(db.DateTime, default=datetime.now)
 
     roles = db.relationship('Role', back_populates='users')
+    photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -117,6 +118,11 @@ class BlogType(db.Model):
         return '<name> %s <description> %s' % (self.name, self.description)
 
 
+tagging = db.Table('tagging',
+                   db.Column('photo_id', db.INTEGER, db.ForeignKey('photo.id')),
+                   db.Column('tag_id', db.INTEGER, db.ForeignKey('tag.id')))
+
+
 class Photo(db.Model):
     __tablename__ = 'photo'
 
@@ -125,6 +131,34 @@ class Photo(db.Model):
     description = db.Column(db.String(300), nullable=False, comment='photo description', default='""')
     save_path = db.Column(db.String(200), nullable=False, comment='photo save path')
     create_time = db.Column(db.DateTime, default=datetime.now)
+
+    tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
+    comments = db.relationship('PhotoComment', back_populates='photo', cascade='all')
+
+
+class Tag(db.Model):
+    __tablename__ = 'tag'
+    id = db.Column(db.INTEGER, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    photos = db.relationship('Photo', secondary=tagging, back_populates='tags')
+
+
+class PhotoComment(db.Model):
+    __tablename__='photo_comment'
+
+    id = db.Column(db.INTEGER, primary_key=True)
+    body = db.Column(db.String(400))
+    timestamp = db.Column(db.DateTime, default=datetime.now, index=True)
+
+    parent_id = db.Column(db.INTEGER)
+    replied_id = db.Column(db.INTEGER, db.ForeignKey('photo_comment.id'))
+    author_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    photo_id = db.Column(db.INTEGER, db.ForeignKey('photo.id'))
+
+    photo = db.relationship('Photo', back_populates='comments')
+    author = db.relationship('User', back_populates='photo_comments')
+    replies = db.relationship('PhotoComment', back_populates='replied', cascade='all')
+    replied = db.relationship('PhotoComment', back_populates='replies', remote_side=[id])
 
 
 class LoveMe(db.Model):
