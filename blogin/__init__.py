@@ -9,12 +9,14 @@
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
-from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share
+from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar
 from blogin.setting import basedir
 import os
 from blogin.blueprint.front.blog_bp import blog_bp
 from blogin.blueprint.backend.blog_bp import be_blog_bp
 from blogin.blueprint.backend.photo_bp import be_photo_bp
+from blogin.blueprint.front.auth import auth_bp
+from blogin.blueprint.front.accounts import accounts_bp
 from blogin.setting import config
 from blogin.models import *
 
@@ -75,6 +77,7 @@ def register_extension(app: Flask):
     ckeditor.init_app(app)
     login_manager.init_app(app)
     share.init_app(app)
+    avatar.init_app(app)
 
 
 # 注册蓝图
@@ -82,6 +85,8 @@ def register_blueprint(app: Flask):
     app.register_blueprint(blog_bp)
     app.register_blueprint(be_blog_bp)
     app.register_blueprint(be_photo_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(accounts_bp)
 
 
 def register_cmd(app: Flask):
@@ -114,7 +119,6 @@ def register_cmd(app: Flask):
             db.drop_all()
             db.create_all()
             Role.init_role()
-            ad = Role.query.filter_by(name='ADMIN').first()
             username = input('请输入超级管理员用户名:')
             email = input('请输入超级管理员邮箱:')
             pwd = input('请输入超级管理员密码:')
@@ -124,8 +128,7 @@ def register_cmd(app: Flask):
                 click.echo('退出当前操作')
                 return
             super_user = User(username=username, email=email, password=pwd, confirm=1,
-                              avatar='/static/img/admin/admin.jpg',
-                              role_id=ad.id)
+                              avatar='/static/img/admin/admin.jpg')
             db.session.add(super_user)
             db.session.commit()
             click.echo('超级管理员创建成功!')

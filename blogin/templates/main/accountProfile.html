@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ current_user.usernam }}的个人资料
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <br>
+            {% for message in get_flashed_messages(with_categories=True) %}
+                <div class="alert alert-{{ message[0] }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message[1] }}
+                </div>
+            {% endfor %}
+
+            <div class="card">
+                <div class="text-muted card-header">
+                    <strong>{{ current_user.username }}</strong>的个人资料
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3">
+                            <img class="img-fluid rounded " src="{{ current_user.avatar }}">
+                        </div>
+                        <div class="col-9">
+                            <h3><strong>{{ current_user.username }}</strong></h3>
+                            <p class="text-muted">个人网站: <i class="fa fa-link"></i> <a class="text-info-a" href="{{ current_user.website }}" target="_blank">{{ current_user.website }}</a></p>
+                            <p class="text-muted">创建时间: <i class="fa fa-clock-o"></i> {{ current_user.create_time }}</p>
+                            <p class="text-muted">注册邮箱: <i class="fa fa-envelope"></i> {{ current_user.email }}</p>
+                            <p class="text-muted">个性签名: <i class="fa fa-text-width"></i> {{ current_user.slogan }}</p>
+                            <br>
+                            <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/profile/edit/">编辑资料</a></button>
+                            <button class="btn btn-danger float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/password/change/">修改密码</a></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#moment"><i class="fa fa-photo"></i> 动态</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
+                        {% if nft_counts %}
+                            <span class="badge badge-info">{{ nft_counts }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#notifications"><i class="fa fa-bell-o"></i> 全部</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="moment" class="container tab-pane active"><br>
+                    {% for comment in ntf_moments %}
+                        <span class="text-muted moment-p" data-toggle="tooltip" data-placement="top" title="{{ comment[1] }}">
+                        <i class="fa fa-clock-o"></i> {{ comment[5] }}</span>
+                        {% if comment[0]['parentComment'] %}
+                            <div class="moment-div">
+                                <p style="color: dodgerblue">{{ comment[0]['parentComment'][0] }}</p>
+                                <p class="moment-p">{{comment[0]['parentComment'][1]|safe}}</p>
+                            </div>
+                        {% endif %}
+                        <div>
+                            {{ comment[2]|safe }}
+                            <p class="moment-p">来自:<a style="color: dodgerblue" href="{{ comment[4] }}">{{ comment[3] }}</a></p>
+                            <hr>
+
+                        </div>
+                    {% endfor %}
+                </div>
+                <div id="notReadNotification" class="container tab-pane fade"><br>
+                    {% if nft_counts %}
+                        <div class="text-muted div-click " onclick="markReadedAll()"><i class="fa fa-close"></i> 全部标记为已读</div>
+                    {% endif %}
+                    {% for ntf in ntf_conmment %}
+                        <div class="comment-parent pt-2" style="border: solid 2px #afd9ee; padding: 5px; border-radius: 5px;" id="com-814">
+                            <li class="media">
+                                <img class="avatar" src="{{ ntf[1] }}" alt="">
+                                <div class="media-body ml-2">
+                                    <a class="float-right small mr-2" onclick="markRead(this.id)" id="{{ ntf[0] }}" style="color: rgb(134, 142, 150); cursor: pointer;">标记为已读</a>
+                                    <p class="mt-0 mb-1">
+                                        <i class="fa fa-user-circle" ></i>
+                                        <strong>{{ ntf[2] }} 回复你:</strong>
+                                    </p>
+                                    <p class="small text-muted">
+                                        <span class="badge badge-success"><i class="fa fa-clock-o"></i> {{ ntf[3] }}</span>
+                                    </p>
+                                </div>
+                            </li>
+                            <div class="ntf-comment-body">
+                                {{ ntf[5]|safe }}
+                                <hr>
+                                查看详情:<a class="text-muted" href="/detail/article/{{ ntf[4] }}">{{ ntf[4] }}</a>
+                            </div>
+
+                        </div><br>
+                    {% endfor %}
+                </div>
+                <div id="notifications" class="container tab-pane fade"><br>
+                    <h3><i class="fa fa-building-o"></i> 正在建设中...</h3>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
