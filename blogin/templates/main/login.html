@@ -15,12 +15,12 @@
             {% endfor %}
             <div class="jumbotron">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div style="margin-bottom: 10px" class="col-md-8">
                         <img src="/static/img/index.jpg" class="rounded img-fluid">
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3 w-100 bg-light">
-                            <div class="card-header"><h4>Log in to Blogin</h4></div>
+                            <div class="card-header"><h4 class="text-muted"><strong>用户登录</strong></h4></div>
                             <div class="card-body">
                                 <form action="/auth/login/" method="post">
                                     {{ form.csrf_token }}
@@ -30,8 +30,8 @@
                                     {{ form.submit }}
                                 </form>
                                 <hr>
-                                <p class="small"><a style="text-decoration: none" href="/auth/register">注册</a></p>
-                                <p class="small"><a style="text-decoration: none" href="/auth/forget-password">忘记密码</a></p>
+                                <p class="small"><a style="text-decoration: none" href="/auth/register/">注册</a></p>
+                                <p class="small"><a style="text-decoration: none" href="/auth/forget-password/">忘记密码</a></p>
                             </div>
                         </div>
                     </div>
