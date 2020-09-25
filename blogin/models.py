@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
 
     roles = db.relationship('Role', back_populates='users')
     photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
+    login_logs = db.relationship('LoginLog', back_populates='user', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -58,6 +59,17 @@ class User(db.Model, UserMixin):
             else:
                 self.roles = Role.query.filter_by(name='USER').first()
             db.session.commit()
+
+
+class LoginLog(db.Model):
+    __tablename__ = 'login_log'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='login record')
+    timestamp = db.Column(db.INTEGER, default=datetime.now)
+    login_add = db.Column(db.String(100), default='')
+    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+
+    user = db.relationship('User', back_populates='login_logs')
 
 
 class Role(db.Model):
