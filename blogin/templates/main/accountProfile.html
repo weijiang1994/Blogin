@@ -102,7 +102,7 @@
                 <div id="notifications" class="container tab-pane fade"><br>
                     {% if logs|length %}
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                 <tr>
                                     <th>序号</th>
@@ -113,7 +113,6 @@
                                 <tbody>
                                 {% for log in logs %}
                                     <tr>
-
                                         <td>{{ loop.index }}</td>
                                         <td>{{ log.timestamp }}</td>
                                         <td>{{ log.login_add }}</td>
