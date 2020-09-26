@@ -1,0 +1,118 @@
+<!-- 每日一句 -->
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
+        <b><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句【From ONE】</b>
+    </div>
+    <div id="oneWord" class="card-body p-2 f-15">
+    </div>
+</div>
+<!-- 个人空间 -->
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
+        <strong><i class="fa fa-paper-plane"></i> 个人空间</strong>
+    </div>
+    <div class="card-body p-2 f-15">
+        <div class="row text-center">
+            <div class="col">
+                <a class="text-info-a" href="https://github.com/weijiang1994/flask-blog-owner" target="_blank" title="进入博主的Github查看博客源码">
+                    <img style="max-width:40px" alt="博主的github"
+                         src="https://tendcode.com/static/blog/img/github.png">
+                    <p class="mt-2">Github</p>
+                </a>
+            </div>
+            <div class="col">
+                <a class="text-info-a" href="/timeline/" title="查看网站建站历程">
+                    <img style="max-width:40px" alt="网站的建站历程"
+                         src="https://tendcode.com/static/blog/img/blog.png">
+                    <p class="mt-2">Timeline</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 博客分类 -->
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
+        <strong><i class="fa fa-book"></i> 文章分类</strong>
+    </div>
+    <ul class="list-group list-group-flush f-16">
+        {% for category in categories %}
+            <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+                <a style="text-decoration: none" class="text-info-a" href="/blog/cate/{{ category.id }}/" title="查看应用部署分类下所有文章">{{ category.name }}</a>
+                <span class="badge badge-pill badge-success" title="当前分类下有{{ category.counts }}篇文章">{{ category.counts }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- 友情链接 -->
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
+        <strong><i class="fa fa-link"></i> 友情链接</strong>
+    </div>
+    <div class="card-body px-0 py-3">
+        <div class="tool-list">
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://tendcode.com" title="一个基于 Django 开发的博客" target="_blank">
+                        Tendcode</a>
+                </div>
+            </div>
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://frostming.com" title="一个基于 Flask 开发的博客" target="_blank">
+                        Frost&#39;s Blog</a>
+                </div>
+            </div>
+
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://zmrenwu.com" title="Django 博客教程分享者" target="_blank">
+                        追梦人物</a>
+                </div>
+            </div>
+
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://www.dusaiphoto.com/" title="Django 搭建的博客，分享博客教程" target="_blank">
+                        杜赛的个人网站</a>
+                </div>
+            </div>
+
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://www.jerrycoding.com/" title="Jerry 的个人博客" target="_blank">
+                        Jerry Coding</a>
+                </div>
+            </div>
+
+            <div class="w-50 float-left text-center mb-2">
+                <div class="mx-2">
+                    <a class="text-info-a" style="text-decoration: none" href="https://boywithacoin.cn/" title="Stray_Camel的个人技术博客" target="_blank">
+                        Stray_Camel</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    // 打开页面自动加载
+    $(function () {
+        $(document).ready(function () {
+            getOne();
+        });
+    })
+
+    // 获取每日一句
+    function getOne(){
+        $.ajax({
+            type: "GET",
+            url: "http://api.youngam.cn/api/one.php",
+            dataType: "json",
+            success: function(result){
+                $("#oneWord").text(result['data'][0]['text']+'  ———— 「ONE · 一个」');
+                return false;
+            }
+        });
+    }
+</script>
