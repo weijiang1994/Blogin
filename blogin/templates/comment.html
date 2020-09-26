@@ -1,0 +1,48 @@
+{% if not current_user.is_authenticated %}
+    <div style="background: #ddddee" class="text-center">
+        <div class="card-body text-center m-2 m-md-3 f-16" id="no-editor">
+            <div>您尚未登录，请
+                <a class="text-danger" href="/auth/login/">登录</a> 或
+                <a class="text-danger" href="/auth/register/">注册</a> 后评论
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div style="margin: 5px">
+            <textarea name="comment-editor" id="comment-editor">
+            </textarea>
+        <div class="blog-content-div">
+            <p id="replyUser" class="float-left text-info ml-0" hidden="hidden"></p>
+            <p id="commentErrorHint" class="text-right text-danger ml-0" hidden="hidden">请输入评论内容后再提交</p>
+            <br>
+            <div>
+                <div class="text-right">
+                    <button hidden="hidden"  class="btn btn-outline-danger round-3 float-right gutter-right" id="cancelReplyBtn">取消回复</button>
+                    <button hidden="hidden"  class="btn btn-outline-success round-3 float-right gutter-right" onclick="replyUserComment()" id="replyBtn">回复</button>
+                    <button class="btn btn-secondary round-3" onclick="submitComment()" id="subCommentBtn">评论</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endif %}
+<script>
+    let editor;
+    ClassicEditor.create( document.querySelector( '#comment-editor' ), {
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+            ]
+        }
+    } ).then(newEditor=>{
+        editor = newEditor;
+    })
+        .catch( error => {
+            console.log( error );
+        } );
+</script>

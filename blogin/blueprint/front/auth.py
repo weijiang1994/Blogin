@@ -8,12 +8,12 @@
 """
 from datetime import datetime
 
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import or_
 
 from blogin.forms.auth import RegisterForm, LoginForm
-from blogin.models import User
+from blogin.models import User, LoginLog
 from blogin.extension import db
 
 
@@ -51,6 +51,8 @@ def login():
         if user is not None and user.check_password(pwd):
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
+                login_log = LoginLog(login_add=request.remote_addr, user=user)
+                db.session.add(login_log)
                 db.session.commit()
                 flash('登录成功!', 'success')
                 return redirect(url_for('blog_bp.index'))
