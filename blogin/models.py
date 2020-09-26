@@ -65,7 +65,7 @@ class LoginLog(db.Model):
     __tablename__ = 'login_log'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='login record')
-    timestamp = db.Column(db.INTEGER, default=datetime.now)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
     login_add = db.Column(db.String(100), default='')
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 

@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#notifications"><i class="fa fa-bell-o"></i> 全部</a>
+                    <a class="nav-link" data-toggle="tab" href="#notifications"><i class="fa fa-history"></i> 登录日志</a>
                 </li>
             </ul>
 
@@ -100,9 +100,34 @@
                     {% endfor %}
                 </div>
                 <div id="notifications" class="container tab-pane fade"><br>
-                    <h3><i class="fa fa-building-o"></i> 正在建设中...</h3>
+                    {% if logs|length %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>时间</th>
+                                    <th>地址</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for log in logs %}
+                                    <tr>
+
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ log.timestamp }}</td>
+                                        <td>{{ log.login_add }}</td>
+                                    </tr>
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
                 </div>
+
             </div>
+        </div>
         </div>
     </main>
 {% endblock %}

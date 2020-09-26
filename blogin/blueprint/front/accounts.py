@@ -8,13 +8,12 @@
 """
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request
 from flask_login import login_required, current_user
-from werkzeug.datastructures import CombinedMultiDict
 
 from blogin.decorators import db_exception_handle
 from blogin.extension import db
 from blogin.forms.auth import ChangePwdForm, EditProfileForm
 from blogin.setting import basedir
-from blogin.models import User
+from blogin.models import User, LoginLog
 
 accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 
@@ -22,7 +21,9 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @accounts_bp.route('/profile/<int:user_id>/')
 @login_required
 def profile(user_id):
-    return render_template('main/accountProfile.html')
+    logs = LoginLog.query.filter_by(user_id=user_id).all()
+    print(logs)
+    return render_template('main/accountProfile.html', logs=logs)
 
 
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])
