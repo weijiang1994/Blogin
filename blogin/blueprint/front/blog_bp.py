@@ -7,9 +7,9 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment
 from blogin.extension import db
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -34,9 +34,16 @@ def index():
 def blog_article(blog_id):
     blog = Blog.query.get_or_404(blog_id)
     blog.read_times += 1
+    replies = []
     cate = BlogType.query.filter_by(id=blog.type_id).first()
+    # 顶级评论
+    comments=BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
+    for comment in comments:
+        reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0).\
+                order_by(BlogComment.timestamp.desc()).all()
+        replies.append(reply)
     db.session.commit()
-    return render_template('main/blog.html', blog=blog, cate=cate)
+    return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies)
 
 
 @blog_bp.route('/blog/cate/<cate_id>/', methods=['GET', 'POST'])
@@ -63,3 +70,33 @@ def love_me():
     db.session.commit()
     flash('点赞成功!你们的支持就是我前进的动力啦~', 'success')
     return redirect(url_for('.index'))
+
+
+@blog_bp.route('/blog/comment/', methods=['GET', 'POST'])
+@login_required
+def new_comment():
+    comment = request.form.get('comment')
+    blog_id = request.form.get('blogID')
+    reply_id = request.form.get('replyID')
+    parent_id = request.form.get('parentID')
+    author = current_user._get_current_object()
+    blog = Blog.query.get_or_404(blog_id)
+    comment = BlogComment(body=comment, author=author, blog=blog)
+    if reply_id:
+        comment.replied = BlogComment.query.get_or_404(reply_id)
+    if parent_id:
+        comment.parent_id = parent_id
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(request.referrer)
+
+
+@blog_bp.route('/blog/comment/delete/', methods=['GET', 'POST'])
+@login_required
+def delete_comment():
+    comm_id = request.form.get('comm_id')
+    comment = BlogComment.query.get_or_404(comm_id)
+    comment.delete_flag = 1
+    db.session.commit()
+    flash('评论删除成功', 'success')
+    return ''

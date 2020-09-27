@@ -2,12 +2,15 @@
 {% block head %}
     {{ super() }}
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
-
+    <link type="text/css" href="/static/css/style.css">
     <style>
         .ck-editor__editable {
             min-height: 100px;
         }
+
     </style>
+    {{ moment.include_moment() }}　　
+    {{ moment.locale(auto_detect=True) }}
 {% endblock %}
 {% block title %}
     {{ blog.title }}
@@ -17,6 +20,12 @@
         {{ share.load() }}
         {{ ckeditor.load_code_theme() }}
         <div class="container">
+            {% for message in get_flashed_messages(with_categories=True) %}
+                <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message[1] }}
+                </div>
+            {% endfor %}
             <nav style="padding-top: 10px" aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white">
                     <li class="breadcrumb-item">
@@ -29,7 +38,7 @@
                     <li class="breadcrumb-item active d-md-none" aria-current="page">当前位置</li>
                 </ol>
             </nav>
-            <div class=" blog-content-div">
+            <div class="blog-content-div">
                 <div class="text-center">
                     <h2 class="blog-title">{{ blog.title }}</h2>
                 </div>
@@ -89,6 +98,9 @@
             </div>
             <div class="blog-content-div">
                 {% include "comment.html" %}
+                <p class="text-muted"><strong>当前共有{{ comments|length }}条评论</strong></p>
+                <hr>
+                {% include "commentContent.html" %}
             </div>
         </div>
 

@@ -9,20 +9,21 @@
     </div>
 {% else %}
     <div style="margin: 5px">
-            <textarea name="comment-editor" id="comment-editor">
-            </textarea>
+        <p id="commentPosition"></p>
+        <textarea name="comment-editor" id="comment-editor">
+        </textarea>
         <div class="blog-content-div">
             <p id="replyUser" class="float-left text-info ml-0" hidden="hidden"></p>
             <p id="commentErrorHint" class="text-right text-danger ml-0" hidden="hidden">请输入评论内容后再提交</p>
             <br>
             <div>
                 <div class="text-right">
-                    <button   class="btn btn-danger round-3" id="cancelReplyBtn">取消回复</button>
-                    <button   class="btn btn-secondary round-3" onclick="replyUserComment()" id="replyBtn">回复</button>
-                    <button class="btn btn-secondary round-3" onclick="submitComment()" id="subCommentBtn">评论</button>
+                    <button hidden="hidden" class="btn btn-danger round-3" id="cancelReplyBtn">取消回复</button>
+                    <button hidden="hidden" class="btn btn-secondary round-3" onclick="replyUserComment()" id="replyBtn">回复</button>
+                    <button class="btn btn-secondary round-3" data-blogid="{{ blog.id }}" onclick="submitComment()" id="subCommentBtn">评论</button>
                 </div>
 
-            </di
+            </div>
         </div>
     </div>
 {% endif %}
@@ -45,4 +46,45 @@
         .catch( error => {
             console.log( error );
         } );
+
+    function submitComment(){
+        const comment = editor.getData();
+        let blogId = $("#subCommentBtn").data('blogid');
+        if (!comment){
+            $("#commentErrorHint").removeAttr('hidden');
+            $("#commentErrorHint").show().delay(3000).hide(500);
+            return false;
+        }
+        $.ajax({
+            url: "/blog/comment/",
+            type: "post",
+            data : {'comment': comment, 'blogID': blogId},
+            success: function (){
+                window.location.reload();
+            }
+        })
+    }
+
+    function replyUserComment(){
+        let reply = editor.getData();
+        let blogId = $("#subCommentBtn").data('blogid');
+        let parent = sessionStorage.getItem('parent');
+        let replyID = sessionStorage.getItem('rep_id');
+        if(!reply){
+            $("#commentErrorHint").removeAttr('hidden');
+            $("#commentErrorHint").show().delay(2000).hide(200);
+            return false;
+        }
+        if (parent == 'null'){
+            parent = replyID;
+        }
+        $.ajax({
+            url: "/blog/comment/",
+            type: "post",
+            data: {'comment': reply, 'blogID': blogId, 'parentID': parent, 'replyID': replyID},
+            success: function (){
+                window.location.reload();
+            }
+        })
+    }
 </script>

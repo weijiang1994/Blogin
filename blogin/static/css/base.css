@@ -203,3 +203,16 @@ main {
     padding-bottom: 7px;
     border-bottom: 2px solid #00AAEE;
 }
+
+.comment-body {
+    margin-left: 60px;
+    min-height: 50px;
+}
+
+.comment-thumbnail {
+    position: absolute;
+}
+.avatar-s {
+    width: 50px;
+    height: 50px;
+}

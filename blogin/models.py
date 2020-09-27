@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', back_populates='users')
     photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
     login_logs = db.relationship('LoginLog', back_populates='user', cascade='all')
+    blog_comments = db.relationship('BlogComment', back_populates='author', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -66,7 +67,8 @@ class LoginLog(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='login record')
     timestamp = db.Column(db.DateTime, default=datetime.now)
-    login_add = db.Column(db.String(100), default='')
+    login_addr = db.Column(db.String(100), default='')
+    real_addr = db.Column(db.String(100), default='')
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
 
     user = db.relationship('User', back_populates='login_logs')
@@ -106,9 +108,29 @@ class Blog(db.Model):
     delete_flag = db.Column(db.INTEGER, nullable=False, default=0, comment='is delete? 0:no 1:yes')
 
     blog_types = db.relationship('BlogType', back_populates='blogs')
+    comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
+
+
+class BlogComment(db.Model):
+    __tablename__ = 'blog_comment'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+    parent_id = db.Column(db.INTEGER)
+
+    replied_id = db.Column(db.INTEGER, db.ForeignKey('blog_comment.id'))
+    author_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    blog_id = db.Column(db.INTEGER, db.ForeignKey('blog.id'))
+    delete_flag = db.Column(db.INTEGER, default=0, comment='this comment delete flag 0 no 1 yes')
+
+    blog = db.relationship('Blog', back_populates='comments')
+    author = db.relationship('User', back_populates='blog_comments')
+    replies = db.relationship('BlogComment', back_populates='replied', cascade='all')
+    replied = db.relationship('BlogComment', back_populates='replies', remote_side=[id])
 
 
 class BlogType(db.Model):
@@ -166,6 +188,7 @@ class PhotoComment(db.Model):
     replied_id = db.Column(db.INTEGER, db.ForeignKey('photo_comment.id'))
     author_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
     photo_id = db.Column(db.INTEGER, db.ForeignKey('photo.id'))
+    delete_flag = db.Column(db.INTEGER, default=0, comment='this comment delete flag 0 no 1 yes')
 
     photo = db.relationship('Photo', back_populates='comments')
     author = db.relationship('User', back_populates='photo_comments')

@@ -21,8 +21,7 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @accounts_bp.route('/profile/<int:user_id>/')
 @login_required
 def profile(user_id):
-    logs = LoginLog.query.filter_by(user_id=user_id).all()
-    print(logs)
+    logs = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).all()
     return render_template('main/accountProfile.html', logs=logs)
 
 

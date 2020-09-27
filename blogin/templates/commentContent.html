@@ -1,0 +1,303 @@
+{% for comment in comments %}
+    {% if comment.delete_flag==1 %}
+        {% if replies[loop.index0]|length == 0 %}
+        {% else %}
+            <div class="comment">
+                <div class="comment-thumbnail">
+                    <a>
+                        <img class="rounded img-fluid avatar-s profile-popover" src="{{ comment.author.avatar }}">
+                    </a>
+                </div>
+                <div class="comment-body">
+                    <h6>
+                        <a class="profile-popover text-muted">
+                            <strong>{{ comment.author.username }}</strong>
+                        </a>
+                        {% if comment.author.role_id == 1 %}
+                            <span class="badge badge-danger">博主</span>
+                        {% else %}
+                            <span class="badge badge-info">用户</span>
+                        {% endif %}
+                        <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ comment.timestamp }}" data-delay="500" data-original-title="" title="{{ comment.timestamp }}">
+                            {{ moment(comment.timestamp, local=True).fromNow(refresh=True) }}
+                        </small>
+                        {% if current_user.is_authenticated %}
+                            <span class="float-right">
+                    <span class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        {% if comment.author.id == current_user.id %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-commid="{{ comment.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                    <i class="fa fa-remove"></i> 删除
+                                </a>
+                            </span>
+                        {% else %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-parent="{%  if comment.parent_id == None %}null{% endif %}" data-repuser="{{ comment.author.username }}" data-repid="{{ comment.id }}" onclick="goRepl($(this).data('repuser'), $(this).data('repid'), $(this).data('parent'))">
+                                    <i class="fa fa-facebook-f"></i> 回复
+                                </a>
+                                <a class="dropdown-item btn" href="#">
+                                    <i class="fa fa-podcast"></i> 举报
+                                </a>
+                                {% if current_user.role_id == 1 %}
+                                    <a class="dropdown-item btn" data-commid="{{ comment.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                        <i class="fa fa-remove"></i> 删除
+                                    </a>
+                                {% endif %}
+
+                            </span>
+                        {% endif %}
+                    </span>
+                </span>
+                        {% endif %}
+                    </h6>
+                    <p>
+                        <strong class="text-muted">由于楼主删除或该评论违规，已被隐藏。</strong>
+                    </p>
+                </div>
+            </div>
+            {% for reply in replies[loop.index0] %}
+                <div style="padding-left: 20px">
+                    <div class="comment">
+                        <div class="comment-thumbnail">
+                            <a>
+                                <img class="rounded img-fluid avatar-s profile-popover" src="{{ reply.author.avatar }}">
+                            </a>
+                        </div>
+                        <div class="comment-body">
+                            <h6>
+                                <a class="profile-popover text-muted">
+                                    <strong>{{ reply.author.username }}</strong>
+                                </a>
+                                {% if reply.author.role_id == 1 %}
+                                    <span class="badge badge-danger">博主</span>
+                                {% else %}
+                                    <span class="badge badge-info">用户</span>
+                                {% endif %}
+                                <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ reply.timestamp }}" data-delay="500" data-original-title="" title="{{ reply.timestamp }}">
+                                    {{ moment(reply.timestamp, local=True).fromNow(refresh=True) }} <strong style="color: #00AAEE">回复:{{ reply.replied.author.username }}</strong>
+                                </small>
+                                {% if current_user.is_authenticated %}
+                                    <span class="float-right">
+                    <span class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        {% if reply.author.id == current_user.id %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-commid="{{ reply.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                    <i class="fa fa-remove"></i> 删除
+                                </a>
+                            </span>
+                        {% else %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-parent="{{ comment.id }}" data-repuser="{{ reply.author.username }}" data-repid="{{ reply.id }}" onclick="goRepl($(this).data('repuser'), $(this).data('repid'), $(this).data('parent'))">
+                                    <i class="fa fa-facebook-f"></i> 回复
+                                </a>
+                                <a class="dropdown-item btn" href="#">
+                                    <i class="fa fa-podcast"></i> 举报
+                                </a>
+                                {% if current_user.role_id == 1 %}
+                                    <a class="dropdown-item btn" data-commid="{{ reply.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                        <i class="fa fa-remove"></i> 删除
+                                    </a>
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    </span>
+                </span>
+                                {% endif %}
+                            </h6>
+                            <p>
+                                {{ reply.body|safe }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <hr>
+        {% endif %}
+    {% else %}
+        <div class="comment">
+            <div class="comment-thumbnail">
+                <a>
+                    <img class="rounded img-fluid avatar-s profile-popover" src="{{ comment.author.avatar }}">
+                </a>
+            </div>
+            <div class="comment-body">
+                <h6>
+                    <a class="profile-popover text-muted">
+                        <strong>{{ comment.author.username }}</strong>
+                    </a>
+                    {% if comment.author.role_id == 1 %}
+                        <span class="badge badge-danger">博主</span>
+                    {% else %}
+                        <span class="badge badge-info">用户</span>
+                    {% endif %}
+                    <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ comment.timestamp }}" data-delay="500" data-original-title="" title="{{ comment.timestamp }}">
+                        {{ moment(comment.timestamp, local=True).fromNow(refresh=True) }}
+                    </small>
+                    {% if current_user.is_authenticated %}
+                        <span class="float-right">
+                    <span class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        {% if comment.author.id == current_user.id %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-commid="{{ comment.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                    <i class="fa fa-remove"></i> 删除
+                                </a>
+                            </span>
+                        {% else %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-parent="{%  if comment.parent_id == None %}null{% endif %}" data-repuser="{{ comment.author.username }}" data-repid="{{ comment.id }}" onclick="goRepl($(this).data('repuser'), $(this).data('repid'), $(this).data('parent'))">
+                                    <i class="fa fa-facebook-f"></i> 回复
+                                </a>
+                                <a class="dropdown-item btn" href="#">
+                                    <i class="fa fa-podcast"></i> 举报
+                                </a>
+                                {% if current_user.role_id == 1 %}
+                                    <a class="dropdown-item btn" data-commid="{{ comment.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                        <i class="fa fa-remove"></i> 删除
+                                    </a>
+                                {% endif %}
+
+                            </span>
+                        {% endif %}
+                    </span>
+                </span>
+                    {% endif %}
+                </h6>
+                <p>
+                    {{ comment.body|safe }}
+                </p>
+            </div>
+        </div>
+        {% for reply in replies[loop.index0] %}
+            <div style="padding-left: 20px">
+                <div class="comment">
+                    <div class="comment-thumbnail">
+                        <a>
+                            <img class="rounded img-fluid avatar-s profile-popover" src="{{ reply.author.avatar }}">
+                        </a>
+                    </div>
+                    <div class="comment-body">
+                        <h6>
+                            <a class="profile-popover text-muted">
+                                <strong>{{ reply.author.username }}</strong>
+                            </a>
+                            {% if reply.author.role_id == 1 %}
+                                <span class="badge badge-danger">博主</span>
+                            {% else %}
+                                <span class="badge badge-info">用户</span>
+                            {% endif %}
+                            <small data-toggle="tooltip" data-placement="top" data-timestamp="{{ reply.timestamp }}" data-delay="500" data-original-title="" title="{{ reply.timestamp }}">
+                                {{ moment(reply.timestamp, local=True).fromNow(refresh=True) }} <strong style="color: #00AAEE">回复:{{ reply.replied.author.username }}</strong>
+                            </small>
+                            {% if current_user.is_authenticated %}
+                                <span class="float-right">
+                    <span class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </button>
+                        {% if reply.author.id == current_user.id %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-commid="{{ reply.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                    <i class="fa fa-remove"></i> 删除
+                                </a>
+                            </span>
+                        {% else %}
+                            <span class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item btn" data-parent="{{ comment.id }}" data-repuser="{{ reply.author.username }}" data-repid="{{ reply.id }}" onclick="goRepl($(this).data('repuser'), $(this).data('repid'), $(this).data('parent'))">
+                                    <i class="fa fa-facebook-f"></i> 回复
+                                </a>
+                                <a class="dropdown-item btn" href="#">
+                                    <i class="fa fa-podcast"></i> 举报
+                                </a>
+                                {% if current_user.role_id == 1 %}
+                                    <a class="dropdown-item btn" data-commid="{{ reply.id }}" data-toggle="modal" data-target="#confirm-delete" >
+                                        <i class="fa fa-remove"></i> 删除
+                                    </a>
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    </span>
+                </span>
+                            {% endif %}
+                        </h6>
+                        <p>
+                            {{ reply.body|safe }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+    {% endif %}
+{% endfor %}
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">确认?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>确定删除该条评论吗?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">取消</button>
+                <button class="btn btn-danger btn-confirm" id="deleteBtn" onclick="submitDelete($(this).val())">删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function goRepl(u, i, p){
+        $('html, body').animate({
+            scrollTop: $("#commentPosition").offset().top
+        }, 800);
+        sessionStorage.setItem('rep_id', i);
+        sessionStorage.setItem('receive_u', u);
+        sessionStorage.setItem('parent', p)
+        $("#replyUser").text("回复 @"+u).removeAttr('hidden');
+        $("#cancelReplyBtn").removeAttr('hidden');
+        $("#replyBtn").removeAttr('hidden');
+        $("#subCommentBtn").attr('hidden', 'true');
+        $("#comment-editor").autofocus = true;
+        $(".rep-btn").css("color", "#868e96");
+        $(this).css("color", "red");
+
+        return false;
+    }
+
+    $("#cancelReplyBtn").click(function (){
+        $("#cancelReplyBtn").attr('hidden', 'true');
+        $("#replyBtn").attr('hidden', 'true');
+        $("#replyUser").attr('hidden', 'true');
+        $("#subCommentBtn").removeAttr('hidden');
+        $(".rep-btn").css("color", "#868e96");
+    })
+
+    $("#confirm-delete").on("show.bs.modal", function (e){
+        let commID = $(e.relatedTarget).data('commid');
+        $("#deleteBtn").val(commID);
+    })
+
+    function submitDelete(commid){
+        $.ajax({
+            url:'/blog/comment/delete/',
+            type: 'POST',
+            data: {'comm_id': commid},
+            success: function (){
+                window.location.reload();
+            },
+            error: function (){}
+        })
+    }
+</script>
