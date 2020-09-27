@@ -70,10 +70,18 @@ def blog_create():
 def blog_edit():
     blog_type_datas = []
     types = BlogType.query.all()
+    blogs = Blog.query.all()
     for _type in types:
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
                                 '/backend/editArticleType/' + str(_type.id)])
-    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas)
+    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs)
+
+
+@be_blog_bp.route('/blog/delete/<blog_id>', methods=['GET', 'POST'])
+def delete(blog_id):
+    Blog.query.filter_by(id=blog_id).delete()
+    db.session.commit()
+    return redirect(url_for('.blog_edit'))
 
 
 @be_blog_bp.route('/blog/category/add/', methods=['POST'])

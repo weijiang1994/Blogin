@@ -108,7 +108,7 @@ class Blog(db.Model):
     delete_flag = db.Column(db.INTEGER, nullable=False, default=0, comment='is delete? 0:no 1:yes')
 
     blog_types = db.relationship('BlogType', back_populates='blogs')
-    comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
+    comments = db.relationship('BlogComment', back_populates='blog', cascade='all, delete')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
