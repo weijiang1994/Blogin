@@ -80,7 +80,7 @@
                 <br>
                 <button class="btn btn-success"><a style="color: white;" href="/backend/admin/blog/create/">添加新博客</a></button>
                 <div class="table-responsive">
-                    {% if articles %}
+                    {% if blogs %}
                         <table class="table table-hover">
                         <caption>已有博客文章</caption>
                         <thead>
@@ -96,22 +96,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for article in articles %}
+                        {% for blog in blogs %}
                             <tr>
-                                <td><a href="/detail/article/{{ article[1] }}">{{ article[1] }}</a></td>
-                                <td><span class="label label-info">{{ article[2] }}</span></td>
-                                <td>{{ article[3] }}</td>
-                                <td>{{ article[4] }}</td>
-                                <td>{{ article[5] }}</td>
-                                <td><spa class="label label-success">{{ article[6] }}</spa></td>
-                                <td><span class="label label-default">{{ article[7] }}</span></td>
+                                <td><a href="/blog/article/{{ blog.id }}">{{ blog.title }}</a></td>
+                                <td><span class="label label-info">{{ blog.blog_types.name }}</span></td>
+                                <td>{{ blog.introduce }}</td>
+                                <td>{{ blog.create_time }}</td>
+                                <td>{{ blog.update_time }}</td>
+                                <td><span class="label label-success">{{ blog.read_times }}</span></td>
+                                <td><span class="label label-default">{{ blog.delete_flag }}</span></td>
                                 <td>
-                                    <button class="btn btn-info"><a>编辑</a></button>
-                                    <button class="btn btn-danger">删除</button>
-                                    {% if article[8] %}
-                                        <button class="btn btn-warning">恢复</button>
-                                        <button class="btn btn-danger">清除</button>
-                                    {% endif %}
+                                    <button class="btn btn-info"><a style="color:white; text-decoration: none" href="/backend/blog/edit/{{ blog.id }}">编辑</a></button>
+                                    <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/delete/{{ blog.id }}">删除</a></button>
                                 </td>
                             </tr>
                         {% endfor %}

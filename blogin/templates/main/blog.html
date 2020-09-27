@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
+
+    {{ share.load() }}
+    {{ ckeditor.load_code_theme() }}
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
     <link type="text/css" href="/static/css/style.css">
     <style>
@@ -9,7 +12,7 @@
         }
 
     </style>
-    {{ moment.include_moment() }}　　
+{#{{ moment.include_moment() }}　　#}
     {{ moment.locale(auto_detect=True) }}
 {% endblock %}
 {% block title %}
@@ -17,8 +20,7 @@
 {% endblock %}
 {% block content %}
     <main style="background: #e3e3e3">
-        {{ share.load() }}
-        {{ ckeditor.load_code_theme() }}
+
         <div class="container">
             {% for message in get_flashed_messages(with_categories=True) %}
                 <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
