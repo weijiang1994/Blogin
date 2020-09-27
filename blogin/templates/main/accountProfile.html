@@ -107,7 +107,8 @@
                                 <tr>
                                     <th>序号</th>
                                     <th>时间</th>
-                                    <th>地址</th>
+                                    <th>IP</th>
+                                    <th>地点</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -115,9 +116,9 @@
                                     <tr>
                                         <td>{{ loop.index }}</td>
                                         <td>{{ log.timestamp }}</td>
-                                        <td>{{ log.login_add }}</td>
+                                        <td>{{ log.login_addr }}</td>
+                                        <td>{{ log.real_addr }}</td>
                                     </tr>
-
                                 {% endfor %}
                                 </tbody>
                             </table>

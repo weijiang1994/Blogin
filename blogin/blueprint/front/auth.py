@@ -15,6 +15,7 @@ from sqlalchemy import or_
 from blogin.forms.auth import RegisterForm, LoginForm
 from blogin.models import User, LoginLog
 from blogin.extension import db
+from blogin.utils import get_ip_real_add
 
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
@@ -42,7 +43,6 @@ def login():
     # 若当前已有用户登录则返回主页
     if current_user.is_authenticated:
         return redirect(url_for('blog_bp.index'))
-
     form = LoginForm()
     if form.validate_on_submit():
         usr = form.usr_email.data
@@ -51,7 +51,8 @@ def login():
         if user is not None and user.check_password(pwd):
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
-                login_log = LoginLog(login_add=request.remote_addr, user=user)
+                remote_ip = request.remote_addr
+                login_log = LoginLog(login_addr=remote_ip, user=user, real_addr=get_ip_real_add(remote_ip))
                 db.session.add(login_log)
                 db.session.commit()
                 flash('登录成功!', 'success')
