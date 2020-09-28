@@ -10,8 +10,10 @@ import datetime
 import os
 
 import json
+from urllib.parse import urlparse, urljoin
+
 import requests
-from flask import current_app
+from flask import current_app, request, redirect, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 
@@ -66,7 +68,7 @@ def validate_token(user, token, operation, new_password=None):
         return False
 
     if operation == Operations.CONFIRM:
-        user.confirm=1
+        user.confirm = 1
     else:
         user.set_password(new_password)
     db.session.commit()
@@ -81,3 +83,18 @@ def generate_ver_code():
 
 def split_space(string):
     return str(string).split()
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
+
+
+def redirect_back(default='blog_bp.index', **kwargs):
+    for target in request.args.get('next'), request.referrer:
+        if not target:
+            continue
+        if is_safe_url(target):
+            return redirect(target)
+    return redirect(url_for(default, **kwargs))

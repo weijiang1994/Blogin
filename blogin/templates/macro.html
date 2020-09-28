@@ -1,0 +1,33 @@
+{% macro photo_card(photo) %}
+    <div class="photo-card card">
+        <a class="card-thumbnail" href="{{ url_for('gallery_bp.photo', photo_id=photo.id) }}">
+            <img class="card-img-top portrait" src="{{ photo.save_path }}">
+        </a>
+        <p class="text-muted">{{ photo.title }}</p>
+        <div class="card-body">
+            <span class="fa fa-heart-o"></span> {{ photo.likes|length }}
+            <span class="fa fa-comment-o"></span> {{ photo.comments|length }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro blog_card(blog) %}
+    <div style="background: white; border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div">
+        <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
+            <a href="/blog/article/{{ blog.id }}/">
+                <img class="w-100 article-img" src="{{ blog.pre_img }}" alt="{{ blog.title }}">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="text-muted mb-2 f-12">
+                <span class="badge badge-inverse"><i class="fa fa-user"></i> Blogin</span>
+                <span class="badge badge-inverse"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
+            </div>
+            <h5 class="text-info">
+                <a style="text-decoration: none;" class="text-info" href="/blog/article/{{ blog.id }}/">{{ blog.title }}</a>
+            </h5>
+            <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(200) }}</p>
+            <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
+        </div>
+    </div>
+{% endmacro %}

@@ -6,7 +6,7 @@
 @File    : gallery
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request
+from flask import Blueprint, render_template, send_from_directory, flash, redirect, request
 from flask_login import login_required, current_user
 
 from blogin import basedir, db
