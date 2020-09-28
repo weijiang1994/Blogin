@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}
+    青年相册
+{% endblock %}
+{% block content %}
+    <style>
+        .border-card{
+            border: 5px solid rgba(0 123 255 / 5%);
+            margin: 0px 0px 5px 0px;
+        }
+        .card-body a{
+            text-decoration: none;
+            color: #0f0f0f;
+        }
+        a:hover{
+            color: #9d9d9d;
+        }
+    </style>
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <div style="margin-top: 10px; margin-bottom: 30px; background: linear-gradient(35deg, #CCFFFF, #FFCCCC); border-radius: 5px;" class="description px-3 pt-3 pb-1">
+                <h3 class="f-17" style="font-weight: bold" id="categoryName"><i class="fa fa-camera-retro"></i> 写代码厨子的业余</h3>
+                <p class="f-16">“我们不只是用相机拍照，因为我们带到摄影中去的是所有我们读过的书，看过的电影，听过的音乐，爱过的人。”——安塞尔 亚当斯</p>
+            </div>
+        <div>
+        </div>
+            <div>
+                {% for photo in photos %}
+                    <div class="border-card card photo-card">
+                        <a href="/gallery/photo/{{ photo.id }}" class="card-thumbnail">
+                            <img class="card-img-top portrait" src="{{ photo.save_path }}">
+                        </a>
+                        <div class="card-body">
+                            <a class="photo-link" href="/gallery/photo/{{ photo.id }}"> {{ photo.title }} </a>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <i class="fa fa-comment"></i> {{ photos.comments|length }}
+                                    <i class="fa fa-heart"></i> {{ photo.likes|length }}
+                                </div>
+                                <div class="col-lg-8 text-right">
+                                    <i class="fa fa-calendar"></i> {{ (photo.create_time|split)[0] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

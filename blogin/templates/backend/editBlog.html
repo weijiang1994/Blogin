@@ -16,7 +16,7 @@
     </style>
     <body>
     <div style="padding-bottom: 30px; padding-top: 10px;" class="container contentDiv" id="content">
-
+        {% include "_flash.html" %}
         <ul class="nav nav-pills" role="tablist">
             <li class="active">
                 <a class="nav-link" data-toggle="pill" href="#articleManage">文章管理</a>
@@ -104,10 +104,14 @@
                                 <td>{{ blog.create_time }}</td>
                                 <td>{{ blog.update_time }}</td>
                                 <td><span class="label label-success">{{ blog.read_times }}</span></td>
-                                <td><span class="label label-default">{{ blog.delete_flag }}</span></td>
+                                <td><span class="label label-default">{{ blog.state.name }}</span></td>
                                 <td>
                                     <button class="btn btn-info"><a style="color:white; text-decoration: none" href="/backend/blog/edit/{{ blog.id }}">编辑</a></button>
-                                    <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/delete/{{ blog.id }}">删除</a></button>
+                                    {% if blog.delete_flag != 1 %}
+                                        <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/recover/{{ blog.id }}/">恢复</a></button>
+                                    {% else %}
+                                        <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/delete/{{ blog.id }}/">删除</a></button>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

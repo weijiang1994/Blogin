@@ -14,12 +14,11 @@ from flask_ckeditor import upload_fail, upload_success
 
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm
-from blogin.models import BlogType, Blog
+from blogin.models import BlogType, Blog, States
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path
 from flask_login import login_required
 from blogin.decorators import permission_required, db_exception_handle
-
 
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
@@ -54,8 +53,9 @@ def blog_create():
         blog_img_path = '/backend/blog/img/' + current_time + '/' + filename
 
         cate = BlogType.query.filter_by(id=type).first()
+        state = States.query.get_or_404(1)
         blg = Blog(title=title, type_id=cate.id, introduce=introduce, content=content, pre_img=blog_img_path,
-                   is_private=level-1)
+                   is_private=level - 1, state=state)
         cate.counts += 1
         db.session.add(blg)
         db.session.commit()
@@ -77,10 +77,23 @@ def blog_edit():
     return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs)
 
 
-@be_blog_bp.route('/blog/delete/<blog_id>', methods=['GET', 'POST'])
+@be_blog_bp.route('/blog/delete/<blog_id>/', methods=['GET', 'POST'])
 def delete(blog_id):
-    Blog.query.filter_by(id=blog_id).delete()
+    blog = Blog.query.get_or_404(blog_id)
+    state = States.query.get_or_404(2)
+    blog.state = state
     db.session.commit()
+    flash('博客删除成功~', 'success')
+    return redirect(url_for('.blog_edit'))
+
+
+@be_blog_bp.route('/blog/recover/<blog_id>/', methods=['GET', 'POST'])
+def recover(blog_id):
+    blog = Blog.query.get_or_404(blog_id)
+    state = States.query.get_or_404(1)
+    blog.state = state
+    db.session.commit()
+    flash('博客恢复成功~', 'success')
     return redirect(url_for('.blog_edit'))
 
 

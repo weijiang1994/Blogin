@@ -32,6 +32,7 @@ class User(db.Model, UserMixin):
     photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
     login_logs = db.relationship('LoginLog', back_populates='user', cascade='all')
     blog_comments = db.relationship('BlogComment', back_populates='author', cascade='all')
+    likes = db.relationship('LikePhoto', back_populates='user', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -105,10 +106,11 @@ class Blog(db.Model):
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     update_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     read_times = db.Column(db.INTEGER, default=0)
-    delete_flag = db.Column(db.INTEGER, nullable=False, default=0, comment='is delete? 0:no 1:yes')
+    delete_flag = db.Column(db.INTEGER, db.ForeignKey('states.id'))
 
     blog_types = db.relationship('BlogType', back_populates='blogs')
-    comments = db.relationship('BlogComment', back_populates='blog', cascade='all, delete')
+    comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
+    state = db.relationship('States', back_populates='blog')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
@@ -131,6 +133,24 @@ class BlogComment(db.Model):
     author = db.relationship('User', back_populates='blog_comments')
     replies = db.relationship('BlogComment', back_populates='replied', cascade='all')
     replied = db.relationship('BlogComment', back_populates='replies', remote_side=[id])
+
+
+class States(db.Model):
+    __tablename__ = 'states'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(40))
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    blog = db.relationship('Blog', back_populates='state')
+
+    @staticmethod
+    def init_states():
+        s1 = States(name='正常')
+        s2 = States(name='禁用')
+        db.session.add(s1)
+        db.session.add(s2)
+        db.session.commit()
 
 
 class BlogType(db.Model):
@@ -165,9 +185,10 @@ class Photo(db.Model):
     description = db.Column(db.String(300), nullable=False, comment='photo description', default='""')
     save_path = db.Column(db.String(200), nullable=False, comment='photo save path')
     create_time = db.Column(db.DateTime, default=datetime.now)
-
+    level = db.Column(db.INTEGER, default=0)
     tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo', cascade='all')
+    likes = db.relationship('LikePhoto', back_populates='photo', cascade='all')
 
 
 class Tag(db.Model):
@@ -209,3 +230,15 @@ class LoveInfo(db.Model):
     user = db.Column(db.String(200), default='')
     user_ip = db.Column(db.String(30), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now())
+
+
+class LikePhoto(db.Model):
+    __tablename__ = 'like_photo'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    img_id = db.Column(db.INTEGER, db.ForeignKey('photo.id'))
+    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    photo = db.relationship('Photo', back_populates='likes')
+    user = db.relationship('User', back_populates='likes')

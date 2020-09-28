@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    {{ share.load() }}
+    {{ moment.locale(auto_detect=True) }}
+    <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
+{% endblock %}
+{% block title %}
+    {{ blog.title }}
+{% endblock %}
+{% block content %}
+    <style>
+        .border-card{
+            border: 10px solid rgb(78 61 125 / 25%);
+            margin: 0px 0px 5px 0px;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <br>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="border-card photo">
+                        <a href="{{ blog.save_path }}" target="_blank">
+                            <img src="{{ blog.save_path }}" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="text-right">
+                        <p title="{{ blog.create_time }}" class="text-muted float-right small"><i class="fa fa-clock-o"></i> 发布于:{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</p>
+                    </div>
+                    <br>
+                    <div class="blog-content-div">
+                        {% include "comment.html" %}
+                        <p class="text-muted"><strong>当前共有{{ blog.comments|length }}条评论</strong></p>
+                        <hr>
+                        {% include "commentContent.html" %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="margin-bottom: 10px;" class="btn-group">
+                        {% if preLink %}
+                            <button type="button" class="btn btn-outline-info"><a style="color: inherit;" href="{{ preLink }}" ><i class="fa fa-arrow-circle-left"></i></a></button>
+                        {% endif %}
+                        {% if nextLink %}
+                            <button type="button" class="btn btn-outline-info"><a style="color: inherit;" href="{{ nextLink }}"><i class="fa fa-arrow-circle-right"></i></a></button>
+                        {% endif %}
+                    </div>
+                    <div class="card bg-light mb-3 w-100 sidebar-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <img class="sidebar-avatar rounded avatar-m" src="/static/img/admin/admin.jpg">
+                                <div class="sidebar-profile">
+                                    <h6 class="card-title">
+                                        <a href="/"><span class="badge badge-pill badge-info">清水</span></a>
+                                    </h6>
+                                    <p class="card-subtitle mb-2 text-muted">清风徐来，水波不兴。</p>
+                                    <br>
+                                    <p class="card-subtitle mb-2 text-muted">　　　　　--苏轼《赤壁赋》</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-light mb-3 w-100">
+                        <div class="card-body">
+                            <div id="description">
+                                <p style="color: #9d9d9d; font-weight: bold;">
+                                    <i>{{ blog.description }}</i>
+                                </p>
+                            </div>
+                            <div id="tags">
+                                <p>
+                                    {% for tag in blog.tags %}
+                                        <a class="badge badge-light" href="/gallery/tag/{{ tag.id }}/"><span class="fa fa-tags"></span> {{ tag.name }}</a>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <a name="{{ blog.name }}" href="/gallery/like/{{ blog.id }}/" style="color: inherit;" class="btn btn-info">
+                                        <i class="fa fa-heartbeat"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-10">
+                                    {{ share.create(sites='weibo, wechat, qq, douban, qzone') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        let editor;
+        ClassicEditor.create( document.querySelector( '#comment-editor' ), {
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+            heading: {
+                options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                ]
+            }
+        } ).then(newEditor=>{
+            editor = newEditor;
+        })
+            .catch( error => {
+                console.log( error );
+            } );
+
+        function submitComment(){
+            const comment = editor.getData();
+            let blogId = $("#subCommentBtn").data('blogid');
+            if (!comment){
+                $("#commentErrorHint").removeAttr('hidden');
+                $("#commentErrorHint").show().delay(3000).hide(500);
+                return false;
+            }
+            $.ajax({
+                url: "/gallery/photo/comment/",
+                type: "post",
+                data : {'comment': comment, 'imgID': blogId},
+                success: function (){
+                    window.location.reload();
+                }
+            })
+        }
+
+        function replyUserComment(){
+            let reply = editor.getData();
+            let blogId = $("#subCommentBtn").data('blogid');
+            let parent = sessionStorage.getItem('parent');
+            let replyID = sessionStorage.getItem('rep_id');
+            if(!reply){
+                $("#commentErrorHint").removeAttr('hidden');
+                $("#commentErrorHint").show().delay(2000).hide(200);
+                return false;
+            }
+            if (parent == 'null'){
+                parent = replyID;
+            }
+            $.ajax({
+                url: "/gallery/photo/comment/",
+                type: "post",
+                data: {'comment': reply, 'imgID': blogId, 'parentID': parent, 'replyID': replyID},
+                success: function (){
+                    window.location.reload();
+                }
+            })
+        }
+
+        function submitDelete(commid){
+            $.ajax({
+                url:'/gallery/comment/delete/',
+                type: 'POST',
+                data: {'comm_id': commid},
+                success: function (){
+                    window.location.reload();
+                },
+                error: function (){}
+            })
+        }
+    </script>
+{% endblock %}

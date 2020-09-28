@@ -7,12 +7,7 @@
     <main>
         <div class="container">
             <br>
-            {% for message in get_flashed_messages(with_categories=True) %}
-                <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ message[1] }}
-                </div>
-            {% endfor %}
+            {% include "_flash.html" %}
             <div class="jumbotron">
                 <div class="row">
                     <div style="margin-bottom: 10px" class="col-md-8">

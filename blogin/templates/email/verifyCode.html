@@ -1,0 +1,9 @@
+<p>Hello {{ username }},</p>
+<p><b>Here is your password reset link:</b><br>
+    <a href="{{ url_for('.reset_confirm', token=token, _external=True) }}">{{ url_for('.reset_confirm', token=token, _external=True) }}</a>
+</p>
+<p><b>Here is your verify code:</b><br>
+<h1><strong>{{ ver_code }}</strong></h1>
+<p style="color: red; font-style: italic"> If this operate is not by yourself, please change your password right now!Maybe your account was cracked.</p>
+</p>
+<small>(Please do not reply to this notification, this inbox is not monitored.)</small>

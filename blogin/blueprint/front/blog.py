@@ -17,7 +17,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 @blog_bp.route('/', methods=['GET'])
 @blog_bp.route('/index/', methods=['GET'])
 def index():
-    blogs = Blog.query.order_by(Blog.create_time.desc()).all()
+    blogs = Blog.query.filter_by(is_private=0, delete_flag=1).order_by(Blog.create_time.desc()).all()
     cates = []
     for blog in blogs:
         cates.append(BlogType.query.filter_by(id=blog.type_id).first().name)
@@ -38,6 +38,7 @@ def blog_article(blog_id):
     cate = BlogType.query.filter_by(id=blog.type_id).first()
     # 顶级评论
     comments=BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
+
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0).\
                 order_by(BlogComment.timestamp.desc()).all()
