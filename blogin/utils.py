@@ -11,8 +11,19 @@ import os
 
 import json
 import requests
+from flask import current_app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import BadSignature, SignatureExpired
+
+from blogin import db
 
 IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,region,regionName,city,lat,lon,query"
+
+
+class Operations:
+    CONFIRM = 'confirm'
+    RESET_PASSWORD = 'reset-password'
+    CHANGE_EMAIL = 'change-email'
 
 
 def get_current_time():
@@ -36,3 +47,37 @@ def get_ip_real_add(ip):
         return '定位失败'
     return response['country'], response['city']
 
+
+def generate_token(user, operation, expire_in=None, **kwargs):
+    s = Serializer(current_app.config['SECRET_KEY'], expire_in)
+    data = {'id': user.id, 'operation': operation}
+    data.update(**kwargs)
+    print(s.dumps(data))
+    return s.dumps(data)
+
+
+def validate_token(user, token, operation, new_password=None):
+    s = Serializer(current_app.config['SECRET_KEY'])
+    try:
+        data = s.loads(token)
+    except (SignatureExpired, BadSignature):
+        return False
+    if operation != data.get('operation') or user.id != data.get('id'):
+        return False
+
+    if operation == Operations.CONFIRM:
+        user.confirm=1
+    else:
+        user.set_password(new_password)
+    db.session.commit()
+
+    return True
+
+
+def generate_ver_code():
+    import random
+    return random.randint(134299, 873242)
+
+
+def split_space(string):
+    return str(string).split()

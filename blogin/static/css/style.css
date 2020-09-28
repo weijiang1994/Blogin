@@ -1,0 +1,295 @@
+/* global */
+
+.tip { /* from github.com */
+    position: relative;
+    padding: 40px;
+    text-align: center;
+    background-color: #fafbfc;
+    border: 1px solid #e1e4e8;
+    border-radius: 3px;
+    box-shadow: inset 0 0 10px rgba(27, 31, 35, 0.05);
+}
+
+.hide {
+    display: none;
+}
+
+.inline {
+    display: inline;
+}
+
+.user-nav {
+    margin: 30px 0 20px;
+}
+
+.dead-link {
+    text-decoration: none !important;
+    border-width: 0;
+}
+
+.badge-notification {
+    position: relative;
+    font-size: 12px;
+    text-align: center;
+    top: -15px;
+    left: -15px;
+    border-radius: 50%;
+}
+
+.page-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.page-footer {
+    padding-top: 40px;
+}
+
+.jumbotron {
+    margin-top: 20px;
+    padding-top: 38px;
+    padding-bottom: 38px;
+}
+
+/*nav {*/
+/*    margin-bottom: 30px;*/
+/*}*/
+
+/*footer {*/
+/*    margin: 30px 0;*/
+/*    padding: 20px 0;*/
+/*    border-top: 1px solid #e5e5e5;*/
+/*}*/
+
+/* for navbar */
+/*.avatar-xs {*/
+/*    width: 22px;*/
+/*    height: 22px;*/
+/*    border-radius: 2px;*/
+/*}*/
+
+/* for photo page */
+.avatar-s {
+    width: 50px;
+    height: 50px;
+}
+
+/* for user card */
+.avatar-m {
+    width: 100px;
+    height: 100px;
+}
+
+/* for user header */
+.avatar-l {
+    width: 180px;
+    height: 180px;
+}
+
+/* list item */
+.photo-card {
+    float: left;
+    width: 33.333%;
+    padding: 0.5rem 0.5rem 0 0.5rem;
+    border: 0;
+}
+
+.photo-card .card-body {
+    padding: 5px;
+}
+
+.user-card {
+    float: left;
+    width: 20%;
+    max-height: 180px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border: 0;
+}
+
+.card-thumbnail {
+    position: relative;
+    width: auto;
+    height: 20em;
+    overflow: hidden;
+}
+
+.card-thumbnail:hover {
+    border: 5px solid transparent;
+}
+
+.card-thumbnail img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: auto;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.card-thumbnail img.portrait {
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 1280px) {
+    .card-thumbnail {
+        height: 270px;
+    }
+}
+
+@media (max-width: 960px) {
+    .card-thumbnail {
+        height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .photo-card {
+        width: 50%;
+    }
+}
+
+@media (max-width: 640px) {
+    .photo-card {
+        width: 50%;
+    }
+}
+
+@media (max-width: 500px) {
+    .card-thumbnail {
+        height: 20rem;
+    }
+
+    .photo-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 360px) {
+    .card-thumbnail {
+        height: 20rem;
+    }
+
+    .photo-card {
+        width: 100%;
+    }
+}
+
+/* photo page */
+.photo {
+    padding: 10px 0;
+    text-align: center;
+}
+
+.sidebar-nav {
+    min-height: 150px;
+}
+
+.sidebar-nav-name {
+    padding-left: 75px;
+}
+
+.sidebar-card {
+    min-height: 150px;
+}
+
+.sidebar-profile {
+    padding-left: 120px;
+}
+
+.sidebar-avatar {
+    position: absolute;
+    margin-left: 10px;
+}
+
+.trend-card-avatar {
+    padding-left: 15px;
+}
+
+.popup-card {
+    padding: 10px 20px;
+}
+
+.popup-profile {
+    padding-left: 55px;
+}
+
+.popup-avatar {
+    position: absolute;
+}
+
+.photo img {
+    max-height: 800px;
+}
+
+.reply-banner {
+    color: #000000;
+    position: relative;
+    padding: 7px;
+    background-color: #B8D9EE;
+}
+
+.comments {
+    margin-top: 30px;
+}
+
+.comment-body {
+    margin-left: 60px;
+    min-height: 50px;
+}
+
+.comment-thumbnail {
+    position: absolute;
+}
+
+.comment-form-thumbnail {
+    position: absolute;
+    padding-top: 16px
+}
+
+.comment-form {
+    margin: 5px 0 16px 60px;
+}
+
+/* Jcrop widget */
+#preview-box {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: -280px;
+    padding: 6px;
+    border: 1px rgba(0, 0, 0, .4) solid;
+    background-color: white;
+
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+
+    -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Photo Page */
+#tag-form, #description-form {
+    display: none;
+    margin: 20px 0;
+}
+
+#toast { /* form w3school.com */
+    display: none;
+    min-width: 200px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 10px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+}

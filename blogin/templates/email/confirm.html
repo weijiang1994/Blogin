@@ -1,0 +1,6 @@
+<p>Hello {{ user.username }},</p>
+<p>Welcome to <b>Blogin</b>!</p>
+<p>Please visit the link below to verify your email address:<br>
+    <a href="{{ url_for('auth_bp.confirm', token=token, _external=True) }}">{{ url_for('auth_bp.confirm', token=token, _external=True) }}</a>
+</p>
+<small>(Please do not reply to this notification, this inbox is not monitored.)</small>

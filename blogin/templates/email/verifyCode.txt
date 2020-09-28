@@ -1,0 +1,10 @@
+Hello {{ username }}
+Welcome to Blogin!
+Here is your password reset link:
+    {{ url_for('.reset_confirm', token=token, _external=True) }}
+
+This is your verify code of your change password
+    {{ ver_code }}
+If this operate is not by yourself, please change your password right now!Maybe your account was cracked.</p>
+
+(Please do not reply to this notification, this inbox is not monitored.)

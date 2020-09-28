@@ -30,12 +30,13 @@ class BaseConfig:
     BLOGIN_PHOTO_PER_PAGE = 12
     SECRET_KEY = os.getenv('SECRET_KEY')
 
+    BLOGIN_MAIL_SUBJECT_PRE = '[Blogin]'
+
     # CKEditor configure
     CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_ENABLE_CODESNIPPET = True
     CKEDITOR_HEIGHT = 500
     CKEDITOR_CODE_THEME = 'docco'
-    # CKEDITOR_CODE_THEME = 'monokai'
     CKEDITOR_FILE_UPLOADER = 'be_blog_bp.upload'
 
     BLOGIN_UPLOAD_PATH = os.path.join(basedir, 'uploads')
@@ -45,8 +46,10 @@ class BaseConfig:
     SQLALCHEMY_ECHO = False
     DATABASE_USER = os.getenv('DATABASE_USER', 'root')
     DATABASE_PWD = os.getenv('DATABASE_PWD')
+
     # DEFAULT AVATAR CONFIGURE
     AVATARS_SAVE_PATH = BLOGIN_UPLOAD_PATH + '/avatars/'
+
     # Mail configure
     BLOGIN_EMAIL_PRE = '[Blogin.] '
     MAIL_SERVER = os.getenv('MAIL_SERVER')

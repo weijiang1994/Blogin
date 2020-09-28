@@ -9,22 +9,25 @@
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
-from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar
+from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail
 from blogin.setting import basedir
 import os
-from blogin.blueprint.front.blog_bp import blog_bp
+from blogin.blueprint.front.blog import blog_bp
 from blogin.blueprint.backend.blog_bp import be_blog_bp
 from blogin.blueprint.backend.photo_bp import be_photo_bp
 from blogin.blueprint.front.auth import auth_bp
 from blogin.blueprint.front.accounts import accounts_bp
+from blogin.blueprint.front.gallery import gallery_bp
 from blogin.setting import config
 from blogin.models import *
+from blogin.utils import split_space
 
 
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
     app = Flask('blogin')
+    app.jinja_env.filters['split'] = split_space
     app.config.from_object(config[config_name])
     register_extension(app)
     register_blueprint(app)
@@ -78,6 +81,7 @@ def register_extension(app: Flask):
     login_manager.init_app(app)
     share.init_app(app)
     avatar.init_app(app)
+    mail.init_app(app)
 
 
 # 注册蓝图
@@ -87,6 +91,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(be_photo_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(accounts_bp)
+    app.register_blueprint(gallery_bp)
 
 
 def register_cmd(app: Flask):
@@ -119,6 +124,7 @@ def register_cmd(app: Flask):
             db.drop_all()
             db.create_all()
             Role.init_role()
+            States.init_states()
             username = input('请输入超级管理员用户名:')
             email = input('请输入超级管理员邮箱:')
             pwd = input('请输入超级管理员密码:')
@@ -127,8 +133,10 @@ def register_cmd(app: Flask):
                 click.echo('两次密码不一致')
                 click.echo('退出当前操作')
                 return
+
             super_user = User(username=username, email=email, password=pwd, confirm=1,
                               avatar='/static/img/admin/admin.jpg')
+            super_user.set_password(pwd)
             db.session.add(super_user)
             db.session.commit()
             click.echo('超级管理员创建成功!')

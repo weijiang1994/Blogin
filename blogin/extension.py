@@ -14,6 +14,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_share import Share
 from flask_avatars import Avatars
+from flask_mail import Mail
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -23,6 +24,7 @@ ckeditor = CKEditor()
 login_manager = LoginManager()
 share = Share()
 avatar = Avatars()
+mail = Mail()
 
 
 @login_manager.user_loader

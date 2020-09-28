@@ -46,7 +46,6 @@
                                         <i class="fa fa-remove"></i> 删除
                                     </a>
                                 {% endif %}
-
                             </span>
                         {% endif %}
                     </span>
@@ -289,15 +288,5 @@
         $("#deleteBtn").val(commID);
     })
 
-    function submitDelete(commid){
-        $.ajax({
-            url:'/blog/comment/delete/',
-            type: 'POST',
-            data: {'comm_id': commid},
-            success: function (){
-                window.location.reload();
-            },
-            error: function (){}
-        })
-    }
+
 </script>

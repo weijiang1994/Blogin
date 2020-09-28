@@ -15,8 +15,8 @@ from sqlalchemy import or_
 from blogin.forms.auth import RegisterForm, LoginForm
 from blogin.models import User, LoginLog
 from blogin.extension import db
-from blogin.utils import get_ip_real_add
-
+from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token
+from blogin.emails import send_confirm_email
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
@@ -33,6 +33,8 @@ def register():
         user.set_role()
         db.session.add(user)
         db.session.commit()
+        token = generate_token(user, operation='confirm')
+        send_confirm_email(user=user, token=token)
         flash('注册成功,欢迎加入Blogin.', 'success')
         return redirect(url_for('.login'))
     return render_template('main/register.html', form=form)
@@ -71,3 +73,12 @@ def logout():
     flash('退出成功!', 'success')
     return redirect(url_for('blog_bp.index'))
 
+
+@auth_bp.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if validate_token(user=current_user, operation=Operations.CONFIRM, token=token):
+        flash('邮箱确认成功!', 'success')
+    else:
+        flash('不是你的就别想有拥有啦!╭(╯^╰)╮  邮箱验证失败啦!', 'danger')
+    return redirect(url_for('blog_bp.index'))
