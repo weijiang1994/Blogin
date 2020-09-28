@@ -59,6 +59,9 @@ class BaseConfig:
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = ('Blogin Admin', MAIL_USERNAME)
 
+    # WHOOSHEE configure
+    WHOOSHEE_MIN_STRING_LEN = 1
+
 
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')

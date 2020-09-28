@@ -7,6 +7,7 @@
 {% endblock %}
 {% block content %}
     <style>
+
         .border-card{
             border: 5px solid rgba(0 123 255 / 5%);
             margin: 0px 0px 5px 0px;
@@ -38,7 +39,7 @@
                             <a class="photo-link" href="/gallery/photo/{{ photo.id }}"> {{ photo.title }} </a>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <i class="fa fa-comment"></i> {{ photos.comments|length }}
+                                    <i class="fa fa-comment"></i> {{ photo.comments|length }}
                                     <i class="fa fa-heart"></i> {{ photo.likes|length }}
                                 </div>
                                 <div class="col-lg-8 text-right">

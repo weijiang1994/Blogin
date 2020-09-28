@@ -15,6 +15,7 @@ from flask_migrate import Migrate
 from flask_share import Share
 from flask_avatars import Avatars
 from flask_mail import Mail
+from flask_whooshee import Whooshee
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -25,6 +26,7 @@ login_manager = LoginManager()
 share = Share()
 avatar = Avatars()
 mail = Mail()
+whooshee = Whooshee()
 
 
 @login_manager.user_loader

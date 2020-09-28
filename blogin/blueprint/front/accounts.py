@@ -9,7 +9,7 @@
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
-from blogin.decorators import db_exception_handle
+from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
 from blogin.forms.auth import ChangePwdForm, EditProfileForm
 from blogin.setting import basedir
@@ -27,6 +27,7 @@ def profile(user_id):
 
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])
 @login_required
+@confirm_required
 @db_exception_handle(db)
 def change_password():
     form = ChangePwdForm()
@@ -41,6 +42,7 @@ def change_password():
 
 @accounts_bp.route('/profile/edit/', methods=['GET', 'POST'])
 @login_required
+@confirm_required
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():

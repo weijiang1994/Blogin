@@ -7,9 +7,11 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo
 from blogin.extension import db
 from flask_login import current_user, login_required
+
+from blogin.utils import redirect_back
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -101,3 +103,18 @@ def delete_comment():
     db.session.commit()
     flash('评论删除成功', 'success')
     return ''
+
+
+@blog_bp.route('/search')
+def search():
+    q = request.args.get('q', '').strip()
+    if q == '':
+        flash('小伙子你很皮，空的关键字你想搜啥呢？', 'info')
+        return redirect_back()
+    category = request.args.get('category', 'blog')
+    if category == 'blog':
+        results = Blog.query.whooshee_search(q).paginate(1, 20)
+    if category == 'photo':
+        results = Photo.query.whooshee_search(q).paginate(1, 20)
+    results =results.items
+    return render_template('main/search.html', results=results, q=q, category=category)

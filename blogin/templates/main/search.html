@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from 'macro.html' import photo_card, blog_card with context %}
+{% block title %}
+    搜索结果
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="nav nav-pills flex-column" role="tablist" aria-orientation="vertical">
+                        <a class="nav-item nav-link {% if category == 'blog' %}active{% endif %}"
+                           href="{{ url_for('.search', q=q, category='blog') }}"><i class="fa fa-book"></i> 博客</a>
+                        <a class="nav-item nav-link {% if category == 'photo' %}active{% endif %}"
+                           href="{{ url_for('.search', q=q, category='photo') }}"><i class="fa fa-image"></i> 照片</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    {% if results %}
+                        <h5>{{ results|length }} 个结果</h5>
+                        {% for item in results %}
+                            {% if category == 'photo' %}
+                                {{ photo_card(item) }}
+                            {% elif category == 'blog' %}
+                                {{ blog_card(item) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <h5 class="tip">No results.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+{% endblock %}

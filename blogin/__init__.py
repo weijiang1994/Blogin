@@ -9,7 +9,7 @@
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
-from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail
+from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee
 from blogin.setting import basedir
 import os
 from blogin.blueprint.front.blog import blog_bp
@@ -82,7 +82,8 @@ def register_extension(app: Flask):
     share.init_app(app)
     avatar.init_app(app)
     mail.init_app(app)
-
+    whooshee.init_app(app)
+    
 
 # 注册蓝图
 def register_blueprint(app: Flask):
