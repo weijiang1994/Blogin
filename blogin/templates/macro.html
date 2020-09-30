@@ -31,3 +31,35 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro moment_card(comment) %}
+    <span style="font-size: 12px;" class="text-muted moment-p" data-toggle="tooltip" data-placement="top" title="{{ comment.timestamp  }}">
+                            <i class="fa fa-clock-o"></i> {{ moment(comment.timestamp, local=True).fromNow(refresh=True)  }}</span>
+    {% if comment.replied_id %}
+        <div class="moment-div">
+            <p style="color: dodgerblue">{{ comment.replied.author.username }}</p>
+            <p class="moment-p">{{comment.replied.body|safe}}</p>
+        </div>
+    {% endif %}
+    <div>
+        {{ comment.body|safe }}
+        <p class="moment-p">来自:<a style="color: dodgerblue; text-decoration: none;" href="/blog/article/{{ comment.blog.id }}">{{ comment.blog.title }}</a></p>
+        <hr>
+    </div>
+{% endmacro %}
+
+{% macro photo_moment_card(comment) %}
+    <span style="font-size: 12px;" class="text-muted moment-p" data-toggle="tooltip" data-placement="top" title="{{ comment.timestamp  }}">
+                            <i class="fa fa-clock-o"></i> {{ moment(comment.timestamp, local=True).fromNow(refresh=True)  }}</span>
+    {% if comment.replied_id %}
+        <div class="moment-div">
+            <p style="color: dodgerblue; text-decoration: none;">{{ comment.replied.author.username }}</p>
+            <p class="moment-p">{{comment.replied.body|safe}}</p>
+        </div>
+    {% endif %}
+    <div>
+        {{ comment.body|safe }}
+        <p class="moment-p">来自:<a style="color: dodgerblue" href="/gallery/photo/{{ comment.photo.id }}">{{ comment.photo.title }}</a></p>
+        <hr>
+    </div>
+{% endmacro %}
