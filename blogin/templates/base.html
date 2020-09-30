@@ -48,11 +48,9 @@
                     <a class="nav-link" href="/blogs/archive/"><i class="fa fa-archive"></i> 归档</a>
                 </li>
                 <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/tech"><i class="fa fa-steam"></i> 工具</a>
+                    <a class="nav-link" href="/tool/"><i class="fa fa-steam"></i> 工具</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/backend/admin/index/"><i class="fa fa-rocket"></i> Blogin</a>
-                </li>
+
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
                 <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required="True">
@@ -106,7 +104,7 @@
                     x.innerHTML = d.getFullYear();
                     let y = document.getElementById("web-day");
                     let dd = Math.floor((d.getTime() - old.getTime()) / (24 * 3600 * 1000));
-                    let d_str = "| 网站已续航 " + dd + " 天";y.innerHTML=d_str;
+                    let d_str = "| 网站已上线 " + dd + " 天";y.innerHTML=d_str;
                 }
                 getNewYear();
             </script>

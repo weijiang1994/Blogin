@@ -11,7 +11,7 @@ import os
 
 import json
 from urllib.parse import urlparse, urljoin
-
+import base64
 import requests
 from flask import current_app, request, redirect, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -20,6 +20,10 @@ from itsdangerous import BadSignature, SignatureExpired
 from blogin import db
 
 IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,region,regionName,city,lat,lon,query"
+OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
+OCR_TOKEN = '24.487f3dbf8ba5259be2f7b321741f02cf.2592000.1604024498.282335-22776145'
+OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
+OCR_CATEGORY = {'文字识别': 'accurate_basic'}
 
 
 class Operations:
@@ -42,6 +46,8 @@ def create_path(path):
 
 
 def get_ip_real_add(ip):
+    if ip == '127.0.0.1':
+        return '本地IP'
     response = requests.get(IP_QUERY.format(ip))
     response = response.text
     response = json.loads(response)
@@ -98,3 +104,31 @@ def redirect_back(default='blog_bp.index', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+
+def allow_img_file(filename):
+    suffix = filename.split('.')[0]
+    if suffix not in ['jpg', 'png', 'jpeg']:
+        return False
+    return True
+
+
+class OCR:
+    def __init__(self, filename, category='accurate_basic'):
+        self.filename = filename
+        self.category = category
+        self.url = None
+        self.img = None
+        self.set_url()
+        self.set_img()
+
+    def set_url(self):
+        self.url = OCR_URL + OCR_CATEGORY.get(self.category) + "?access_token=" + OCR_TOKEN
+
+    def set_img(self):
+        with open(self.filename, 'rb') as f:
+            self.img = base64.b64encode(f.read())
+
+    def ocr(self):
+        response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
+        return response.json()

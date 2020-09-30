@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_bread with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+        #textarea {
+            padding: 8px;
+            width: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            outline: 0;
+            border: 1px solid #397EFF;
+            font-size: 13px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-user-modify: read-write-plaintext-only;
+        }
+        [contentEditable=true]:empty:not(:focus):before {
+            content: attr(data-text);
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    OCR在线工具
+{% endblock %}
+{% block content %}
+    <main style="background: #eeeeee">
+        <div class="container">
+            {{ tool_bread("OCR在线工具", "OCR") }}
+            <div style="background: white; padding: 10px;">
+                <article>
+                    <p class="tool-title">工具说明:</p>
+                    <ul>
+                        <li>OCR工具是基于百度的AI开发平台进行开发的，地址<a class="text-info-a" href="https://cloud.baidu.com/doc/OCR/s/zk3h7xw5e">百度AI平台</a></li>
+                        <li>目前具有图片文字、身份证、银行卡、驾驶证、行驶证、营业资格证、车牌识别等功能</li>
+                        <li>由于使用的是免费的API每天都有接口调用限制，如出现识别失败的问题，可能就是次数限制，尽请谅解，毕竟人穷买不起付费版~</li>
+                    </ul>
+                    <p class="tool-title">工具使用:</p>
+                    <form id="upload" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p>识别类型:</p>
+                                    <select id="ocrCategory" class="form-control">
+                                        <option>文字识别</option>
+                                        <option>身份证</option>
+                                        <option>银行卡</option>
+                                        <option>驾驶证</option>
+                                        <option>行驶证</option>
+                                        <option>营业资格证</option>
+                                        <option>车牌</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>识别图片:</p>
+                                    <input required id="image" name="img" style="height: 2.4rem;border: 1px solid #cccccc;padding: 3px;border-radius: 3px;" type="file">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-secondary" onclick="startOCR()">开始识别</button>
+                    <hr>
+                    <div hidden="hidden" id="ocrHint" class="text-center">
+                        <p><b>正在进行OCR文字识别,请稍后...</b></p>
+                    </div>
+                    <div id="resultDiv" hidden="hidden" class="no-results">
+                        <p class="tool-title">识别结果:</p>
+                        <p class="text-muted" id="nums"></p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img id="originImg" class="img-fluid">
+                            </div>
+                            <div class="col-md-8">
+                                <div id="textarea" contenteditable="true" data-text="输入内容..."></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <script>
+        function startOCR(){
+            let category = $("#ocrCategory").val();
+            let img = $("#image")[0].files[0];
+            if (img==undefined){
+                alert('请选择图片!');
+                return false;
+            }
+            let formdata = new FormData();
+            formdata.append('image', img);
+            formdata.append('category', category);
+            $("#ocrHint").removeAttr('hidden');
+            $.ajax({
+                url: "/tool/ocr/",
+                type:"POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (res){
+                    if (res.tag == 0){
+                        alert('OCR识别失败!')
+                        return false;
+                    }
+                    showResult(res);
+                },
+                error: function (){}
+            })
+        }
+
+        function showResult(res){
+            $("#ocrHint").attr('hidden', 'hidden');
+            $("#resultDiv").removeAttr('hidden');
+            $("#textarea").html(res.texts);
+            $("#originImg").attr('src', res.img)
+            $("#nums").text('文字行数:'+res.nums);
+        }
+    </script>
+{% endblock %}

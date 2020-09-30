@@ -18,6 +18,7 @@ from blogin.blueprint.backend.photo_bp import be_photo_bp
 from blogin.blueprint.front.auth import auth_bp
 from blogin.blueprint.front.accounts import accounts_bp
 from blogin.blueprint.front.gallery import gallery_bp
+from blogin.blueprint.front.tool import tool_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space
@@ -93,6 +94,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(auth_bp)
     app.register_blueprint(accounts_bp)
     app.register_blueprint(gallery_bp)
+    app.register_blueprint(tool_bp)
 
 
 def register_cmd(app: Flask):
