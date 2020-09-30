@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_bread with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+        #textarea {
+            padding: 8px;
+            height: 300px;
+            width: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+            outline: 0;
+            border: 1px solid #aaaaaa;
+            font-size: 13px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-user-modify: read-write-plaintext-only;
+        }
+        [contentEditable=true]:empty:not(:focus):before {
+            content: attr(data-text);
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    词云图制作
+{% endblock %}
+{% block content %}
+    <main style="background: #eeeeee">
+        <div class="container">
+            {{ tool_bread('词云图制作', '词云图') }}
+            <div style="background: white; padding: 10px; border-radius: 5px;">
+                <article>
+                    <p class="tool-title">工具说明:</p>
+                    <ul>
+                        <li>词云图制作工具是基于jieba分词库进行开发的，连接<a class="text-info-a" href="https://github.com/fxsjy/jieba">jieba分词</a></li>
+                        <li>通过直接载入文本，或者上传文本文件<b><i>(txt)</i></b>的方式进行词云图生成</li>
+                        <li>目前仅支持中文词云图生成，尽请谅解</li>
+                    </ul>
+                    <p class="tool-title">工具使用:</p>
+                    <p class="text-muted">请选择下面一种方式进行操作，输入文本或者上传txt文件。</p>
+                    <div class="row">
+                        <div class="col-md-4 offset-2">
+                            <div id="textarea" contenteditable="true" data-text=""></div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="file" id="txt">
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}
