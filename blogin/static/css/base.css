@@ -221,3 +221,9 @@ main {
 .pl-4{
     padding: 8px;
 }
+
+.tool-title{
+    border-left: 3px solid #20c997;
+    padding-left: 3px;
+    font-weight: bold;
+}

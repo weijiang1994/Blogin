@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_card with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .tool-des{
+            height: 10rem;
+        }
+        .tool:hover {
+            transform: scale(1.02);
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    在线小工具
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <br>
+            <div class="row">
+                {{ tool_card("在线OCR工具", "在线OCR工具是基于百度AI平台接口进行开发的，每天50000次的免费调用，如果识别失败那一定是因为博主穷，每天免费次数使用完毕了。", "ocr") }}
+                {{ tool_card("IP查询工具", "IP查询工具是基于ipfree接口进行查询，由于使用的外网源，可能查询的时间有点较慢，或者超时。", "query-ip") }}
+                {{ tool_card("文本加密工具", "文本加密工具主要功能是对明文文本进行常用方式的加密如MD5、Base64等等。", 'encryted') }}
+            </div>
+        </div>
+    </main>
+{% endblock %}

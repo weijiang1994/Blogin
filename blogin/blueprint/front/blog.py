@@ -123,6 +123,7 @@ def search():
 @blog_bp.route('/blogs/archive/', methods=['GET', 'POST'])
 def archive():
     blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+    categories = BlogType.query.all()
     archives = {}
     for blog in blogs:
         current_year = str(blog.create_time).split(' ')[0].split('-')[0]
@@ -143,4 +144,4 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
-    return render_template('main/archive.html', archives=archives)
+    return render_template('main/archive.html', archives=archives, categories=categories)
