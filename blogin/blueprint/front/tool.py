@@ -52,6 +52,11 @@ def query_ip_addr():
     return render_template('main/queryIP.html')
 
 
+@tool_bp.route('/word-cloud/', methods=['GET', 'POST'])
+def word_cloud():
+    return render_template('main/wordCloud.html')
+
+
 @tool_bp.route('/<path>/<filename>')
 def get_blog_sample_img(path, filename):
     path = basedir + '/uploads/' + path + '/'
