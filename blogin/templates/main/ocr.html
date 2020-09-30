@@ -8,8 +8,9 @@
             width: 100%;
             min-height: 100%;
             max-height: 100%;
+            border-radius: 5px;
             outline: 0;
-            border: 1px solid #397EFF;
+            border: 1px solid #aaaaaa;
             font-size: 13px;
             overflow-x: hidden;
             overflow-y: auto;
@@ -32,8 +33,9 @@
                     <p class="tool-title">工具说明:</p>
                     <ul>
                         <li>OCR工具是基于百度的AI开发平台进行开发的，地址<a class="text-info-a" href="https://cloud.baidu.com/doc/OCR/s/zk3h7xw5e">百度AI平台</a></li>
-                        <li>目前具有图片文字、身份证、银行卡、驾驶证、行驶证、营业资格证、车牌识别等功能</li>
+                        <li>目前具有图片文字、身份证、银行卡、驾驶证、、车牌识别等功能</li>
                         <li>由于使用的是免费的API每天都有接口调用限制，如出现识别失败的问题，可能就是次数限制，尽请谅解，毕竟人穷买不起付费版~</li>
+                        <li><strong>选择识别类型后请上传正确的图片！！！识别结果本站不负任何责任~</strong></li>
                     </ul>
                     <p class="tool-title">工具使用:</p>
                     <form id="upload" enctype="multipart/form-data">
@@ -43,12 +45,10 @@
                                     <p>识别类型:</p>
                                     <select id="ocrCategory" class="form-control">
                                         <option>文字识别</option>
-                                        <option>身份证</option>
-                                        <option>银行卡</option>
-                                        <option>驾驶证</option>
-                                        <option>行驶证</option>
-                                        <option>营业资格证</option>
-                                        <option>车牌</option>
+                                        <option>身份证识别</option>
+                                        <option>银行卡识别</option>
+                                        <option>驾驶证识别</option>
+                                        <option>车牌识别</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">

@@ -23,7 +23,9 @@ IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,r
 OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
 OCR_TOKEN = '24.487f3dbf8ba5259be2f7b321741f02cf.2592000.1604024498.282335-22776145'
 OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
-OCR_CATEGORY = {'文字识别': 'accurate_basic'}
+OCR_CATEGORY = {'文字识别': 'accurate_basic', '身份证识别': 'idcard', '银行卡识别': 'bankcard',
+                '驾驶证识别': 'driving_license', '车牌识别': 'license_plate'}
+BANK_CARD_TYPE = {0: '不能识别', 1: '借记卡', 2: '信用卡'}
 
 
 class Operations:
@@ -131,4 +133,62 @@ class OCR:
 
     def ocr(self):
         response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
-        return response.json()
+        res = response.json()
+        nums = res.get("words_result_num")
+        texts = ''
+        for text in res.get('words_result'):
+            texts += text.get('words') + '\n'
+        return nums, texts
+
+    def ocr_idcard(self):
+        response = requests.post(self.url, data={"id_card_side": "front", "image": self.img}, headers=OCR_HEADERS)
+        res = response.json()
+        nums = res.get('words_result_num')
+        texts = ''
+        results = res.get('words_result')
+        texts += '姓名:' + results.get('姓名').get('words') + '\n'
+        texts += '民族:' + results.get('民族').get('words') + '\n'
+        texts += '住址:' + results.get('住址').get('words') + '\n'
+        texts += '出生:' + results.get('出生').get('words') + '\n'
+        texts += '公民身份号码:' + results.get('公民身份号码').get('words') + '\n'
+        texts += '性别:' + results.get('性别').get('words') + '\n'
+        return nums, texts
+
+    def ocr_bankcard(self):
+        response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
+        res = response.json()
+        card_num = res.get('result').get('bank_card_number')
+        validate_date = res.get('result').get('valid_date')
+        card_type = BANK_CARD_TYPE.get(res.get('result').get('bank_card_type'))
+        bank_name = res.get('result').get('bank_name')
+        return 4, '卡号: ' + card_num + '\n' + '有效日期: ' + validate_date + \
+                  '\n' + '卡种: ' + card_type + '\n' + '所属行: ' + bank_name
+
+    def ocr_drive_card(self):
+        response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
+        res = response.json()
+        nums = res.get('words_result_num')
+        results = res.get('words_result')
+        number = results.get('证号').get('words')
+        validate_date = results.get('有效期限').get('words')
+        car_type = results.get('准驾车型').get('words')
+        # start_date = results.get('有效起始日期').get('words')
+        addr = results.get('住址').get('words')
+        name = results.get('姓名').get('words')
+        country = results.get('国籍').get('words')
+        birth = results.get('出生日期').get('words')
+        gender = results.get('性别').get('words')
+        get_time = results.get('初次领证日期').get('words')
+
+        return nums, '证号: ' + number + '\n' + '有效期限: ' + validate_date + '\n' + '准驾车型: ' + car_type + '\n' + \
+                     '住址: ' + addr + '\n' + '姓名: ' + name + '\n' + \
+                     '国籍: ' + country + '\n' + '出生日期: ' + birth + '\n' + '性别: ' + gender + '\n' + '初次领证日期: ' \
+                     + get_time
+
+    def ocr_license_plate(self):
+        response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
+        res = response.json()
+        color = res.get('words_result').get('color')
+        number = res.get('words_result').get('number')
+
+        return 0, '车牌颜色: ' + color + '\n' + '车牌号码: ' + number
