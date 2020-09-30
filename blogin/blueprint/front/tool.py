@@ -30,11 +30,7 @@ def ocr():
         category = request.form.get('category')
         img_url = '/tool/ocr/'+filename
         c_ocr = OCR(filename=basedir + r'/uploads/ocr/'+filename, category=category)
-        results = c_ocr.ocr()
-        nums = results.get('words_result_num')
-        texts = ''
-        for text in results.get('words_result'):
-            texts += text.get('words') + '\n'
+        nums, texts = ocr_result(category, c_ocr)
         return jsonify({'tag': 1, 'nums': nums, 'texts': texts, 'img': img_url})
     return render_template("main/ocr.html")
 
@@ -43,3 +39,16 @@ def ocr():
 def get_blog_sample_img(path, filename):
     path = basedir + '/uploads/' + path + '/'
     return send_from_directory(path, filename)
+
+
+def ocr_result(category, _ocr: OCR):
+    if category == '文字识别':
+        return _ocr.ocr()
+    if category == '身份证识别':
+        return _ocr.ocr_idcard()
+    if category == '银行卡识别':
+        return _ocr.ocr_bankcard()
+    if category == '驾驶证识别':
+        return _ocr.ocr_drive_card()
+    if category == '车牌识别':
+        return _ocr.ocr_license_plate()
