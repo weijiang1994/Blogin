@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_bread with context %}
+{% block title %}
+    IP真实归属地查询
+{% endblock %}
+{% block content %}
+    <main style="background: #eeeeee">
+        <div  class="container">
+            {{ tool_bread("IP真实归属地查询", 'IP查询') }}
+            <div style="background: white; padding: 10px;">
+                <article>
+                    <p class="tool-title">工具说明:</p>
+                    <ul>
+                        <li>IP真实归属地查询是基于ip-api进行开发的，地址<a class="text-info-a" href="http://ip-api.com/">ip-api</a></li>
+                        <li>目前查询结果支持中文、英文、日语、法语、俄语五种查询结果</li>
+                        <li>由于接口地址属于外网源，可能会出现查询缓慢、超时等现象，尽情谅解啦~</li>
+                        <li><strong>查询结果本站不负任何法律责任~</strong></li>
+                    </ul>
+                    <p class="tool-title">工具使用:</p>
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col">
+                            <input class="form-control" id="ip" placeholder="请输入IP地址">
+                        </div>
+                        <div class="col">
+                            <select id="language" class="form-control">
+                                <option>中文</option>
+                                <option>英文</option>
+                                <option>日语</option>
+                                <option>法语</option>
+                                <option>俄语</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button onclick="query()" class="btn btn-secondary">查询</button>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div hidden="hidden" id="ipHint" class="text-center">
+                        <p><b>正在查询IP真实归属地,请稍后...</b></p>
+                    </div>
+                    <div hidden="hidden" class="text-center col-md-4 offset-md-4 " id="result">
+                        <p class="text-muted" id="title"></p>
+                        <ul id="resultUL" class="list-group">
+                            <li class="list-group-item"><strong>所属地:</strong>中国湖南长沙</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+    <script>
+        let datas = ['国家', '省份', '市', '所属大洲', '大洲编号', '运营商', '时区',  '纬度', '经度']
+        function query(){
+            let ip = $("#ip").val();
+            let lang = $("#language").val();
+            if (ip == ''){
+                alert('请输入IP地址~');
+                return false;
+            }
+            $("#ipHint").removeAttr('hidden');
+            $.ajax({
+                url: '/tool/query-ip/',
+                type: 'POST',
+                data: {'ip': ip, 'lang': lang},
+                success: function (res){
+                    if (res.tag == 0){
+                        alert(res.info);
+                        $("#ipHint").attr('hidden', 'hidden');
+                        return false;
+                    }
+                    showIPQueryResult(res);
+                },
+                error: function (){}
+            })
+        }
+
+        function showIPQueryResult(res){
+            $("#ipHint").attr('hidden', 'hidden');
+            $("#title").text('IP真实归属地:'+res.region);
+            $("#result").removeAttr('hidden');
+            let values = res.result;
+            $("#resultUL").html('');
+            for (let i=0;i<values.length;i++){
+                $("#resultUL").append('<li class="list-group-item"><strong>'+datas[i]+':</strong>'+values[i]+'</li>')
+            }
+        }
+    </script>
+{% endblock %}

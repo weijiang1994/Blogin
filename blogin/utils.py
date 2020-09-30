@@ -26,6 +26,8 @@ OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
 OCR_CATEGORY = {'文字识别': 'accurate_basic', '身份证识别': 'idcard', '银行卡识别': 'bankcard',
                 '驾驶证识别': 'driving_license', '车牌识别': 'license_plate'}
 BANK_CARD_TYPE = {0: '不能识别', 1: '借记卡', 2: '信用卡'}
+LANGUAGE = {'中文': 'zh-CN', '英文': 'en', '日语': 'ja', '法语': 'fr', '俄语': 'ru'}
+IP_REG = '((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))'
 
 
 class Operations:
@@ -192,3 +194,22 @@ class OCR:
         number = res.get('words_result').get('number')
 
         return 0, '车牌颜色: ' + color + '\n' + '车牌号码: ' + number
+
+
+class IPQuery:
+    def __init__(self, ip, lang='zh-CN'):
+        self.ip = ip
+        self.lang = LANGUAGE.get(lang)
+        self.url = "http://ip-api.com/json/{}?lang={}&fields=status,continent,continentCode,isp,zip,message,timezone," \
+                   "country,region,regionName,city,lat,lon,query"
+
+    def query(self):
+        if self.ip == '127.0.0.1':
+            return '本地IP'
+        response = requests.get(self.url.format(self.ip, self.lang))
+        response = response.text
+        response = json.loads(response)
+        if response['status'] == 'fail':
+            return '查询失败'
+        return [response['country'], response['regionName'], response['city'], response['continent'],
+                response['continentCode'], response['isp'], response['timezone'], response['lat'], response['lon']]
