@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% from "macro.html" import moment_card, photo_moment_card with context %}
 {% block title %}
     {{ current_user.username }}的个人主页
 {% endblock %}
 {% block content %}
+    {{ moment.locale(auto_detect=True) }}
     <main>
         <div class="container">
             <br>
@@ -38,39 +40,48 @@
             <br>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#moment"><i class="fa fa-photo"></i> 动态</a>
+                    <a class="nav-link active text-info-a" data-toggle="tab" href="#moment"><i class="fa fa-photo"></i> 动态</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
+                    <a class="nav-link text-info-a" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
                         {% if nft_counts %}
                             <span class="badge badge-info">{{ nft_counts }}</span>
                         {% endif %}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#notifications"><i class="fa fa-history"></i> 登录日志</a>
+                    <a class="nav-link text-info-a" data-toggle="tab" href="#notifications"><i class="fa fa-history"></i> 登录日志</a>
                 </li>
             </ul>
 
             <div class="tab-content">
+                <!-- 动态栏 -->
                 <div id="moment" class="container tab-pane active"><br>
-                    {% for comment in ntf_moments %}
-                        <span class="text-muted moment-p" data-toggle="tooltip" data-placement="top" title="{{ comment[1] }}">
-                        <i class="fa fa-clock-o"></i> {{ comment[5] }}</span>
-                        {% if comment[0]['parentComment'] %}
-                            <div class="moment-div">
-                                <p style="color: dodgerblue">{{ comment[0]['parentComment'][0] }}</p>
-                                <p class="moment-p">{{comment[0]['parentComment'][1]|safe}}</p>
-                            </div>
-                        {% endif %}
-                        <div>
-                            {{ comment[2]|safe }}
-                            <p class="moment-p">来自:<a style="color: dodgerblue" href="{{ comment[4] }}">{{ comment[3] }}</a></p>
-                            <hr>
+                    <div style="margin-bottom: 20px">
+                        <a href="#blog" class="btn btn-success" data-toggle="collapse">博客</a>
+                        <a href="#gallery" class="btn btn-success" data-toggle="collapse">相册</a>
+                    </div>
+                    <!-- 博客评论动态 -->
+                    <div id="blog" class="collapse">
+                        <span style="background: #b3ff7b;padding: 10px; border-radius: 5px;" class="text-important"><strong>博客动态</strong></span>
+                        <br>
+                        <br>
+                        {% for comment in blogComments %}
+                            {{ moment_card(comment) }}
+                        {% endfor %}
+                    </div>
+                    <!-- 相册评论动态 -->
+                    <div id="gallery" class="collapse">
+                        <span style="background: #b3ff7b;padding: 10px; border-radius: 5px;" class="text-important"><strong>相册动态</strong></span>
+                        <br>
+                        <br>
+                        {% for comment in photoComments %}
+                            {{ photo_moment_card(comment) }}
+                        {% endfor %}
+                    </div>
 
-                        </div>
-                    {% endfor %}
                 </div>
+
                 <div id="notReadNotification" class="container tab-pane fade"><br>
                     {% if nft_counts %}
                         <div class="text-muted div-click " onclick="markReadedAll()"><i class="fa fa-close"></i> 全部标记为已读</div>
@@ -99,6 +110,7 @@
                         </div><br>
                     {% endfor %}
                 </div>
+
                 <div id="notifications" class="container tab-pane fade"><br>
                     {% if logs|length %}
                         <div class="table-responsive">

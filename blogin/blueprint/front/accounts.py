@@ -13,7 +13,7 @@ from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
 from blogin.forms.auth import ChangePwdForm, EditProfileForm
 from blogin.setting import basedir
-from blogin.models import User, LoginLog
+from blogin.models import User, LoginLog, BlogComment, PhotoComment
 
 accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 
@@ -22,7 +22,11 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @login_required
 def profile(user_id):
     logs = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).all()
-    return render_template('main/accountProfile.html', logs=logs)
+    blog_comments = BlogComment.query.filter_by(author_id=user_id).order_by(BlogComment.timestamp.desc()).all()
+    photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
+
+    return render_template('main/accountProfile.html', logs=logs, blogComments=blog_comments,
+                           photoComments=photo_comments)
 
 
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])

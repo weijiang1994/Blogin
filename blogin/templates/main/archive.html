@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}
+    博客归档
+{% endblock %}
+{% block content %}
+    <main style="background: #eeeeee">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div style="background: white;margin-top: 10px;" class="card-body f-16 archive">
+                        <ul class="pl-4">
+                            {% for year in archives.items() %}
+                                <li>{{ year[0] }} 年
+                                    {% for month in year[1].items() %}
+                                        <ul class="pl-4">
+                                            <li>{{ month[0] }} 月 (共 {{ month[1]|length }} 篇)
+                                                <ul class="pl-4">
+                                                    {% for blog in month[1] %}
+                                                        <li class="text-info">&nbsp;&nbsp;
+                                                            <a class="text-info-a" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    {% include "slider.html" %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

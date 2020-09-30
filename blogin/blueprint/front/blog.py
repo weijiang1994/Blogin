@@ -39,11 +39,11 @@ def blog_article(blog_id):
     replies = []
     cate = BlogType.query.filter_by(id=blog.type_id).first()
     # 顶级评论
-    comments=BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
+    comments = BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
 
     for comment in comments:
-        reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0).\
-                order_by(BlogComment.timestamp.desc()).all()
+        reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
+            order_by(BlogComment.timestamp.desc()).all()
         replies.append(reply)
     db.session.commit()
     return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies)
@@ -116,5 +116,31 @@ def search():
         results = Blog.query.whooshee_search(q).paginate(1, 20)
     if category == 'photo':
         results = Photo.query.whooshee_search(q).paginate(1, 20)
-    results =results.items
+    results = results.items
     return render_template('main/search.html', results=results, q=q, category=category)
+
+
+@blog_bp.route('/blogs/archive/', methods=['GET', 'POST'])
+def archive():
+    blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+    archives = {}
+    for blog in blogs:
+        current_year = str(blog.create_time).split(' ')[0].split('-')[0]
+        current_month = str(blog.create_time).split(' ')[0].split('-')[1]
+        # 如果当前年份不存在,那么当前月份也不存在
+        if not archives.get(current_year):
+            # 记录当前年份以及当前月份
+            archives.setdefault(current_year, {current_month: []})
+            archives.get(current_year).get(current_month).append([blog.id, blog.title,
+                                                                  str(blog.create_time).split(' ')[0][5:]])
+        else:
+            # 如果当前年份存在,月份不存在,则更新一条数据到当前年份中
+            if not archives.get(current_year).get(current_month):
+                archives.get(current_year).update({current_month: []})
+                archives.get(current_year).get(current_month).append([blog.id, blog.title,
+                                                                      str(blog.create_time).split(' ')[0][5:]])
+            else:
+                # 年月都存在则直接将数据拼接到后面
+                archives.get(current_year).get(current_month).append([blog.id, blog.title,
+                                                                      str(blog.create_time).split(' ')[0][5:]])
+    return render_template('main/archive.html', archives=archives)
