@@ -29,7 +29,7 @@
     <main style="background: #eeeeee">
         <div class="container">
             {{ tool_bread('词云图制作', '词云图') }}
-            <div style="background: white; padding: 10px; border-radius: 5px;">
+            <div style="background: white; padding: 10px; border-radius: 5px;margin-bottom: 10px">
                 <article>
                     <p class="tool-title">工具说明:</p>
                     <ul>
@@ -44,17 +44,54 @@
                             <div id="textarea" contenteditable="true" data-text=""></div>
                         </div>
                         <div class="col-md-4">
+                            <label>文本文件</label>
                             <input type="file" id="txt">
+                            <br>
+                            <label>底片:</label>
+                            <br>
+                            <input type="file" id="img">
                         </div>
                         <div class="col">
                         </div>
                     </div>
                     <div style="text-align: right">
-                        <button class="btn btn-secondary">生成词云图</button>
+                        <button class="btn btn-secondary" onclick="generateWordCloud()">生成词云图</button>
                     </div>
 
                 </article>
             </div>
         </div>
     </main>
+    <script>
+        function generateWordCloud(){
+            let img = $("#img")[0].files[0];
+            let txt = $("#txt")[0].files[0];
+            let content = $("#textarea").text();
+            let data = new FormData()
+            if (img == undefined || (txt==undefined && content=='')){
+                alert('请输入关键信息~');
+                return false;
+            }
+            if (txt == undefined){
+                data.append('tag', 0);
+                data.append('content', content);
+                data.append('img', img);
+            }else {
+                data.append('tag', 1);
+                data.append('txt', txt);
+                data.append('img', img);
+            }
+            $.ajax({
+                url:"/tool/word-cloud/",
+                type:"POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (){},
+                error: function (){}
+            })
+        }
+
+    </script>
+
 {% endblock %}

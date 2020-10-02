@@ -54,6 +54,17 @@ def query_ip_addr():
 
 @tool_bp.route('/word-cloud/', methods=['GET', 'POST'])
 def word_cloud():
+    if request.method == 'POST':
+        tag = request.form.get('tag')
+        img = request.files['img']
+        print(tag)
+        if tag == '0':
+            content = request.form.get('content')
+        else:
+            content = request.files['txt']
+        print(img.filename)
+        print(content)
+        return jsonify({'tag': 1})
     return render_template('main/wordCloud.html')
 
 

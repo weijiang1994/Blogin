@@ -98,10 +98,10 @@ class Blog(db.Model):
     __tablename__ = 'blog'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='blog id', autoincrement=True)
-    title = db.Column(db.String(300), nullable=False, comment='blog title', index=True)
+    title = db.Column(db.String(200), nullable=False, comment='blog title', index=True)
     type_id = db.Column(db.INTEGER, db.ForeignKey('blog_type.id'))
     pre_img = db.Column(db.String(200), nullable=False, comment='blog preview image')
-    introduce = db.Column(db.String(300), nullable=False, comment='blog introduce text', index=True)
+    introduce = db.Column(db.String(255), nullable=False, comment='blog introduce text', index=True)
     content = db.Column(db.TEXT, nullable=False, comment='blog content')
     is_private = db.Column(db.INTEGER, nullable=False, default=0, comment='is private? 0:no 1:yes')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
