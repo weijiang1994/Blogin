@@ -18,6 +18,9 @@ else:
 
 
 class Operators:
+    def __init__(self):
+        pass
+
     CONFIRM = 'confirm'
     RESET_PASSWORD = 'reset-password'
 
