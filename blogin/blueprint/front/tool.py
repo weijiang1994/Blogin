@@ -71,7 +71,7 @@ def word_cloud():
             wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
             result = wc.generate()
         if result:
-            return jsonify({'tag': 1, 'wc': '/tool/wordcloud/word-cloud.jpg',
+            return jsonify({'tag': 1, 'wc': '/tool/wordcloud/' + result,
                             'originImg': '/tool/wordcloud/' + filename})
         else:
             return jsonify({'tag': 0, 'info': '抱歉,词云生成出错了~'})

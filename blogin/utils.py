@@ -243,8 +243,9 @@ class WordCloud:
             w = wc.WordCloud(font_path="simkai.ttf", mask=mask, width=1000, height=700, background_color="white",
                              max_words=20)
             w.generate(self.words)
-            w.to_file(basedir + '/uploads/wordcloud/word-cloud.jpg')
-            return basedir + '/uploads/wordcloud/word-cloud.jpg'
+            pre = str(datetime.datetime.now()).split(' ')[1].replace(':', '')
+            w.to_file(basedir + '/uploads/wordcloud/' + pre + '.jpg')
+            return pre + '.jpg'
         except:
             import traceback
             traceback.format_exc()
