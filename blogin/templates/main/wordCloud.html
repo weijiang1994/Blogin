@@ -50,6 +50,13 @@
                             <label>底片:</label>
                             <br>
                             <input type="file" id="img">
+                            <span class="text-muted">Tip:</span>
+                            <br>
+                            <ul>
+                                <li>优先使用txt文本作为分词内容</li>
+                                <li>底片为生成词云图的样式图片</li>
+                                <li>上传的txt文件需要为utf-8的编码格式</li>
+                            </ul>
                         </div>
                         <div class="col">
                         </div>
@@ -57,7 +64,27 @@
                     <div style="text-align: right">
                         <button class="btn btn-secondary" onclick="generateWordCloud()">生成词云图</button>
                     </div>
+                    <hr>
+                    <div hidden="hidden" id="wcHint" class="text-center">
+                        <p><b>正在生成词云图片,请稍后...</b></p>
+                    </div>
+                    <div id="resultDiv" hidden="hidden" class="no-results">
+                        <p class="tool-title">生成结果:</p>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-4 text-center">
+                                <label>原始图像:</label>
+                                <img id="originImg" class="img-fluid">
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label>词云图:</label>
+                                <img id="wcImg" class="img-fluid">
+                            </div>
+                            <div class="col-md-2"></div>
 
+                        </div>
+                        a
+                    </div>
                 </article>
             </div>
         </div>
@@ -72,6 +99,7 @@
                 alert('请输入关键信息~');
                 return false;
             }
+            $("#wcHint").removeAttr('hidden');
             if (txt == undefined){
                 data.append('tag', 0);
                 data.append('content', content);
@@ -87,7 +115,16 @@
                 data: data,
                 processData: false,
                 contentType: false,
-                success: function (){},
+                success: function (res){
+                    if (!res.tag){
+                        alert(res.info);
+                        return false;
+                    }
+                    $("#resultDiv").removeAttr('hidden');
+                    $("#originImg").attr('src', res.originImg);
+                    $("#wcImg").attr('src', res.wc);
+                    $("#wcHint").attr('hidden', 'hidden');
+                },
                 error: function (){}
             })
         }

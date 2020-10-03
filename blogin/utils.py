@@ -16,8 +16,12 @@ import requests
 from flask import current_app, request, redirect, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
+import jieba
+import wordcloud as wc
 
-from blogin import db
+from blogin.extension import db
+from blogin.setting import basedir
+from imageio import imread
 
 IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,region,regionName,city,lat,lon,query"
 OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
@@ -117,6 +121,13 @@ def allow_img_file(filename):
     return True
 
 
+def allow_txt_file(filename):
+    suffix = filename.split('.')[0]
+    if suffix != 'txt':
+        return False
+    return True
+
+
 class OCR:
     def __init__(self, filename, category='accurate_basic'):
         self.filename = filename
@@ -164,7 +175,7 @@ class OCR:
         card_type = BANK_CARD_TYPE.get(res.get('result').get('bank_card_type'))
         bank_name = res.get('result').get('bank_name')
         return 4, '卡号: ' + card_num + '\n' + '有效日期: ' + validate_date + \
-                  '\n' + '卡种: ' + card_type + '\n' + '所属行: ' + bank_name
+               '\n' + '卡种: ' + card_type + '\n' + '所属行: ' + bank_name
 
     def ocr_drive_card(self):
         response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
@@ -183,9 +194,9 @@ class OCR:
         get_time = results.get('初次领证日期').get('words')
 
         return nums, '证号: ' + number + '\n' + '有效期限: ' + validate_date + '\n' + '准驾车型: ' + car_type + '\n' + \
-                     '住址: ' + addr + '\n' + '姓名: ' + name + '\n' + \
-                     '国籍: ' + country + '\n' + '出生日期: ' + birth + '\n' + '性别: ' + gender + '\n' + '初次领证日期: ' \
-                     + get_time
+               '住址: ' + addr + '\n' + '姓名: ' + name + '\n' + \
+               '国籍: ' + country + '\n' + '出生日期: ' + birth + '\n' + '性别: ' + gender + '\n' + '初次领证日期: ' \
+               + get_time
 
     def ocr_license_plate(self):
         response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
@@ -213,3 +224,28 @@ class IPQuery:
             return '查询失败'
         return [response['country'], response['regionName'], response['city'], response['continent'],
                 response['continentCode'], response['isp'], response['timezone'], response['lat'], response['lon']]
+
+
+class WordCloud:
+    def __init__(self, txt=None, img=None):
+        self.txt = txt
+        self.img = img
+        self.words = None
+
+    def cut(self):
+        self.words = jieba.cut(self.txt)
+        self.words = ' '.join(self.words)
+
+    def generate(self):
+        try:
+            mask = imread(self.img)
+            self.cut()
+            w = wc.WordCloud(font_path="simkai.ttf", mask=mask, width=1000, height=700, background_color="white",
+                             max_words=20)
+            w.generate(self.words)
+            w.to_file(basedir + '/uploads/wordcloud/word-cloud.jpg')
+            return basedir + '/uploads/wordcloud/word-cloud.jpg'
+        except:
+            import traceback
+            traceback.format_exc()
+            return False
