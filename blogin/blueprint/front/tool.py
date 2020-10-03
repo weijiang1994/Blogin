@@ -9,7 +9,7 @@
 from flask import Blueprint, render_template, request, jsonify, send_from_directory
 
 from blogin.setting import basedir
-from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG
+from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud
 import re
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -57,13 +57,24 @@ def word_cloud():
     if request.method == 'POST':
         tag = request.form.get('tag')
         img = request.files['img']
-        print(tag)
+        filename = img.filename
+        img.save(basedir + '/uploads/wordcloud/' + filename)
         if tag == '0':
             content = request.form.get('content')
+            wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
+            result = wc.generate()
         else:
             content = request.files['txt']
-        print(img.filename)
-        print(content)
+            content.save(basedir + '/uploads/wordcloud/' + content.filename)
+            with open(basedir + '/uploads/wordcloud/' + content.filename) as f:
+                content = f.read()
+            wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
+            result = wc.generate()
+        if result:
+            return jsonify({'tag': 1, 'wc': '/tool/wordcloud/word-cloud.jpg',
+                            'originImg': '/tool/wordcloud/' + filename})
+        else:
+            return jsonify({'tag': 0, 'info': '抱歉,词云生成出错了~'})
         return jsonify({'tag': 1})
     return render_template('main/wordCloud.html')
 
