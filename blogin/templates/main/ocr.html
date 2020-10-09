@@ -35,7 +35,7 @@
                         <li>OCR工具是基于百度的AI开发平台进行开发的，地址<a class="text-info-a" href="https://cloud.baidu.com/doc/OCR/s/zk3h7xw5e">百度AI平台</a></li>
                         <li>目前具有图片文字、身份证<b><i>(正面)</i></b>、银行卡、驾驶证、车牌识别等功能</li>
                         <li>由于使用的是免费的API每天都有接口调用限制，如出现识别失败的问题，可能就是次数限制，尽请谅解，毕竟人穷买不起付费版~</li>
-                        <li><strong>选择识别类型后请上传正确的图片！！！识别结果本站不负法律任何责任~</strong></li>
+                        <li><strong>选择识别类型后请上传正确的图片！！！识别结果仅供参考~</strong></li>
                     </ul>
                     <p class="tool-title">工具使用:</p>
                     <form id="upload" enctype="multipart/form-data">
@@ -68,7 +68,7 @@
                         <p class="text-muted" id="nums"></p>
                         <div class="row">
                             <div class="col-md-4">
-                                <img id="originImg" class="img-fluid">
+                                <img id="originImg" data-toggle="modal" data-target="#bigImg" class="img-fluid">
                             </div>
                             <div class="col-md-8">
                                 <div id="textarea" contenteditable="true" data-text="输入内容..."></div>
@@ -76,6 +76,15 @@
                         </div>
                     </div>
                 </article>
+            </div>
+        </div>
+        <div class="modal fade" id="bigImg" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="img">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img id="BigImg" class="img-fluid" src="">
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -112,7 +121,8 @@
             $("#ocrHint").attr('hidden', 'hidden');
             $("#resultDiv").removeAttr('hidden');
             $("#textarea").html(res.texts);
-            $("#originImg").attr('src', res.img)
+            $("#originImg").attr('src', res.img);
+            $("#BigImg").attr('src', res.img);
             $("#nums").text('文字行数:'+res.nums);
         }
     </script>

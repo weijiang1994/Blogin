@@ -7,7 +7,7 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification
 from blogin.extension import db
 from flask_login import current_user, login_required
 
@@ -83,10 +83,15 @@ def new_comment():
     reply_id = request.form.get('replyID')
     parent_id = request.form.get('parentID')
     author = current_user._get_current_object()
+    notify = comment
     blog = Blog.query.get_or_404(blog_id)
     comment = BlogComment(body=comment, author=author, blog=blog)
     if reply_id:
         comment.replied = BlogComment.query.get_or_404(reply_id)
+        # title = Blog.query.get_or_404(blog_id).title
+        new_notify = Notification(type=0, target_id=blog_id, send_user=author.username,
+                                  receive_id=comment.replied.author_id, msg=notify, target_name=blog.title)
+        db.session.add(new_notify)
     if parent_id:
         comment.parent_id = parent_id
     db.session.add(comment)
