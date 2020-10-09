@@ -111,5 +111,12 @@ def reset_confirm():
 
     form = ResetPwdForm()
     if form.validate_on_submit():
+        email = form.email.data
+        usr = User.query.filter_by(email=email).first()
+        if not usr:
+            flash('邮箱不存在，请输入正确的邮箱~', 'danger')
+            return
+        pwd= form.confirm_pwd.data
+
         pass
     return render_template('main/auth/resetPwd.html', form=form)
