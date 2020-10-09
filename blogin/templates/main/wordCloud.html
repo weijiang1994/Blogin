@@ -65,7 +65,7 @@
                     </div>
                     <hr>
                     <div hidden="hidden" id="wcHint" class="text-center">
-                        <p><b>正在生成词云图片,请稍后...</b></p>
+                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>正在生成词云图片,请稍后...</b></p>
                     </div>
                     <div id="resultDiv" hidden="hidden" class="no-results">
                         <p class="tool-title">生成结果:</p>
@@ -73,18 +73,25 @@
                             <div class="col-md-2"></div>
                             <div class="col-md-4 text-center">
                                 <label>原始图像:</label>
-                                <img id="originImg" class="img-fluid">
+                                <img id="originImg"  data-toggle="modal" data-target="#bigImg" class="img-fluid">
                             </div>
                             <div class="col-md-4 text-center">
                                 <label>词云图:</label>
                                 <img id="wcImg" class="img-fluid">
                             </div>
                             <div class="col-md-2"></div>
-
                         </div>
-                        a
                     </div>
                 </article>
+            </div>
+        </div>
+        <div class="modal fade" id="bigImg" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="img">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img id="BigImg" class="img-fluid" src="">
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -121,6 +128,7 @@
                     }
                     $("#resultDiv").removeAttr('hidden');
                     $("#originImg").attr('src', res.originImg);
+                    $("#BigImg").attr('src', res.originImg);
                     $("#wcImg").attr('src', res.wc);
                     $("#wcHint").attr('hidden', 'hidden');
                 },
