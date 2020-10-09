@@ -11,6 +11,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import or_
+from blogin.forms.forms import ResetPwdForm
 
 from blogin.forms.auth import RegisterForm, LoginForm
 from blogin.models import User, LoginLog
@@ -103,6 +104,12 @@ def reset_password():
     return render_template('main/auth/pwdResetNext.html')
 
 
-@auth_bp.route('/reset-confirm/')
+@auth_bp.route('/reset-confirm/', methods=['POST', 'GET'])
 def reset_confirm():
-    pass
+    if current_user.is_authenticated:
+        return redirect(url_for('.login'))
+
+    form = ResetPwdForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('main/auth/resetPwd.html', form=form)

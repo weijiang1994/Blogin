@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+    重置密码
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <br>
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    {% for message in get_flashed_messages() %}
+                        <div style="margin-top: 5px;" class="text-center alert alert-danger" role="alert">
+                            {{ message }}
+                            <button type="button" class="close btn btn-small" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        <img class="img-fluid" src="/static/img/blogin.png">
+                        <br>
+                        <br>
+                        <h2><strong>重置密码</strong></h2>
+                        <br>
+                    </div>
+                    <form method="post">
+                        {{ form.csrf_token }}
+                        {{ wtf.form_field(form.email) }}
+                        {{ wtf.form_field(form.new_pwd) }}
+                        {{ wtf.form_field(form.confirm_pwd) }}
+                        {{ wtf.form_field(form.ver_code) }}
+                        {{ wtf.form_field(form.submit, class="btn btn-success float-right") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
