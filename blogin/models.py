@@ -13,6 +13,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
+class Notification(db.Model):
+    __tablename__ = 'notification'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    type = db.Column(db.INTEGER, default=0, comment='notification type 0 blog 1 photo')
+    target_id = db.Column(db.INTEGER)
+    target_name = db.Column(db.String(200))
+    send_user = db.Column(db.String(40))
+    receive_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    msg = db.Column(db.String(400))
+    read = db.Column(db.INTEGER, default=0, comment='is readed? 0 no 1 yes')
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+    receive_user = db.relationship('User', back_populates='receive_notify')
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
@@ -33,6 +49,8 @@ class User(db.Model, UserMixin):
     login_logs = db.relationship('LoginLog', back_populates='user', cascade='all')
     blog_comments = db.relationship('BlogComment', back_populates='author', cascade='all')
     likes = db.relationship('LikePhoto', back_populates='user', cascade='all')
+
+    receive_notify = db.relationship('Notification', back_populates='receive_user', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -201,7 +219,7 @@ class Tag(db.Model):
 
 
 class PhotoComment(db.Model):
-    __tablename__='photo_comment'
+    __tablename__ = 'photo_comment'
 
     id = db.Column(db.INTEGER, primary_key=True)
     body = db.Column(db.String(400))
@@ -220,7 +238,7 @@ class PhotoComment(db.Model):
 
 
 class LoveMe(db.Model):
-    __tablename__ ='loveme'
+    __tablename__ = 'loveme'
 
     id = db.Column(db.INTEGER, primary_key=True, comment='primary key id')
     counts = db.Column(db.INTEGER, nullable=False, default=0)
@@ -244,3 +262,6 @@ class LikePhoto(db.Model):
 
     photo = db.relationship('Photo', back_populates='likes')
     user = db.relationship('User', back_populates='likes')
+
+
+

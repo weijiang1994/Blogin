@@ -30,6 +30,8 @@ MarkupSafe==1.1.1
 matplotlib==3.3.2
 numpy==1.19.2
 Pillow==7.2.0
+PyMySQL==0.10.1
+pyparsing==2.4.7
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 python-editor==1.0.4

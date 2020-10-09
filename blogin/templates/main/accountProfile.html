@@ -50,7 +50,7 @@
                     <a class="nav-link active text-info-a" data-toggle="tab" href="#moment"><i class="fa fa-photo"></i> 动态</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-info-a" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
+                    <a class="nav-link text-info-a" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读 <span class="badge badge-secondary">{{ notifies|length }}</span>
                         {% if nft_counts %}
                             <span class="badge badge-info">{{ nft_counts }}</span>
                         {% endif %}
@@ -90,32 +90,29 @@
                 </div>
 
                 <div id="notReadNotification" class="container tab-pane fade"><br>
-                    {% if nft_counts %}
-                        <div class="text-muted div-click " onclick="markReadedAll()"><i class="fa fa-close"></i> 全部标记为已读</div>
-                    {% endif %}
-                    {% for ntf in ntf_conmment %}
-                        <div class="comment-parent pt-2" style="border: solid 2px #afd9ee; padding: 5px; border-radius: 5px;" id="com-814">
-                            <li class="media">
-                                <img class="avatar" src="{{ ntf[1] }}" alt="">
-                                <div class="media-body ml-2">
-                                    <a class="float-right small mr-2" onclick="markRead(this.id)" id="{{ ntf[0] }}" style="color: rgb(134, 142, 150); cursor: pointer;">标记为已读</a>
-                                    <p class="mt-0 mb-1">
-                                        <i class="fa fa-user-circle" ></i>
-                                        <strong>{{ ntf[2] }} 回复你:</strong>
-                                    </p>
-                                    <p class="small text-muted">
-                                        <span class="badge badge-success"><i class="fa fa-clock-o"></i> {{ ntf[3] }}</span>
-                                    </p>
-                                </div>
-                            </li>
-                            <div class="ntf-comment-body">
-                                {{ ntf[5]|safe }}
-                                <hr>
-                                查看详情:<a class="text-muted" href="/detail/article/{{ ntf[4] }}">{{ ntf[4] }}</a>
+                    {% if notifies %}
+                        <div class="text-muted float-right"><span style="min-height: 8px;" class="badge badge-danger"><a style="color: inherit; text-decoration: none;" href="/accounts/mark-all/">全部标记为已读</a></span></div>
+                        <br>
+                        <hr>
+                        {% for notify in notifies %}
+                            <div>
+                                <div class="float-right text-muted"><span class="badge badge-light"><a style="color: inherit; text-decoration: none;" href="/accounts/mark/{{ notify.id }}/">已读</a></span></div>
+                                <span style="font-size: 14px;" class="text-muted"><i class="fa fa-clock-o"></i> {{ moment(notify.timestamp, local=True).fromNow(refresh=True)  }}</span>
+                                <p>用户<strong>{{ notify.send_user }}</strong>在
+                                    {% if notify.type == 0 %}
+                                        <span class="badge badge-dark">博客</span><a href="/blog/article/{{ notify.target_id }}">{{ notify.target_name }}</a>
+                                    {% else %}
+                                        <span class="badge badge-success">照片</span><a href="/gallery/photo/{{ notify.target_id }}">{{ notify.target_name }}</a>
+                                    {% endif %}
+                                    回复你</p>
+                                <h6>{{ notify.msg|safe }}</h6>
                             </div>
+                            <hr>
+                        {% endfor %}
+                    {% else %}
+                        <div>您还没有新消息!</div>
+                    {% endif %}
 
-                        </div><br>
-                    {% endfor %}
                 </div>
 
                 <div id="notifications" class="container tab-pane fade"><br>
@@ -144,7 +141,6 @@
                         </div>
                     {% endif %}
                 </div>
-
             </div>
         </div>
         </div>

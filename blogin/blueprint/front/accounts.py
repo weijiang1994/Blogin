@@ -6,14 +6,14 @@
 @File    : accounts
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request
+from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for
 from flask_login import login_required, current_user
 
 from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
 from blogin.forms.auth import ChangePwdForm, EditProfileForm
 from blogin.setting import basedir
-from blogin.models import User, LoginLog, BlogComment, PhotoComment
+from blogin.models import User, LoginLog, BlogComment, PhotoComment, Notification
 
 accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 
@@ -24,9 +24,10 @@ def profile(user_id):
     logs = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).all()
     blog_comments = BlogComment.query.filter_by(author_id=user_id).order_by(BlogComment.timestamp.desc()).all()
     photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
-
+    notifies = Notification.query.filter_by(receive_id=current_user.id, read=0).\
+        order_by(Notification.timestamp.desc()).all()
     return render_template('main/accountProfile.html', logs=logs, blogComments=blog_comments,
-                           photoComments=photo_comments)
+                           photoComments=photo_comments, notifies=notifies)
 
 
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])
@@ -70,3 +71,24 @@ def edit_profile():
 def get_avatar(filename):
     path = basedir + '/uploads/avatars/'
     return send_from_directory(path, filename)
+
+
+@accounts_bp.route('/mark/<int:notify_id>/')
+@login_required
+def mark_notify(notify_id):
+    no = Notification.query.get_or_404(notify_id)
+    no.read = 1
+    db.session.commit()
+    flash('操作成功!', 'success')
+    return redirect(url_for('.profile', user_id=current_user.id))
+
+
+@accounts_bp.route('/mark-all/')
+@login_required
+def mark_all():
+    notifies = Notification.query.filter_by(receive_id=current_user.id).all()
+    for notify in notifies:
+        notify.read = 1
+    db.session.commit()
+    flash('操作成功!', 'success')
+    return redirect(url_for('.profile', user_id=current_user.id))

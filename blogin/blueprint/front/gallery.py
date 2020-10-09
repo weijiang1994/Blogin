@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, send_from_directory, flash, redire
 from flask_login import login_required, current_user
 
 from blogin import basedir, db
-from blogin.models import Photo, LikePhoto
+from blogin.models import Photo, LikePhoto, Notification
 from blogin.models import PhotoComment
 
 gallery_bp = Blueprint('gallery_bp', __name__, url_prefix='/gallery')
@@ -72,9 +72,13 @@ def new_comment():
     parent_id = request.form.get('parentID')
     author = current_user._get_current_object()
     img = Photo.query.get_or_404(blog_id)
+    notify = comment
     comment = PhotoComment(body=comment, author=author, photo=img)
     if reply_id:
         comment.replied = PhotoComment.query.get_or_404(reply_id)
+        new_notify = Notification(type=1, target_id=blog_id, send_user=author.username,
+                                  receive_id=comment.replied.author_id, msg=notify, target_name=img.title)
+        db.session.add(new_notify)
     if parent_id:
         comment.parent_id = parent_id
     db.session.add(comment)

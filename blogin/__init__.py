@@ -84,7 +84,7 @@ def register_extension(app: Flask):
     avatar.init_app(app)
     mail.init_app(app)
     whooshee.init_app(app)
-    
+
 
 # 注册蓝图
 def register_blueprint(app: Flask):
@@ -143,6 +143,7 @@ def register_cmd(app: Flask):
             db.session.add(super_user)
             db.session.commit()
             click.echo('超级管理员创建成功!')
+            click.echo('应用初始化成功!')
             click.echo('程序退出...')
         except:
             import traceback
