@@ -23,7 +23,11 @@ from blogin.extension import db
 from blogin.setting import basedir
 from imageio import imread
 
+# IP查询工具配置
 IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,region,regionName,city,lat,lon,query"
+IP_REG = '((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))'
+
+# 百度OCR配置
 OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
 OCR_TOKEN = '24.487f3dbf8ba5259be2f7b321741f02cf.2592000.1604024498.282335-22776145'
 OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
@@ -31,7 +35,6 @@ OCR_CATEGORY = {'文字识别': 'accurate_basic', '身份证识别': 'idcard', '
                 '驾驶证识别': 'driving_license', '车牌识别': 'license_plate'}
 BANK_CARD_TYPE = {0: '不能识别', 1: '借记卡', 2: '信用卡'}
 LANGUAGE = {'中文': 'zh-CN', '英文': 'en', '日语': 'ja', '法语': 'fr', '俄语': 'ru'}
-IP_REG = '((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))'
 
 
 class Operations:
@@ -194,9 +197,8 @@ class OCR:
         get_time = results.get('初次领证日期').get('words')
 
         return nums, '证号: ' + number + '\n' + '有效期限: ' + validate_date + '\n' + '准驾车型: ' + car_type + '\n' + \
-               '住址: ' + addr + '\n' + '姓名: ' + name + '\n' + \
-               '国籍: ' + country + '\n' + '出生日期: ' + birth + '\n' + '性别: ' + gender + '\n' + '初次领证日期: ' \
-               + get_time
+               '住址: ' + addr + '\n' + '姓名: ' + name + '\n' + '国籍: ' + country + '\n' + '出生日期: ' + birth + \
+               '\n' + '性别: ' + gender + '\n' + '初次领证日期: ' + get_time
 
     def ocr_license_plate(self):
         response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
@@ -240,7 +242,8 @@ class WordCloud:
         try:
             mask = imread(self.img)
             self.cut()
-            w = wc.WordCloud(font_path="simkai.ttf", mask=mask, width=1000, height=700, background_color="white",
+            w = wc.WordCloud(font_path=basedir + r'/blogin/res/STFangsong.ttf', mask=mask, width=len(mask[0]),
+                             height=len(mask), background_color="white",
                              max_words=20)
             w.generate(self.words)
             pre = str(datetime.datetime.now()).split(' ')[1].replace(':', '')
@@ -248,5 +251,5 @@ class WordCloud:
             return pre + '.jpg'
         except:
             import traceback
-            traceback.format_exc()
+            traceback.print_exc()
             return False
