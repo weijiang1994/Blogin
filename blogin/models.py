@@ -264,4 +264,11 @@ class LikePhoto(db.Model):
     user = db.relationship('User', back_populates='likes')
 
 
+class VerifyCode(db.Model):
+    __tablename__ = 'ver_code'
 
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.INTEGER)
+    code = db.Column(db.INTEGER)
+    create_time = db.Column(db.DateTime, default=datetime.now)
+    is_retire = db.Column(db.BOOLEAN)

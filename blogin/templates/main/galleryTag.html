@@ -24,12 +24,8 @@
     <main>
         <div class="container">
             {% include "_flash.html" %}
-{#            <div style="margin-top: 10px; margin-bottom: 30px; background: linear-gradient(35deg, #CCFFFF, #FFCCCC); border-radius: 5px;" class="description px-3 pt-3 pb-1">#}
-{#                <h3 class="f-17" style="font-weight: bold" id="categoryName"><i class="fa fa-camera-retro"></i> 写代码厨子的业余</h3>#}
-{#                <p class="f-16">“我们不只是用相机拍照，因为我们带到摄影中去的是所有我们读过的书，看过的电影，听过的音乐，爱过的人。”——安塞尔 亚当斯</p>#}
-{#            </div>#}
             <div>
-            {{ gallery_bread("摄影穷三代", '相册') }}
+                {{ gallery_bread('相片类别-'+tags.name, tags.name) }}
                 {% for photo in photos %}
                     <div class="border-card card photo-card">
                         <a href="/gallery/photo/{{ photo.id }}" class="card-thumbnail">

@@ -15,8 +15,8 @@ from sqlalchemy import or_
 from blogin.forms.auth import RegisterForm, LoginForm
 from blogin.models import User, LoginLog
 from blogin.extension import db
-from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token
-from blogin.emails import send_confirm_email
+from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token, generate_ver_code
+from blogin.emails import send_confirm_email, send_reset_password_email
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
@@ -82,3 +82,27 @@ def confirm(token):
     else:
         flash('不是你的就别想有拥有啦!╭(╯^╰)╮  邮箱验证失败啦!', 'danger')
     return redirect(url_for('blog_bp.index'))
+
+
+@auth_bp.route('/forget-password/')
+def forget_pwd():
+    return render_template('main/auth/forgetPwd.html')
+
+
+@auth_bp.route('/password-reset/', methods=['GET', 'POST'])
+def reset_password():
+    email = request.form.get('email')
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        flash('邮箱不存在,请输入正确的邮箱!', 'danger')
+        return redirect(url_for('.forget_pwd'))
+    ver_code = generate_ver_code()
+    token = generate_token(user=user, operation=Operations.RESET_PASSWORD)
+    send_reset_password_email(user=user, token=token, ver_code=ver_code)
+    flash('验证邮件发送成功，请到邮箱查看然后重置密码!', 'success')
+    return render_template('main/auth/pwdResetNext.html')
+
+
+@auth_bp.route('/reset-confirm/')
+def reset_confirm():
+    pass
