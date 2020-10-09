@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}
+    验证邮件发送成功
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 offset-md-4 ">
+                {% include "_flash.html" %}
+                    <div class="text-center">
+                        <img class="img-fluid" src="/static/img/blogin.png">
+                        <br>
+                        <br>
+                        <h2><strong>重置密码</strong></h2>
+                        <br>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <label style="font-weight: bold">检查您的电子邮件的链接，以重置您的密码。如果它在几分钟内没有出现，检查你的垃圾邮件文件夹。</label>
+                            <br>
+                            <div class="text-center">
+                                <a class="btn btn-dark" href="/auth/login/">返回登录页面</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}

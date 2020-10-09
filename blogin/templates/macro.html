@@ -95,3 +95,15 @@
         </ol>
     </nav>
 {% endmacro %}
+
+{% macro gallery_bread(name, s_name) %}
+    <nav style="padding-top: 10px" aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light">
+            <li class="breadcrumb-item">
+                <a class="text-info-a" href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item active d-none d-md-block" aria-current="page">{{ name }}</li>
+            <li class="breadcrumb-item active d-md-none" aria-current="page">{{ s_name }}</li>
+        </ol>
+    </nav>
+{% endmacro %}

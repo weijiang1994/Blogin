@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, send_from_directory, flash, redire
 from flask_login import login_required, current_user
 
 from blogin import basedir, db
-from blogin.models import Photo, LikePhoto, Notification
+from blogin.models import Photo, LikePhoto, Notification, Tag
 from blogin.models import PhotoComment
 
 gallery_bp = Blueprint('gallery_bp', __name__, url_prefix='/gallery')
@@ -95,3 +95,10 @@ def delete_comment():
     db.session.commit()
     flash('评论删除成功', 'success')
     return ''
+
+
+@gallery_bp.route('/tag/<int:tag_id>/')
+def tag(tag_id):
+    tags = Tag.query.get_or_404(tag_id)
+    photos = Photo.query.with_parent(tags).order_by(Photo.create_time.desc())
+    return render_template('main/galleryTag.html', photos=photos, tags=tags)
