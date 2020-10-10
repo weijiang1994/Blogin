@@ -6,6 +6,8 @@
 @File    : tool
 @Software: PyCharm
 """
+import os
+
 from flask import Blueprint, render_template, request, jsonify, send_from_directory
 
 from blogin.setting import basedir
@@ -66,6 +68,10 @@ def word_cloud():
         else:
             content = request.files['txt']
             content.save(basedir + '/uploads/wordcloud/' + content.filename)
+            size = os.path.getsize(basedir + '/uploads/wordcloud/' + content.filename)
+            if size > 1700000:
+                os.remove(basedir + '/uploads/wordcloud/' + content.filename)
+                return jsonify({'tag': 0, 'info': '上传txt请小于1.6M!'})
             with open(basedir + '/uploads/wordcloud/' + content.filename) as f:
                 content = f.read()
             wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
