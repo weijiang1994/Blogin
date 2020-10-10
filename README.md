@@ -23,7 +23,7 @@ service redis-server start
 sudo mysql -u root -p
 ```
 ```mysql
-CREATE DATABASE blog;
+create database blog CHARACTER SET utf8 COLLATE utf8_general_ci;
 SHOW DATABASES ;
 ```
 如果控制台输出的内容中包含有`blog`数据库，则说明数据库创建成功。

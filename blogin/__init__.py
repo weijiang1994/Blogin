@@ -150,3 +150,7 @@ def register_cmd(app: Flask):
             traceback.print_exc()
             db.session.rollback()
             click.echo('操作出现异常,退出...')
+
+
+# index-url = http://mirrors.tencentyun.com/pypi/simple
+# trusted-host = mirrors.tencentyun.com
