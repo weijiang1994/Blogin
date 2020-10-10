@@ -241,7 +241,7 @@ class WordCloud:
         try:
             mask = imread(self.img)
             self.cut()
-            w = wc.WordCloud(font_path=basedir + r'/blogin/res/STFangsong.ttf', mask=mask, width=len(mask[0]),
+            w = wc.WordCloud(font_path=basedir + r'/res/STFangsong.ttf', mask=mask, width=len(mask[0]),
                              height=len(mask), background_color="white",
                              max_words=20)
             w.generate(self.words)
