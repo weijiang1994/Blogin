@@ -64,7 +64,7 @@ def get_ip_real_add(ip):
     response = json.loads(response)
     if response['status'] == 'fail':
         return '定位失败'
-    return response['country']-response['city']
+    return response['country'] + '-' + response['city']
 
 
 def generate_token(user, operation, expire_in=None, **kwargs):
