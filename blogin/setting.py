@@ -65,6 +65,9 @@ class BaseConfig:
     # WHOOSHEE configure
     WHOOSHEE_MIN_STRING_LEN = 1
 
+    # Redis Configure
+    EXPIRE_TIME = 60 * 10
+
 
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = prefix + os.path.join(basedir, 'data-dev.db')

@@ -5,6 +5,7 @@ Here is your password reset link:
 
 This is your verify code of your change password
     {{ ver_code }}
+The captcha will expire after 10 minutes.
 If this operate is not by yourself, please change your password right now!Maybe your account was cracked.</p>
 
 (Please do not reply to this notification, this inbox is not monitored.)

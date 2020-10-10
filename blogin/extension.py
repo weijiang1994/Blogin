@@ -16,6 +16,7 @@ from flask_share import Share
 from flask_avatars import Avatars
 from flask_mail import Mail
 from flask_whooshee import Whooshee
+import redis
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -27,6 +28,8 @@ share = Share()
 avatar = Avatars()
 mail = Mail()
 whooshee = Whooshee()
+pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
+rd = redis.Redis(connection_pool=pool)
 
 
 @login_manager.user_loader
