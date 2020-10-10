@@ -35,7 +35,7 @@
                             <p class="text-muted">个性签名: <i class="fa fa-text-width"></i> {{ current_user.slogan }}</p>
                             <br>
                             {% if not current_user.confirm %}
-                                <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/profile/edit/">认证邮件</a></button>
+                                <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/auth/resend-confirm/">认证邮件</a></button>
                             {% else %}
                                 <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/profile/edit/">编辑资料</a></button>
                                 <button class="btn btn-danger float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/password/change/">修改密码</a></button>
