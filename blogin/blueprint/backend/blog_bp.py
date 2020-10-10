@@ -13,7 +13,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from flask_ckeditor import upload_fail, upload_success
 
 from blogin import basedir
-from blogin.blueprint.backend.forms import PostForm
+from blogin.blueprint.backend.forms import PostForm, EditPostForm
 from blogin.models import BlogType, Blog, States
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path
@@ -75,6 +75,27 @@ def blog_edit():
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
                                 '/backend/editArticleType/' + str(_type.id)])
     return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs)
+
+
+@be_blog_bp.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
+def blog_content_edit(blog_id):
+    form = EditPostForm()
+    blog = Blog.query.get_or_404(blog_id)
+    if form.validate_on_submit():
+        blog.content = form.body.data
+        blog.title = form.title.data
+        type = form.blog_type.choices[int(form.blog_type.data) - 1][0]
+        cate = BlogType.query.filter_by(id=type).first()
+        blog.type_id = cate.id
+        blog.introduce = form.brief_content.data
+        db.session.commit()
+        return redirect(url_for('blog_bp.blog_article', blog_id=blog_id))
+
+    form.title.data = blog.title
+    form.blog_type.data = blog.type_id
+    form.brief_content.data = blog.introduce
+    form.body.data = blog.content
+    return render_template('backend/editBlogContent.html', form=form)
 
 
 @be_blog_bp.route('/blog/delete/<blog_id>/', methods=['GET', 'POST'])

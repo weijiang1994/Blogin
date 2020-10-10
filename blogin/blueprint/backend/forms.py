@@ -35,6 +35,25 @@ class PostForm(FlaskForm):
         self.blog_type.choices = [(cate.id, cate.name) for cate in categories]
 
 
+class EditPostForm(FlaskForm):
+    title = StringField(u'博客标题', validators=[Length(min=3, max=50, message='用户名长度必须在3到20位之间')],
+                        render_kw={'class': '', 'rows': 50, 'placeholder': '输入您的博客标题'})
+    blog_type = SelectField(label=u'博客类型',
+                            default=0,
+                            coerce=int)
+    blog_level = SelectField(label=u'博客权限', choices=[(1, '公开'), (2, '私有')], validators=[DataRequired()],
+                             default=1, coerce=int)
+    brief_content = TextAreaField(u'博客简介', validators=[DataRequired()])
+
+    body = CKEditorField('Body', validators=[DataRequired(message='请输入博客内容')])
+    submit = SubmitField(u'保存编辑')
+
+    def __init__(self, *args, **kwargs):
+        super(EditPostForm, self).__init__(*args, **kwargs)
+        categories = BlogType.query.all()
+        self.blog_type.choices = [(cate.id, cate.name) for cate in categories]
+
+
 class AddPhotoForm(FlaskForm):
     # 添加相册照片前端表单
     photo_title = StringField(u'相片标题',
