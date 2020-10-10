@@ -8,7 +8,7 @@
 """
 from datetime import datetime
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, current_user, logout_user, login_required
 from sqlalchemy import or_
 from blogin.forms.forms import ResetPwdForm
@@ -18,6 +18,7 @@ from blogin.models import User, LoginLog
 from blogin.extension import db
 from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token, generate_ver_code
 from blogin.emails import send_confirm_email, send_reset_password_email
+from blogin.extension import rd
 
 auth_bp = Blueprint('auth_bp', __name__, url_prefix='/auth')
 
@@ -98,6 +99,8 @@ def reset_password():
         flash('邮箱不存在,请输入正确的邮箱!', 'danger')
         return redirect(url_for('.forget_pwd'))
     ver_code = generate_ver_code()
+    # 将验证码设置到redis中,过期时间为10分钟
+    rd.set(user.id, ver_code, ex=current_app.config['EXPIRE_TIME'])
     token = generate_token(user=user, operation=Operations.RESET_PASSWORD)
     send_reset_password_email(user=user, token=token, ver_code=ver_code)
     flash('验证邮件发送成功，请到邮箱查看然后重置密码!', 'success')
@@ -113,10 +116,23 @@ def reset_confirm():
     if form.validate_on_submit():
         email = form.email.data
         usr = User.query.filter_by(email=email).first()
+        # 如果输入的邮箱不存在
         if not usr:
             flash('邮箱不存在，请输入正确的邮箱~', 'danger')
-            return
+            return render_template('main/auth/resetPwd.html', form=form)
+        # 如果验证码已经超出了有效时间
+        if rd.get(usr.id) is None:
+            flash('验证码已过期.', 'danger')
+            return render_template('main/auth/resetPwd.html', form=form)
         pwd= form.confirm_pwd.data
+        ver_code = form.ver_code.data
 
-        pass
+        # 如果输入的验证码与redis中的不一致
+        if ver_code != rd.get(usr.id):
+            flash('验证码错误')
+            return render_template('main/auth/resetPwd.html', form=form)
+        usr.set_password(pwd)
+        db.session.commit()
+        flash('密码重置成功!', 'success')
+        return redirect(url_for('.login'))
     return render_template('main/auth/resetPwd.html', form=form)
