@@ -136,3 +136,13 @@ def reset_confirm():
         flash('密码重置成功!', 'success')
         return redirect(url_for('.login'))
     return render_template('main/auth/resetPwd.html', form=form)
+
+
+@auth_bp.route('/resend-confirm/')
+@login_required
+def resend_confirm_mail():
+    user = current_user._get_current_object()
+    token = generate_token(user=user, operation=Operations.CONFIRM)
+    send_confirm_email(user=user, token=token)
+    flash('邮箱认证邮件发送成功，请前往邮箱查看认证!', 'success')
+    return redirect(request.referrer)
