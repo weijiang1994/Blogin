@@ -35,7 +35,7 @@
                     <ul>
                         <li>词云图制作工具是基于jieba分词库进行开发的，连接<a class="text-info-a" href="https://github.com/fxsjy/jieba">jieba分词</a></li>
                         <li>通过直接载入文本，或者上传文本文件<b><i>(txt)</i></b>的方式进行词云图生成</li>
-                        <li>目前仅支持中文词云图生成，尽请谅解</li>
+                        <li>由于服务器的配置限制，上传的txt文件不要超过1.6M，否则服务器会出现内存溢出杀死进程!!!可怜~~</li>
                     </ul>
                     <p class="tool-title">工具使用:</p>
                     <p class="text-muted">请选择下面一种方式进行操作，输入文本或者上传txt文件。</p>
@@ -124,6 +124,7 @@
                 success: function (res){
                     if (!res.tag){
                         alert(res.info);
+                        $("#wcHint").attr('hidden', 'hidden');
                         return false;
                     }
                     $("#resultDiv").removeAttr('hidden');
