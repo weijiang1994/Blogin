@@ -83,8 +83,11 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
-                                        prefix + os.path.join(basedir, 'data.db'))
+    # SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
+    #                                     prefix + os.path.join(basedir, 'data.db'))
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8'.format(BaseConfig.DATABASE_USER,
+                                                                                         BaseConfig.DATABASE_PWD)
+    REDIS_URL = "redis://localhost"
 
 
 config = {
