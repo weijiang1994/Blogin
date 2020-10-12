@@ -6,13 +6,57 @@
 @File    : user_manage_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash, redirect, url_for
 from blogin.models import User
+from blogin.extension import db
 
-user_m_bp = Blueprint('user_m_bp', __name__, url_prefix='/backend')
+
+user_m_bp = Blueprint('user_m_bp', __name__, url_prefix='/backend/user-m')
 
 
-@user_m_bp.route('/user-m/index/')
+@user_m_bp.route('/index/')
 def index():
     users = User.query.all()
     return render_template('backend/userManager.html', users=users)
+
+
+@user_m_bp.route('/set-admin/<int:user_id>/')
+def set_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    user.role_id = 1
+    db.session.commit()
+    flash('操作成功~', 'success')
+    return redirect(url_for('.index'))
+
+
+@user_m_bp.route('/set-user/<int:user_id>/')
+def set_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.email == '804022023@qq.com':
+        flash('该账号是超级号，禁止操作!', 'danger')
+        return redirect(url_for('.index'))
+    user.role_id = 2
+    db.session.commit()
+    flash('操作成功~', 'success')
+    return redirect(url_for('.index'))
+
+
+@user_m_bp.route('/lock/<int:user_id>/')
+def lock(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.email == '804022023@qq.com':
+        flash('该账号是超级号，禁止操作!', 'danger')
+        return redirect(url_for('.index'))
+    user.status = 2
+    db.session.commit()
+    flash('操作成功~', 'success')
+    return redirect(url_for('.index'))
+
+
+@user_m_bp.route('/unlock/<int:user_id>/')
+def unlock(user_id):
+    user = User.query.get_or_404(user_id)
+    user.status = 1
+    db.session.commit()
+    flash('操作成功~', 'success')
+    return redirect(url_for('.index'))
