@@ -33,6 +33,7 @@ def create_app(config_name=None):
     app = Flask('blogin')
     app.jinja_env.filters['split'] = split_space
     app.config.from_object(config[config_name])
+    print(app.config)
     register_extension(app)
     register_blueprint(app)
     register_cmd(app)
