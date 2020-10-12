@@ -7,7 +7,7 @@
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
     <script src="/static/bootstrap-select/js/bootstrap-select.min.js"></script>
 {% endblock %}
-{% block title %}Black Crow{% endblock %}
+{% block title %}{% endblock %}-Blogin
 {% block navbar %}
     <div class="header-page">
         <div class="navbar navbar-default" role="navigation">
@@ -30,8 +30,8 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/backend/admin/blog/create/">新增博客</a></li>
-                            <li><a href="/backend/admin/blog/edit/">编辑博客</a></li>
+                            <li><a href="/backend/admin/blog/create/"><i class="fa fa-plus-square"></i> 新增博客</a></li>
+                            <li><a href="/backend/admin/blog/edit/"><i class="fa fa-edit"></i> 编辑博客</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -40,22 +40,22 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/backend/photo/add/">增加照片</a></li>
-                            <li><a href="/backend/photo/edit/">编辑照片</a></li>
+                            <li><a href="/backend/photo/add/"><i class="fa fa-plus-square"></i> 增加照片</a></li>
+                            <li><a href="/backend/photo/edit/"><i class="fa fa-edit"></i> 编辑照片</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            用户
+                            <i class="fa fa-user"></i> 用户
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/backend/user-m/index/">用户管理</a></li>
+                            <li><a href="/backend/user-m/index/"><i class="fa fa-compass"></i> 用户管理</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            其他
+                            <i class="fa fa-vcard"></i> 其他
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
