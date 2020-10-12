@@ -6,6 +6,8 @@
 @File    : __init__.py
 @Software: PyCharm
 """
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
@@ -22,6 +24,7 @@ from blogin.blueprint.front.tool import tool_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space
+import logging
 
 
 def create_app(config_name=None):
@@ -35,7 +38,7 @@ def create_app(config_name=None):
     register_cmd(app)
     error_execute(app)
     shell_handler(app)
-
+    register_log(app)
     return app
 
 
@@ -151,6 +154,15 @@ def register_cmd(app: Flask):
             db.session.rollback()
             click.echo('操作出现异常,退出...')
 
+
+def register_log(app: Flask):
+    app.logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler = RotatingFileHandler('logs/blogin.log', maxBytes=10 * 1024 * 1024, backupCount=10)
+    file_handler.setFormatter(formatter)
+    file_handler.setLevel(logging.DEBUG)
+    # if not app.debug:
+    app.logger.addHandler(file_handler)
 
 # index-url = http://mirrors.tencentyun.com/pypi/simple
 # trusted-host = mirrors.tencentyun.com
