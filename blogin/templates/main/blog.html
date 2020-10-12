@@ -38,7 +38,7 @@
                     <li class="breadcrumb-item active d-none d-md-block" aria-current="page">{{ blog.title }}</li>
                     <li class="breadcrumb-item active d-md-none" aria-current="page">当前位置</li>
                     {% if current_user.role_id == 1 %}
-                    <li class="breadcrumb-item float-right" aria-current="page"><a href="/backend/blog/edit/{{ blog.id }}">编辑文章</a></li>
+                        <li class="breadcrumb-item float-right" aria-current="page"><a href="/backend/blog/edit/{{ blog.id }}">编辑文章</a></li>
                     {% endif %}
                 </ol>
             </nav>
