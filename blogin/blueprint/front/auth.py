@@ -52,7 +52,11 @@ def login():
         usr = form.usr_email.data
         pwd = form.password.data
         user = User.query.filter(or_(User.username==usr, User.email==usr.lower())).first()
+        if user is not None and user.status == 2:
+            flash('您的账号处于封禁状态,禁止登陆！联系管理员解除封禁!', 'danger')
+            return redirect(url_for('.login'))
         if user is not None and user.check_password(pwd):
+
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
                 remote_ip = request.headers.get('X-Real-Ip')
