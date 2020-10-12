@@ -30,7 +30,7 @@ def register():
         name = form.user_name.data
         pwd = form.confirm_pwd.data
         email = form.user_email.data.lower()
-        user = User(username=name, email=email, password=pwd)
+        user = User(username=name, email=email, password=pwd, )
         user.set_password(pwd)
         user.set_role()
         db.session.add(user)
@@ -55,7 +55,7 @@ def login():
         if user is not None and user.check_password(pwd):
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
-                remote_ip = request.headers['X-Real-Ip']
+                remote_ip = request.headers.get('X-Real-Ip')
                 if remote_ip is None:
                     remote_ip = request.remote_addr
                 login_log = LoginLog(login_addr=remote_ip, user=user, real_addr=get_ip_real_add(remote_ip))

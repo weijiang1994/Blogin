@@ -44,7 +44,9 @@ class EditPostForm(FlaskForm):
     blog_level = SelectField(label=u'博客权限', choices=[(1, '公开'), (2, '私有')], validators=[DataRequired()],
                              default=1, coerce=int)
     brief_content = TextAreaField(u'博客简介', validators=[DataRequired()])
-
+    blog_img_file = FileField(u'博客示例图',
+                              validators=[FileAllowed(['png', 'jpg'], '只接收png和jpg图片')],
+                              render_kw={'value': "上传", 'class': 'btn btn-default'})
     body = CKEditorField('Body', validators=[DataRequired(message='请输入博客内容')])
     submit = SubmitField(u'保存编辑')
 
@@ -70,4 +72,3 @@ class AddPhotoForm(FlaskForm):
                        validators=[DataRequired(), Length(min=1, max=50, message='标签长度必须在1-50之间')],
                        render_kw={'placeholder': '请输入相片标签，用空格隔开'})
     submit = SubmitField(u'发布相片')
-
