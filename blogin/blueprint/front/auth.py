@@ -55,7 +55,9 @@ def login():
         if user is not None and user.check_password(pwd):
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
-                remote_ip = request.remote_addr
+                remote_ip = request.headers['X-Real-Ip']
+                if remote_ip is None:
+                    remote_ip = request.remote_addr
                 login_log = LoginLog(login_addr=remote_ip, user=user, real_addr=get_ip_real_add(remote_ip))
                 db.session.add(login_log)
                 db.session.commit()
