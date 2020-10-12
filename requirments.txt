@@ -27,8 +27,8 @@ Jinja2==2.11.2
 kiwisolver
 Mako==1.1.3
 MarkupSafe==1.1.1
-matplotlib==3.3.2
-numpy==1.19.2
+matplotlib
+numpy
 Pillow==7.2.0
 PyMySQL==0.10.1
 pyparsing==2.4.7

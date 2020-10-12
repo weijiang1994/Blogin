@@ -8,6 +8,8 @@
 """
 import os
 import sys
+from dotenv import load_dotenv
+load_dotenv('.env')
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 WIN = sys.platform.startswith('win')
@@ -49,7 +51,7 @@ class BaseConfig:
     SQLALCHEMY_ECHO = False
     DATABASE_USER = os.getenv('DATABASE_USER', 'root')
     DATABASE_PWD = os.getenv('DATABASE_PWD')
-
+    print('setting ', os.getenv('DATABASE_PWD'))
     # DEFAULT AVATAR CONFIGURE
     AVATARS_SAVE_PATH = BLOGIN_UPLOAD_PATH + '/avatars/'
 
