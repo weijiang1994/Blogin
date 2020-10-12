@@ -8,4 +8,4 @@
 """
 from blogin import create_app
 
-blogin = create_app('production')
+app = create_app('production')
