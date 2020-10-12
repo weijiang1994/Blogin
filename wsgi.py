@@ -7,5 +7,7 @@
 @Software: PyCharm
 """
 from blogin import create_app
+import os
 
+print(os.getenv('DATABASE_PWD'))
 app = create_app('production')
