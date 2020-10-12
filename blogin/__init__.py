@@ -17,6 +17,7 @@ import os
 from blogin.blueprint.front.blog import blog_bp
 from blogin.blueprint.backend.blog_bp import be_blog_bp
 from blogin.blueprint.backend.photo_bp import be_photo_bp
+from blogin.blueprint.backend.user_manage_bp import user_m_bp
 from blogin.blueprint.front.auth import auth_bp
 from blogin.blueprint.front.accounts import accounts_bp
 from blogin.blueprint.front.gallery import gallery_bp
@@ -98,6 +99,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(accounts_bp)
     app.register_blueprint(gallery_bp)
     app.register_blueprint(tool_bp)
+    app.register_blueprint(user_m_bp)
 
 
 def register_cmd(app: Flask):

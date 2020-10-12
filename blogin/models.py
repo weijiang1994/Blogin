@@ -43,12 +43,14 @@ class User(db.Model, UserMixin):
     create_time = db.Column(db.DateTime, default=datetime.now)
     slogan = db.Column(db.String(200), default='')
     recent_login = db.Column(db.DateTime, default=datetime.now)
+    status = db.Column(db.INTEGER, db.ForeignKey('states.id'), default=1)
 
     roles = db.relationship('Role', back_populates='users')
     photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
     login_logs = db.relationship('LoginLog', back_populates='user', cascade='all')
     blog_comments = db.relationship('BlogComment', back_populates='author', cascade='all')
     likes = db.relationship('LikePhoto', back_populates='user', cascade='all')
+    statuses = db.relationship('States', back_populates='user')
 
     receive_notify = db.relationship('Notification', back_populates='receive_user', cascade='all')
 
@@ -162,6 +164,7 @@ class States(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.now)
 
     blog = db.relationship('Blog', back_populates='state')
+    user = db.relationship('User', back_populates='statuses')
 
     @staticmethod
     def init_states():

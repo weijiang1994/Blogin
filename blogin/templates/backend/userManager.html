@@ -1,0 +1,61 @@
+{% extends "backend/base.html" %}
+{% block head %}
+    {{ super() }}
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
+{% block title %}
+    用户管理
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <h3><b>用户管理</b></h3>
+            <hr>
+            <div class="table-responsive">
+                {% if users %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>角色</th>
+                        <th>加入时间</th>
+                        <th>最近登录</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td><i class="fa fa-user"></i> {{ user.username }}</td>
+                            <td><i class="fa fa-envelope-o"></i> {{ user.email }}</td>
+                            <td><i class="fa fa-tag"></i> {{ user.roles.name }}</td>
+                            <td><i class="fa fa-calendar"></i> {{ user.create_time }}</td>
+                            <td><i class="fa fa-clock-o"></i> {{ user.login_logs[-1].timestamp }}</td>
+                            <td>
+                                {% if user.statuses.id == 1 %}
+                                    <span class="label label-success"><i class="fa fa-star"></i> {{ user.statuses.name }}</span>
+                                {% else %}
+                                    <span class="label label-danger"> <i class="fa fa-remove"></i> {{ user.statuses.name }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-info" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/user-m/set-admin/{{ user.id }}/">管理员</a></button>
+                                {% if user.statuses.id == 1 %}
+                                <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/user-m/set-admin/{{ user.id }}/">禁用</a></button>
+                                {% else %}
+                                <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/user-m/set-admin/{{ user.id }}/">解除</a></button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -82,6 +82,11 @@ def blog_content_edit(blog_id):
     form = EditPostForm()
     blog = Blog.query.get_or_404(blog_id)
     if form.validate_on_submit():
+        filename = form.blog_img_file.data.filename
+        if filename != '':
+            blog_img_path = save_blog_img(filename, form)
+            blog.pre_img = blog_img_path
+
         blog.content = form.body.data
         blog.title = form.title.data
         type = form.blog_type.choices[int(form.blog_type.data) - 1][0]
@@ -96,6 +101,16 @@ def blog_content_edit(blog_id):
     form.brief_content.data = blog.introduce
     form.body.data = blog.content
     return render_template('backend/editBlogContent.html', form=form)
+
+
+def save_blog_img(filename, form):
+    current_time = get_current_time()
+    current_time = current_time.split(' ')[0]
+    create_path(basedir + '/uploads/image/' + current_time)
+    # 将博客示例图片存储到对应的文件夹中
+    form.blog_img_file.data.save(basedir + '/uploads/image/' + current_time + '/' + filename)
+    blog_img_path = '/backend/blog/img/' + current_time + '/' + filename
+    return blog_img_path
 
 
 @be_blog_bp.route('/blog/delete/<blog_id>/', methods=['GET', 'POST'])
