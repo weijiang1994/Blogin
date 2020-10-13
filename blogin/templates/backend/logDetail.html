@@ -8,7 +8,7 @@
             <h3><b>{{ path }} 日志</b></h3>
             <div class="row-fluid" style="padding: 10px; margin-bottom: 20px; border-radius: 3px; background: #ddddee; border: 1px solid;">
                 {% for content in contents %}
-                    <p>{{ content|safe }}</p>
+                    <p style="word-break: break-all;">{{ content|safe }}</p>
                 {% endfor %}
             </div>
         </div>

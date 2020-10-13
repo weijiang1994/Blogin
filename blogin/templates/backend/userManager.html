@@ -18,6 +18,7 @@
                     <thead>
                     <tr>
                         <th>用户名</th>
+                        <th>头像</th>
                         <th>邮箱</th>
                         <th>角色</th>
                         <th>加入时间</th>
@@ -30,6 +31,7 @@
                     {% for user in users %}
                         <tr>
                             <td><i class="fa fa-user"></i> {{ user.username }}</td>
+                            <td><img style="height: 50px;width: 50px;" src="{{ user.avatar }}"></td>
                             <td><i class="fa fa-envelope-o"></i> {{ user.email }}</td>
                             <td><i class="fa fa-tag"></i> {{ user.roles.name }}</td>
                             <td><i class="fa fa-calendar"></i> {{ user.create_time }}</td>
