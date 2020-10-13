@@ -8,17 +8,101 @@
 """
 import os
 from datetime import datetime
-
-from flask import Blueprint, render_template, send_from_directory, request, make_response
-
+from bs4 import BeautifulSoup
+from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for
+from blogin.blueprint.backend.forms import TimelineForm
 from blogin import basedir
+from blogin.models import Timeline
+from blogin.extension import db
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
 
-@other_bp.route('/timeline/add/')
+@other_bp.route('/timeline/add/', methods=['GET', 'POST'])
 def add_timeline():
-    pass
+    form = TimelineForm()
+    if form.validate_on_submit():
+        title = form.timeline_title.data
+        content = form.timeline_content.data
+        if content[-1] != '；':
+            flash('里程碑内容请以分号结尾!', 'danger')
+            return render_template('backend/addTimeline.html', form=form)
+
+        # 分割并拼接里程碑内容
+        milestone_body = splice_tm_content(content)
+
+        # 存储当前时间内容
+        timeline = Timeline(title=title, content=milestone_body, timestamp=form.timestamp.data)
+        db.session.add(timeline)
+        db.session.commit()
+        flash('里程碑添加成功!', 'success')
+        return redirect(url_for('blog_bp.timeline'))
+    return render_template('backend/addTimeline.html', form=form)
+
+
+def splice_tm_content(content):
+    contents = content.split('；')[:-1]
+    milestone_body = "<ul>"
+    for content in contents:
+        milestone_body += '<li>' + content + '</li>'
+    milestone_body += "</ul>"
+    return milestone_body
+
+
+@other_bp.route('/timeline/edit/')
+def edit_timeline():
+    timelines = Timeline.query.order_by(Timeline.timestamp.desc()).all()
+    return render_template('backend/editTimeline.html', timelines=timelines)
+
+
+@other_bp.route('/timeline/info-edit/<int:tm_id>/', methods=['GET', 'POST'])
+def tm_info_edit(tm_id):
+    form = TimelineForm()
+    tm = Timeline.query.get_or_404(tm_id)
+    if form.validate_on_submit():
+        content = form.timeline_content.data
+        if content[-1] != '；':
+            flash('里程碑内容请以分号结尾!', 'danger')
+            return render_template('backend/editTimelineInfo.html', form=form)
+
+        milestone_body = splice_tm_content(content)
+        tm.title = form.timeline_title.data
+        tm.content = milestone_body
+        tm.timestamp = form.timestamp.data
+        db.session.commit()
+        flash('里程碑编辑成功!', 'success')
+        return redirect(url_for('.edit_timeline'))
+
+    # 原始数据复现
+    form.timestamp.data = tm.timestamp
+    form.timeline_title.data = tm.title
+
+    # 由于保存的时候拼接了ul，所以使用bs4来进行元素分割
+    bs = BeautifulSoup(tm.content, 'html.parser')
+    origin_tm_content = ''
+    for l in bs.find_all('li'):
+        origin_tm_content += l.string + '；'
+    form.timeline_content.data = origin_tm_content
+    form.submit.render_kw = {'value': '保存修改'}
+    return render_template('backend/editTimelineInfo.html', form=form)
+
+
+@other_bp.route('/timeline/abandon/<int:tm_id>/')
+def abandon_tm(tm_id):
+    tm = Timeline.query.get_or_404(tm_id)
+    tm.abandon = 1
+    db.session.commit()
+    flash('遗弃该里程碑操作成功!', 'success')
+    return redirect(url_for('.edit_timeline'))
+
+
+@other_bp.route('/timeline/activate/<int:tm_id>/')
+def activate_tm(tm_id):
+    tm = Timeline.query.get_or_404(tm_id)
+    tm.abandon = 0
+    db.session.commit()
+    flash('启用该里程碑操作成功!', 'success')
+    return redirect(url_for('.edit_timeline'))
 
 
 @other_bp.route('/logs/')
@@ -26,11 +110,9 @@ def look_logs():
     logs = []
     app_log_path = basedir + '/logs/'
     nginx_log_path = '/var/log/nginx/'
-
     # 运行日志
     get_log_file_info(app_log_path, logs)
     get_log_file_info(nginx_log_path, logs, log_cate='nginx access/error 文件日志!')
-
     return render_template('backend/logs.html', logs=logs)
 
 
