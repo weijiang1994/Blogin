@@ -51,7 +51,6 @@ def log_detail(file_path):
     with open('/' + file_path) as f:
         for line in f.readlines():
             contents.append(line.strip('\n'))
-    print(contents)
     return render_template('backend/logDetail.html', contents=contents, path='/'+file_path)
 
 
