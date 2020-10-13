@@ -50,7 +50,12 @@ def log_detail(file_path):
     contents = []
     with open('/' + file_path) as f:
         for line in f.readlines():
-            contents.append(line.strip('\n'))
+            line.strip('\n')
+            if line.__contains__('[GET]') or line.__contains__('[POST]'):
+                line = "<span style='color: red;'>"+line+"</span>"
+            if line.__contains__('Traceback'):
+                line = "<span style='color: red;'>"+line+"</span>"
+            contents.append(line)
     return render_template('backend/logDetail.html', contents=contents, path='/'+file_path)
 
 
