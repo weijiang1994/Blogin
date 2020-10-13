@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'timeline/style.css') }}" >
+{% endblock %}
+{% block title %}
+    MileStone
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <div>
+                <section id="cd-timeline" class="cd-container">
+                    {% for timeline in timelines %}
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-location ">
+                                <img src="../static/img/cd-icon-location.svg">
+                            </div>
+                            <div class="cd-timeline-content">
+                                <h3><strong>{{ timeline.title }}</strong></h3>
+                                {{ timeline.content|safe }}
+                                <span class="text-muted float-right"><i class="fa fa-calendar"></i> {{ (timeline.timestamp|split)[0] }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -6,10 +6,12 @@
 @File    : forms
 @Software: PyCharm
 """
+from datetime import datetime
+
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, SelectField, TextAreaField, FileField, SubmitField
+from wtforms import StringField, SelectField, TextAreaField, FileField, SubmitField, DateTimeField
 from wtforms.validators import Length, DataRequired
 from blogin.models import BlogType
 
@@ -78,3 +80,13 @@ class EditPhotoInfoForm(FlaskForm):
     photo_desc = TextAreaField(u'相片描述',
                                validators=[DataRequired(), Length(min=3, max=250, message='相片描述长度必须在3到250之间')])
     submit = SubmitField(u'保存信息')
+
+
+class TimelineForm(FlaskForm):
+    timeline_title = StringField(u'名称', validators=[Length(min=3, max=50, message='用户名长度必须在3到20位之间')],
+                                 render_kw={'class': '', 'rows': 50, 'placeholder': '请输入时间线标题'})
+    timeline_content = TextAreaField(u'时间线内容', validators=[DataRequired()],
+                                     render_kw={'placeholder': '请输入时间线内容，多条使用；隔开以及使用；结尾！！',
+                                                'style': 'height:150px;'})
+    timestamp = DateTimeField(u'日期', default=datetime.now)
+    submit = SubmitField(u'添加时间线')

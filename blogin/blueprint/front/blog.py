@@ -7,7 +7,7 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline
 from blogin.extension import db
 from flask_login import current_user, login_required
 
@@ -150,3 +150,13 @@ def archive():
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
     return render_template('main/archive.html', archives=archives, categories=categories)
+
+
+TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],
+                  ['cd-picture', 'cd-icon-picture.svg'], ]
+
+
+@blog_bp.route('/timeline/')
+def timeline():
+    timelines = Timeline.query.filter_by(abandon=0).order_by(Timeline.timestamp.desc()).all()
+    return render_template('main/timeline.html', timelines=timelines)

@@ -275,3 +275,13 @@ class VerifyCode(db.Model):
     code = db.Column(db.INTEGER)
     create_time = db.Column(db.DateTime, default=datetime.now)
     is_retire = db.Column(db.BOOLEAN)
+
+
+class Timeline(db.Model):
+    __tablename__ = 'timeline'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(50), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+    abandon = db.Column(db.INTEGER, default=0, comment='0 activate 1 abandon')
