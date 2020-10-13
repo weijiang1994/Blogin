@@ -1,12 +1,19 @@
 {% if not current_user.is_authenticated %}
-    <div style="background: #ddddee" class="text-center">
-        <div class="card-body text-center m-2 m-md-3 f-16" id="no-editor">
-            <div>您尚未登录，请
-                <a class="text-danger" href="/auth/login/">登录</a> 或
-                <a class="text-danger" href="/auth/register/">注册</a> 后评论
+{#    <h5><b>发表评论</b></h5>#}
+{#    <div class="blog-content-div">#}
+{#        <p>登录后参与交流、获取后续更新提醒</p>#}
+{#        <button class="btn btn-success">立即登录</button>#}
+{#        <button class="btn btn-outline-success">立即注册</button>#}
+{#    </div>#}
+{#    <hr>#}
+        <div style="background: #ddddee" class="text-center">
+            <div class="card-body text-center m-2 m-md-3 f-16" id="no-editor">
+                <div>您尚未登录，
+                    <a href="/auth/login/"><span class="badge badge-info">登录</span></a> 或
+                    <a href="/auth/register/"><span class="badge badge-success">注册</span></a> 后评论
+                </div>
             </div>
         </div>
-    </div>
 {% else %}
     <div style="margin: 5px">
         <p id="commentPosition"></p>
@@ -22,7 +29,6 @@
                     <button hidden="hidden" class="btn btn-secondary round-3" onclick="replyUserComment()" id="replyBtn">回复</button>
                     <button class="btn btn-secondary round-3" data-blogid="{{ blog.id }}" onclick="submitComment()" id="subCommentBtn">评论</button>
                 </div>
-
             </div>
         </div>
     </div>
