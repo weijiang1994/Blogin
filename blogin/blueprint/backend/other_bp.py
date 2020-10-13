@@ -47,9 +47,12 @@ def look_logs():
 
 @other_bp.route('/logs/detail/<path:file_path>/')
 def log_detail(file_path):
+    contents = []
     with open('/' + file_path) as f:
-        content=f.read()
-    return render_template('backend/logDetail.html', content=content, path='/'+file_path)
+        for line in f.readlines():
+            contents.append(line.strip('\n'))
+    print(contents)
+    return render_template('backend/logDetail.html', contents=contents, path='/'+file_path)
 
 
 def get_file_mtime(timestamp):
