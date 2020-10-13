@@ -50,8 +50,8 @@
                                     <h5 class="text-info">
                                         <a style="text-decoration: none;" class="text-info" href="/blog/article/{{ blog.id }}/">{{ blog.title }}</a>
                                     </h5>
-                                    <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(200) }}</p>
-                                    <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
+                                    <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
+                                    <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(50) }}</p>
                                     <div class="text-muted mb-0 f-12">
                                         <a class="text-info" style="text-decoration: none;" href="/blog/cate/{{ blog.type_id }}/" title="查看当前分类下更多文章">
                                             <span class="badge badge-inverse"><i class="fa fa-book mr-1"></i>{{ cates[loop.index0] }}</span>

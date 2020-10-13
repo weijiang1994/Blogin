@@ -1,0 +1,23 @@
+{% extends "backend/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+    相片内容编辑
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <h3>相片内容编辑</h3>
+            <form method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                {{wtf.form_field(form.photo_title)}}
+                {{wtf.form_field(form.photo_desc)}}
+                <div class="row">
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2" style="text-align: right;">
+                        {{ wtf.form_field(form.submit, class="btn btn-info") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

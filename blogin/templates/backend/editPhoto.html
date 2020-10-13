@@ -1,0 +1,48 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    照片编辑
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <h3><b>照片管理</b></h3>
+            <div class="table-responsive">
+                {% if photos %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>描述</th>
+                        <th>时间</th>
+                        <th>照片</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for photo in photos %}
+                        <tr>
+                            <td><i class="fa fa-user"></i> {{ photo.title }}</td>
+                            <td><i class="fa fa-envelope-o"></i> {{ photo.description }}</td>
+                            <td><i class="fa fa-tag"></i> {{ photo.create_time }}</td>
+                            <td>
+                                <a href="/gallery/photo/{{ photo.id }}"><img style="height: 100px;width: 100px" class="img-fluid" src="{{ photo.save_path }}"></a>
+                            </td>
+                            <td>
+                                {% if photo.level == 0 %}
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="设置私密照片" style="color: inherit; text-decoration: none;" href="/backend/photo/private/{{ photo.id }}/">设为私密</a></button>
+                                {% else %}
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="设置公开照片" style="color: inherit; text-decoration: none;" href="/backend/photo/non-private/{{ photo.id }}/">公开照片</a></button>
+                                {% endif %}
+                                <button class="btn btn-info" style="margin-bottom: 3px;"><a title="编辑照片信息" style="color: inherit; text-decoration: none;" href="/backend/photo/info-edit/{{ photo.id }}/">编辑</a></button>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

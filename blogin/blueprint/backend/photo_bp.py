@@ -11,14 +11,14 @@ from datetime import datetime
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from blogin.setting import basedir
-from blogin.blueprint.backend.forms import AddPhotoForm
+from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
 from blogin.models import Photo, Tag
 from blogin.utils import create_path
 from blogin.extension import db
-be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend')
+be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend/photo')
 
 
-@be_photo_bp.route('/photo/add/', methods=['GET', 'POST'])
+@be_photo_bp.route('/add/', methods=['GET', 'POST'])
 @login_required
 def add_photo():
     form = AddPhotoForm()
@@ -47,3 +47,40 @@ def add_photo():
         return redirect(url_for('gallery_bp.index'))
     return render_template('backend/addPhoto.html', form=form)
 
+
+@be_photo_bp.route('/edit/')
+def photo_edit():
+    photos = Photo.query.all()
+    return render_template('backend/editPhoto.html', photos=photos)
+
+
+@be_photo_bp.route('/private/<int:photo_id>/')
+def private(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo.level = 1
+    db.session.commit()
+    flash('设为私密照片成功!', 'success')
+    return redirect(url_for('.photo_edit'))
+
+
+@be_photo_bp.route('/non-private/<int:photo_id>/')
+def non_private(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    photo.level = 0
+    db.session.commit()
+    flash('设为公开照片成功!', 'success')
+    return redirect(url_for('.photo_edit'))
+
+
+@be_photo_bp.route('/info-edit/<int:photo_id>/', methods=['GET', 'POST'])
+def info_edit(photo_id):
+    form = EditPhotoInfoForm()
+    photo = Photo.query.get_or_404(photo_id)
+    if form.validate_on_submit():
+        photo.title = form.photo_title.data
+        photo.description = form.photo_desc.data
+        db.session.commit()
+        return redirect(url_for('.photo_edit'))
+    form.photo_title.data = photo.title
+    form.photo_desc.data = photo.description
+    return render_template('backend/editPhotoInfo.html', form=form)

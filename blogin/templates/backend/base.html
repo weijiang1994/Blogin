@@ -8,7 +8,7 @@
     <script src="/static/bootstrap-select/js/bootstrap-select.min.js"></script>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
-{% block title %}{% endblock %}-Blogin
+<title>{% block title %}{% endblock %} - Blogin</title>
 {% block navbar %}
     <div class="header-page">
         <div class="navbar navbar-default" role="navigation">
@@ -60,7 +60,8 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/backend/timeline/add/">新增时间线</a></li>
+                            <li><a href="/backend/logs/"><i class="fa fa-file-code-o"></i> 运行日志</a></li>
+                            <li><a href="/backend/timeline/add/"><i class="fa fa-line-chart"></i> 新增时间线</a></li>
                         </ul>
                     </li>
                 </ul>
