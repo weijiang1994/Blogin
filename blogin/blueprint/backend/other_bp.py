@@ -31,17 +31,7 @@ def look_logs():
     # 运行日志
     get_log_file_info(app_log_path, logs)
     get_log_file_info(nginx_log_path, logs, log_cate='nginx access/error 文件日志!')
-    # nginx 日志
-    # nginx_access_log_update_time = get_file_mtime('/var/log/nginx/access.log')
-    # nginx_access_log_size = os.path.getsize('/var/log/nginx/access.log')
-    #
-    # nginx_error_log_update_time = get_file_mtime('/var/log/nginx/error.log')
-    # nginx_error_log_size = os.path.getsize('/var/log/nginx/error.log')
 
-    # logs.append(['access.log', 'nginx access文件日志!', nginx_access_log_update_time, '/var/log/nginx/access.log',
-    #              str(nginx_access_log_size) + 'byte'])
-    # logs.append(['error.log', 'nginx error文件日志!', nginx_error_log_update_time, '/var/log/nginx/error.log',
-    #              str(nginx_error_log_size) + 'byte'])
     return render_template('backend/logs.html', logs=logs)
 
 
@@ -78,6 +68,6 @@ def get_log_files(path):
     fl_ls = []
     for root, dirs, files in os.walk(path):
         for f in files:
-            if f.__contains__('log'):
+            if f.__contains__('log') and not f.__contains__('.gz'):
                 fl_ls.append(os.path.join(root, f))
     return fl_ls
