@@ -29,7 +29,7 @@
                             <td><i class="fa fa-signal"></i> {{ log[4] }}</td>
                             <td>
                                 <button class="btn btn-info" style="margin-bottom: 3px;"><a title="查看日志" style="color: inherit; text-decoration: none;" href="/backend/logs/detail/{{ log[3] }}/">查看</a></button>
-                                <button class="btn btn-success" style="margin-bottom: 3px;"><a title="查看日志" style="color: inherit; text-decoration: none;" href="/backend/logs/{{ log[3] }}/">备份</a></button>
+                                <button class="btn btn-success" style="margin-bottom: 3px;"><a title="下载备份日志" style="color: inherit; text-decoration: none;" href="/backend/logs/download/?filename={{ log[3] }}">备份</a></button>
                             </td>
                         </tr>
                     {% endfor %}

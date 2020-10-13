@@ -8,6 +8,7 @@
 """
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for
 from flask_login import login_required, current_user
+from imageio import imread
 
 from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
@@ -58,6 +59,10 @@ def edit_profile():
             filename = form.avatar.data.filename
             filename = str(current_user.username) + filename
             form.avatar.data.save(basedir + '/uploads/avatars/'+filename)
+            img_data = imread(basedir + '/uploads/avatars/'+filename)
+            if len(img_data) != len(img_data[0]):
+                flash('为了头像显示正常，请上传长宽一致的头像!', 'danger')
+                return render_template('main/editProfile.html', form=form)
             user.avatar = '/accounts/avatar/' + filename
         db.session.commit()
         flash('资料修改成功!', 'success')
