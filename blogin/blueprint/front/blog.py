@@ -7,9 +7,11 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics,\
+    LikeStatistics, CommentStatistics
 from blogin.extension import db
 from flask_login import current_user, login_required
+from blogin.decorators import statistic_traffic
 
 from blogin.utils import redirect_back
 
@@ -18,6 +20,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 
 @blog_bp.route('/', methods=['GET'])
 @blog_bp.route('/index/', methods=['GET'])
+@statistic_traffic(db, VisitStatistics)
 def index():
     blogs = Blog.query.filter_by(is_private=0, delete_flag=1).order_by(Blog.create_time.desc()).all()
     cates = []
@@ -57,6 +60,7 @@ def blog_cate(cate_id):
 
 
 @blog_bp.route('/loveme/')
+@statistic_traffic(db, LikeStatistics)
 def love_me():
     love = LoveMe.query.first()
     if love is None:
@@ -77,6 +81,7 @@ def love_me():
 
 @blog_bp.route('/blog/comment/', methods=['GET', 'POST'])
 @login_required
+@statistic_traffic(db, CommentStatistics)
 def new_comment():
     comment = request.form.get('comment')
     blog_id = request.form.get('blogID')

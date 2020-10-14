@@ -1,9 +1,90 @@
-<!DOCTYPE html>
 {% extends "backend/base.html" %}
+{% block head %}
+    {{ super() }}
+    {#    <script href="{{ url_for('static', filename= 'echarts/echarts.min.js') }}"></script>#}
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    {#    <script crossorigin="anonymous" integrity="sha384-DX1FVVXdGcNR016Jj6c5WuxYmyUvkb2/0ZMXKwbXaXs8j9tPs3e4RUjNg4tViEj4" src="https://lib.baomitu.com/echarts/4.7.0/echarts-en.common.js"></script>#}
+    <style>
+        .card-body{
+            border: #cccccc 2px solid;
+            border-radius: 5px;
+            padding: 15px;
+            margin:20px 0 20px 0;
+        }
+
+        .card-body:hover{
+            transform: scale(1.01);
+        }
+    </style>
+{% endblock %}
 {% block title %}博客后台管理{% endblock %}
-<html lang="en">
+{% block content %}
+    <main>
+        <div class="container">
+            <div class="card-body">
+                <h4><b>网站今日流量统计</b></h4>
+                <p><i class="fa fa-desktop"></i> 今日新增访问: <span class="label label-default">{{ visits }}</span></p>
+                <p><i class="fa fa-comment-o"></i> 今日新增评论: <span class="label label-default">{{ comments }}</span></p>
+                <p><i class="fa fa-heart-o"></i> 今日新增点赞: <span class="label label-default">{{ likes }}</span></p>
+            </div>
+            <div class="card-body">
+                <h4><b>最近7天流量趋势</b></h4>
+                <div id="traffic" style="width:1000px;height:300px;"></div>
+            </div>
 
-<body>
+        </div>
 
-</body>
-</html>
+    </main>
+    <script>
+        $(document).ready(function (){
+            getRecent7DaysDatas();
+        })
+        function getRecent7DaysDatas(){
+            $.ajax({
+                url: "/backend/admin/index/",
+                type: "post",
+                success: function (res){
+                    // 基于准备好的dom，初始化echarts实例
+                    var myChart = echarts.init(document.getElementById('traffic'));
+                    // 指定图表的配置项和数据
+                    var option = {
+                        tooltip: {},
+                        legend: {
+                            data:['访问', '评论', '点赞']
+                        },
+                        xAxis: {
+                            data: res.days,
+                        },
+                        yAxis: {},
+                        series: [
+                            {
+                                name: '访问',
+                                type: 'bar',
+                                data: res.result[0]
+                            },
+                            {
+                                name: '评论',
+                                type: 'bar',
+                                data: res.result[1]
+                            },
+                            {
+                                name: '点赞',
+                                type: 'bar',
+                                data: res.result[2]
+                            },
+                        ]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            })
+        }
+
+        /*setTimeout(function (){
+	    window.onresize = function () {
+	    	myChart.resize();
+	    }
+	},200)*/
+
+    </script>
+{% endblock %}

@@ -10,13 +10,15 @@ from flask import Blueprint, render_template, send_from_directory, flash, redire
 from flask_login import login_required, current_user
 
 from blogin import basedir, db
-from blogin.models import Photo, LikePhoto, Notification, Tag
+from blogin.models import Photo, LikePhoto, Notification, Tag, VisitStatistics, CommentStatistics, LikeStatistics
 from blogin.models import PhotoComment
+from blogin.decorators import statistic_traffic
 
 gallery_bp = Blueprint('gallery_bp', __name__, url_prefix='/gallery')
 
 
 @gallery_bp.route('/all/', methods=['GET', 'POST'])
+@statistic_traffic(db, VisitStatistics)
 def index():
     photos = Photo.query.filter_by(level=0).order_by(Photo.create_time.desc()).all()
     return render_template('main/gallery.html', photos=photos)
@@ -57,6 +59,7 @@ def get_blog_sample_img(path, filename):
 
 @gallery_bp.route('/like/<photo_id>/')
 @login_required
+@statistic_traffic(db, LikeStatistics)
 def like_photo(photo_id):
     img = Photo.query.get_or_404(photo_id)
     lp = LikePhoto(user=current_user, photo=img)
@@ -68,6 +71,7 @@ def like_photo(photo_id):
 
 @gallery_bp.route('/photo/comment/', methods=['GET', 'POST'])
 @login_required
+@statistic_traffic(db, CommentStatistics)
 def new_comment():
     comment = request.form.get('comment')
     blog_id = request.form.get('imgID')
