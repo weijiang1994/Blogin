@@ -36,8 +36,8 @@ def get_recent_7days_traffics():
     lst_data = []
     td = datetime.date.today()
     vsts = VisitStatistics.query.filter(VisitStatistics.date > td - timedelta(days=7)).all()
-    csts = CommentStatistics.query.filter(VisitStatistics.date > td - timedelta(days=7)).all()
-    lsts = LikeStatistics.query.filter(VisitStatistics.date > td - timedelta(days=7)).all()
+    csts = CommentStatistics.query.filter(CommentStatistics.date > td - timedelta(days=7)).all()
+    lsts = LikeStatistics.query.filter(LikeStatistics.date > td - timedelta(days=7)).all()
     for vst in vsts:
         days.append(str(vst.date))
         vst_data.append(vst.times)
