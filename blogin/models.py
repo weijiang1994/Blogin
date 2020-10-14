@@ -285,3 +285,27 @@ class Timeline(db.Model):
     content = db.Column(db.String(500), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.now)
     abandon = db.Column(db.INTEGER, default=0, comment='0 activate 1 abandon')
+
+
+class VisitStatistics(db.Model):
+    __tablename__ = 'visit_statistics'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, nullable=False)
+    times = db.Column(db.INTEGER, default=1)
+
+
+class CommentStatistics(db.Model):
+    __tablename__ = 'comment_statistics'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, nullable=False)
+    times = db.Column(db.INTEGER, default=1)
+
+
+class LikeStatistics(db.Model):
+    __tablename__ = 'like_statistics'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, nullable=False)
+    times = db.Column(db.INTEGER, default=1)

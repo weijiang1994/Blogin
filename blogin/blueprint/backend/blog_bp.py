@@ -23,14 +23,16 @@ from blogin.decorators import permission_required, db_exception_handle
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
 
-@be_blog_bp.route('/admin/index/')
-@login_required
-@permission_required
-def index():
-    return render_template('backend/index.html')
+# @be_blog_bp.route('/admin/index/')
+# @login_required
+# @permission_required
+# def index():
+#     return render_template('backend/index.html')
 
 
 @be_blog_bp.route('/admin/blog/create/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def blog_create():
     form = PostForm()
     if request.method == 'GET':
@@ -67,6 +69,8 @@ def blog_create():
 
 
 @be_blog_bp.route('/admin/blog/edit/')
+@login_required
+@permission_required
 def blog_edit():
     blog_type_datas = []
     types = BlogType.query.all()
@@ -78,6 +82,8 @@ def blog_edit():
 
 
 @be_blog_bp.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def blog_content_edit(blog_id):
     form = EditPostForm()
     blog = Blog.query.get_or_404(blog_id)
@@ -114,6 +120,8 @@ def save_blog_img(filename, form):
 
 
 @be_blog_bp.route('/blog/delete/<blog_id>/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def delete(blog_id):
     blog = Blog.query.get_or_404(blog_id)
     state = States.query.get_or_404(2)
@@ -124,6 +132,8 @@ def delete(blog_id):
 
 
 @be_blog_bp.route('/blog/recover/<blog_id>/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def recover(blog_id):
     blog = Blog.query.get_or_404(blog_id)
     state = States.query.get_or_404(1)
@@ -134,6 +144,7 @@ def recover(blog_id):
 
 
 @be_blog_bp.route('/blog/category/add/', methods=['POST'])
+@login_required
 @permission_required
 @db_exception_handle(db)
 def blog_category_add():
