@@ -6,16 +6,27 @@
 @File    : photo_bp
 @Software: PyCharm
 """
+import os
 from datetime import datetime
 
-from flask import Blueprint, render_template, flash, redirect, url_for
+from PIL import Image
+from flask import Blueprint, render_template, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from blogin.setting import basedir
 from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
 from blogin.models import Photo, Tag
 from blogin.utils import create_path
 from blogin.extension import db
+
 be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend/photo')
+
+
+def generate_thumbnail(path):
+    img = Image.open(path)
+    width = img.size[0]
+    height = img.size[1]
+    img = img.resize((int(width * 0.3), int(height * 0.3)), Image.ANTIALIAS)
+    return img
 
 
 @be_photo_bp.route('/add/', methods=['GET', 'POST'])
@@ -28,12 +39,25 @@ def add_photo():
         img_file = form.img_file.data.filename
         img_file = str(current_user.id) + img_file
         desc = form.photo_desc.data
+
+        # 相片保存在当前日期的文件夹中
         folder = str(datetime.now()).split(' ')[0]
         create_path(basedir + '/uploads/gallery/' + folder)
         form.img_file.data.save(basedir + '/uploads/gallery/' + folder + '/' + img_file)
-        img_path = '/gallery/' + folder + '/' + img_file
-        photo = Photo(title=title, description=desc, save_path=img_path)
 
+        # 云服务器带宽过低,当图片太大在相册加载太慢，所以这里生成相片缩略图 > 1M
+        if os.path.getsize(basedir + '/uploads/gallery/' + folder + '/' + img_file) > \
+                current_app.config.get('PHOTO_NEED_RESIZE'):
+            small_img = generate_thumbnail(basedir + '/uploads/gallery/' + folder + '/' + img_file)
+            small_img.save(basedir + '/uploads/gallery/' + folder + '/' + 'small'+img_file)
+            small_path = '/gallery/' + folder + '/' + 'small'+img_file
+        else:
+            small_path = '/gallery/' + folder + '/' + img_file
+
+        img_path = '/gallery/' + folder + '/' + img_file
+        photo = Photo(title=title, description=desc, save_path=img_path, save_path_s=small_path)
+
+        # 将tag信息添加到相片中
         for name in tags.split():
             tag = Tag.query.filter_by(name=name).first()
             if tag is None:

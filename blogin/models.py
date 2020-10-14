@@ -207,6 +207,7 @@ class Photo(db.Model):
     title = db.Column(db.String(40), nullable=False, comment='photo title', default='""')
     description = db.Column(db.String(300), nullable=False, comment='photo description', default='""')
     save_path = db.Column(db.String(200), nullable=False, comment='photo save path')
+    save_path_s = db.Column(db.String(200), nullable=False, comment='small size')
     create_time = db.Column(db.DateTime, default=datetime.now)
     level = db.Column(db.INTEGER, default=0)
     tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
@@ -214,6 +215,7 @@ class Photo(db.Model):
     likes = db.relationship('LikePhoto', back_populates='photo', cascade='all')
 
 
+@whooshee.register_model('name')
 class Tag(db.Model):
     __tablename__ = 'tag'
     id = db.Column(db.INTEGER, primary_key=True)
