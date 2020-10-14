@@ -70,6 +70,9 @@ class BaseConfig:
     # Redis Configure
     EXPIRE_TIME = 60 * 10
 
+    # Photo Configure
+    PHOTO_NEED_RESIZE = 1024*1024
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8'.format(BaseConfig.DATABASE_USER,

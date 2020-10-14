@@ -7,8 +7,8 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics,\
-    LikeStatistics, CommentStatistics
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
+    LikeStatistics, CommentStatistics, Tag
 from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -126,6 +126,8 @@ def search():
         results = Blog.query.whooshee_search(q).paginate(1, 20)
     if category == 'photo':
         results = Photo.query.whooshee_search(q).paginate(1, 20)
+    if category == 'tag':
+        results = Tag.query.whooshee_search(q).paginate(1, 20)
     results = results.items
     return render_template('main/search.html', results=results, q=q, category=category)
 
