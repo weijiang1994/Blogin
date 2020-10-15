@@ -8,11 +8,12 @@
 """
 import os
 
+from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory
 
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
-    BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation
+    BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, add_mark_to_image
 import re
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -105,6 +106,23 @@ def multi_translation():
 
 @tool_bp.route('/image-pro/', methods=['GET', 'POST'])
 def image_pro():
+    if request.method == 'POST':
+        img = request.files['image']
+        print(os.path.split(img.filename))
+        if os.path.splitext(img.filename)[1] not in ['.jpg', '.png', '.jpeg', '.bmp']:
+            return jsonify({'tag': 0, 'info': '目前支持jpg/png/jpeg/bmp类型图片!'})
+        pro_type = request.form.get('proType')
+
+        if pro_type == '添加水印':
+            mark_text = request.form.get('markText')
+            font_size = request.form.get('markTextSize')
+            origin_img_path = basedir + '/uploads/img-pro/' + img.filename
+            save_path = basedir + '/uploads/img-pro/' + 'mark' + os.path.splitext(img.filename)[0] + '.png'
+            img.save(origin_img_path)
+            img_stream = Image.open(origin_img_path)
+            add_mark_to_image(image=img_stream, font_size=int(font_size), text=mark_text, save_path=save_path)
+            return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
+                            '/tool/img-pro/' + 'mark' + os.path.splitext(img.filename)[0] + '.png'})
     return render_template('main/tool/image-pro.html')
 
 

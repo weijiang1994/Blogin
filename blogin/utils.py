@@ -25,6 +25,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 import jieba
 import wordcloud as wc
+from PIL import Image, ImageDraw, ImageFont
 
 from blogin.extension import db
 from blogin.setting import basedir
@@ -138,6 +139,30 @@ def allow_txt_file(filename):
     if suffix != 'txt':
         return False
     return True
+
+
+def add_mark_to_image(image, text, font_size, save_path):
+    font = ImageFont.truetype(basedir + '/res/STFangsong.ttf', font_size)
+    # 添加背景
+    new_img = Image.new('RGBA', (image.size[0] * 3, image.size[1] * 3), (0, 0, 0, 0))
+    new_img.paste(image, image.size)
+
+    # 添加水印
+    font_len = len(text)
+    rgba_image = new_img.convert('RGBA')
+    text_overlay = Image.new('RGBA', rgba_image.size, (255, 255, 255, 0))
+    image_draw = ImageDraw.Draw(text_overlay)
+
+    for i in range(0, rgba_image.size[0], font_len * 40 + 100):
+        for j in range(0, rgba_image.size[1], 200):
+            image_draw.text((i, j), text, font=font, fill=(0, 0, 0, 50))
+
+    text_overlay = text_overlay.rotate(-45)
+    image_with_text = Image.alpha_composite(rgba_image, text_overlay)
+
+    # 裁切图片
+    image_with_text = image_with_text.crop((image.size[0], image.size[1], image.size[0] * 2, image.size[1] * 2))
+    image_with_text.save(save_path)
 
 
 class OCR:
