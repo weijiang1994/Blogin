@@ -64,11 +64,11 @@
     </div>
 {% endmacro %}
 
-{% macro tool_card(head, body, link) %}
+{% macro tool_card(head, body, link, fa) %}
     <div class="col-md-6 col-lg-4 col-xl-3 px-lg-2 mb-3 tool">
         <div class="card">
             <div class="card-header">
-                {{ head }}
+                <i class="{{ fa }}"></i> {{ head }}
             </div>
             <div class="card-body text-muted tool-des">
                 {{ body }}

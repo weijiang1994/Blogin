@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_bread with context%}
+{% block head %}
+    {{ super() }}
+    <style>
+        .textarea {
+            padding: 8px;
+            width: 100%;
+            min-height: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+            outline: 0;
+            border: 1px solid #aaaaaa;
+            font-size: 13px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            -webkit-user-modify: read-write-plaintext-only;
+        }
+        [contentEditable=true]:empty:not(:focus):before {
+            content: attr(data-text);
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    多端翻译
+{% endblock %}
+{% block content %}
+    <main style="background: #eeeeee">
+        <div class="container">
+            {{ tool_bread("多端翻译", "翻译") }}
+            <div style="background: white; padding: 10px; border-radius: 5px;margin-bottom: 10px;">
+                <article>
+                    <p class="tool-title">工具说明:</p>
+                    <ul>
+                        <li>多端翻译工具包含有谷歌、百度、有道三种翻译工具；</li>
+                        <li>目前只支持英译中/中译英功能，谷歌、有道都是通过爬虫的方式去获取的结果，有可能会出现翻译失败情况；</li>
+                        <li>百度还是比较良心提供有免费的API接口，可以实现多语种翻译，但是这里没必要实现了，因为百度有自己的翻译web工具；</li>
+                    </ul>
+                    <p class="tool-title">工具使用:</p>
+                    <form id="upload" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p style="margin-bottom: 5px;">翻译类型:</p>
+                                    <select id="tranCategory" class="form-control">
+                                        <option>英译中</option>
+                                        <option>中译英</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p style="margin-bottom: 5px;">请输入需要翻译的文本</p>
+                            <div id="translationText" style="min-height: 100px;" class="textarea"></div>
+                        </div>
+
+                    </form>
+                    <button class="btn btn-secondary float-right" onclick="startTranslation()">翻译</button>
+                    <br>
+                    <br>
+                    <hr>
+                    <div hidden="hidden" id="tranHint" class="text-center">
+                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>正在进行文本翻译,请稍后...</b></p>
+                    </div>
+                    <div hidden="hidden" id="resultDiv">
+                        <p>翻译结果:</p>
+                        <div class="row">
+                            <div style="margin-bottom: 20px;" class="col-md-4">谷歌翻译
+                                <div id="googleRes" class="textarea"></div>
+                            </div>
+                            <div  style="margin-bottom: 20px;" class="col-md-4">百度翻译
+                                <div id="baiduRes" class="textarea"></div>
+                            </div>
+                            <div  style="margin-bottom: 20px;" class="col-md-4">有道翻译
+                                <div id="youdaoRes" class="textarea"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </article>
+            </div>
+        </div>
+        <script>
+            function startTranslation(){
+                let translationText = $("#translationText").text();
+                if (translationText == ''){
+                    alert('请输入需要翻译的文本!');
+                    return false;
+                }
+                let tranType = $("#tranCategory").val();
+                $("#tranHint").removeAttr(("hidden"));
+                $.ajax({
+                    url:"/tool/multi-translation/",
+                    type:"post",
+                    data:{'type': tranType, 'text': translationText},
+                    success: function (res){
+                        if (res.tag == 0){
+                            alert(res.info);
+                            $("#tranHint").attr("hidden", "hidden");
+                            return false;
+                        }
+                        $("#tranHint").attr("hidden", "hidden");
+                        $("#resultDiv").removeAttr('hidden');
+                        $("#googleRes").text(res.googleRes);
+                        $("#baiduRes").text(res.baiduRes);
+                        $("#youdaoRes").text(res.youdaoRes);
+                    }
+                })
+            }
+        </script>
+    </main>
+{% endblock %}
