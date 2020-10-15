@@ -103,6 +103,11 @@ def multi_translation():
     return render_template('main/tool/translation.html')
 
 
+@tool_bp.route('/image-pro/', methods=['GET', 'POST'])
+def image_pro():
+    return render_template('main/tool/image-pro.html')
+
+
 @tool_bp.route('/<path>/<filename>')
 def get_blog_sample_img(path, filename):
     path = basedir + '/uploads/' + path + '/'
