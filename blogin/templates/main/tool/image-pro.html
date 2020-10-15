@@ -1,13 +1,185 @@
 {% extends "base.html" %}
 {% from "macro.html" import tool_bread with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+
+    </style>
+{% endblock %}
 {% block title %}
     图片处理工具
 {% endblock %}
 {% block content %}
     <main style="background: #eeeeee">
         <div class="container">
-            {{ tool_bread("图片处理工具", "图片工具") }}
-            <h5>正在开发中...</h5>
+            {{ tool_bread("图片制作工具", "图片工具") }}
+            <div style="background: white; padding: 10px; border-radius: 5px;margin-bottom: 10px;">
+                <article>
+                    <p class="tool-title">工具说明:</p>
+                    <ul>
+                        <li>图片处理工具主要是采用opencv库以及PIL对图片进行一些简单的处理；</li>
+                        <li>目前包含有图片缩放、添加水印、证件照换底等功能；</li>
+                        <li>服务器配置不太够，上传处理的图片请不要太大!!!</li>
+                    </ul>
+                    <p class="tool-title">工具使用:</p>
+                    <form id="upload" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select onclick="changeFunction()" id="proType" class="form-control">
+                                        <option>图片缩放</option>
+                                        <option>添加水印</option>
+                                        <option>证件照换底</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div id="resizeDiv" class="row">
+                                        <div class="col">
+                                            <select id="resizeType" class="form-control">
+                                                <option>放大</option>
+                                                <option>缩小</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>高缩放比例:</label>
+                                            <input class="form-control" id="heightZoom" type="number" placeholder="高缩放比">
+                                            <label>宽缩放比例:</label>
+                                            <input class="form-control" id="widthZoom" type="number" placeholder="宽缩放比">
+                                        </div>
+
+                                    </div>
+                                    <div hidden="hidden" id="markDiv" class="row">
+                                        <div class="col">
+                                            <label>水印文字:</label>
+                                            <input class="form-control" placeholder="请输入水印文字" id="markText">
+                                            <label>文字大小:</label>
+                                            <input class="form-control" type="number" placeholder="请输入文字大小" id="textSize">
+                                        </div>
+                                    </div>
+                                    <div hidden="hidden" id="changeBackDiv" class="row">
+                                        <div class="col">
+                                            <label>请选择目标底色:</label>
+                                            <select id="backType" class="form-control">
+                                                <option>蓝底</option>
+                                                <option>红底</option>
+                                                <option>白底</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="image" type="file">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-secondary float-right" onclick="imgProcess()">处理</button>
+                    <br>
+                    <br>
+                    <hr>
+                    <div hidden="hidden" id="tranHint" class="text-center">
+                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>图片正在进行处理，请稍后...</b></p>
+                    </div>
+                    <div hidden="hidden" id="resultDiv">
+                        <p>处理结果:</p>
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div style="margin-right: 20px;" class="col-md-4">原图<img class="img-fluid" id="originImg">
+                            </div>
+                            <div class="col-md-5">处理后的图<img class="img-fluid" id="proImage"></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
         </div>
     </main>
+    <script>
+        function changeFunction(){
+            let index = $("#proType").val();
+            if (index == '图片缩放'){
+                $("#resizeDiv").removeAttr('hidden');
+                $("#markDiv").attr('hidden', 'hidden');
+                $("#changeBackDiv").attr('hidden', 'hidden');
+            }else if (index == '添加水印'){
+                $("#resizeDiv").attr('hidden', 'hidden');
+                $("#markDiv").removeAttr('hidden');
+                $("#changeBackDiv").attr('hidden', 'hidden');
+            }else {
+                $("#resizeDiv").attr('hidden', 'hidden');
+                $("#changeBackDiv").removeAttr('hidden');
+                $("#markDiv").attr('hidden', 'hidden');
+            }
+        }
+
+        function imgProcess(){
+            let proType = $("#proType").val();
+            let img = $("#image")[0].files[0];
+            if (img==undefined){
+                alert('请选择图片!');
+                return false;
+            }
+            let formdata = new FormData();
+            formdata.append('image', img);
+            let resizeType = '';
+            let widthZoomNum = 0;
+            let heightZoomNum = 0;
+            let markText = '';
+            let markTextSize = 18;
+            if (proType == '图片缩放'){
+                resizeType = $("#resizeType").val();
+                widthZoomNum = $("#heightZoom").val();
+                heightZoomNum = $("#heightZoom").val();
+                if (widthZoomNum == '' || heightZoomNum == ''){
+                    alert('请输入宽高缩放比例!');
+                    return false;
+                }
+                if (resizeType == '放大'){
+                    if (widthZoomNum <= 1 || heightZoomNum <= 1){
+                        alert('请输入大于1的数值!');
+                        return false;
+                    }
+                }else {
+                    if (widthZoomNum >=1 || heightZoomNum >=1){
+                        alert('请输入小于1的数值!');
+                        return false;
+                    }
+                }
+                formdata.append('widthZoom', widthZoomNum);
+                formdata.append('heightZoom', heightZoomNum);
+            }else if (proType=='添加水印'){
+                markText = $("#markText").val();
+                markTextSize = $("#textSize").val();
+                if (markText == '' || markTextSize == ''){
+                    alert('请输入水印文字及其字体大小!');
+                    return false;
+                }
+                formdata.append('markText', markText);
+                formdata.append('markTextSize', markTextSize);
+            }else if (proType == '证件照换底'){
+
+            }
+            formdata.append('proType', proType);
+
+            $.ajax({
+                url:'/tool/image-pro/',
+                type: 'post',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (res){
+                    if (res.tag == 0){
+                        alert(res.info);
+                        return false;
+                    }
+                    $("#resultDiv").removeAttr('hidden');
+                    $("#originImg").attr('src', res.originPath);
+                    $("#proImage").attr('src', res.proPath);
+                }
+            })
+        }
+    </script>
 {% endblock %}
