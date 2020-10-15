@@ -73,6 +73,10 @@ class BaseConfig:
     # Photo Configure
     PHOTO_NEED_RESIZE = 1024*1024
 
+    # BAIDU Trans appid
+    BAIDU_TRANS_APPID = os.getenv('BAIDU_TRANS_APPID')
+    BAIDU_TRANS_KEY = os.getenv('BAIDU_TRANS_KEY')
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8'.format(BaseConfig.DATABASE_USER,

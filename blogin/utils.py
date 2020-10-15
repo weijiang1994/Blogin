@@ -7,11 +7,18 @@
 @Software: PyCharm
 """
 import datetime
+import hashlib
+import http
 import os
 
 import json
+import random
+import re
+import urllib
 from urllib.parse import urlparse, urljoin
 import base64
+
+import execjs
 import requests
 from flask import current_app, request, redirect, url_for
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -35,6 +42,9 @@ OCR_CATEGORY = {'文字识别': 'accurate_basic', '身份证识别': 'idcard', '
                 '驾驶证识别': 'driving_license', '车牌识别': 'license_plate'}
 BANK_CARD_TYPE = {0: '不能识别', 1: '借记卡', 2: '信用卡'}
 LANGUAGE = {'中文': 'zh-CN', '英文': 'en', '日语': 'ja', '法语': 'fr', '俄语': 'ru'}
+
+TRAN_LANGUAGE = {'英译中': 'zh-CN', '中译英': 'en'}
+BAIDU_LANGUAGE = {'英译中': 'zh', '中译英': 'en'}
 
 
 class Operations:
@@ -252,3 +262,135 @@ class WordCloud:
             import traceback
             traceback.print_exc()
             return False
+
+
+class GoogleTranslation:
+    def __init__(self):
+        self.url = 'https://translate.google.cn/translate_a/single'
+        self.TKK = "434674.96463358"  # 随时都有可能需要更新的TKK值
+
+        self.header = {
+            "accept": "*/*",
+            "accept-language": "zh-CN,zh;q=0.9",
+            "cookie": "NID=188=M1p_rBfweeI_Z02d1MOSQ5abYsPfZogDrFjKwIUbmAr584bc9GBZkfDwKQ80cQCQC34zwD4ZYHFMUf4F59aDQLSc79_LcmsAihnW0Rsb1MjlzLNElWihv-8KByeDBblR2V1kjTSC8KnVMe32PNSJBQbvBKvgl4CTfzvaIEgkqss",
+            "referer": "https://translate.google.cn/",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+            "x-client-data": "CJK2yQEIpLbJAQjEtskBCKmdygEIqKPKAQi5pcoBCLGnygEI4qjKAQjxqcoBCJetygEIza3KAQ==",
+        }
+
+        self.data = {
+            "client": "webapp",  # 基于网页访问服务器
+            "sl": "auto",  # 源语言,auto表示由谷歌自动识别
+            "tl": "vi",  # 翻译的目标语言
+            "hl": "zh-CN",  # 界面语言选中文，毕竟URL都是cn后缀了，就不装美国人了
+            "dt": ["at", "bd", "ex", "ld", "md", "qca", "rw", "rm", "ss", "t"],  # dt表示要求服务器返回的数据类型
+            "otf": "2",
+            "ssel": "0",
+            "tsel": "0",
+            "kc": "1",
+            "tk": "",  # 谷歌服务器会核对的token
+            "q": ""  # 待翻译的字符串
+        }
+
+        with open(basedir + r'/res/token.js', 'r', encoding='utf-8') as f:
+            self.js_fun = execjs.compile(f.read())
+
+        # 构建完对象以后要同步更新一下TKK值
+        # self.update_TKK()
+
+    def update_TKK(self):
+        url = "https://translate.google.cn/"
+        req = urllib.request.Request(url=url, headers=self.header)
+        page_source = urllib.request.urlopen(req).read().decode("utf-8")
+        self.TKK = re.findall(r"tkk:'([0-9]+\.[0-9]+)'", page_source)[0]
+
+    def construct_url(self):
+        base = self.url + '?'
+        for key in self.data:
+            if isinstance(self.data[key], list):
+                base = base + "dt=" + "&dt=".join(self.data[key]) + "&"
+            else:
+                base = base + key + '=' + self.data[key] + '&'
+        base = base[:-1]
+        return base
+
+    def query(self, q, lang_to=''):
+        self.data['q'] = urllib.parse.quote(q)
+        self.data['tk'] = self.js_fun.call('wo', q, self.TKK)
+        self.data['tl'] = lang_to
+        url = self.construct_url()
+        req = urllib.request.Request(url=url, headers=self.header)
+        response = json.loads(urllib.request.urlopen(req).read().decode("utf-8"))
+        target_text = response[0][0][0]
+        return target_text
+
+
+class BaiduTranslation:
+    def __init__(self, q, lang='en'):
+        self.app_id = current_app.config.get('BAIDU_TRANS_APPID')
+        self.key = current_app.config.get('BAIDU_TRANS_KEY')
+        self.pre_url = '/api/trans/vip/translate'
+        self.from_lang = 'auto'
+        self.to_lang = lang
+        self.http_client = None
+        self.salt = random.randint(32768, 65536)
+        sign = self.app_id + q + str(self.salt) + self.key
+        sign = hashlib.md5(sign.encode()).hexdigest()
+        self.url = self.pre_url + '?appid=' + self.app_id + '&q=' + urllib.parse.quote(
+            q) + '&from=' + self.from_lang + '&to=' + self.to_lang + '&salt=' + str(
+            self.salt) + '&sign=' + sign
+
+    def query(self):
+        try:
+            self.http_client = http.client.HTTPConnection('api.fanyi.baidu.com')
+            self.http_client.request('GET', self.url)
+            response = self.http_client.getresponse()
+            result_all = response.read().decode("utf-8")
+            result = json.loads(result_all)
+            trans = result.get('trans_result')[0].get('dst')
+            return trans
+        except:
+            return False
+        finally:
+            if self.http_client:
+                self.http_client.close()
+
+
+class YoudaoTranslation:
+    def __init__(self, q, from_lang='auto', to_lang='zh'):
+        # 翻译地址
+        request_url = 'http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule'
+        # data参数
+        data = {'i': q,
+                'from': from_lang,
+                'to': to_lang,
+                'smartresult': 'dict',
+                'client': 'fanyideskweb',
+                'salt': '15944508027607',
+                'sign': '598c09b218f668874be4524f19e0be37',
+                'ts': '1594450802760',
+                'bv': '02a6ad4308a3443b3732d855273259bf',
+                'doctype': 'json',
+                'version': '2.1',
+                'keyfrom': 'fanyi.web',
+                'action': 'FY_BY_REALTlME',
+                }
+        # headers参数
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
+        # 将data规范化
+        data = urllib.parse.urlencode(data)
+        # 转为字节型
+        data = bytes(data, 'utf-8')
+        # 创建请求
+        req = urllib.request.Request(request_url, data, headers=headers)
+        # 发送请求并获取相应
+        response = urllib.request.urlopen(req)
+        # 返回内容,得到一个json字符串
+        html = response.read().decode('utf-8')
+        # 将json字符串转为字典
+        html = json.loads(html)
+        self.result = html['translateResult'][0][0]['tgt']
+
+    def query(self):
+        return self.result

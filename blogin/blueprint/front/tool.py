@@ -11,7 +11,8 @@ import os
 from flask import Blueprint, render_template, request, jsonify, send_from_directory
 
 from blogin.setting import basedir
-from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud
+from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
+    BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation
 import re
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -19,7 +20,7 @@ tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
 
 @tool_bp.route('/')
 def index():
-    return render_template('main/tool.html')
+    return render_template('main/tool/tool.html')
 
 
 @tool_bp.route('/ocr/', methods=['GET', 'POST'])
@@ -35,7 +36,7 @@ def ocr():
         c_ocr = OCR(filename=basedir + r'/uploads/ocr/' + filename, category=category)
         nums, texts = ocr_result(category, c_ocr)
         return jsonify({'tag': 1, 'nums': nums, 'texts': texts, 'img': img_url})
-    return render_template("main/ocr.html")
+    return render_template("main/tool/ocr.html")
 
 
 @tool_bp.route('/query-ip/', methods=['GET', 'POST'])
@@ -51,7 +52,7 @@ def query_ip_addr():
         region = '-'.join(region)
         return jsonify({'tag': 1, 'region': region, 'result': ipq.query()})
 
-    return render_template('main/queryIP.html')
+    return render_template('main/tool/queryIP.html')
 
 
 @tool_bp.route('/word-cloud/', methods=['GET', 'POST'])
@@ -82,7 +83,24 @@ def word_cloud():
         else:
             return jsonify({'tag': 0, 'info': '抱歉,词云生成出错了~'})
         return jsonify({'tag': 1})
-    return render_template('main/wordCloud.html')
+    return render_template('main/tool/wordCloud.html')
+
+
+@tool_bp.route('/multi-translation/', methods=['GET', 'POST'])
+def multi_translation():
+    if request.method == 'POST':
+        try:
+            tran_type = request.form.get('type')
+            text = request.form.get('text')
+            google_res = GoogleTranslation().query(text, lang_to=TRAN_LANGUAGE.get(tran_type))
+            baidu_res = BaiduTranslation(q=text, lang=BAIDU_LANGUAGE.get(tran_type)).query()
+            youdao_res = YoudaoTranslation(q=text, to_lang=BAIDU_LANGUAGE.get(tran_type)).query()
+            return jsonify({'tag': 1, 'googleRes': google_res, 'baiduRes': baidu_res, 'youdaoRes': youdao_res})
+        except:
+            import traceback
+            traceback.print_exc()
+            return jsonify({'tag': 0, 'info': '可能由于请求过多，导致翻译服务器拒绝连接，请稍后重试!'})
+    return render_template('main/tool/translation.html')
 
 
 @tool_bp.route('/<path>/<filename>')
