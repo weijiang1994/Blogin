@@ -14,6 +14,14 @@
                 width: 12em;
             }
         }
+
+        /*当为移动端的时候隐藏*/
+        @media screen and (max-width: 600px) {
+            .hide-div{
+                display: none;
+            }
+        }
+
     </style>
 {% endblock %}
 {% block title %}
@@ -23,7 +31,7 @@
     <main>
         <div class="container-fluid">
             {% if 'access' in path %}
-                <div class="fixed-div">
+                <div class="hide-div fixed-div">
                     <p style="margin-bottom: 5px; border-bottom: 1px solid;"><b>IP查询结果显示</b></p>
                     <p class="text-muted" id="title"></p>
                     <ul id="resultUL" class="list-group">
@@ -41,8 +49,18 @@
         </div>
 
         <script>
-            let datas = ['国家', '省份', '市', '所属大洲', '大洲编号', '运营商', '时区',  '纬度', '经度']
+            $(document).ready(function() {
 
+                if ((screen.width>1024)) {
+                    // if screen size is 1025px wide or larger
+                    $(".yourClass").css('display', 'none'); // you can also use $(".yourClass").hide();
+                }
+                else if ((screen.width<=1024)) {
+                    // if screen size width is less than 1024px
+                    $(".yourClass").css('display', 'block'); // here you can also use show();
+                }
+            });
+            let datas = ['国家', '省份', '市', '所属大洲', '大洲编号', '运营商', '时区',  '纬度', '经度']
             // 监听鼠标双击时间,并获取双击时选中的文本,用来查询访问者的IP归属地
             $('.log').mouseup(function() {
                 let ip=getSelectedText();
@@ -68,6 +86,7 @@
                     })
                 }
             });
+
             function getSelectedText() {
                 if (window.getSelection) {
                     return window.getSelection().toString();

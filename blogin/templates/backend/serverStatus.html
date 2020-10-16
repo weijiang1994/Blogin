@@ -1,0 +1,82 @@
+{% extends "backend/base.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+    <style>
+        .server-status-div{
+            margin: 10px 10px 10px 0px;
+            padding: 8px;
+            border: #cccccc 2px solid;
+            background: #ddddee;
+            border-radius: 5px;
+        }
+        .title-p{
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    服务器当前状态
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <h4><b><i class="fa fa-server"></i> 服务器状态</b></h4>
+            <div class="server-status-div">
+                <span style="border-bottom: #20c997 2px solid;"><b>CPU状态</b></span>
+                <br>
+                <br>
+                <p class="title-p">核心数: <label class="label label-default">{{ cpu_counts }}</label></p>
+                <p class="title-p">使用率: <label class="label label-success">{{ cpu_use_rate }}</label></p>
+                <p class="title-p">CPU温度: <label class="label label-success">{{ cpu_temp }}</label></p>
+                <p class="title-p">使用率曲线: </p>
+                <div id="cpuRateCurve" style="width: 100%;height:300px;"></div>
+            </div>
+            <div class="server-status-div">
+                <span style="border-bottom: #20c997 2px solid;"><b>内存状态</b></span>
+                <br>
+                <br>
+                <p class="title-p">内存总数: <label class="label label-default">{{ mem_counts }}</label></p>
+                <p class="title-p">已使用: <label class="label label-success">{{ mem_used }}</label></p>
+                <p class="title-p">使用率: <label class="label label-success">{{ mem_use_rate }}</label></p>
+                <p class="title-p">使用率曲线: </p>
+                <div id="memoryRateCurve" style="width: 100%;height:300px;"></div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function (){
+                setInterval("sendAjax()",5000);
+            })
+
+            function sendAjax(){
+                $.ajax({
+                    url:"/backend/server-status/",
+                    type: 'post',
+                    success: function (res){
+                        let myChart = echarts.init(document.getElementById('cpuRateCurve'));
+                        var option = {
+                            tooltip: {},
+                            legend: {
+                                data:['cpu使用率']
+                            },
+                            xAxis: {
+                                data: res.times,
+                            },
+                            yAxis: {},
+                            series: [
+                                {
+                                    name: 'cpu使用率',
+                                    type: 'line',
+                                    data: res.cpu_rates,
+                                },
+
+                            ]
+                        };
+                        myChart.setOption(option);
+                    }
+                })
+            }
+        </script>
+    </main>
+{% endblock %}
