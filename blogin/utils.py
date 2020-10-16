@@ -47,6 +47,8 @@ LANGUAGE = {'中文': 'zh-CN', '英文': 'en', '日语': 'ja', '法语': 'fr', '
 TRAN_LANGUAGE = {'英译中': 'zh-CN', '中译英': 'en'}
 BAIDU_LANGUAGE = {'英译中': 'zh', '中译英': 'en'}
 
+FONT_COLOR = {'红色': (255, 0, 0, 50), '蓝色': (0, 0, 255, 50), '白色': (255, 255, 255, 50), '黑色': (0, 0, 0, 50)}
+
 
 class Operations:
     CONFIRM = 'confirm'
@@ -141,7 +143,148 @@ def allow_txt_file(filename):
     return True
 
 
-def add_mark_to_image(image, text, font_size, save_path):
+class ImageAddMarkBase:
+    def __init__(self, image, text, font_size, save_path, font_color):
+        self.image = image
+        self.text = text
+        self.font_size = font_size
+        self.save_path = save_path
+        self.font_color = font_color
+        self.font = None
+        self.font_len = None
+        self.image_draw = None
+        self.rgba_image = None
+        self.text_overlay = None
+
+    def generate_base(self):
+        self.font = ImageFont.truetype(basedir + '/res/STFangsong.ttf', self.font_size)
+        # 添加背景
+        new_img = Image.new('RGBA', (self.image.size[0] * 3, self.image.size[1] * 3), (0, 0, 0, 0))
+        new_img.paste(self.image, self.image.size)
+
+        # 添加水印
+        self.font_len = len(self.text)
+        self.rgba_image = new_img.convert('RGBA')
+        self.text_overlay = Image.new('RGBA', self.rgba_image.size, (255, 255, 255, 0))
+        self.image_draw = ImageDraw.Draw(self.text_overlay)
+
+
+class AddMark2RT(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2RT, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        self.image_draw.text((self.image.size[0] * 2 - (self.font_len + 150), self.image.size[1]),
+                             self.text, font=self.font, fill=self.font_color)
+
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2RB(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2RB, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    # (image.size[0] * 2 - (font_len * 36), image.size[1] * 2 - (font_len * (36/3)))
+    def generate_mark(self):
+        self.image_draw.text((self.image.size[0] * 2 - (self.font_len * self.font_size),
+                              self.image.size[1] * 2 - (self.font_len * (self.font_size / 3))),
+                             self.text, font=self.font, fill=self.font_color)
+
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2LT(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2LT, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        self.image_draw.text((self.image.size[0], self.image.size[1]),
+                             self.text, font=self.font, fill=self.font_color)
+
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2LB(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2LB, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        self.image_draw.text((self.image.size[0], self.image.size[1]*2-(self.font_len * (self.font_size/3))),
+                             self.text, font=self.font, fill=self.font_color)
+
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2Center(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2Center, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        self.image_draw.text((self.image.size[0]*1.5 - self.font_len, self.image.size[1] * 1.5),
+                             self.text, font=self.font, fill=self.font_color)
+
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2Parallel(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2Parallel, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        for i in range(0, self.rgba_image.size[0], self.font_len * self.font_size + 50):  # 控制
+            for j in range(0, self.rgba_image.size[1], int(self.image.size[1]/10)):
+                self.image_draw.text((i, j), self.text, font=self.font, fill=self.font_color)
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+class AddMark2Rotate(ImageAddMarkBase):
+    def __init__(self, *args, **kwargs):
+        super(AddMark2Rotate, self).__init__(*args, **kwargs)
+        self.generate_base()
+
+    def generate_mark(self):
+        for i in range(0, self.rgba_image.size[0], self.font_len * 40 + 50):  # 控制
+            for j in range(0, self.rgba_image.size[1], int(self.image.size[1]/10)):
+                self.image_draw.text((i, j), self.text, font=self.font, fill=self.font_color)
+        self.text_overlay = self.text_overlay.rotate(-45)
+        image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
+        # 裁切图片
+        image_with_text = image_with_text.crop(
+            (self.image.size[0], self.image.size[1], self.image.size[0] * 2, self.image.size[1] * 2))
+        image_with_text.save(self.save_path)
+
+
+def add_mark_to_image(image, text, font_size, save_path, font_color):
     font = ImageFont.truetype(basedir + '/res/STFangsong.ttf', font_size)
     # 添加背景
     new_img = Image.new('RGBA', (image.size[0] * 3, image.size[1] * 3), (0, 0, 0, 0))
@@ -153,9 +296,9 @@ def add_mark_to_image(image, text, font_size, save_path):
     text_overlay = Image.new('RGBA', rgba_image.size, (255, 255, 255, 0))
     image_draw = ImageDraw.Draw(text_overlay)
 
-    for i in range(0, rgba_image.size[0], font_len * 40 + 100):
-        for j in range(0, rgba_image.size[1], 200):
-            image_draw.text((i, j), text, font=font, fill=(0, 0, 0, 50))
+    for i in range(0, rgba_image.size[0], font_len * 40 + 50):
+        for j in range(0, rgba_image.size[1], 100):
+            image_draw.text((i, j), text, font=font, fill=font_color)
 
     text_overlay = text_overlay.rotate(-45)
     image_with_text = Image.alpha_composite(rgba_image, text_overlay)

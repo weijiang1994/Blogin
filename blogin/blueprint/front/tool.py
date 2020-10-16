@@ -13,10 +13,19 @@ from flask import Blueprint, render_template, request, jsonify, send_from_direct
 
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
-    BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, add_mark_to_image
+    BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
+    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel
 import re
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
+
+MARK_POSITION = {'右上角': AddMark2RT,
+                 '右下角': AddMark2RB,
+                 '左上角': AddMark2LT,
+                 '左下角': AddMark2LB,
+                 '中心': AddMark2Center,
+                 '水平铺满': AddMark2Parallel,
+                 '45°铺满': AddMark2Rotate}
 
 
 @tool_bp.route('/')
@@ -108,7 +117,6 @@ def multi_translation():
 def image_pro():
     if request.method == 'POST':
         img = request.files['image']
-        print(os.path.split(img.filename))
         if os.path.splitext(img.filename)[1] not in ['.jpg', '.png', '.jpeg', '.bmp']:
             return jsonify({'tag': 0, 'info': '目前支持jpg/png/jpeg/bmp类型图片!'})
         pro_type = request.form.get('proType')
@@ -116,13 +124,25 @@ def image_pro():
         if pro_type == '添加水印':
             mark_text = request.form.get('markText')
             font_size = request.form.get('markTextSize')
+            font_color = request.form.get('markFontColor')
+            mark_position = request.form.get('markPosition')
+
             origin_img_path = basedir + '/uploads/img-pro/' + img.filename
-            save_path = basedir + '/uploads/img-pro/' + 'mark' + os.path.splitext(img.filename)[0] + '.png'
+            pro_img_filename = mark_position + '_mark_' + font_color + '_' + os.path.splitext(img.filename)[0] + '.png'
+            save_path = basedir + '/uploads/img-pro/' + pro_img_filename
             img.save(origin_img_path)
             img_stream = Image.open(origin_img_path)
-            add_mark_to_image(image=img_stream, font_size=int(font_size), text=mark_text, save_path=save_path)
+            MARK_POSITION.get(mark_position)(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
+                                             image=img_stream, text=mark_text, save_path=save_path).generate_mark()
+
+            # mark = AddMark2RT(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
+            #                   image=img_stream, text=mark_text, save_path=save_path)
+            # mark.generate_rt_mark()
+            # add_mark_to_image(image=img_stream, font_size=int(font_size), text=mark_text, save_path=save_path,
+            #                   font_color=FONT_COLOR.get(font_color))
+
             return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
-                            '/tool/img-pro/' + 'mark' + os.path.splitext(img.filename)[0] + '.png'})
+                            '/tool/img-pro/' + pro_img_filename})
     return render_template('main/tool/image-pro.html')
 
 
