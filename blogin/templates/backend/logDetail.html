@@ -1,16 +1,83 @@
 {% extends "backend/base.html" %}
+{% block head %}
+    {{ super() }}
+    <style>
+        @media screen and (min-width: 1554px){
+            .fixed-div {
+                position: fixed;
+                top: 6.5em;
+                left: 1.1em;
+                margin: 5px;
+                padding: 10px;
+                border: #eeccdd 1px solid;
+                border-radius: 5px;
+                width: 12em;
+            }
+        }
+    </style>
+{% endblock %}
 {% block title %}
     {{ path }}
 {% endblock %}
 {% block content %}
     <main>
-        <div class="container">
-            <h3><b>{{ path }} 日志</b></h3>
-            <div class="row-fluid" style="padding: 10px; margin-bottom: 20px; border-radius: 3px; background: #ddddee; border: 1px solid;">
-                {% for content in contents %}
-                    <p style="word-break: break-all;">{{ content|safe }}</p>
-                {% endfor %}
+        <div class="container-fluid">
+            {% if 'access' in path %}
+                <div class="fixed-div">
+                    <p style="margin-bottom: 5px; border-bottom: 1px solid;"><b>IP查询结果显示</b></p>
+                    <p class="text-muted" id="title"></p>
+                    <ul id="resultUL" class="list-group">
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="container">
+                <h3><b>{{ path }} 日志</b></h3>
+                <div class="row-fluid" style="padding: 10px; margin-bottom: 20px; border-radius: 3px; background: #ddddee; border: 1px solid;">
+                    {% for content in contents %}
+                        <p class="log" style="word-break: break-all;">{{ content|safe }}</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
+
+        <script>
+            let datas = ['国家', '省份', '市', '所属大洲', '大洲编号', '运营商', '时区',  '纬度', '经度']
+
+            // 监听鼠标双击时间,并获取双击时选中的文本,用来查询访问者的IP归属地
+            $('.log').mouseup(function() {
+                let ip=getSelectedText();
+                if (ip != ''){
+                    $("#title").text('正在查询IP真实归属地,请稍后...');
+                    $.ajax({
+                        url: '/tool/query-ip/',
+                        type: 'POST',
+                        data: {'ip': ip, 'lang': '中文'},
+                        success: function (res){
+                            if (res.tag == 0){
+                                $("#title").text(res.info);
+                                return false;
+                            }
+                            $("#title").text('IP真实归属地:'+res.region);
+                            let values = res.result;
+                            $("#resultUL").html('');
+                            for (let i=0;i<values.length;i++){
+                                $("#resultUL").append('<li style="word-break: break-all" class="list-group-item"><strong>'+datas[i]+':</strong>'+values[i]+'</li>')
+                            }
+                        },
+                        error: function (){}
+                    })
+                }
+            });
+            function getSelectedText() {
+                if (window.getSelection) {
+                    return window.getSelection().toString();
+                } else if (document.selection) {
+                    return document.selection.createRange().text;
+                }
+                return '';
+            }
+
+        </script>
     </main>
+
 {% endblock %}
