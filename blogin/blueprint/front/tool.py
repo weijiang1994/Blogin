@@ -134,13 +134,6 @@ def image_pro():
             img_stream = Image.open(origin_img_path)
             MARK_POSITION.get(mark_position)(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
                                              image=img_stream, text=mark_text, save_path=save_path).generate_mark()
-
-            # mark = AddMark2RT(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
-            #                   image=img_stream, text=mark_text, save_path=save_path)
-            # mark.generate_rt_mark()
-            # add_mark_to_image(image=img_stream, font_size=int(font_size), text=mark_text, save_path=save_path,
-            #                   font_color=FONT_COLOR.get(font_color))
-
             return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
                             '/tool/img-pro/' + pro_img_filename})
     return render_template('main/tool/image-pro.html')

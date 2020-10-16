@@ -9,11 +9,15 @@
 import os
 from datetime import datetime
 from bs4 import BeautifulSoup
-from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for
+from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
+from flask_login import current_user
+
 from blogin.blueprint.backend.forms import TimelineForm
 from blogin import basedir
 from blogin.models import Timeline
 from blogin.extension import db
+import psutil
+from blogin.extension import rd
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
@@ -150,6 +154,27 @@ def download_log_file():
     """
     file = request.args.get('filename')
     return send_from_directory(os.path.split(file)[0], filename=os.path.split(file)[1], as_attachment=True)
+
+
+@other_bp.route('/server-status/', methods=['GET', 'POST'])
+def server_status():
+    if request.method == 'POST':
+        history_percent = rd.lrange(current_user.id, 0, -1)
+        times = rd.lrange('times', 0, -1)
+        cpu_use_rate = psutil.cpu_percent()
+        history_percent.append(cpu_use_rate)
+        now_time = datetime.now().strftime('%H:%M:%S')
+        times.append(now_time)
+        # 存入到redis缓存数据库
+        rd.rpush(current_user.id, cpu_use_rate)
+        rd.rpush('times', now_time)
+        return jsonify({'times': times, 'cpu_rates': history_percent})
+
+    cpu_counts = psutil.cpu_count()
+    cpu_use_rate = psutil.cpu_percent()
+    cpu_temp = psutil.sensors_temperatures().get('acpitz')[0].current
+    return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate,
+                           cpu_temp=cpu_temp)
 
 
 def get_file_mtime(path):
