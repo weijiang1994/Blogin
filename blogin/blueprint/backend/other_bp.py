@@ -172,9 +172,7 @@ def server_status():
 
     cpu_counts = psutil.cpu_count()
     cpu_use_rate = psutil.cpu_percent()
-    cpu_temp = psutil.sensors_temperatures().get('acpitz')[0].current
-    return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate,
-                           cpu_temp=cpu_temp)
+    return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate)
 
 
 def get_file_mtime(path):
