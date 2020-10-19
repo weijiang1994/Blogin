@@ -53,6 +53,27 @@
 
                 <div id="diskPie" style="width: 100%;height:300px;"></div>
             </div>
+            <div class="server-status-div">
+                <span style="border-bottom: #20c997 2px solid;"><b>网络状态</b></span>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2"><p class="title-p">发送数据: <label class="label label-success"><span id="netSend">{{ (net.bytes_sent/1024/1024)|round(2, 'floor') }}</span>M</label></p></div>
+                    <div class="col-md-2"><p class="title-p">接收数据: <label class="label label-success"><span id="netRec">{{ (net.bytes_recv/1024/1024)|round(2, 'floor')}}</span>M</label></p></div>
+                    <div class="col-md-2"><p class="title-p">发送数据包: <label class="label label-success"><span id="netSendPkg">{{ net.packets_sent }}</span>个</label></p></div>
+                    <div class="col-md-2"><p class="title-p">接收数据包: <label class="label label-success"><span id="netRecPkg">{{ net.packets_recv }}</span>个</label></p></div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2"><p class="title-p">接收错误: <label class="label label-danger"><span id="netRecErr">{{ net.errin }}</span>个</label></p></div>
+                    <div class="col-md-2"><p class="title-p">发送错误: <label class="label label-danger"><span id="netSendErr">{{ net.errout }}</span>个</label></p></div>
+                    <div class="col-md-2"><p class="title-p">接收丢包: <label class="label label-danger"><span id="netRecDrop">{{ net.dropin }}</span>个</label></p></div>
+                    <div class="col-md-2"><p class="title-p">发送丢包: <label class="label label-danger"><span id="netSendDrop">{{ net.dropout }}</span>个</label></p></div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
         </div>
         <script>
             $(document).ready(function (){
@@ -134,6 +155,14 @@
                         displayChart("cpuRateCurve", 'cpu使用率', res.cpu_rates, res.times);
                         displayChart("memoryRateCurve", '内存使用率', res.mem_rates, res.times);
                         displayPie(res);
+                        $("#netSend").text(res.net[0]);
+                        $("#netRec").text(res.net[1]);
+                        $("#netSendPkg").text(res.net[2]);
+                        $("#netRecPkg").text(res.net[3]);
+                        $("#netRecErr").text(res.net[4]);
+                        $("#netSendErr").text(res.net[5]);
+                        $("#netRecDrop").text(res.net[6]);
+                        $("#netSendDrop").text(res.net[7]);
                     }
                 })
             }
