@@ -19,6 +19,7 @@ from blogin.models import Timeline
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
+from blogin.emails import send_server_warning_mail
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
@@ -194,6 +195,13 @@ def server_status():
             rd.rpush(current_user.id, cpu_use_rate)
             rd.rpush('times', now_time)
             rd.rpush(str(current_user.id) + 'mem', memory.percent)
+        if cpu_use_rate > 95 or memory.percent > 95:
+            # 发送告警邮件
+            send = rd.get('warningEmail')
+            if not send:
+                # 发送间隔三小时，不然会一直收到邮件，如果该条件满足
+                send_server_warning_mail(cpu_rate=cpu_use_rate, mem_rate=memory.percent)
+                rd.set('warningEmail', 1, ex=60*60*3)
 
         return jsonify({'times': times, 'cpu_rates': history_percent, 'mem_rates': history_memory,
                         'disk': [round(disk.free / 1024 / 1024 / 1024, 2), round(disk.used / 1024 / 1024 / 1024, 2)],

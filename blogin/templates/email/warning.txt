@@ -1,0 +1,5 @@
+Hello Admin:
+
+    The server machine cpu usage rate is {{ cpu_rate }}, and the memory usage rate is {{ mem_rate }}!!!
+    Maybe you need login in the backend manage page, or use the SSH to connect the server machine to check what happened!!!
+                                                                                        Server monitor.

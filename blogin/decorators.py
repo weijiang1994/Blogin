@@ -22,7 +22,7 @@ def confirm_required(func):
                 'Not receive the email?'
                 '<a class="alert-link" href="%s">Resend Confirm Email</a>' %
                 url_for('auth.resend_confirm_email'))
-            flash(message, 'warning')
+            flash(message, 'warning.txt')
             return redirect(url_for('main.index'))
         return func(*args, **kwargs)
 
