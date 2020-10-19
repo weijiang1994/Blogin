@@ -12,6 +12,7 @@ from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee
+from blogin.monitor import start_monitor_thread
 from blogin.setting import basedir
 import os
 from blogin.blueprint.front.blog import blog_bp
@@ -42,6 +43,7 @@ def create_app(config_name=None):
     error_execute(app)
     shell_handler(app)
     register_log(app)
+
     return app
 
 

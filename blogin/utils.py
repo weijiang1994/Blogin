@@ -190,7 +190,6 @@ class AddMark2RB(ImageAddMarkBase):
         super(AddMark2RB, self).__init__(*args, **kwargs)
         self.generate_base()
 
-    # (image.size[0] * 2 - (font_len * 36), image.size[1] * 2 - (font_len * (36/3)))
     def generate_mark(self):
         self.image_draw.text((self.image.size[0] * 2 - (self.font_len * self.font_size),
                               self.image.size[1] * 2 - (self.font_len * (self.font_size / 3))),
@@ -388,7 +387,7 @@ class OCR:
 
 class IPQuery:
     def __init__(self, ip, lang='zh-CN'):
-        self.ip = ip
+        self.ip = ip.strip()
         self.lang = LANGUAGE.get(lang)
         self.url = "http://ip-api.com/json/{}?lang={}&fields=status,continent,continentCode,isp,zip,message,timezone," \
                    "country,region,regionName,city,lat,lon,query"

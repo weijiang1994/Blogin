@@ -1,14 +1,15 @@
-# -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li <withlihui@gmail.com>
-    :license: MIT, see LICENSE for more details.
+# coding:utf-8
+@Time    : 2020/9/21
+@Author  : jiangwei
+@mail    : jiangwei1@kylinos.cn
+@File    : decorators
+@Software: PyCharm
 """
 from datetime import datetime
 from functools import wraps
 
-from flask import Markup, flash, url_for, redirect, abort, jsonify
+from flask import Markup, flash, url_for, redirect, abort
 from flask_login import current_user
 
 
