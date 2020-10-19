@@ -1,6 +1,7 @@
 {% extends "backend/base.html" %}
 {% block head %}
     {{ super() }}
+    <!--suppress ALL -->
     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
     <style>
         .server-status-div{
@@ -28,51 +29,111 @@
                 <br>
                 <br>
                 <p class="title-p">核心数: <label class="label label-default">{{ cpu_counts }}</label></p>
-                <p class="title-p">使用率: <label class="label label-success">{{ cpu_use_rate }}</label></p>
-                <p class="title-p">使用率曲线: </p>
+                <p class="title-p">使用率: <label class="label label-success"><span id="cpuRate">{{ cpu_use_rate }}%</span></label></p>
+                <p class="title-p">历史曲线: </p>
                 <div id="cpuRateCurve" style="width: 100%;height:300px;"></div>
             </div>
             <div class="server-status-div">
                 <span style="border-bottom: #20c997 2px solid;"><b>内存状态</b></span>
                 <br>
                 <br>
-                <p class="title-p">内存总数: <label class="label label-default">{{ mem_counts }}</label></p>
-                <p class="title-p">已使用: <label class="label label-success">{{ mem_used }}</label></p>
-                <p class="title-p">使用率: <label class="label label-success">{{ mem_use_rate }}</label></p>
-                <p class="title-p">使用率曲线: </p>
+                <p class="title-p">内存总数: <label class="label label-default">{{ memory_total }}kb</label></p>
+                <p class="title-p">已使用: <label class="label label-danger">{{ memory_used }}kb</label></p>
+                <p class="title-p">使用率: <label class="label label-success">{{ mem_percent }}%</label></p>
+                <p class="title-p">历史曲线: </p>
                 <div id="memoryRateCurve" style="width: 100%;height:300px;"></div>
+            </div>
+            <div class="server-status-div">
+                <span style="border-bottom: #20c997 2px solid;"><b>磁盘状态</b></span>
+                <br>
+                <br>
+                <p class="title-p">磁盘大小: <label class="label label-default">{{ disk_total }}G</label></p>
+                <p class="title-p">已用大小: <label class="label label-danger">{{ disk_used }}G</label></p>
+                <p class="title-p">未用大小: <label class="label label-success">{{ disk_free }}G</label></p>
+
+                <div id="diskPie" style="width: 100%;height:300px;"></div>
             </div>
         </div>
         <script>
             $(document).ready(function (){
+                sendAjax();
                 setInterval("sendAjax()",5000);
             })
+
+            function displayChart(divId, legend, yData, xData){
+                let chart = echarts.init(document.getElementById(divId));
+                var option = {
+                    tooltip: {},
+                    legend: {
+                        data: [legend]
+                    },
+                    xAxis: {
+                        data: xData,
+                    },
+                    yAxis: {},
+                    series: [
+                        {
+                            name: legend,
+                            type: 'line',
+                            data: yData,
+                        },
+
+                    ]
+                };
+                chart.setOption(option);
+            }
+
+            function displayPie(res) {
+                let pieChart = echarts.init(document.getElementById('diskPie'));
+                let option = {
+                    color: ['green', 'red'],
+                    title: {
+                        text: '磁盘使用情况',
+                        x: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'right',
+                        bottom: '80px',
+                        data: ['已使用', '未使用']
+                    },
+                    series: [
+                        {
+                            name: '占比情况',
+                            type: 'pie',
+                            radius: '55%',
+                            center: ['50%', '50%'],
+                            data: [{value: res.disk[0], name: '未用'},
+                                {value: res.disk[1], name: '已用'}],
+                            /*在series中添加itemStyle即可直观显示饼型数值*/
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: true,
+                                        formatter: '{b} : {c} ({d}%)'
+                                    },
+                                    labelLine: {show: true}
+                                }
+                            }
+                        }
+                    ]
+                };
+                pieChart.setOption(option);
+            }
 
             function sendAjax(){
                 $.ajax({
                     url:"/backend/server-status/",
                     type: 'post',
                     success: function (res){
-                        let myChart = echarts.init(document.getElementById('cpuRateCurve'));
-                        var option = {
-                            tooltip: {},
-                            legend: {
-                                data:['cpu使用率']
-                            },
-                            xAxis: {
-                                data: res.times,
-                            },
-                            yAxis: {},
-                            series: [
-                                {
-                                    name: 'cpu使用率',
-                                    type: 'line',
-                                    data: res.cpu_rates,
-                                },
-
-                            ]
-                        };
-                        myChart.setOption(option);
+                        $("#cpuRate").text(res.cpu_rates[res.cpu_rates.length -1]);
+                        displayChart("cpuRateCurve", 'cpu使用率', res.cpu_rates, res.times);
+                        displayChart("memoryRateCurve", '内存使用率', res.mem_rates, res.times);
+                        displayPie(res);
                     }
                 })
             }
