@@ -9,7 +9,8 @@
 import os
 from datetime import datetime
 from bs4 import BeautifulSoup
-from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify, \
+    current_app
 from flask_login import current_user
 
 from blogin.blueprint.backend.forms import TimelineForm
@@ -159,20 +160,52 @@ def download_log_file():
 @other_bp.route('/server-status/', methods=['GET', 'POST'])
 def server_status():
     if request.method == 'POST':
+        # 获取redis中历史缓存数据
         history_percent = rd.lrange(current_user.id, 0, -1)
+        history_memory = rd.lrange(str(current_user.id) + 'mem', 0, -1)
+        history_disk = rd.lrange(str(current_user.id) + 'disk', 0, -1)
+
         times = rd.lrange('times', 0, -1)
+        # 获取cpu相关信息
         cpu_use_rate = psutil.cpu_percent()
         history_percent.append(cpu_use_rate)
+
+        # 获取内存相关信息
+        memory = psutil.virtual_memory()
+        history_memory.append(memory.percent)
+        # 磁盘信息
+        disk = psutil.disk_usage('/')
+
         now_time = datetime.now().strftime('%H:%M:%S')
         times.append(now_time)
-        # 存入到redis缓存数据库
-        rd.rpush(current_user.id, cpu_use_rate)
-        rd.rpush('times', now_time)
-        return jsonify({'times': times, 'cpu_rates': history_percent})
+        # 只保留历史500条数据
+        if len(times) > 500:
+            times.pop(0)
+            history_percent.pop(0)
+            rd.lpop(1)
+            rd.lpop('times')
+            # 存入到redis缓存数据库
+            rd.rpush(current_user.id, cpu_use_rate)
+            rd.rpush('times', now_time)
+        else:
+            # 存入到redis缓存数据库
+            rd.rpush(current_user.id, cpu_use_rate)
+            rd.rpush('times', now_time)
+            rd.rpush(str(current_user.id) + 'mem', memory.percent)
+        return jsonify({'times': times, 'cpu_rates': history_percent, 'mem_rates': history_memory,
+                        'disk': [round(disk.free / 1024 / 1024 / 1024, 2), round(disk.used / 1024 / 1024 / 1024, 2)]})
 
     cpu_counts = psutil.cpu_count()
     cpu_use_rate = psutil.cpu_percent()
-    return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate)
+    memory = psutil.virtual_memory()
+    disk = psutil.disk_usage('/')
+    return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate,
+                           memory_total=round(memory.total / 1024 / 1024 / 1024, 2),
+                           memory_used=round(memory.used / 1024 / 1024 / 1024, 2),
+                           mem_percent=memory.percent,
+                           disk_total=round(disk.total / 1024 / 1024 / 1024, 2),
+                           disk_used=round(disk.used / 1024 / 1024 / 1024, 2),
+                           disk_free=round(disk.free / 1024 / 1024 / 1024, 2))
 
 
 def get_file_mtime(path):
