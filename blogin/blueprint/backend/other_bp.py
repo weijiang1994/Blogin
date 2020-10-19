@@ -163,8 +163,6 @@ def server_status():
         # 获取redis中历史缓存数据
         history_percent = rd.lrange(current_user.id, 0, -1)
         history_memory = rd.lrange(str(current_user.id) + 'mem', 0, -1)
-        history_disk = rd.lrange(str(current_user.id) + 'disk', 0, -1)
-
         times = rd.lrange('times', 0, -1)
         # 获取cpu相关信息
         cpu_use_rate = psutil.cpu_percent()
@@ -178,34 +176,43 @@ def server_status():
 
         now_time = datetime.now().strftime('%H:%M:%S')
         times.append(now_time)
-        # 只保留历史500条数据
-        if len(times) > 500:
+        net = psutil.net_io_counters()
+        # 只保留历史200条数据
+        if len(times) > 200:
             times.pop(0)
             history_percent.pop(0)
             rd.lpop(1)
             rd.lpop('times')
+            rd.lpop('1mem')
+
             # 存入到redis缓存数据库
             rd.rpush(current_user.id, cpu_use_rate)
             rd.rpush('times', now_time)
+            rd.rpush(str(current_user.id) + 'mem', memory.percent)
         else:
             # 存入到redis缓存数据库
             rd.rpush(current_user.id, cpu_use_rate)
             rd.rpush('times', now_time)
             rd.rpush(str(current_user.id) + 'mem', memory.percent)
+
         return jsonify({'times': times, 'cpu_rates': history_percent, 'mem_rates': history_memory,
-                        'disk': [round(disk.free / 1024 / 1024 / 1024, 2), round(disk.used / 1024 / 1024 / 1024, 2)]})
+                        'disk': [round(disk.free / 1024 / 1024 / 1024, 2), round(disk.used / 1024 / 1024 / 1024, 2)],
+                        'net': [round(net.bytes_sent / 1024 / 1024, 2), round(net.bytes_recv / 1024 / 1024, 2),
+                                net.packets_sent, net.packets_recv, net.errin, net.errout, net.dropin, net.dropout]})
 
     cpu_counts = psutil.cpu_count()
     cpu_use_rate = psutil.cpu_percent()
     memory = psutil.virtual_memory()
     disk = psutil.disk_usage('/')
+    net = psutil.net_io_counters()
     return render_template('backend/serverStatus.html', cpu_counts=cpu_counts, cpu_use_rate=cpu_use_rate,
                            memory_total=round(memory.total / 1024 / 1024 / 1024, 2),
                            memory_used=round(memory.used / 1024 / 1024 / 1024, 2),
                            mem_percent=memory.percent,
                            disk_total=round(disk.total / 1024 / 1024 / 1024, 2),
                            disk_used=round(disk.used / 1024 / 1024 / 1024, 2),
-                           disk_free=round(disk.free / 1024 / 1024 / 1024, 2))
+                           disk_free=round(disk.free / 1024 / 1024 / 1024, 2),
+                           net=net)
 
 
 def get_file_mtime(path):
