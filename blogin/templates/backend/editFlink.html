@@ -1,0 +1,92 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    编辑友链
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <h4><b>编辑友链</b></h4>
+            {% include "_flash.html" %}
+            <div class="table-responsive">
+                {% if flinks %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>URL</th>
+                        <th>描述</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for flink in flinks %}
+                        <tr>
+                            <td><input style="border: none;min-width: 250px;" id="name{{ flink.id }}" value="{{ flink.name }}"></td>
+                            <td><input style="border: none;min-width: 250px;" id="link{{ flink.id }}" value="{{ flink.link }}"></td>
+                            <td><input style="border: none;min-width: 250px;" id="desc{{ flink.id }}" value="{{ flink.desc }}"></td>
+                            <td>
+                                {% if flink.status.name == '正常' %}
+                                    <i class="fa fa-unlock"></i>
+                                {% else %}
+                                    <i class="fa fa-lock"></i>
+                                {% endif %}
+                                {{ flink.status.name }}
+                            </td>
+                            <td>
+                                {% if flink.status.name == '正常' %}
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该里程碑" style="color: inherit; text-decoration: none;" href="/backend/flink/abandon/{{ flink.id }}/">遗弃</a></button>
+                                {% else %}
+                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该里程碑" style="color: inherit; text-decoration: none;" href="/backend/flink/activate/{{ flink.id }}/">启用</a></button>
+                                {% endif %}
+                                <button id="{{ flink.id }}" onclick="saveChange(this.id)" class="btn btn-info" style="margin-bottom: 3px; display: none;">保存</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+            $('input').bind('input propertychange', function(){
+                // 监听输入框变化
+                if($(this).val()){
+                    let btnID = this.id;
+                    if ((btnID.split('name'))[0] == ''){
+                        btnID = btnID.split('name')[1];
+                    }
+                    if ((btnID.split('link'))[0] == ''){
+                        btnID = btnID.split('link')[1];
+                    }
+                    if ((btnID.split('desc'))[0] == ''){
+                        btnID = btnID.split('desc')[1];
+                    }
+                    $("#"+btnID).show();
+                }else{
+                    console.log("不能清空信息!");
+                }
+            })
+
+            function saveChange(linkId){
+                let name = $("#name"+linkId).val();
+                let url = $("#link"+linkId).val();
+                let desc = $("#desc"+linkId).val();
+
+                if (name == "" || url == "" || desc == ""){
+                    alert("友情链接名称、url、描述信息不能为空!");
+                    return false;
+                }
+                $.ajax({
+                    url:"/backend/flink/edit/",
+                    type:"post",
+                    data:{"name": name, "url": url, "desc": desc},
+                    success: function (){
+                        window.location.reload();
+                    }
+                })
+            }
+        </script>
+    </main>
+
+{% endblock %}
