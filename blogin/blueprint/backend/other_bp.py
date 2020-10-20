@@ -261,3 +261,15 @@ def add_flink():
         db.session.commit()
         return redirect(url_for('blog_bp.index'))
     return render_template('backend/addFlink.html', form=form)
+
+
+@other_bp.route('/flink/edit/', methods=['GET', 'POST'])
+def edit_flink():
+    flinks = FriendLink.query.all()
+    if request.method == 'post':
+        name = request.form.get('name')
+        url = request.form.get('url')
+        desc = request.form.get('desc')
+        flash('友链信息修改成功!', 'success');
+        return jsonify({'tag': 1})
+    return render_template('backend/editFlink.html', flinks=flinks)
