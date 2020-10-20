@@ -9,13 +9,12 @@
 import os
 from datetime import datetime
 from bs4 import BeautifulSoup
-from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify, \
-    current_app
+from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import current_user
 
-from blogin.blueprint.backend.forms import TimelineForm
+from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm
 from blogin import basedir
-from blogin.models import Timeline
+from blogin.models import Timeline, FriendLink, States
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
@@ -201,7 +200,7 @@ def server_status():
             if not send:
                 # 发送间隔三小时，不然会一直收到邮件，如果该条件满足
                 send_server_warning_mail(cpu_rate=cpu_use_rate, mem_rate=memory.percent)
-                rd.set('warningEmail', 1, ex=60*60*3)
+                rd.set('warningEmail', 1, ex=60 * 60 * 3)
 
         return jsonify({'times': times, 'cpu_rates': history_percent, 'mem_rates': history_memory,
                         'disk': [round(disk.free / 1024 / 1024 / 1024, 2), round(disk.used / 1024 / 1024 / 1024, 2)],
@@ -247,3 +246,18 @@ def get_log_files(path):
             if f.__contains__('log') and not f.__contains__('.gz'):
                 fl_ls.append(os.path.join(root, f))
     return fl_ls
+
+
+@other_bp.route('/flink/add/', methods=['GET', 'POST'])
+def add_flink():
+    form = AddFlinkForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        url = form.link.data
+        desc = form.desc.data
+        status = States.query.filter(States.name=='正常').first()
+        flink = FriendLink(name=name, link=url, flag=status.id, desc=desc)
+        db.session.add(flink)
+        db.session.commit()
+        return redirect(url_for('blog_bp.index'))
+    return render_template('backend/addFlink.html', form=form)

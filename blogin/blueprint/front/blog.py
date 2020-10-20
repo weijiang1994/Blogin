@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
-    LikeStatistics, CommentStatistics, Tag
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink
 from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -23,9 +23,8 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    # blogs = Blog.query.filter_by(is_private=0, delete_flag=1).order_by(Blog.create_time.desc()).all()
-    pagination = Blog.query.order_by(Blog.create_time.desc()).paginate(page,
-                                                                       current_app.config['BLOGIN_BLOG_PER_PAGE'])
+    pagination = Blog.query.order_by(Blog.create_time.desc()).paginate(page, per_page=current_app.
+                                                                       config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []
     for blog in blogs:
@@ -36,8 +35,11 @@ def index():
         loves = 0
     else:
         loves = loves.counts
-    return render_template('main/index.html', pagination=pagination, blogs=blogs, cates=cates, categories=categories,
-                           loves=loves)
+    su = User.query.filter(User.email=='804022023@qq.com').first()
+    flinks = FriendLink.query.filter(FriendLink.flag==1).all()
+    return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
+                           pagination=pagination, blogs=blogs, cates=cates, categories=categories,
+                           loves=loves, su=su, flinks=flinks)
 
 
 @blog_bp.route('/blog/article/<blog_id>/')

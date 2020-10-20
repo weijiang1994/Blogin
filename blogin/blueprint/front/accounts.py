@@ -6,7 +6,7 @@
 @File    : accounts
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for
+from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from imageio import imread
 
@@ -22,13 +22,16 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @accounts_bp.route('/profile/<int:user_id>/')
 @login_required
 def profile(user_id):
-    logs = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    pagination = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).paginate(page=page, per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
+    logs = pagination.items
+
     blog_comments = BlogComment.query.filter_by(author_id=user_id).order_by(BlogComment.timestamp.desc()).all()
     photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
     notifies = Notification.query.filter_by(receive_id=current_user.id, read=0).\
         order_by(Notification.timestamp.desc()).all()
     return render_template('main/accountProfile.html', logs=logs, blogComments=blog_comments,
-                           photoComments=photo_comments, notifies=notifies)
+                           photoComments=photo_comments, notifies=notifies, pagination=pagination)
 
 
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])

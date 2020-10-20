@@ -12,8 +12,8 @@ from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, SelectField, TextAreaField, FileField, SubmitField, DateTimeField
-from wtforms.validators import Length, DataRequired
-from blogin.models import BlogType
+from wtforms.validators import Length, DataRequired, ValidationError
+from blogin.models import BlogType, FriendLink
 
 
 class PostForm(FlaskForm):
@@ -90,3 +90,22 @@ class TimelineForm(FlaskForm):
                                                 'style': 'height:150px;'})
     timestamp = DateTimeField(u'日期', default=datetime.now)
     submit = SubmitField(u'添加时间线')
+
+
+class AddFlinkForm(FlaskForm):
+
+    name = StringField(u'友链名称', validators=[DataRequired(), Length(min=3, max=50, message='用户名长度必须在3到20位之间')],
+                       render_kw={'class': '', 'rows': 50, 'placeholder': '请输入友链名称'})
+    link = StringField(u'URL地址', validators=[DataRequired(), Length(min=3, max=50, message='用户名长度必须在3到20位之间')],
+                       render_kw={'class': '', 'rows': 50, 'placeholder': '请输入友链URL地址'})
+    desc = StringField(u'友链描述', validators=[Length(min=3, max=50, message='用户名长度必须在3到20位之间')],
+                       render_kw={'class': '', 'rows': 50, 'placeholder': '请输入友链描述信息'})
+    submit = SubmitField(u'添加友链')
+
+    def validate_name(self, filed):
+        if FriendLink.query.filter_by(name=filed.data).first():
+            raise ValidationError('该名称已存在')
+
+    def validate_link(self, filed):
+        if FriendLink.query.filter_by(link=filed.data.lower()).first():
+            raise ValidationError('该URL已经被添加')

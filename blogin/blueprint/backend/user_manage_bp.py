@@ -6,18 +6,20 @@
 @File    : user_manage_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from blogin.models import User
 from blogin.extension import db
-
 
 user_m_bp = Blueprint('user_m_bp', __name__, url_prefix='/backend/user-m')
 
 
 @user_m_bp.route('/index/')
 def index():
-    users = User.query.all()
-    return render_template('backend/userManager.html', users=users)
+    page = request.args.get('page')
+    pagination = User.query.order_by(User.create_time).paginate(page=page,
+                                                                per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
+    users = pagination.items
+    return render_template('backend/userManager.html', pagination=pagination, users=users)
 
 
 @user_m_bp.route('/set-admin/<int:user_id>/')

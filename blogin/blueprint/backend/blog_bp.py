@@ -72,13 +72,16 @@ def blog_create():
 @login_required
 @permission_required
 def blog_edit():
+    page = request.args.get('page', 1, type=int)
     blog_type_datas = []
     types = BlogType.query.all()
-    blogs = Blog.query.all()
+    pagination = Blog.query.order_by(Blog.create_time).paginate(page=page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
+    blogs = pagination.items
     for _type in types:
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
                                 '/backend/editArticleType/' + str(_type.id)])
-    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs)
+    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs,
+                           pagination=pagination)
 
 
 @be_blog_bp.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
