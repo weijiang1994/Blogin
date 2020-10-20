@@ -83,3 +83,4 @@ pip install -r requirments.txt -i https://pypi.douban.com/simple
    ```
 
    打开 http://127.0.0.1:5000 就可以看到页面了。
+   在线演示地址: http://2dogz.cn
