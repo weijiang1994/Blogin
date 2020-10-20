@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, request, url_for
 from flask_login import login_required, current_user
-
+from sqlalchemy.sql.expression import func
 from blogin import basedir, db
 from blogin.models import Photo, LikePhoto, Notification, Tag, VisitStatistics, CommentStatistics, LikeStatistics
 from blogin.models import PhotoComment
@@ -20,7 +20,7 @@ gallery_bp = Blueprint('gallery_bp', __name__, url_prefix='/gallery')
 @gallery_bp.route('/all/', methods=['GET', 'POST'])
 @statistic_traffic(db, VisitStatistics)
 def index():
-    photos = Photo.query.filter_by(level=0).order_by(Photo.create_time.desc()).all()
+    photos = Photo.query.filter_by(level=0).order_by(func.random()).limit(9)
     return render_template('main/gallery.html', photos=photos)
 
 

@@ -44,6 +44,11 @@
                             </div>
                         </div>
                     </div>
+                    {% if loop.index == 9 %}
+                        <div class="text-center">
+                            <button class="btn btn-outline-success"><a style="color: inherit;text-decoration: none;" href="{{ url_for('.index') }}"><span><i class="fa fa-exchange"></i> 换一批</span></a></button>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
