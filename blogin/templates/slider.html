@@ -51,47 +51,14 @@
     </div>
     <div class="card-body px-0 py-3">
         <div class="tool-list">
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://tendcode.com" title="一个基于 Django 开发的博客" target="_blank">
-                        Tendcode</a>
+            {% for flink in flinks %}
+                <div class="w-50 float-left text-center mb-2">
+                    <div class="mx-2">
+                        <a class="text-info-a" style="text-decoration: none" href="{{ flink.link }}" title="{{ flink.desc }}" target="_blank">
+                            {{ flink.name }}</a>
+                    </div>
                 </div>
-            </div>
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://frostming.com" title="一个基于 Flask 开发的博客" target="_blank">
-                        Frost&#39;s Blog</a>
-                </div>
-            </div>
-
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://zmrenwu.com" title="Django 博客教程分享者" target="_blank">
-                        追梦人物</a>
-                </div>
-            </div>
-
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://www.dusaiphoto.com/" title="Django 搭建的博客，分享博客教程" target="_blank">
-                        杜赛的个人网站</a>
-                </div>
-            </div>
-
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://www.jerrycoding.com/" title="Jerry 的个人博客" target="_blank">
-                        Jerry Coding</a>
-                </div>
-            </div>
-
-            <div class="w-50 float-left text-center mb-2">
-                <div class="mx-2">
-                    <a class="text-info-a" style="text-decoration: none" href="https://boywithacoin.cn/" title="Stray_Camel的个人技术博客" target="_blank">
-                        Stray_Camel</a>
-                </div>
-            </div>
-
+            {% endfor %}
         </div>
     </div>
 </div>

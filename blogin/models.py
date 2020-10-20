@@ -165,6 +165,7 @@ class States(db.Model):
 
     blog = db.relationship('Blog', back_populates='state')
     user = db.relationship('User', back_populates='statuses')
+    flink = db.relationship('FriendLink', back_populates='status')
 
     @staticmethod
     def init_states():
@@ -311,3 +312,16 @@ class LikeStatistics(db.Model):
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     date = db.Column(db.Date, nullable=False)
     times = db.Column(db.INTEGER, default=1)
+
+
+class FriendLink(db.Model):
+    __tablename__ = 'friend_link'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(40), nullable=False)
+    link = db.Column(db.String(40), nullable=False)
+    desc = db.Column(db.String(40), default='')
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+    flag = db.Column(db.INTEGER, db.ForeignKey('states.id'))
+
+    status = db.relationship(States, back_populates='flink')

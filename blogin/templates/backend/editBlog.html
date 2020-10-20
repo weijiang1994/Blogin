@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 {% extends "backend/base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
+{% from "macro.html" import render_pagination with context %}
 {% block head %}
     {{super()}}
 {% endblock %}
 {% block title %}博客编辑{% endblock %}
 {% block content %}
-    <style>
-        .contentDiv{
-            background: white;
-            border-radius: 8px;
-            border: #cccccc solid 1px;
-            box-shadow: 10px 10px 5px #888888;
-        }
-    </style>
     <body>
-    <div style="padding-bottom: 30px; padding-top: 10px;" class="container contentDiv" id="content">
+    <div style="padding-bottom: 30px; padding-top: 10px;" class="container" id="content">
         {% include "_flash.html" %}
         <ul class="nav nav-pills" role="tablist">
             <li class="active">
@@ -25,7 +18,7 @@
                 <a class="nav-link" data-toggle="pill" href="#typeManage">分类管理</a>
             </li>
         </ul>
-        <div  class="tab-content">
+        <div class="tab-content">
             <div id="typeManage" class="container tab-pane fade">
                 <br>
                 <a href="#category" class="btn btn-success" data-toggle="collapse">添加新类别</a>
@@ -119,7 +112,9 @@
                     </tbody>
                     </table>
                 </div>
-
+                <div style="margin-right:10px;text-align: right">
+                    {{ render_pagination(pagination, align='center') }}
+                </div>
             </div>
         </div>
     </div>

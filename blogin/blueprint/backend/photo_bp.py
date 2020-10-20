@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 
 from PIL import Image
-from flask import Blueprint, render_template, flash, redirect, url_for, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, current_app, request
 from flask_login import login_required, current_user
 from blogin.setting import basedir
 from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
@@ -22,6 +22,11 @@ be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend/photo')
 
 
 def generate_thumbnail(path):
+    """
+    生成缩略图
+    :param path: 文件路径
+    :return: 返回缩略图，缩小尺寸到原来的三分之一
+    """
     img = Image.open(path)
     width = img.size[0]
     height = img.size[1]
@@ -74,8 +79,10 @@ def add_photo():
 
 @be_photo_bp.route('/edit/')
 def photo_edit():
-    photos = Photo.query.all()
-    return render_template('backend/editPhoto.html', photos=photos)
+    page = request.args.get('page', 1, type=int)
+    pagination = Photo.query.order_by(Photo.create_time).paginate(page=page, per_page=current_app.config['BLOGIN_PHOTO_PER_PAGE'])
+    photos = pagination.items
+    return render_template('backend/editPhoto.html', pagination=pagination, photos=photos)
 
 
 @be_photo_bp.route('/private/<int:photo_id>/')

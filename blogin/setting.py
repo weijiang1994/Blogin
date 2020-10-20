@@ -30,9 +30,10 @@ class Operators:
 class BaseConfig:
 
     # Paginate configure
-    BLOGIN_BLOG_PER_PAGE = 5
+    BLOGIN_BLOG_PER_PAGE = 8
     BLOGIN_COMMENT_PER_PAGE = 10
     BLOGIN_PHOTO_PER_PAGE = 12
+    LOGIN_LOG_PER_PAGE = 20
     SECRET_KEY = os.getenv('SECRET_KEY')
 
     BLOGIN_MAIL_SUBJECT_PRE = '[Blogin]'

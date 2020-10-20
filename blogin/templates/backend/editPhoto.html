@@ -1,4 +1,5 @@
 {% extends "backend/base.html" %}
+{% from "macro.html" import render_pagination %}
 {% block title %}
     照片编辑
 {% endblock %}
@@ -42,6 +43,9 @@
                 {% endif %}
                 </tbody>
                 </table>
+                <div style="text-align: right; margin-right: 15px;">
+                    {{ render_pagination(pagination) }}
+                </div>
             </div>
         </div>
     </main>

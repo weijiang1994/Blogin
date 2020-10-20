@@ -1,4 +1,5 @@
 {% extends "backend/base.html" %}
+{% from "macro.html" import render_pagination with context %}
 {% block head %}
     {{ super() }}
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -60,7 +61,11 @@
                 {% endif %}
                 </tbody>
                 </table>
+                <div style="text-align: right; margin-right: 15px;">
+                    {{ render_pagination(pagination) }}
+                </div>
             </div>
+
         </div>
     </main>
 

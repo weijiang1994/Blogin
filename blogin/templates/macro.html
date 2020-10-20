@@ -59,7 +59,7 @@
     {% endif %}
     <div>
         {{ comment.body|safe }}
-        <p class="moment-p">来自:<a style="color: dodgerblue" href="/gallery/photo/{{ comment.photo.id }}">{{ comment.photo.title }}</a></p>
+        <p class="moment-p">来自:<a style="color: dodgerblue; text-decoration: none;" href="/gallery/photo/{{ comment.photo.id }}">{{ comment.photo.title }}</a></p>
         <hr>
     </div>
 {% endmacro %}

@@ -1,0 +1,24 @@
+{% extends "backend/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block title %}
+    添加友链
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <form method="post">
+                {{ form.csrf_token }}
+                {{wtf.form_field(form.name)}}
+                {{wtf.form_field(form.link)}}
+                {{wtf.form_field(form.desc)}}
+                <div class="row">
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2" style="text-align: right;">
+                        {{ wtf.form_field(form.submit, class="btn btn-info") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}
