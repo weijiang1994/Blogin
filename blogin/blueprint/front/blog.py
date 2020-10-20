@@ -6,7 +6,7 @@
 @File    : blog_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag
 from blogin.extension import db
@@ -22,7 +22,11 @@ blog_bp = Blueprint('blog_bp', __name__)
 @blog_bp.route('/index/', methods=['GET'])
 @statistic_traffic(db, VisitStatistics)
 def index():
-    blogs = Blog.query.filter_by(is_private=0, delete_flag=1).order_by(Blog.create_time.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    # blogs = Blog.query.filter_by(is_private=0, delete_flag=1).order_by(Blog.create_time.desc()).all()
+    pagination = Blog.query.order_by(Blog.create_time.desc()).paginate(page,
+                                                                       current_app.config['BLOGIN_BLOG_PER_PAGE'])
+    blogs = pagination.items
     cates = []
     for blog in blogs:
         cates.append(BlogType.query.filter_by(id=blog.type_id).first().name)
@@ -32,7 +36,8 @@ def index():
         loves = 0
     else:
         loves = loves.counts
-    return render_template('main/index.html', blogs=blogs, cates=cates, categories=categories, loves=loves)
+    return render_template('main/index.html', pagination=pagination, blogs=blogs, cates=cates, categories=categories,
+                           loves=loves)
 
 
 @blog_bp.route('/blog/article/<blog_id>/')

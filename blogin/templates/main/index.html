@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% from "macro.html" import render_pager  with context %}
 {% block title %}
     Home
 {% endblock %}
@@ -63,6 +64,11 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% if blogs %}
+                        <div class="float-right">
+                        {{ render_pager(pagination) }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                     {% include "slider.html" %}
