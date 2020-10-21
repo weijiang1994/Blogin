@@ -1,0 +1,77 @@
+{% extends "backend/base.html" %}
+{% from "macro.html" import render_pagination with context %}
+{% block title %}
+    毒鸡汤
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <h4><b>毒鸡汤</b></h4>
+            {% include "_flash.html" %}
+            <div class="table-responsive">
+                {% if souls %}
+                    <div hidden="hidden" id="hintSaveSuccess" style="border-radius: 5px; border-color: #c3e6cb; padding:5px;background: #d4edda;margin: 10px;">
+                        <h5><b>毒鸡汤制作成功!</b></h5>
+                    </div>
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>内容</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for soul in souls %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><input class="form-control" id="title{{ soul.id }}" style="border: none;min-width: 250px;" value="{{ soul.title }}"></td>
+                            <td>
+                                <button id="{{ soul.id }}" onclick="saveChange(this.id)" class="btn btn-info" style="margin-bottom: 3px; display: none;">保存</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+                <div style="margin-right: 10px; text-align: right">
+                    {{ render_pagination(pagination) }}
+                </div>
+            </div>
+        </div>
+        <script>
+            $('input').bind('input propertychange', function(){
+                // 监听输入框变化
+                if($(this).val()){
+                    let btnID = this.id;
+                    btnID = btnID.split('title')[1];
+                    $("#"+btnID).show();
+                }else{
+                    console.log("不能清空信息!");
+                }
+            })
+
+            function saveChange(linkId){
+                let title = $("#title"+linkId).val();
+
+                if (title == ""){
+                    alert("请输入毒鸡汤信息!");
+                    return false;
+                }
+                $.ajax({
+                    url:"/backend/soul/",
+                    type:"post",
+                    data:{"title": title, 'id': linkId},
+                    success: function (res){
+                        if (res.tag == 1){
+                            $("#"+linkId).hide();
+                            $("#hintSaveSuccess").removeAttr("hidden");
+                            $("#hintSaveSuccess").show().delay(2000).hide(500);
+                        }
+                    }
+                })
+            }
+        </script>
+    </main>
+
+{% endblock %}

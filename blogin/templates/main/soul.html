@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .soul-div{
+            padding: 25px;
+            min-height: 50px;
+            text-align: center;
+            background: #00AAEE;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 0px 15px 0px 15px;
+        }
+        .tip-text{
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    毒鸡汤
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container" style="height: 100%">
+            <div class="row justify-content-center" style="height: 100%">
+                <div class="align-self-center">
+                    <div class="soul-div">
+                        <h4>{{ soul[0].title }}</h4>
+                        <div class="float-right">
+                            <i class="fa fa-smile-o"></i>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="text-center">
+        <button style="min-width: 80px;border-radius: 20px;" class="btn btn-outline-info">
+            <a style="color: inherit;text-decoration: none;" href="/soul/"><i class="fa fa-exchange"></i></a>
+        </button>
+        <p class="text-muted tip-text">截屏分享给好友</p>
+    </div>
+{% endblock %}

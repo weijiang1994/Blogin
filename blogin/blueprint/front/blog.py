@@ -63,7 +63,8 @@ def blog_article(blog_id):
 def blog_cate(cate_id):
     cate = BlogType.query.filter_by(id=cate_id).first()
     categories = BlogType.query.all()
-    return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs)
+    flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
+    return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks)
 
 
 @blog_bp.route('/loveme/')
@@ -76,10 +77,14 @@ def love_me():
     else:
         love.counts += 1
     # 如果用户已经登录,则记录用户名 ip,否则记录 匿名用户 IP
+    remote_ip = request.headers.get('X-Real-Ip')
+    if remote_ip is None:
+        remote_ip = request.remote_addr
+
     if current_user.is_authenticated:
-        li = LoveInfo(user=current_user.username, user_ip=request.remote_addr)
+        li = LoveInfo(user=current_user.username, user_ip=remote_ip)
     else:
-        li = LoveInfo(user='Anonymous', user_ip=request.remote_addr)
+        li = LoveInfo(user='Anonymous', user_ip=remote_ip)
     db.session.add(li)
     db.session.commit()
     flash('点赞成功!你们的支持就是我前进的动力啦~', 'success')
@@ -144,6 +149,7 @@ def archive():
     blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
     categories = BlogType.query.all()
     archives = {}
+    flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     for blog in blogs:
         current_year = str(blog.create_time).split(' ')[0].split('-')[0]
         current_month = str(blog.create_time).split(' ')[0].split('-')[1]
@@ -163,7 +169,7 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
-    return render_template('main/archive.html', archives=archives, categories=categories)
+    return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks)
 
 
 TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],
