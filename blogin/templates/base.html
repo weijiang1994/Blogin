@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-hans">
 {% block head %}
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - Blogin</title>
-        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
@@ -53,7 +52,7 @@
 
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
-                <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required="True">
+                <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
             </form>
             {% if not current_user.is_authenticated %}
