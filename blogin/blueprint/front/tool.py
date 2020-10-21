@@ -7,6 +7,7 @@
 @Software: PyCharm
 """
 import os
+import random
 
 from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory
@@ -14,7 +15,7 @@ from flask import Blueprint, render_template, request, jsonify, send_from_direct
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
-    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel
+    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img
 import re
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -121,21 +122,36 @@ def image_pro():
             return jsonify({'tag': 0, 'info': '目前支持jpg/png/jpeg/bmp类型图片!'})
         pro_type = request.form.get('proType')
 
+        origin_img_path = basedir + '/uploads/img-pro/' + img.filename
+        img.save(origin_img_path)
+
         if pro_type == '添加水印':
             mark_text = request.form.get('markText')
             font_size = request.form.get('markTextSize')
             font_color = request.form.get('markFontColor')
             mark_position = request.form.get('markPosition')
 
-            origin_img_path = basedir + '/uploads/img-pro/' + img.filename
             pro_img_filename = mark_position + '_mark_' + font_color + '_' + os.path.splitext(img.filename)[0] + '.png'
             save_path = basedir + '/uploads/img-pro/' + pro_img_filename
-            img.save(origin_img_path)
             img_stream = Image.open(origin_img_path)
             MARK_POSITION.get(mark_position)(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
                                              image=img_stream, text=mark_text, save_path=save_path).generate_mark()
             return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
                             '/tool/img-pro/' + pro_img_filename})
+
+        if pro_type == '图片缩放':
+            width_zoom = request.form.get('widthZoom', type=float)
+            height_zoom = request.form.get('heightZoom', type=float)
+            pro_img = resize_img(origin_img_path, w_zoom=width_zoom, h_zoom=height_zoom)
+            img_name = os.path.split(origin_img_path)[1]
+            pre_num = random.randint(0, 3456)
+            pro_img.save(basedir + r'/uploads/img-pro/' + 'resize' + str(pre_num) + img_name)
+            return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
+                            '/tool/img-pro/' + 'resize' + str(pre_num) + img_name})
+
+        if pro_type == '证件照换底':
+            pass
+
     return render_template('main/tool/image-pro.html')
 
 

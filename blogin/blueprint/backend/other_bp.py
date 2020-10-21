@@ -15,7 +15,7 @@ from flask_login import current_user, login_required
 from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm
 from blogin import basedir
 from blogin.decorators import permission_required
-from blogin.models import Timeline, FriendLink, States
+from blogin.models import Timeline, FriendLink, States, Soul
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
@@ -286,3 +286,18 @@ def edit_flink():
             db.session.commit()
         return jsonify({'tag': 1})
     return render_template('backend/editFlink.html', flinks=flinks)
+
+
+@other_bp.route('/soul/', methods=['GET', 'POST'])
+def soul():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        soul_id = request.form.get('id')
+        so = Soul.query.get_or_404(soul_id)
+        so.title = title
+        db.session.commit()
+        return jsonify({'tag': 1})
+    page = request.args.get('page', 1, type=int)
+    pagination = Soul.query.paginate(page=page, per_page=100)
+    souls = pagination.items
+    return render_template("backend/soul.html", souls=souls, pagination=pagination)

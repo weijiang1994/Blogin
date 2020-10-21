@@ -23,13 +23,6 @@ from blogin.decorators import permission_required, db_exception_handle
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
 
-# @be_blog_bp.route('/admin/index/')
-# @login_required
-# @permission_required
-# def index():
-#     return render_template('backend/index.html')
-
-
 @be_blog_bp.route('/admin/blog/create/', methods=['GET', 'POST'])
 @login_required
 @permission_required

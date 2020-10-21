@@ -325,3 +325,11 @@ class FriendLink(db.Model):
     flag = db.Column(db.INTEGER, db.ForeignKey('states.id'))
 
     status = db.relationship(States, back_populates='flink')
+
+
+class Soul(db.Model):
+    __tablename__ = 'soul'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(300), nullable=False)
+    hits = db.Column(db.String(300), nullable=False, default=1)

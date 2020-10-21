@@ -169,6 +169,21 @@ class ImageAddMarkBase:
         self.image_draw = ImageDraw.Draw(self.text_overlay)
 
 
+def resize_img(path, w_zoom, h_zoom):
+    """
+    生成缩略图
+    :param h_zoom: 高放大比例
+    :param w_zoom: 宽放大比例
+    :param path: 文件路径
+    :return: 返回缩略图，缩小尺寸到原来的三分之一
+    """
+    img = Image.open(path)
+    width = img.size[0]
+    height = img.size[1]
+    img = img.resize((int(width * w_zoom), int(height * h_zoom)), Image.ANTIALIAS)
+    return img
+
+
 class AddMark2RT(ImageAddMarkBase):
     def __init__(self, *args, **kwargs):
         super(AddMark2RT, self).__init__(*args, **kwargs)

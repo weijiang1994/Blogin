@@ -25,6 +25,7 @@ from blogin.blueprint.front.auth import auth_bp
 from blogin.blueprint.front.accounts import accounts_bp
 from blogin.blueprint.front.gallery import gallery_bp
 from blogin.blueprint.front.tool import tool_bp
+from blogin.blueprint.front.soul_bp import soul_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space
@@ -106,6 +107,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(user_m_bp)
     app.register_blueprint(other_bp)
     app.register_blueprint(index_bp_be)
+    app.register_blueprint(soul_bp)
 
 
 def register_cmd(app: Flask):
