@@ -10,10 +10,11 @@ import os
 from datetime import datetime
 from bs4 import BeautifulSoup
 from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm
 from blogin import basedir
+from blogin.decorators import permission_required
 from blogin.models import Timeline, FriendLink, States
 from blogin.extension import db
 import psutil
@@ -158,6 +159,8 @@ def download_log_file():
 
 
 @other_bp.route('/server-status/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def server_status():
     if request.method == 'POST':
         # 获取redis中历史缓存数据
@@ -249,6 +252,8 @@ def get_log_files(path):
 
 
 @other_bp.route('/flink/add/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def add_flink():
     form = AddFlinkForm()
     if form.validate_on_submit():
@@ -264,12 +269,20 @@ def add_flink():
 
 
 @other_bp.route('/flink/edit/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def edit_flink():
     flinks = FriendLink.query.all()
-    if request.method == 'post':
+    if request.method == 'POST':
         name = request.form.get('name')
         url = request.form.get('url')
         desc = request.form.get('desc')
-        flash('友链信息修改成功!', 'success');
+        flink_id = request.form.get('btnID')
+        flink = FriendLink.query.get_or_404(flink_id)
+        if flink:
+            flink.name = name
+            flink.link = url
+            flink.desc = desc
+            db.session.commit()
         return jsonify({'tag': 1})
     return render_template('backend/editFlink.html', flinks=flinks)

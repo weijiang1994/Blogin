@@ -9,6 +9,9 @@
             {% include "_flash.html" %}
             <div class="table-responsive">
                 {% if flinks %}
+                    <div hidden="hidden" id="hintSaveSuccess" style="border-radius: 5px; border-color: #c3e6cb; padding:5px;background: #d4edda;margin: 10px;">
+                        <h5><b>友情链接信息编辑成功!</b></h5>
+                    </div>
                     <table class="table table-hover">
                     <thead>
                     <tr>
@@ -35,9 +38,9 @@
                             </td>
                             <td>
                                 {% if flink.status.name == '正常' %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该里程碑" style="color: inherit; text-decoration: none;" href="/backend/flink/abandon/{{ flink.id }}/">遗弃</a></button>
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/abandon/{{ flink.id }}/">遗弃</a></button>
                                 {% else %}
-                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该里程碑" style="color: inherit; text-decoration: none;" href="/backend/flink/activate/{{ flink.id }}/">启用</a></button>
+                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/activate/{{ flink.id }}/">启用</a></button>
                                 {% endif %}
                                 <button id="{{ flink.id }}" onclick="saveChange(this.id)" class="btn btn-info" style="margin-bottom: 3px; display: none;">保存</button>
                             </td>
@@ -80,9 +83,13 @@
                 $.ajax({
                     url:"/backend/flink/edit/",
                     type:"post",
-                    data:{"name": name, "url": url, "desc": desc},
-                    success: function (){
-                        window.location.reload();
+                    data:{"name": name, "url": url, "desc": desc, 'btnID': linkId},
+                    success: function (res){
+                        if (res.tag == 1){
+                            $("#"+linkId).hide();
+                            $("#hintSaveSuccess").removeAttr("hidden");
+                            $("#hintSaveSuccess").show().delay(2000).hide(500);
+                        }
                     }
                 })
             }
