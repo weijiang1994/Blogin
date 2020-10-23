@@ -114,6 +114,14 @@ def split_space(string):
     return str(string).split()
 
 
+def super_split(string, f):
+    return str(string).split(f)
+
+
+def conv_list(string):
+    return list(string)
+
+
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
@@ -239,7 +247,7 @@ class AddMark2LB(ImageAddMarkBase):
         self.generate_base()
 
     def generate_mark(self):
-        self.image_draw.text((self.image.size[0], self.image.size[1]*2-(self.font_len * (self.font_size/3))),
+        self.image_draw.text((self.image.size[0], self.image.size[1] * 2 - (self.font_len * (self.font_size / 3))),
                              self.text, font=self.font, fill=self.font_color)
 
         image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
@@ -255,7 +263,7 @@ class AddMark2Center(ImageAddMarkBase):
         self.generate_base()
 
     def generate_mark(self):
-        self.image_draw.text((self.image.size[0]*1.5 - self.font_len, self.image.size[1] * 1.5),
+        self.image_draw.text((self.image.size[0] * 1.5 - self.font_len, self.image.size[1] * 1.5),
                              self.text, font=self.font, fill=self.font_color)
 
         image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
@@ -272,7 +280,7 @@ class AddMark2Parallel(ImageAddMarkBase):
 
     def generate_mark(self):
         for i in range(0, self.rgba_image.size[0], self.font_len * self.font_size + 50):  # 控制
-            for j in range(0, self.rgba_image.size[1], int(self.image.size[1]/10)):
+            for j in range(0, self.rgba_image.size[1], int(self.image.size[1] / 10)):
                 self.image_draw.text((i, j), self.text, font=self.font, fill=self.font_color)
         image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)
         # 裁切图片
@@ -288,7 +296,7 @@ class AddMark2Rotate(ImageAddMarkBase):
 
     def generate_mark(self):
         for i in range(0, self.rgba_image.size[0], self.font_len * 40 + 50):  # 控制
-            for j in range(0, self.rgba_image.size[1], int(self.image.size[1]/10)):
+            for j in range(0, self.rgba_image.size[1], int(self.image.size[1] / 10)):
                 self.image_draw.text((i, j), self.text, font=self.font, fill=self.font_color)
         self.text_overlay = self.text_overlay.rotate(-45)
         image_with_text = Image.alpha_composite(self.rgba_image, self.text_overlay)

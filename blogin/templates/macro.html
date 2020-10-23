@@ -192,3 +192,26 @@
         </ul>
     </nav>
 {%- endmacro %}
+
+{% macro nav_item(endpoint, text, fa) %}
+    <li class="nav-item" style="margin-right: 50px;">
+        <a class="nav-link {% if request.endpoint and request.endpoint==endpoint %}active{% endif %}" href="{{ url_for(endpoint) }}">
+            <i class="{{ fa }}"></i>
+            {{ text }}
+        </a>
+    </li>
+{% endmacro %}
+
+{% macro dropmenu(endpoint) %}
+    <li class="nav-item dropdown {% if request.endpoint == endpoint %}active{% endif %}">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-subway"></i> SOUL
+        </a>
+        <div class="dropdown-menu mt-0 rounded-0 border-0" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ url_for('soul_bp.index') }}"><i class="fa fa-coffee"></i> 毒鸡汤</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-file-text-o"></i> 唐诗</a>
+            <a class="dropdown-item" href="/song-ci/"><i class="fa fa-file-text"></i> 宋词</a>
+            <a class="dropdown-item" href="/api/introduce/"><i class="fa fa-exchange"></i> API</a>
+        </div>
+    </li>
+{% endmacro %}

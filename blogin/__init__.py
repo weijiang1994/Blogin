@@ -28,7 +28,7 @@ from blogin.blueprint.front.tool import tool_bp
 from blogin.blueprint.front.soul_bp import soul_bp
 from blogin.setting import config
 from blogin.models import *
-from blogin.utils import split_space
+from blogin.utils import split_space, super_split, conv_list
 import logging
 
 
@@ -37,6 +37,8 @@ def create_app(config_name=None):
         config_name = os.getenv('FLASK_CONFIG', 'development')
     app = Flask('blogin')
     app.jinja_env.filters['split'] = split_space
+    app.jinja_env.filters['ssplit'] = super_split
+    app.jinja_env.filters['slist'] = conv_list
     app.config.from_object(config[config_name])
     register_extension(app)
     register_blueprint(app)

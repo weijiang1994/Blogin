@@ -35,7 +35,7 @@ class BaseConfig:
     BLOGIN_PHOTO_PER_PAGE = 12
     LOGIN_LOG_PER_PAGE = 20
     SECRET_KEY = os.getenv('SECRET_KEY')
-
+    JSON_AS_ASCII = False
     BLOGIN_MAIL_SUBJECT_PRE = '[Blogin]'
 
     # CKEditor configure
