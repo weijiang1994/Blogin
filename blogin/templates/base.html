@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "macro.html" import nav_item, dropmenu with context %}
 <html lang="zh-hans">
 {% block head %}
     <head>
@@ -36,22 +37,11 @@
         </button>
         <div class="navbar-collapse collapse " id="collapsibleNavbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/"><i class="fa fa-home"></i> 主页<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/gallery/all/"><i class="fa fa-photo"></i> 相册</a>
-                </li>
-                <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/blogs/archive/"><i class="fa fa-archive"></i> 归档</a>
-                </li>
-                <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/tool/"><i class="fa fa-steam"></i> 工具</a>
-                </li>
-                <li class="nav-item" style="margin-right: 50px;">
-                    <a class="nav-link" href="/soul/"><i class="fa fa-subway"></i> SOUL</a>
-                </li>
-
+                {{ nav_item("blog_bp.index", '主页', 'fa fa-home') }}
+                {{ nav_item("gallery_bp.index", '相册', 'fa fa-photo') }}
+                {{ nav_item("blog_bp.archive", '归档', 'fa fa-archive') }}
+                {{ nav_item("tool_bp.index", '工具', 'fa fa-steam') }}
+                {{ dropmenu("soul_bp.index") }}
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
                 <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required>
