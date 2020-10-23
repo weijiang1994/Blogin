@@ -6,9 +6,9 @@
             margin-top: 20px;
             margin-bottom: 20px;
             border: 1px solid #eeeeee;
-            padding: 15px 0px 15px 0px;
-            border-radius: 15px;
-            min-width: 150px;
+            padding: 0px 0px 15px 0px;
+            border-radius: 3px;
+            min-width: 350px;
         }
         .ci-title{
             color: white;
@@ -16,7 +16,7 @@
             min-height: 55px;
             padding: 5px;
             background: rgba(239, 90, 90, .7);
-            width: 70%;
+            width: 65%;
         }
 
         .ci-author{
@@ -25,7 +25,7 @@
             min-height: 55px;
             padding: 5px;
             background: rgba(80, 128, 92, 0.7);
-            width: 30%;
+            width: 35%;
             text-align: center;
         }
         .ci-content{
@@ -34,8 +34,10 @@
         .ci-title-date{
             color: #488b8f;
             padding-left: 10px;
+            font-weight: bold;
         }
         .ci-title-n-date{
+            font-weight: bold;
             color: #333;
             padding-right: 10px;
         }
@@ -48,12 +50,14 @@
     <main>
         <div class="container" style="height: 100%">
             <div class="row justify-content-center" style="height: 100%">
-                <div class="align-self-center ci-div">
+                <divx class="align-self-center ci-div">
+                    <div style="width: 65%;background: #20c997;height: 3px;" class="float-left"></div>
+                    <div style="width: 35%;background: #00AAEE;height: 3px;" class="float-right"></div>
                     <div class="ci-title-date">
-                        <p class="float-left">2020-10-23 星期五</p>
+                        <p class="float-left">{{ now }}</p>
                     </div>
                     <div class="ci-title-n-date">
-                        <p class="float-right">庚子 九月初七</p>
+                        <p class="float-right">{{ lundar.gz_year() }}·{{ lundar.ln_date_str() }}</p>
                     </div>
                     <div class="float-left ci-title">
                         <p>{{ ci.rhythmic }}</p>
@@ -62,14 +66,15 @@
                         <p>宋·{{ ci.authors.name }}</p>
                     </div>
                     <br>
+                    <br>
                     <div class="ci-content">
                         {% for sentence in ci.content|ssplit('。') %}
                             {% if loop.index !=  ci.content|ssplit('。')|length%}
-                                <p>{{ sentence }}。</p>
+                                <p class="text-muted">{{ sentence }}。</p>
                             {% endif %}
                         {% endfor %}
                     </div>
-                </div>
+                </divx>
             </div>
         </div>
     </main>

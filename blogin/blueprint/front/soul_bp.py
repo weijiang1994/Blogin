@@ -10,6 +10,8 @@ from flask import Blueprint, render_template, request, jsonify
 from sqlalchemy.sql.expression import func
 
 from blogin.models import Soul, Blog, SongCi
+from blogin.utils import Lunar
+import datetime
 
 soul_bp = Blueprint('soul_bp', __name__)
 
@@ -43,8 +45,6 @@ def api_introduce():
 @soul_bp.route('/song-ci/')
 def song_ci():
     ci = SongCi.query.order_by(func.random()).limit(1)[0]
-    print(ci.content)
-    print(type(ci.content))
-    for i in ci.content:
-        print(i)
-    return render_template('main/poem/songCi.html', ci=ci)
+    now = datetime.date.today()
+    lundar = Lunar(datetime.datetime.now())
+    return render_template('main/poem/songCi.html', ci=ci, now=now, lundar=lundar)
