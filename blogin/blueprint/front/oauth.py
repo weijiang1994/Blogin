@@ -44,9 +44,9 @@ def get_social_profile(provider, token):
 
     if provider.name == 'github':
         username = response.data.get('name')
-        website = response.data.get('url')
+        website = response.data.get('blog')
         email = response.data.get('email')
-        bio = response.data.get('description')
+        bio = response.data.get('bio')
         avatar = response.data.get('avatar')
     return username, website, email, bio, avatar
 
