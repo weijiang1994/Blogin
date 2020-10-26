@@ -23,8 +23,8 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Blog.query.order_by(Blog.create_time.desc()).paginate(page, per_page=current_app.
-                                                                       config['BLOGIN_BLOG_PER_PAGE'])
+    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).\
+        paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []
     for blog in blogs:
@@ -35,8 +35,8 @@ def index():
         loves = 0
     else:
         loves = loves.counts
-    su = User.query.filter(User.email=='804022023@qq.com').first()
-    flinks = FriendLink.query.filter(FriendLink.flag==1).all()
+    su = User.query.filter(User.email == '804022023@qq.com').first()
+    flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
                            pagination=pagination, blogs=blogs, cates=cates, categories=categories,
                            loves=loves, su=su, flinks=flinks)

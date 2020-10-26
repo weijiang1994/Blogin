@@ -79,7 +79,7 @@
                         <p style="margin-bottom: 0px;">{{ poem.poets.dynasties.name }}·{{ poem.poets.name }}</p>
                     </div>
                     <div style="height: 100px;"></div>
-                    <div class="ci-content">
+                    <div class="text-center ci-content">
                         {% for sentence in poem.content|ssplit('。') %}
                             {% if loop.index !=  poem.content|ssplit('。')|length%}
                                 <p class="text-muted">{{ sentence }}。</p>
