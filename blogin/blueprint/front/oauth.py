@@ -30,9 +30,7 @@ providers = {
 }
 
 profile_endpoints = {
-    'github': 'user',
-    'google': 'userinfo',
-    'twitter': 'account/verify_credentials.json?include_email=true'
+    'github': 'user'
 }
 
 oauth_bp = Blueprint('oauth_bp', __name__)
@@ -43,11 +41,13 @@ def get_social_profile(provider, token):
     response = provider.get(profile_endpoint, token=token)
 
     if provider.name == 'github':
-        username = response.data.get('name')
-        website = response.data.get('blog')
+        # print(response.data)
+        username = response.data.get('login')
+        website = response.data.get('html_url')
         email = response.data.get('email')
         bio = response.data.get('bio')
-        avatar = response.data.get('avatar')
+        avatar = response.data.get('avatar_url')
+
     return username, website, email, bio, avatar
 
 

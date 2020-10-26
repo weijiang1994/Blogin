@@ -12,6 +12,9 @@
             margin-top: 8px;
             margin-right: 8px;
         }
+        .div-third-party{
+            border-top: solid 1px #cccccc; margin-bottom: 5px;
+        }
     </style>
 {% endblock %}
 {% block title %}
@@ -41,9 +44,9 @@
                                 <hr>
                                 <p class="small"><a style="text-decoration: none" href="/auth/register/">注册</a></p>
                                 <p class="small"><a style="text-decoration: none" href="/auth/forget-password/">忘记密码</a></p>
-                                <hr>
-                                <span class="span-auth">第三方登录</span>
-                                <br>
+                                <div class="div-third-party">
+                                    <span class="span-auth text-muted"><b>第三方登录</b></span>
+                                </div>
                                 <a class="a-third-party-icon" href="/login/github"><i class="fa fa-github fa-2x"></i></a>
                             </div>
                         </div>
