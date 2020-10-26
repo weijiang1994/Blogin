@@ -11,7 +11,8 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
-from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee
+from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
+    oauth
 from blogin.monitor import start_monitor_thread
 from blogin.setting import basedir
 import os
@@ -27,6 +28,7 @@ from blogin.blueprint.front.gallery import gallery_bp
 from blogin.blueprint.front.tool import tool_bp
 from blogin.blueprint.front.soul_bp import soul_bp
 from blogin.blueprint.front.api import api_bp
+from blogin.blueprint.front.oauth import oauth_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space, super_split, conv_list
@@ -96,6 +98,7 @@ def register_extension(app: Flask):
     avatar.init_app(app)
     mail.init_app(app)
     whooshee.init_app(app)
+    oauth.init_app(app)
 
 
 # 注册蓝图
@@ -112,6 +115,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(index_bp_be)
     app.register_blueprint(soul_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(oauth_bp)
 
 
 def register_cmd(app: Flask):

@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .span-auth{
+            border-bottom: solid 2px #426aff;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .a-third-party-icon{
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+    </style>
+{% endblock %}
 {% block title %}
     用户登录
 {% endblock %}
@@ -27,6 +41,10 @@
                                 <hr>
                                 <p class="small"><a style="text-decoration: none" href="/auth/register/">注册</a></p>
                                 <p class="small"><a style="text-decoration: none" href="/auth/forget-password/">忘记密码</a></p>
+                                <hr>
+                                <span class="span-auth">第三方登录</span>
+                                <br>
+                                <a class="a-third-party-icon" href="/login/github"><i class="fa fa-github fa-2x"></i></a>
                             </div>
                         </div>
                     </div>
