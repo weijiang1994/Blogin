@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "macro.html" import poem_slider with context %}
+
+{% block title %}
+    唐诗
+{% endblock %}
+{% block content %}
+    <body style="background: url('/static/img/poem.jpg') no-repeat; background-size: 100%">
+    <main>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    {{ poem_slider('宋词') }}
+                </div>
+                <div style="background: #9d9d9d" class="col-md-10">
+                </div>
+            </div>
+        </div>
+    </main>
+    </body>
+{% endblock %}

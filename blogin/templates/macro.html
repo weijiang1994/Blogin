@@ -215,3 +215,12 @@
         </div>
     </li>
 {% endmacro %}
+
+{% macro poem_slider(active) %}
+    <div class="list-group">
+        <a {% if active == '唐诗' %}style="color: #20c997"{% endif %} class="list-group-item text-info-a" href="/tool/poem-tang/"><i class="fa fa-file-text fa-fw" aria-hidden="true"></i>&nbsp; 唐诗</a>
+        <a {% if active == '宋诗' %}style="color: #20c997"{% endif %} class="list-group-item text-info-a" href="/tool/poem-song/"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp; 宋诗</a>
+        <a {% if active == '宋词' %}style="color: #20c997"{% endif %} class="list-group-item text-info-a" href="/tool/ci-song/"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>&nbsp; 宋词</a>
+        <a {% if active == '搜索' %}style="color: #20c997"{% endif %}class="list-group-item text-info-a" href="/tool/search/"><i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp; 搜索</a>
+    </div>
+{% endmacro %}
