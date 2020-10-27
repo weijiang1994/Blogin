@@ -235,8 +235,12 @@ def search():
         if type1 == '词':
             if type2 == '作者':
                 if mode == '精确查询':
-                    SongCiAuthor.query.filter_by(name=keyword).first()
-                    pass
+                    author = SongCiAuthor.query.filter_by(name=keyword).first()
+                    if author is None:
+                        flash('数据库中未找到相关作者信息,请查正后再试!', 'danger')
+                        return render_template('main/tool/search.html', tag=0)
+                    pagination = SongCi.query.filter_by(author_id=author.id).paginate(page=page, per_page=per_page)
+                    results = pagination.items
                 if mode == '模糊查询':
                     flash('作者不支持模糊查询方式!', 'danger')
                     return render_template('main/tool/search.html', tag=0)
