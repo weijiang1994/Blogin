@@ -17,7 +17,7 @@ from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, Google
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
     AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img
 import re
-from blogin.models import SongCi, Poem, Poet
+from blogin.models import SongCi, Poem, Poet, SongCiAuthor
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
 
@@ -202,7 +202,7 @@ def search():
         if keyword.strip() == '':
             flash('小伙你很皮，空的关键字你能搜到个G2东西?', 'danger')
             return render_template('main/tool/search.html')
-        print(type1, type2, mode, keyword, page)
+
         if type1 == '诗':
             if type2 == '作者':
                 if mode == '精确查询':
@@ -233,7 +233,31 @@ def search():
                     results = pagination.items
 
         if type1 == '词':
-            pass
+            if type2 == '作者':
+                if mode == '精确查询':
+                    SongCiAuthor.query.filter_by(name=keyword).first()
+                    pass
+                if mode == '模糊查询':
+                    flash('作者不支持模糊查询方式!', 'danger')
+                    return render_template('main/tool/search.html', tag=0)
+            if type2 == '标题':
+                if mode == '精确查询':
+                    pagination = SongCi.query.filter_by(rhythmic=keyword).paginate(page=page, per_page=per_page)
+                    results = pagination.items
+                if mode == '模糊查询':
+                    pagination = SongCi.query.filter(SongCi.rhythmic.like('%{}%'.format(keyword))).\
+                        paginate(page=page, per_page=per_page)
+                    results = pagination.items
+
+            if type2 == '内容':
+                if mode == '精确查询':
+                    flash('诗词内容不支持精确查询的方式!', 'danger')
+                    return render_template('main/tool/search.html', tag=0)
+                if mode == '模糊查询':
+                    pagination = SongCi.query.filter(SongCi.content.like('%{}%'.format(keyword))).paginate(page=page,
+                                                                                              per_page=per_page)
+                    results = pagination.items
+
         return render_template('main/tool/search.html', tag=1, results=results, pagination=pagination, sctype=type1,
                                mode=mode, keyword=keyword, type2=type2)
     return render_template('main/tool/search.html', tag=0)
