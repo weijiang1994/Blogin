@@ -149,6 +149,7 @@ def register_cmd(app: Flask):
             db.create_all()
             Role.init_role()
             States.init_states()
+            ThirdParty.init_tp()
             username = input('请输入超级管理员用户名:')
             email = input('请输入超级管理员邮箱:')
             pwd = input('请输入超级管理员密码:')
@@ -172,6 +173,15 @@ def register_cmd(app: Flask):
             db.session.rollback()
             click.echo('操作出现异常,退出...')
 
+    @app.cli.command()
+    def addtp():
+        print('添加第三方登录方式')
+        third_party_name = input('请输入第三方登录方式:')
+        tp = ThirdParty(name=third_party_name)
+        db.session.add(tp)
+        db.session.commit()
+        print('添加成功')
+
 
 def register_log(app: Flask):
     app.logger.setLevel(logging.DEBUG)
@@ -182,5 +192,3 @@ def register_log(app: Flask):
     # if not app.debug:
     app.logger.addHandler(file_handler)
 
-# index-url = http://mirrors.tencentyun.com/pypi/simple
-# trusted-host = mirrors.tencentyun.com

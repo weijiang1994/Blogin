@@ -8,13 +8,7 @@
     <main>
         <div class="container">
             <br>
-            {% for message in get_flashed_messages(with_categories=True) %}
-                <div class="alert alert-{{ message[0] }}">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ message[1] }}
-                </div>
-            {% endfor %}
-
+            {% include "_flash.html" %}
             <div class="card">
                 <div class="text-muted card-header">
                     <strong>{{ current_user.username }}</strong>的个人资料
@@ -37,8 +31,11 @@
                             {% if not current_user.confirm %}
                                 <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/auth/resend-confirm/">认证邮件</a></button>
                             {% else %}
+                                {% if current_user.third_party.name == 'default' %}
+                                    <button class="btn btn-danger float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/password/change/">修改密码</a></button>
+                                {% endif %}
                                 <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/profile/edit/">编辑资料</a></button>
-                                <button class="btn btn-danger float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/password/change/">修改密码</a></button>
+
                             {% endif %}
                         </div>
                     </div>
