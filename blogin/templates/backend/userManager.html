@@ -36,7 +36,7 @@
                             <td><i class="fa fa-envelope-o"></i> {{ user.email }}</td>
                             <td><i class="fa fa-tag"></i> {{ user.roles.name }}</td>
                             <td><i class="fa fa-calendar"></i> {{ user.create_time }}</td>
-                            <td><i class="fa fa-clock-o"></i> {{ user.login_logs[-1].timestamp }}</td>
+                            <td><i class="fa fa-clock-o"></i> {{ user.recent_login }}</td>
                             <td>
                                 {% if user.statuses.id == 1 %}
                                     <span class="label label-success"><i class="fa fa-star"></i> {{ user.statuses.name }}</span>
