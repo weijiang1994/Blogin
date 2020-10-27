@@ -225,14 +225,15 @@ def search():
                                                                                                      per_page=per_page)
                     results = pagination.items
             if type2 == '内容':
-                pass
+                if mode == '精确查询':
+                    flash('诗词内容不支持精确查询的方式!', 'danger')
+                    return render_template('main/tool/search.html', tag=0)
+                if mode == '模糊查询':
+                    pagination = Poem.query.filter(Poem.content.like('%{}%'.format(keyword))).paginate(page=page, per_page=per_page)
+                    results = pagination.items
 
         if type1 == '词':
             pass
-
-        # pagination = SongCi.query.filter_by(rhythmic='水调歌头').paginate(page=page, per_page=50)
-        # pagination = Poem.query.filter_by(title='登鹳雀楼').paginate(page=page, per_page=50)
-        # results = pagination.items
         return render_template('main/tool/search.html', tag=1, results=results, pagination=pagination, sctype=type1,
                                mode=mode, keyword=keyword, type2=type2)
     return render_template('main/tool/search.html', tag=0)

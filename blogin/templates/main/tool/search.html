@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <label for="searchType2" class="sr-only">搜索类型</label>
-                                    <select name="searchType2" class="form-control" id="searchType2">
+                                    <select name="searchType2" onclick="changeText()" class="form-control" id="searchType2">
                                         <option>作者</option>
                                         <option>标题</option>
                                         <option>内容</option>
@@ -119,5 +119,17 @@
             </div>
         </div>
     </main>
+    <script>
+        function changeText(){
+            let val = $("#searchType2").val();
+            if (val == '作者'){
+                $("#searchType3").val('精确查询');
+            }
+            if (val == '内容'){
+                $("#searchType3").val('模糊查询');
+            }
+        }
+        $("#searchType2").change()
+    </script>
     </body>
 {% endblock %}
