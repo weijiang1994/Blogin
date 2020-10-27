@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% from "macro.html" import poem_slider, render_pagination with context %}
+{% block title %}
+    诗词搜索
+{% endblock %}
+{% block content %}
+    <!--suppress CssUnknownTarget -->
+    <body style="background: url('/static/img/poem.jpg') no-repeat; background-size: 100%">
+    <main>
+        <br>
+        <div class="container">
+            {% include "_flash.html" %}
+            <div class="row">
+                <div class="col-md-2">
+                    {{ poem_slider('搜索') }}
+                </div>
+                <div class="col-md-10">
+                    <div class="text-right">
+                        <form action="/tool/search/" method="get">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <label for="searchType" class="sr-only">搜索类型</label>
+                                    <select name="searchType" class="form-control" id="searchType">
+                                        <option>诗</option>
+                                        <option>词</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="searchType2" class="sr-only">搜索类型</label>
+                                    <select name="searchType2" class="form-control" id="searchType2">
+                                        <option>作者</option>
+                                        <option>标题</option>
+                                        <option>内容</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="searchType3" class="sr-only">搜索类型</label>
+                                    <select name="searchType3" class="form-control" id="searchType3">
+                                        <option>精确查询</option>
+                                        <option>模糊查询</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="perPage" class="sr-only">每页数量</label>
+                                    <select name="perPage" class="form-control" id="perPage">
+                                        <option>50</option>
+                                        <option>100</option>
+                                        <option>150</option>
+                                        <option>200</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="keyword" class="sr-only">keyword</label>
+                                    <input type="text" name="keyword" class="form-control" id="keyword" required placeholder="关键字">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-dark">搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    {% if tag == 0 %}
+                        <article>
+                            <span style="border-bottom: 5px solid #00AAEE">查询说明</span>
+                            <br>
+                            <br>
+                            <section>
+                                <p>1. 因为数据库中诗跟词没有放在同一张表里面，同时，诗词的表结构也不一样，因此搜索的时候需要选择搜索的类型，诗或者词；</p>
+                                <p>2. 关键字类型分为三种分别是作者、标题(诗名、词牌名)以及内容，字面意思不需要多解释；</p>
+                                <p>3. 搜索模式包含有精确查询和模糊查询两种方式；</p>
+                                <div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">精确查询就是百分百匹配的意思，如你查询黄鹤楼通过标题的形式，那么返回的就只有标题名为黄河楼的诗词；</li>
+                                        <li class="list-group-item">模糊查询就是模糊匹配，如你查询黄鹤楼通过标题的形式，那么返回是标题包含有黄鹤楼的诗词；</li>
+                                        <li class="list-group-item">模糊查询其实我是不想支持的，因为使用这样的查询方式会导致数据库的索引失效，而且诗词数据库的数据量比较大了，十分影响性能；</li>
+                                    </ul>
+                                </div>
+                                <p>4. 数字栏表示每页显示查询结果的数据量大小；</p>
+                            </section>
+                        </article>
+                    {% else %}
+                        <article>
+                            <h5>搜索结果</h5>
+                            <p class="text-muted">
+                                条件1:<span class="badge badge-info">{{ sctype }}</span> 条件2:<span class="badge badge-info">{{ type2 }}</span> 条件3:<span class="badge badge-info">{{ mode }}</span>
+                                关键字:<span class="badge badge-info">{{ keyword }}</span>
+                            </p>
+                            <p>总共查询到<b>{{ pagination.total }}</b>个结果</p>
+                            {% if sctype == '词' %}
+                                {% for result in results %}
+                                    <div style="margin-bottom: 8px;" class="card">
+                                        <div class="text-muted card-header">
+                                            {{ result.rhythmic }}&nbsp;&nbsp;&nbsp;&nbsp;宋·{{ result.authors.name }}
+                                        </div>
+                                        <div class="card-body">
+                                            {{ result.content|safe }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                {% for result in results %}
+                                    <div style="margin-bottom: 8px;" class="card bg-dark text-white">
+                                        <div class="text-muted card-header">
+                                            {{ result.title }}&nbsp;&nbsp;&nbsp;&nbsp;{{ result.poets.dynasties.name }}·{{ result.poets.name }}
+                                        </div>
+                                        <div class="card-body">
+                                            {{ result.content|safe }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="float-right">
+                                {{ render_pagination(pagination) }}
+                            </div>
+                        </article>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+    </body>
+{% endblock %}

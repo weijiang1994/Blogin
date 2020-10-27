@@ -10,13 +10,14 @@ import os
 import random
 
 from PIL import Image
-from flask import Blueprint, render_template, request, jsonify, send_from_directory
+from flask import Blueprint, render_template, request, jsonify, send_from_directory, flash, abort
 
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
     AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img
 import re
+from blogin.models import SongCi, Poem, Poet
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
 
@@ -137,7 +138,7 @@ def image_pro():
             MARK_POSITION.get(mark_position)(font_color=FONT_COLOR.get(font_color), font_size=int(font_size),
                                              image=img_stream, text=mark_text, save_path=save_path).generate_mark()
             return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
-                            '/tool/img-pro/' + pro_img_filename})
+                '/tool/img-pro/' + pro_img_filename})
 
         if pro_type == '图片缩放':
             width_zoom = request.form.get('widthZoom', type=float)
@@ -147,7 +148,7 @@ def image_pro():
             pre_num = random.randint(0, 3456)
             pro_img.save(basedir + r'/uploads/img-pro/' + 'resize' + str(pre_num) + img_name)
             return jsonify({'originPath': '/tool/img-pro/' + img.filename, 'proPath':
-                            '/tool/img-pro/' + 'resize' + str(pre_num) + img_name})
+                '/tool/img-pro/' + 'resize' + str(pre_num) + img_name})
 
         if pro_type == '证件照换底':
             pass
@@ -172,3 +173,66 @@ def ocr_result(category, _ocr: OCR):
         return _ocr.ocr_drive_card()
     if category == '车牌识别':
         return _ocr.ocr_license_plate()
+
+
+@tool_bp.route('/poem-tang/')
+def poem_tang():
+    return render_template('main/tool/tang-poem.html')
+
+
+@tool_bp.route('/poem-song/')
+def poem_song():
+    return render_template('main/tool/song-poem.html')
+
+
+@tool_bp.route('/ci-song/')
+def ci_song():
+    return render_template('main/tool/song-ci.html')
+
+
+@tool_bp.route('/search/')
+def search():
+    type1 = request.args.get('searchType')
+    type2 = request.args.get('searchType2')
+    mode = request.args.get('searchType3')
+    keyword = request.args.get('keyword')
+    per_page = request.args.get('perPage', 50, type=int)
+    page = request.args.get('page', 1, type=int)
+    if type1 is not None:
+        if keyword.strip() == '':
+            flash('小伙你很皮，空的关键字你能搜到个G2东西?', 'danger')
+            return render_template('main/tool/search.html')
+        print(type1, type2, mode, keyword, page)
+        if type1 == '诗':
+            if type2 == '作者':
+                if mode == '精确查询':
+                    poet = Poet.query.filter_by(name=keyword).first()
+                    if poet is None:
+                        flash('数据库中未找到相关作者信息,请查正后再试!', 'danger')
+                        return render_template('main/tool/search.html', tag=0)
+                    pagination = Poem.query.filter_by(author_id=poet.id).paginate(page=page, per_page=per_page)
+                    results = pagination.items
+                if mode == '模糊查询':
+                    flash('作者不支持模糊查询方式!', 'danger')
+                    return render_template('main/tool/search.html', tag=0)
+
+            if type2 == '标题':
+                if mode == '精确查询':
+                    pagination = Poem.query.filter_by(title=keyword).paginate(page=page, per_page=per_page)
+                    results = pagination.items
+                if mode == '模糊查询':
+                    pagination = Poem.query.filter(Poem.title.like('%{}%'.format(keyword))).paginate(page=page,
+                                                                                                     per_page=per_page)
+                    results = pagination.items
+            if type2 == '内容':
+                pass
+
+        if type1 == '词':
+            pass
+
+        # pagination = SongCi.query.filter_by(rhythmic='水调歌头').paginate(page=page, per_page=50)
+        # pagination = Poem.query.filter_by(title='登鹳雀楼').paginate(page=page, per_page=50)
+        # results = pagination.items
+        return render_template('main/tool/search.html', tag=1, results=results, pagination=pagination, sctype=type1,
+                               mode=mode, keyword=keyword, type2=type2)
+    return render_template('main/tool/search.html', tag=0)
