@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, abort, redirect, url_for, flash
 import os
-from blogin.models import User
+from blogin.models import User, ThirdParty
 from flask_login import current_user, login_user
 
 from blogin.extension import db, oauth
@@ -41,7 +41,6 @@ def get_social_profile(provider, token):
     response = provider.get(profile_endpoint, token=token)
 
     if provider.name == 'github':
-        # print(response.data)
         username = response.data.get('login')
         website = response.data.get('html_url')
         email = response.data.get('email')
@@ -64,32 +63,46 @@ def oauth_login(provider_name):
 
 @oauth_bp.route('/callback/<provider_name>')
 def oauth_callback(provider_name):
-    if provider_name not in providers.keys():
-        abort(404)
+    try:
+        if provider_name not in providers.keys():
+            abort(404)
 
-    provider = providers[provider_name]
-    response = provider.authorized_response()
+        provider = providers[provider_name]
+        response = provider.authorized_response()
 
-    if response is not None:
-        if provider_name == 'twitter':
-            access_token = response.get('oauth_token'), response.get('oauth_token_secret')
+        if response is not None:
+            if provider_name == 'twitter':
+                access_token = response.get('oauth_token'), response.get('oauth_token_secret')
+            else:
+                access_token = response.get('access_token')
         else:
-            access_token = response.get('access_token')
-    else:
-        access_token = None
+            access_token = None
 
-    if access_token is None:
-        flash('权限拒绝，请稍后再试!', 'danger')
-        return redirect(url_for('auth_bp.login'))
+        if access_token is None:
+            flash('权限拒绝，请稍后再试!', 'danger')
+            return redirect(url_for('auth_bp.login'))
 
-    username, website, email, bio, avatar = get_social_profile(provider, access_token)
-    print(username, website, email, bio, avatar)
-    user = User.query.filter_by(email=email).first()
-    if user is None:
-        user = User(username=username, email=email, website=website, password='github', avatar=avatar)
-        db.session.add(user)
-        db.session.commit()
+        username, website, email, bio, avatar = get_social_profile(provider, access_token)
+
+        if email is None:
+            flash('未能正确的获取到您的邮箱，请到第三方社交网络设置邮箱后登录！', 'danger')
+            return redirect(url_for('auth_bp.login'))
+
+        user = User.query.filter_by(email=email).first()
+        if user is None:
+            tp = ThirdParty.query.filter_by(name=provider.name).first()
+            user = User(username=username, email=email, website=website, password=provider.name, avatar=avatar,
+                        slogan=bio, confirm=1, reg_way=tp.id)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            flash('使用{}社交账号登录成功!'.format(provider.name), 'success')
+            return redirect(url_for('accounts_bp.profile', user_id=user.id))
         login_user(user, remember=True)
-        return redirect(url_for('chat.profile'))
-    login_user(user, remember=True)
-    return redirect(url_for('blog_bp.index'))
+        flash('使用{}社交账号登录成功!'.format(provider.name), 'success')
+        return redirect(url_for('blog_bp.index'))
+    except:
+        import traceback
+        traceback.print_exc()
+        flash('使用{}登录出现了意外了~稍后再试吧~'.format(provider.name), 'danger')
+        return redirect(url_for('auth_bp.login'))

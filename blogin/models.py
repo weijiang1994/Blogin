@@ -44,6 +44,7 @@ class User(db.Model, UserMixin):
     slogan = db.Column(db.String(200), default='')
     recent_login = db.Column(db.DateTime, default=datetime.now)
     status = db.Column(db.INTEGER, db.ForeignKey('states.id'), default=1)
+    reg_way = db.Column(db.INTEGER, db.ForeignKey('third_party.id'), default=1)
 
     roles = db.relationship('Role', back_populates='users')
     photo_comments = db.relationship('PhotoComment', back_populates='author', cascade='all')
@@ -51,6 +52,7 @@ class User(db.Model, UserMixin):
     blog_comments = db.relationship('BlogComment', back_populates='author', cascade='all')
     likes = db.relationship('LikePhoto', back_populates='user', cascade='all')
     statuses = db.relationship('States', back_populates='user')
+    third_party = db.relationship('ThirdParty', back_populates='user')
 
     receive_notify = db.relationship('Notification', back_populates='receive_user', cascade='all')
 
@@ -391,3 +393,24 @@ class SongCi(db.Model):
     content = db.Column(db.TEXT, nullable=False)
 
     authors = db.relationship('SongCiAuthor', back_populates='cis')
+
+
+class ThirdParty(db.Model):
+    __tablename__ = 'third_party'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+
+    user = db.relationship('User', back_populates='third_party', cascade='all')
+
+    @staticmethod
+    def init_tp():
+        tp = ThirdParty(name='default')
+        db.session.add(tp)
+        tp = ThirdParty(name='github')
+        db.session.add(tp)
+        tp = ThirdParty(name='weibo')
+        db.session.add(tp)
+        tp = ThirdParty(name='qq')
+        db.session.add(tp)
+        db.session.commit()
