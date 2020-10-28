@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% from "macro.html" import poem_slider with context %}
+{% from "macro.html" import poem_slider, render_pager with context %}
 {% block title %}
     唐宋诗词查询工具
 {% endblock %}
 {% block content %}
+    <!--suppress ALL -->
     <body style="background: url('/static/img/poem.jpg') no-repeat; background-size: 100%">
     <main>
         <br>
@@ -12,10 +13,56 @@
                 <div class="col-md-2">
                     {{ poem_slider('唐诗') }}
                 </div>
-                <div style="background: #9d9d9d" class="col-md-10">
+                <div class="col-md-10">
+                    <p>
+                        <i class="fa fa-calendar fa-2x"></i>
+                        <span class="text-muted title-calendar">{{ date }}&nbsp;&nbsp;&nbsp;{{ week }}&nbsp;&nbsp;&nbsp;{{ lundar.gz_year() }}年·{{ lundar.ln_date_str() }}</span>
+                    </p>
+                    <p><span class="span-bb-5">随机推荐</span></p>
+                    <div class="row">
+                        <div class="col-md-8 text-center">
+                            {% for poem in poems %}
+                                <div class="ci-content">
+                                    <p class="p-poem-ci-title">{{ poem.title }}</p>
+                                    <p class="p-poem-ci-author">{{ poem.poets.dynasties.name }}·{{ poem.poets.name }}</p>
+                                    <div class="text-center">
+                                        {% for sentence in poem.content|ssplit('。') %}
+                                            {% if loop.index !=  poem.content|ssplit('。')|length%}
+                                                <p class="text-muted">{{ sentence }}。</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <form class="form-inline" method="get" action="/tool/search/" role="form">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="作者" required id="name" name="q">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary">搜索</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="card-body">
+                                    {% for author in authors %}
+                                        <a style="font-family: 华文楷体" class="text-decoration-none text-info-a" href="/tool/poem-tang/{{ author.id }}">{{ author.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                <div class="card-footer">
+                                    <div class="float-right">
+                                        {{ render_pager(pagination)}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
     </main>
     </body>
 

@@ -6,17 +6,20 @@
 @File    : tool
 @Software: PyCharm
 """
+import datetime
 import os
 import random
 
 from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory, flash, abort
-
+from sqlalchemy.sql.expression import func
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
-    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img
+    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar
 import re
+from blogin.extension import rd
+
 from blogin.models import SongCi, Poem, Poet, SongCiAuthor
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -28,6 +31,16 @@ MARK_POSITION = {'右上角': AddMark2RT,
                  '中心': AddMark2Center,
                  '水平铺满': AddMark2Parallel,
                  '45°铺满': AddMark2Rotate}
+
+WEEKDAY = {
+    1: '星期一',
+    2: '星期二',
+    3: '星期三',
+    4: '星期四',
+    5: '星期五',
+    6: '星期六',
+    7: '星期天',
+}
 
 
 @tool_bp.route('/')
@@ -176,8 +189,20 @@ def ocr_result(category, _ocr: OCR):
 
 
 @tool_bp.route('/poem-tang/')
-def poem_tang():
-    return render_template('main/tool/tang-poem.html')
+@tool_bp.route('/poem-tang/<poet_id>')
+def poem_tang(poet_id=None):
+    page = request.args.get('page', 1, type=int)
+    now = datetime.date.today()
+    lundar = Lunar(datetime.datetime.now())
+    week = datetime.datetime.isoweekday(datetime.datetime.now())
+    pagination = Poet.query.filter(Poet.dynasty_id == 1).paginate(page=page, per_page=100)
+    authors = pagination.items
+    if poet_id is None:
+        poems = Poem.query.order_by(func.random()).limit(10)
+        return render_template('main/tool/tang-poem.html', date=now, week=WEEKDAY.get(week), lundar=lundar,
+                               authors=authors, pagination=pagination, poems=poems)
+    else:
+        author = Poet.query.get_or_404(poet_id)
 
 
 @tool_bp.route('/poem-song/')
@@ -229,7 +254,8 @@ def search():
                     flash('诗词内容不支持精确查询的方式!', 'danger')
                     return render_template('main/tool/search.html', tag=0)
                 if mode == '模糊查询':
-                    pagination = Poem.query.filter(Poem.content.like('%{}%'.format(keyword))).paginate(page=page, per_page=per_page)
+                    pagination = Poem.query.filter(Poem.content.like('%{}%'.format(keyword))).paginate(page=page,
+                                                                                                       per_page=per_page)
                     results = pagination.items
 
         if type1 == '词':
@@ -249,7 +275,7 @@ def search():
                     pagination = SongCi.query.filter_by(rhythmic=keyword).paginate(page=page, per_page=per_page)
                     results = pagination.items
                 if mode == '模糊查询':
-                    pagination = SongCi.query.filter(SongCi.rhythmic.like('%{}%'.format(keyword))).\
+                    pagination = SongCi.query.filter(SongCi.rhythmic.like('%{}%'.format(keyword))). \
                         paginate(page=page, per_page=per_page)
                     results = pagination.items
 
@@ -259,7 +285,7 @@ def search():
                     return render_template('main/tool/search.html', tag=0)
                 if mode == '模糊查询':
                     pagination = SongCi.query.filter(SongCi.content.like('%{}%'.format(keyword))).paginate(page=page,
-                                                                                              per_page=per_page)
+                                                                                                           per_page=per_page)
                     results = pagination.items
 
         return render_template('main/tool/search.html', tag=1, results=results, pagination=pagination, sctype=type1,

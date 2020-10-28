@@ -9,7 +9,7 @@
 from flask import Blueprint, render_template
 from sqlalchemy.sql.expression import func
 
-from blogin.models import Soul, Blog, SongCi, Poem
+from blogin.models import Soul, SongCi, Poem
 from blogin.utils import Lunar
 import datetime
 
