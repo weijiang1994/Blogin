@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-{% from "macro.html" import poem_slider with context %}
-
+{% from "macro.html" import poem_slider, render_pager, render_pagination with context %}
 {% block title %}
-    唐诗
+    宋词
 {% endblock %}
 {% block content %}
-    <body style="background: url('/static/img/poem.jpg') no-repeat; background-size: 100%">
     <main>
         <br>
         <div class="container">
@@ -13,10 +11,66 @@
                 <div class="col-md-2">
                     {{ poem_slider('宋词') }}
                 </div>
-                <div style="background: #9d9d9d" class="col-md-10">
+                <div class="col-md-10">
+                    <p><i class="fa fa-calendar fa-2x"></i><span class="text-muted title-calendar">&nbsp;{{ date }}&nbsp;&nbsp;&nbsp;{{ week }}&nbsp;&nbsp;&nbsp;{{ lundar.gz_year() }}年·{{ lundar.ln_date_str() }}</span></p>
+                    <p><span class="span-bb-5">{{ title }}的词集</span></p>
+                    {% if tag == 1 %}
+                        <p class="p-poem-ci-author text-muted">{{ author.desc }}</p>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-md-8 text-center">
+                            {% for ci in cis %}
+                                <div class="ci-content">
+                                    <p class="p-poem-ci-title">{{ ci.rhythmic }}</p>
+                                    <p class="p-poem-ci-author">宋·{{ ci.authors.name }}</p>
+                                    <div class="text-center">
+                                        {% for sentence in ci.content|ssplit('。') %}
+                                            {% if loop.index !=  ci.content|ssplit('。')|length%}
+                                                <p class="text-muted">{{ sentence }}。</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if tag == 1 %}
+                                <div class="float-right">
+                                    {{ render_pagination(pagination2) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="作者" id="authorName">
+                                        <div class="input-group-append">
+                                            <button name="s-ci" id="search" onclick="search(this.name)" class="btn btn-secondary">搜索</button>
+                                        </div>
+                                    </div>
+                                    <p id="errorHint" hidden="hidden" class="text-danger">请输入作者名!</p>
+                                    <div id="divSearchResult">
+                                        <p id="searchHint" hidden="hidden">正在搜索...</p>
+                                        <a class="text-info-a" id="searchResult" hidden="hidden"></a>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    {% for author in authors %}
+                                        <a style="font-family: 华文楷体" class="text-decoration-none text-info-a" href="/tool/ci-song/{{ author.id }}/">{{ author.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                {% if tag == 0 %}
+                                    <div class="card-footer">
+                                        <div class="float-right">
+                                            {{ render_pager(pagination)}}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-    </body>
 {% endblock %}

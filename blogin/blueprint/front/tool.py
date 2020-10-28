@@ -114,6 +114,7 @@ def word_cloud():
 @tool_bp.route('/multi-translation/', methods=['GET', 'POST'])
 def multi_translation():
     if request.method == 'POST':
+        # noinspection PyBroadException
         try:
             tran_type = request.form.get('type')
             text = request.form.get('text')
@@ -188,31 +189,84 @@ def ocr_result(category, _ocr: OCR):
         return _ocr.ocr_license_plate()
 
 
-@tool_bp.route('/poem-tang/')
-@tool_bp.route('/poem-tang/<poet_id>')
-def poem_tang(poet_id=None):
+def get_poem(poet_id, dynasty=1, temp='tang-poem.html'):
     page = request.args.get('page', 1, type=int)
     now = datetime.date.today()
     lundar = Lunar(datetime.datetime.now())
     week = datetime.datetime.isoweekday(datetime.datetime.now())
-    pagination = Poet.query.filter(Poet.dynasty_id == 1).paginate(page=page, per_page=100)
-    authors = pagination.items
     if poet_id is None:
-        poems = Poem.query.order_by(func.random()).limit(10)
-        return render_template('main/tool/tang-poem.html', date=now, week=WEEKDAY.get(week), lundar=lundar,
-                               authors=authors, pagination=pagination, poems=poems)
+        pagination = Poet.query.filter(Poet.dynasty_id == dynasty).paginate(page=page, per_page=100)
+        authors = pagination.items
+        if dynasty == 1:
+            poems = Poem.query.filter(Poem.author_id <= 3667).order_by(func.random()).limit(10)
+        else:
+            poems = Poem.query.filter(Poem.author_id > 3667).order_by(func.random()).limit(10)
+        return render_template('main/tool/{}'.format(temp), date=now, week=WEEKDAY.get(week), lundar=lundar,
+                               authors=authors, pagination=pagination, poems=poems, title='随机推荐', tag=0)
     else:
+        authors = Poet.query.filter(Poet.dynasty_id == dynasty).order_by(func.random()).limit(100)
         author = Poet.query.get_or_404(poet_id)
+        pagination2 = Poem.query.filter_by(author_id=author.id).paginate(page=page, per_page=10)
+        poems = pagination2.items
+        return render_template('main/tool/{}'.format(temp), date=now, week=WEEKDAY.get(week), lundar=lundar,
+                               authors=authors, poems=poems, pagination2=pagination2, tag=1,
+                               title=author.name, author=author)
+
+
+@tool_bp.route('/poem-tang/')
+@tool_bp.route('/poem-tang/<poet_id>/')
+def poem_tang(poet_id=None):
+    return get_poem(poet_id, 1)
 
 
 @tool_bp.route('/poem-song/')
-def poem_song():
-    return render_template('main/tool/song-poem.html')
+@tool_bp.route('/poem-song/<poet_id>/')
+def poem_song(poet_id=None):
+    return get_poem(poet_id, 2, temp='song-poem.html')
 
 
 @tool_bp.route('/ci-song/')
-def ci_song():
-    return render_template('main/tool/song-ci.html')
+@tool_bp.route('/ci-song/<poet_id>/')
+def ci_song(poet_id=None):
+    page = request.args.get('page', 1, type=int)
+    now = datetime.date.today()
+    lundar = Lunar(datetime.datetime.now())
+    week = datetime.datetime.isoweekday(datetime.datetime.now())
+    if poet_id is None:
+        cis = SongCi.query.order_by(func.random()).limit(10)
+        pagination = SongCiAuthor.query.paginate(page=page, per_page=100)
+        authors = pagination.items
+        return render_template('main/tool/song-ci.html', lundar=lundar, date=now, week=WEEKDAY.get(week),
+                               title='随机推荐', cis=cis, authors=authors, pagination=pagination, tag=0)
+    else:
+        poet = SongCiAuthor.query.get_or_404(poet_id)
+        pagination = SongCi.query.filter_by(author_id=poet.id).paginate(page=page, per_page=10)
+        cis = pagination.items
+        authors = SongCiAuthor.query.order_by(func.random()).limit(100)
+        return render_template('main/tool/song-ci.html', lundar=lundar, date=now, week=WEEKDAY.get(week),
+                               title=poet.name, cis=cis, authors=authors, author=poet, pagination2=pagination, tag=1)
+
+
+@tool_bp.route('/search-author/', methods=['GET', 'POST'])
+def search_shi_author_ajax():
+    author = request.form.get('poet')
+    t = request.form.get('name')
+    if t.split('-')[-1] == 'shi':
+        poet = Poet.query.filter_by(name=author).first()
+        if poet is not None:
+            if t == 't-shi':
+                return jsonify({'code': 200, 'id': '/tool/poem-tang/' + str(poet.id) + '/', 'name': author})
+            if t == 's-shi':
+                return jsonify({'code': 200, 'id': '/tool/poem-song/' + str(poet.id) + '/', 'name': author})
+        else:
+            return jsonify({'code': 400, 'info': '查无此人!'})
+
+    if t.split('-')[-1] == 'ci':
+        poet = SongCiAuthor.query.filter_by(name=author).first()
+        if poet is not None:
+            return jsonify({'code': 200, 'id': '/tool/ci-song/'+str(poet.id)+'/', 'name': author})
+        else:
+            return jsonify({'code': 400, 'info': '查无此人!'})
 
 
 @tool_bp.route('/search/')
