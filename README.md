@@ -3,12 +3,7 @@
 #### 开始
 ##### 依赖安装
 1. 安装MySQL
-  进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。
-  Linux用户可以通过如下命令进行安装
-
-  ```bash
-  sudo apt-get install mysql
-  ```
+  进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装`sudo apt-get install mysql`
 
 2. 安装redis
 
