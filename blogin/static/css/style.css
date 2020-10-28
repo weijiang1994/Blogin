@@ -293,3 +293,34 @@
     left: 50%;
     bottom: 30px;
 }
+
+.span-bb-5{
+    border-bottom: solid 5px #70b8f0;
+}
+
+.title-calendar{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.p-bb-1-s-gray{
+    border-bottom: 1px solid #cccccc;
+}
+
+.p-poem-ci-title{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.p-poem-ci-author{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.ci-content{
+    margin-bottom: 10px;
+    font-family: 华文楷体;
+    padding: 15px;
+    border-radius: 5px;
+    background-image: url('/static/img/peom-bg.JPG');
+}

@@ -26,7 +26,7 @@ from blogin.blueprint.front.auth import auth_bp
 from blogin.blueprint.front.accounts import accounts_bp
 from blogin.blueprint.front.gallery import gallery_bp
 from blogin.blueprint.front.tool import tool_bp
-from blogin.blueprint.front.soul_bp import soul_bp
+from blogin.blueprint.front.soul import soul_bp
 from blogin.blueprint.front.api import api_bp
 from blogin.blueprint.front.oauth import oauth_bp
 from blogin.setting import config
