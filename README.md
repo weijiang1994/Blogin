@@ -3,7 +3,7 @@
 #### 开始
 ##### 依赖安装
 1. 安装MySQL
-  进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装`sudo apt-get install mysql`
+    进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装`sudo apt-get install mysql`
 
 2. 安装redis
 
@@ -68,32 +68,34 @@
 
 3. 创建并激活虚拟环境
 
-  由于每个项目的依赖都不一样，Python提供了虚拟环境工具来隔离每个项目的依赖，使用如下命令进行虚拟环境创建。
+   由于每个项目的依赖都不一样，Python提供了虚拟环境工具来隔离每个项目的依赖，使用如下命令进行虚拟环境创建。
 
-  ```bash
-  cd Blogin
-  python3 -m venv venv
-  ```
+   ```shell
+     cd Blogin
+     python3 -m venv venv
+   ```
 
-  然后使用如下命令进行虚拟环境激活
+   然后使用如下命令进行虚拟环境激活。
 
-  ```bash
-  . venv/bin/activate
-  ```
+   ```shell
+   source venv/bin/activate
+   ```
 
-  在Windows下使用如下命令激活
+   在Windows下激活
 
-  ```bash
-  venv\Scripts\activate
-  ```
+   ```shell
+     venv\Scripts\activate
+   ```
 
-4. 安装python依赖
-  我们进入了虚拟环境以后可以使用如下命令安装第三方依赖
+4. 安装Python依赖
 
-  ```bash
-  cd Blogin
-  pip install -r requirments.txt -i https://pypi.douban.com/simple
-  ```
+   我们进入了虚拟环境以后可以使用如下命令安装第三方依赖
+
+   ```shell
+     cd Blogin
+     pip install -r requirments.txt -i https://pypi.douban.com/simple
+   ```
+
 5. 初始化数据库
 
    进入项目的根目录，使用如下命令进行数据库初始化
