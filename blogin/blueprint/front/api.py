@@ -70,7 +70,7 @@ def get_poet_poem():
         ls = {'title': poem.title, 'content': poem.content, 'author': poem.poets.dynasties.name + '·' + poem.poets.name,
               'id': poem.id}
         result.get('result').append(ls)
-        c+=1
+        c += 1
     result['counts'] = c
     return jsonify(result)
 
@@ -148,7 +148,7 @@ def get_ci_with_title():
         if author is None:
             # 如果数据库中查询结果作者为空，则返回错误信息
             return jsonify({'code': 400, 'info': '未找到该作者相关词！'})
-        cis = SongCi.query.filter(SongCi.rhythmic==title, SongCi.author_id==author.id).all()
+        cis = SongCi.query.filter(SongCi.rhythmic == title, SongCi.author_id == author.id).all()
 
     if len(cis) == 0:
         # 如果未查询到匹配的词，则返回提示信息

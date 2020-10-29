@@ -224,3 +224,16 @@
         <a {% if active == '搜索' %}style="color: #20c997"{% endif %}class="list-group-item text-info-a" href="/tool/search/"><i class="fa fa-search fa-fw" aria-hidden="true"></i>&nbsp; 搜索</a>
     </div>
 {% endmacro %}
+
+{% macro page_hint(pagination2) %}
+    {% if pagination2.total == 1 %}
+        <p class="p-page">总共1条记录</p>
+    {% else %}
+        {% if pagination2.page * 10 < pagination2.total %}
+            <p class="p-page">当前第{{ (pagination2.page - 1)*10 + 1  }}条-{{ pagination2.page*10 }}条记录</p>
+        {% else %}
+            <p class="p-page">当前第{{ (pagination2.page - 1)*10 + 1  }}条-{{ pagination2.total }}条记录</p>
+        {% endif %}
+    {% endif %}
+
+{% endmacro %}

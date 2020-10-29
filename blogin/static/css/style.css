@@ -324,3 +324,8 @@
     border-radius: 5px;
     background-image: url('/static/img/peom-bg.JPG');
 }
+
+.p-page{
+    font-weight: bold;
+    font-size: 12px;
+}
