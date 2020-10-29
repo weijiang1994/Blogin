@@ -47,21 +47,28 @@ def login():
     # 若当前已有用户登录则返回主页
     if current_user.is_authenticated:
         return redirect(url_for('blog_bp.index'))
+
+    remote_ip = request.headers.get('X-Real-Ip')
+    if remote_ip is None:
+        remote_ip = request.remote_addr
+    ban_ip = rd.get(str(remote_ip))
     form = LoginForm()
+    if ban_ip is not None:
+        if int(ban_ip) >= 5:
+            flash('当前IP登录错误次数过多,已被禁止登录,请明天再试!', 'info')
+            return render_template('main/login.html', form=form)
+
     if form.validate_on_submit():
         usr = form.usr_email.data
         pwd = form.password.data
-        user = User.query.filter(or_(User.username==usr, User.email==usr.lower())).first()
+        user = User.query.filter(or_(User.username == usr, User.email == usr.lower())).first()
         if user is not None and user.status == 2:
             flash('您的账号处于封禁状态,禁止登陆！联系管理员解除封禁!', 'danger')
             return redirect(url_for('.login'))
-        if user is not None and user.check_password(pwd):
 
+        if user is not None and user.check_password(pwd):
             if login_user(user, form.remember_me.data):
                 user.recent_login = datetime.now()
-                remote_ip = request.headers.get('X-Real-Ip')
-                if remote_ip is None:
-                    remote_ip = request.remote_addr
                 login_log = LoginLog(login_addr=remote_ip, user=user, real_addr=get_ip_real_add(remote_ip))
                 db.session.add(login_log)
                 db.session.commit()
@@ -70,6 +77,10 @@ def login():
         elif user is None:
             flash('无效的邮箱或用户名.', 'danger')
         else:
+            if ban_ip is None:
+                rd.set(str(request.remote_addr), str(1), ex=60*60*24)
+            else:
+                rd.set(str(request.remote_addr), str(int(ban_ip)+1), ex=60*60*24)
             flash('无效的密码', 'danger')
     return render_template('main/login.html', form=form)
 
@@ -130,7 +141,7 @@ def reset_confirm():
         if rd.get(usr.id) is None:
             flash('验证码已过期.', 'danger')
             return render_template('main/auth/resetPwd.html', form=form)
-        pwd= form.confirm_pwd.data
+        pwd = form.confirm_pwd.data
         ver_code = form.ver_code.data
 
         # 如果输入的验证码与redis中的不一致

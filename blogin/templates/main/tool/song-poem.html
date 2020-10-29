@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "macro.html" import poem_slider,render_pager, render_pagination with context %}
+{% from "macro.html" import poem_slider,render_pager, render_pagination, page_hint with context %}
 {% block title %}
     宋诗
 {% endblock %}
@@ -15,6 +15,7 @@
                     <p><i class="fa fa-calendar fa-2x"></i><span class="text-muted title-calendar">{{ date }}&nbsp;&nbsp;&nbsp;{{ week }}&nbsp;&nbsp;&nbsp;{{ lundar.gz_year() }}年·{{ lundar.ln_date_str() }}</span></p>
                     <p><span class="span-bb-5">{{ title }}的诗集</span></p>
                     {% if tag == 1 %}
+                        {{ page_hint(pagination2) }}
                         <p class="p-poem-ci-author text-muted">{{ author.desc }}</p>
                     {% endif %}
                     <div class="row">

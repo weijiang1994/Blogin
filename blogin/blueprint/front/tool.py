@@ -190,6 +190,13 @@ def ocr_result(category, _ocr: OCR):
 
 
 def get_poem(poet_id, dynasty=1, temp='tang-poem.html'):
+    """
+    get poem through alterable param
+    :param poet_id: poet id
+    :param dynasty: specifies dynasty
+    :param temp: front page template
+    :return: poem
+    """
     page = request.args.get('page', 1, type=int)
     now = datetime.date.today()
     lundar = Lunar(datetime.datetime.now())
