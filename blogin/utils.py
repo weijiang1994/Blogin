@@ -37,7 +37,7 @@ IP_REG = '((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d
 
 # 百度OCR配置
 OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
-OCR_TOKEN = '24.487f3dbf8ba5259be2f7b321741f02cf.2592000.1604024498.282335-22776145'
+OCR_TOKEN = '24.e45ac0a064909ce3ee8ee1dfb6d48e29.2592000.1606641510.282335-22776145'
 OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
 OCR_CATEGORY = {'文字识别': 'accurate_basic', '身份证识别': 'idcard', '银行卡识别': 'bankcard',
                 '驾驶证识别': 'driving_license', '车牌识别': 'license_plate'}
@@ -349,6 +349,7 @@ class OCR:
     def ocr(self):
         response = requests.post(self.url, data={"image": self.img}, headers=OCR_HEADERS)
         res = response.json()
+        print(res)
         nums = res.get("words_result_num")
         texts = ''
         for text in res.get('words_result'):
