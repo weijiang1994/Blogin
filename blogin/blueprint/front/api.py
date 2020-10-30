@@ -109,7 +109,7 @@ def get_song_ci_api():
 
 
 # 根据作者获取宋词随机获取条数或者全部获取
-@api_bp.route('/get-poet/ci/')
+@api_bp.route('/get-song-ci/poet/')
 def get_poet_ci():
     poet = request.args.get('author')
     counts = request.args.get('counts', 1)
@@ -130,7 +130,7 @@ def get_poet_ci():
     return jsonify(result)
 
 
-@api_bp.route('/get-ci/title/')
+@api_bp.route('/get-song-ci/title/')
 def get_ci_with_title():
     title = request.args.get('title')
     poet = request.args.get('author')
