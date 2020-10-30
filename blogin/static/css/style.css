@@ -319,7 +319,7 @@
 
 .ci-content{
     margin-bottom: 10px;
-    font-family: 华文楷体;
+    font-family: 华文楷体, 华文楷体, kait,宋体，微软雅黑;
     padding: 15px;
     border-radius: 5px;
     background-image: url('/static/img/peom-bg.JPG');
@@ -329,3 +329,4 @@
     font-weight: bold;
     font-size: 12px;
 }
+
