@@ -34,6 +34,7 @@ pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
 rd = redis.Redis(connection_pool=pool)
 oauth = OAuth()
 
+
 @login_manager.user_loader
 def load_user(user_id):
     from blogin.models import User
