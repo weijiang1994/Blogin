@@ -59,10 +59,10 @@ class RegisterForm(FlaskForm):
 class ChangePwdForm(FlaskForm):
     origin_pwd = StringField(u'原始密码', validators=[DataRequired(message='原始密码不能为空.')],
                              render_kw={'placeholder': '请输入原始密码', 'type': 'password'})
-    change_pwd = StringField(u'原始密码', validators=[DataRequired(message='修改后的密码不能为空.'),
+    change_pwd = StringField(u'新的密码', validators=[DataRequired(message='修改后的密码不能为空.'),
                                                   EqualTo('confirm_pwd', message='两次输入密码不一致.')],
                              render_kw={'placeholder': '请输入新的密码', 'type': 'password'})
-    confirm_pwd = StringField(u'原始密码', validators=[DataRequired(message='原始密码不能为空')],
+    confirm_pwd = StringField(u'确认密码', validators=[DataRequired(message='原始密码不能为空')],
                               render_kw={'placeholder': '请再次确认密码', 'type': 'password'})
     submit = SubmitField(u'修改', render_kw={'class': 'btn btn-secondary'})
 
