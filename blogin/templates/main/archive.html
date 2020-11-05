@@ -1,23 +1,78 @@
 {% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style>
+        ul.timeline {
+            list-style-type: none;
+            position: relative;
+            padding-inline-start: 40px;
+        }
+        ul.timeline:before {
+            content: ' ';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 29px;
+            width: 2px;
+            height: 100%;
+            z-index: 400;
+        }
+        ul.timeline > li {
+            padding-left: 20px;
+            padding-bottom: 20px;
+        }
+        ul.timeline > li:before {
+            content: ' ';
+            background: white;
+            display: inline-block;
+            position: absolute;
+            border: 3px solid #157186;
+            left: 20px;
+            width: 20px;
+            height: 20px;
+            z-index: 400;
+        }
+        ul.timeline-items {
+            padding-left: 20px;
+            list-style-type: square;
+        }
+        ul.timeline-items > li {
+            padding: 5px 0;
+        }
+        h4 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: .25px;
+            margin-top: 0;
+        }
+        h4 {
+            display: block;
+            margin-block-start: -0.67em;
+            margin-inline-start: 7px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
 {% block title %}
     博客归档
 {% endblock %}
 {% block content %}
     <main style="background: #eeeeee">
         <div class="container">
-        {% include "_flash.html" %}
+            {% include "_flash.html" %}
             <div class="row">
                 <div class="col-md-8">
                     <div style="background: white;margin-top: 10px;" class="card-body f-16 archive">
-                        <ul class="pl-4">
+                        <ul class="pl-4 timeline">
                             {% for year in archives.items() %}
-                                <li>{{ year[0] }} 年
+                                <li class="timeline-items"><h4>{{ year[0] }}</h4>
                                     {% for month in year[1].items() %}
                                         <ul class="pl-4">
-                                            <li>{{ month[0] }} 月 (共 {{ month[1]|length }} 篇)
+                                            <li style="list-style-type: none"><b>{{ month[0] }} 月 (共 {{ month[1]|length }} 篇)</b>
                                                 <ul class="pl-4">
                                                     {% for blog in month[1] %}
-                                                        <li class="text-info">&nbsp;&nbsp;
+                                                        <li class="text-info timeline-items">&nbsp;&nbsp;
                                                             <a class="text-info-a" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
                                                     {% endfor %}
                                                 </ul>
@@ -28,7 +83,6 @@
                             {% endfor %}
                         </ul>
                     </div>
-
                 </div>
                 <div class="col-md-4">
                     {% include "slider.html" %}
