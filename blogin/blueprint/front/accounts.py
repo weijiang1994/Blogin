@@ -79,7 +79,7 @@ def edit_profile():
         return redirect(url_for('.profile', user_id=current_user.id))
     form.slogan.data = current_user.slogan
     form.website.data = current_user.website
-    form.user_name.data = current_user.username 
+    form.user_name.data = current_user.username
     return render_template('main/editProfile.html', form=form)
 
 
