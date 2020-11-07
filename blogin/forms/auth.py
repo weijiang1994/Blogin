@@ -20,7 +20,7 @@ class LoginForm(FlaskForm):
     password = StringField(u'登录密码',
                            validators=[DataRequired(message='登录密码不能为空'),
                                        Length(min=8, max=40, message='登录密码必须在8-40位之间')],
-                           render_kw={'type': 'password'})
+                           render_kw={'type': 'password','placeholder': '请输入用户密码'})
     remember_me = BooleanField('记住我')
     submit = SubmitField(u'登录', render_kw={'class': 'btn btn-secondary'})
 
