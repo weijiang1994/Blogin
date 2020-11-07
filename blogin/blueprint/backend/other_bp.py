@@ -167,6 +167,7 @@ def server_status():
         history_percent = rd.lrange(current_user.id, 0, -1)
         history_memory = rd.lrange(str(current_user.id) + 'mem', 0, -1)
         times = rd.lrange('times', 0, -1)
+
         # 获取cpu相关信息
         cpu_use_rate = psutil.cpu_percent()
         history_percent.append(cpu_use_rate)
