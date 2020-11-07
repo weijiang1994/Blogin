@@ -9,6 +9,7 @@
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user
 from imageio import imread
+from wtforms import ValidationError
 
 from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
@@ -56,8 +57,14 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         user = User.query.filter_by(id=current_user.id).first()
+        new_name = form.user_name.data
         user.website = form.website.data
         user.slogan = form.slogan.data
+        query_name_user = User.query.filter_by(username=new_name).first()
+        if query_name_user is not None and  query_name_user.id != current_user.id:
+            flash('用户名已存在', 'danger')
+            return render_template('main/editProfile.html', form=form)
+        user.username = form.user_name.data
         if form.avatar.data.filename:
             filename = form.avatar.data.filename
             filename = str(current_user.username) + filename
@@ -72,6 +79,7 @@ def edit_profile():
         return redirect(url_for('.profile', user_id=current_user.id))
     form.slogan.data = current_user.slogan
     form.website.data = current_user.website
+    form.user_name.data = current_user.username 
     return render_template('main/editProfile.html', form=form)
 
 

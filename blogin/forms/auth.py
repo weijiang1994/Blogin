@@ -72,6 +72,12 @@ class ChangePwdForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
+    user_name = StringField(u'用户名',
+                            validators=[DataRequired(message='用户名不能为空'),
+                                        Length(min=1, max=16, message='用户名长度限定在1-16位之间'),
+                                        Regexp('^[a-zA-Z0-9_]*$',
+                                               message='用户名只能包含数字、字母以及下划线.')],
+                            render_kw={'placeholder': '请输入用户名长度1-8之间'})
     website = StringField(u'个人网站', render_kw={'placeholder': '请输入个人网站', 'type': 'url'})
     avatar = FileField(u'个人头像', validators=[FileAllowed(['png', 'jpg'], '只接收png和jpg图片')])
     slogan = TextAreaField(u'个性签名', render_kw={'placeholder': '签名不超过200个字符'})
