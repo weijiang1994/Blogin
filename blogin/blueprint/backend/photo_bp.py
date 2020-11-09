@@ -17,6 +17,7 @@ from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
 from blogin.models import Photo, Tag
 from blogin.utils import create_path
 from blogin.extension import db
+from blogin.decorators import permission_required
 
 be_photo_bp = Blueprint('be_photo_bp', __name__, url_prefix='/backend/photo')
 
@@ -36,6 +37,7 @@ def generate_thumbnail(path):
 
 @be_photo_bp.route('/add/', methods=['GET', 'POST'])
 @login_required
+@permission_required
 def add_photo():
     form = AddPhotoForm()
     if form.validate_on_submit():
@@ -78,6 +80,8 @@ def add_photo():
 
 
 @be_photo_bp.route('/edit/')
+@login_required
+@permission_required
 def photo_edit():
     page = request.args.get('page', 1, type=int)
     pagination = Photo.query.order_by(Photo.create_time).paginate(page=page, per_page=current_app.config['BLOGIN_PHOTO_PER_PAGE'])
@@ -86,6 +90,8 @@ def photo_edit():
 
 
 @be_photo_bp.route('/private/<int:photo_id>/')
+@login_required
+@permission_required
 def private(photo_id):
     photo = Photo.query.get_or_404(photo_id)
     photo.level = 1
@@ -95,6 +101,8 @@ def private(photo_id):
 
 
 @be_photo_bp.route('/non-private/<int:photo_id>/')
+@login_required
+@permission_required
 def non_private(photo_id):
     photo = Photo.query.get_or_404(photo_id)
     photo.level = 0
@@ -104,6 +112,8 @@ def non_private(photo_id):
 
 
 @be_photo_bp.route('/info-edit/<int:photo_id>/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def info_edit(photo_id):
     form = EditPhotoInfoForm()
     photo = Photo.query.get_or_404(photo_id)

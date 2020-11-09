@@ -20,11 +20,15 @@ from blogin.extension import db
 import psutil
 from blogin.extension import rd
 from blogin.emails import send_server_warning_mail
+from flask_login import login_required
+
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
 
 @other_bp.route('/timeline/add/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def add_timeline():
     form = TimelineForm()
     if form.validate_on_submit():
@@ -56,12 +60,16 @@ def splice_tm_content(content):
 
 
 @other_bp.route('/timeline/edit/')
+@login_required
+@permission_required
 def edit_timeline():
     timelines = Timeline.query.order_by(Timeline.timestamp.desc()).all()
     return render_template('backend/editTimeline.html', timelines=timelines)
 
 
 @other_bp.route('/timeline/info-edit/<int:tm_id>/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def tm_info_edit(tm_id):
     form = TimelineForm()
     tm = Timeline.query.get_or_404(tm_id)
@@ -94,6 +102,8 @@ def tm_info_edit(tm_id):
 
 
 @other_bp.route('/timeline/abandon/<int:tm_id>/')
+@login_required
+@permission_required
 def abandon_tm(tm_id):
     tm = Timeline.query.get_or_404(tm_id)
     tm.abandon = 1
@@ -103,6 +113,8 @@ def abandon_tm(tm_id):
 
 
 @other_bp.route('/timeline/activate/<int:tm_id>/')
+@login_required
+@permission_required
 def activate_tm(tm_id):
     tm = Timeline.query.get_or_404(tm_id)
     tm.abandon = 0
@@ -112,6 +124,8 @@ def activate_tm(tm_id):
 
 
 @other_bp.route('/logs/')
+@login_required
+@permission_required
 def look_logs():
     logs = []
     app_log_path = basedir + '/logs/'
@@ -130,6 +144,8 @@ def get_log_file_info(app_log_path, logs, log_cate='程序运行日志！'):
 
 
 @other_bp.route('/logs/detail/<path:file_path>/')
+@login_required
+@permission_required
 def log_detail(file_path):
     """
     显示日志文件内容
@@ -149,6 +165,8 @@ def log_detail(file_path):
 
 
 @other_bp.route('/logs/download/')
+@login_required
+@permission_required
 def download_log_file():
     """
     下载备份日志文件
@@ -290,6 +308,8 @@ def edit_flink():
 
 
 @other_bp.route('/soul/', methods=['GET', 'POST'])
+@login_required
+@permission_required
 def soul():
     if request.method == 'POST':
         title = request.form.get('title')
