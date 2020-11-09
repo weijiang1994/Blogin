@@ -59,13 +59,13 @@
             </div>
             {% for reply in replies[loop.index0] %}
                 <div style="padding-left: 20px">
-                    <div class="comment">
+                    <div class="comment" id="comment{{ reply.id }}">
                         <div class="comment-thumbnail">
                             <a>
                                 <img class="rounded img-fluid avatar-s profile-popover" src="{{ reply.author.avatar }}">
                             </a>
                         </div>
-                        <div class="comment-body">
+                        <div class="comment-body" id="comment{{ comment.id }}">
                             <h6>
                                 <a class="profile-popover text-muted">
                                     <strong>{{ reply.author.username }}</strong>
@@ -125,7 +125,7 @@
                     <img class="rounded img-fluid avatar-s profile-popover" src="{{ comment.author.avatar }}">
                 </a>
             </div>
-            <div class="comment-body">
+            <div class="comment-body" id="comment{{ comment.id }}">
                 <h6>
                     <a class="profile-popover text-muted">
                         <strong>{{ comment.author.username }}</strong>
@@ -183,7 +183,7 @@
                             <img class="rounded img-fluid avatar-s profile-popover" src="{{ reply.author.avatar }}">
                         </a>
                     </div>
-                    <div class="comment-body">
+                    <div class="comment-body" id="comment{{ reply.id }}">
                         <h6>
                             <a class="profile-popover text-muted">
                                 <strong>{{ reply.author.username }}</strong>
