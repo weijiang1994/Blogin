@@ -1,0 +1,60 @@
+{% extends "backend/base.html" %}
+{% from "macro.html" import render_pagination with context %}
+{% block title %}
+    博客评论管理
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <h3><b>照片评论管理</b></h3>
+            <hr>
+            <div class="table-responsive">
+                {% if comments %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>用户名</th>
+                        <th>内容</th>
+                        <th>评论时间</th>
+                        <th>文章链接</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for comment in comments %}
+                        <tr>
+                            <td>{{ comment.id }}</td>
+                            <td>{{ comment.author.username }}</td>
+                            <td>{{ comment.body|safe }}</td>
+                            <td>{{ comment.timestamp }}</td>
+                            <td><a href="/gallery/photo/{{ comment.photo.id }}#comment{{ comment.id }}">{{ comment.photo.title }}</a></td>
+                            <td>
+                                {% if comment.delete_flag %}
+                                    <span class="label label-danger">已删除</span>
+                                {% else %}
+                                    <span class="label label-success">正常</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if comment.delete_flag %}
+                                    <a href="{{ url_for('user_m_bp.unlock_or_lock_photo_comment', com_id=comment.id) }}" class="btn btn-success">恢复</a>
+                                {% else %}
+                                    <a href="{{ url_for('user_m_bp.unlock_or_lock_photo_comment', com_id=comment.id) }}" class="btn btn-danger">屏蔽</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+                <div style="text-align: right; margin-right: 15px;">
+                    {{ render_pagination(pagination) }}
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
