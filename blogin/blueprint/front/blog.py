@@ -53,7 +53,7 @@ def blog_article(blog_id):
 
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
-            order_by(BlogComment.timestamp.desc()).all()
+            order_by(BlogComment.timestamp.asc()).all()
         replies.append(reply)
     db.session.commit()
     return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies)

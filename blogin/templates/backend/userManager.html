@@ -46,14 +46,14 @@
                             </td>
                             <td>
                                 {% if user.role_id == 1 %}
-                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为普通用户" style="color: inherit; text-decoration: none;" href="/backend/user-m/set-user/{{ user.id }}/">用户</a></button>
+                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为普通用户" style="color: inherit; text-decoration: none;" href="/backend/interactive/set-user/{{ user.id }}/">用户</a></button>
                                 {% else %}
-                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为管理员" style="color: inherit; text-decoration: none;" href="/backend/user-m/set-admin/{{ user.id }}/">管理员</a></button>
+                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为管理员" style="color: inherit; text-decoration: none;" href="/backend/interactive/set-admin/{{ user.id }}/">管理员</a></button>
                                 {% endif %}
                                 {% if user.statuses.id == 1 %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/user-m/lock/{{ user.id }}/">禁用</a></button>
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/interactive/lock/{{ user.id }}/">禁用</a></button>
                                 {% else %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/user-m/unlock/{{ user.id }}/">解除</a></button>
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/interactive/unlock/{{ user.id }}/">解除</a></button>
                                 {% endif %}
                             </td>
                         </tr>
