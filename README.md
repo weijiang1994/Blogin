@@ -3,19 +3,22 @@
 #### 开始
 ##### 依赖安装
 1. 安装MySQL
-    进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装`sudo apt-get install mysql`
+    进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装
+    ```shell script
+    sudo apt-get install mysql
+    ```
 
 2. 安装redis
 
    进入redis官网下载安装包进行安装，Linux用户可以通过下面的命令安装
 
-   ```bash
+   ```shell script
    sudo apt-get install redis
    ```
 
    安装成功之后，通过如下命令开启redis服务
 
-   ```bash
+   ```shell script
    sudo service redis-server start
    ```
 
@@ -23,7 +26,7 @@
 
    打开终端，输入如下命令进入MySQL控制台，具体命令根据你自己的MySQL数据库的设置而定
 
-   ```bash
+   ```shell script
    sudo mysql -u root -p
    ```
 
@@ -39,7 +42,7 @@
 
    进行这一步本地机器上必须先配置好git环境，具体细节请网上冲浪查询。
 
-   ```bash
+   ```shell script
    git clone https://github.com/weijiang1994/Blogin.git
    ```
 
@@ -65,7 +68,14 @@
    ```
 
    **邮件服务器可以申请QQ邮箱或者163邮箱，具体申请流程请网上冲浪，十分简单，这里不做描述。**
-
+   
+   在项目根目录新建.flaskenv文件，在其中输入以下内容
+   ```ini
+   FLASK_APP=blogin
+   FLASK_ENV=development
+   ```
+   指定当前环境为开发环境，指定当前APP为blogin.
+   
 3. 创建并激活虚拟环境
 
    由于每个项目的依赖都不一样，Python提供了虚拟环境工具来隔离每个项目的依赖，使用如下命令进行虚拟环境创建。
