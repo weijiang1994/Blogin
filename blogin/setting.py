@@ -92,7 +92,7 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@localhost/blog?charset=utf8'.format(BaseConfig.DATABASE_USER,
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@localhost/blog?charset=utf8mb4'.format(BaseConfig.DATABASE_USER,
                                                                                          BaseConfig.DATABASE_PWD)
     REDIS_URL = "redis://localhost"
 
