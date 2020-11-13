@@ -13,6 +13,8 @@ from wtforms import StringField, SubmitField, BooleanField, FileField, TextAreaF
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Regexp
 from blogin.models import User
 
+# noinspection PyMethodMayBeStatic
+
 
 class LoginForm(FlaskForm):
     usr_email = StringField(u'邮箱/用户名', validators=[DataRequired(message='用户名或邮箱不能为空')],
