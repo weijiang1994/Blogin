@@ -52,6 +52,7 @@ def login():
     if remote_ip is None:
         remote_ip = request.remote_addr
     ban_ip = rd.get(str(remote_ip))
+
     form = LoginForm()
     if ban_ip is not None:
         if int(ban_ip) >= 5:
