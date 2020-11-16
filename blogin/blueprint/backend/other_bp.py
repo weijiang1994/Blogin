@@ -101,25 +101,17 @@ def tm_info_edit(tm_id):
     return render_template('backend/editTimelineInfo.html', form=form)
 
 
-@other_bp.route('/timeline/abandon/<int:tm_id>/')
+@other_bp.route('/timeline/abandon-or-activate/<int:tm_id>/')
 @login_required
 @permission_required
-def abandon_tm(tm_id):
+def abandon_or_activate_timeline(tm_id):
     tm = Timeline.query.get_or_404(tm_id)
-    tm.abandon = 1
+    if tm.abandon == 1:
+        tm.abandon = 0
+    else:
+        tm.abandon = 1
     db.session.commit()
-    flash('遗弃该里程碑操作成功!', 'success')
-    return redirect(url_for('.edit_timeline'))
-
-
-@other_bp.route('/timeline/activate/<int:tm_id>/')
-@login_required
-@permission_required
-def activate_tm(tm_id):
-    tm = Timeline.query.get_or_404(tm_id)
-    tm.abandon = 0
-    db.session.commit()
-    flash('启用该里程碑操作成功!', 'success')
+    flash('里程碑操作成功!', 'success')
     return redirect(url_for('.edit_timeline'))
 
 
@@ -305,6 +297,20 @@ def edit_flink():
             db.session.commit()
         return jsonify({'tag': 1})
     return render_template('backend/editFlink.html', flinks=flinks)
+
+
+@other_bp.route('/flink/lock-or-unlock/<int:flink_id>/', methods=['GET'])
+@login_required
+@permission_required
+def lock_or_unlock_flink(flink_id):
+    fl = FriendLink.query.get_or_404(flink_id)
+    if fl.flag == 1:
+        fl.flag = 2
+    else:
+        fl.flag = 1
+    db.session.commit()
+    flash('操作成功', 'success')
+    return redirect(url_for('.edit_flink'))
 
 
 @other_bp.route('/soul/', methods=['GET', 'POST'])
