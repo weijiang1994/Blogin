@@ -33,9 +33,9 @@
                             </td>
                             <td>
                                 {% if timeline.abandon == 0 %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该里程碑" style="color: inherit; text-decoration: none;" href="/backend/timeline/abandon/{{ timeline.id }}/">遗弃</a></button>
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该里程碑" style="color: inherit; text-decoration: none;" href="/backend/timeline/abandon-or-activate/{{ timeline.id }}/">遗弃</a></button>
                                 {% else %}
-                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该里程碑" style="color: inherit; text-decoration: none;" href="/backend/timeline/activate/{{ timeline.id }}/">启用</a></button>
+                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该里程碑" style="color: inherit; text-decoration: none;" href="/backend/timeline/abandon-or-activate/{{ timeline.id }}/">启用</a></button>
                                 {% endif %}
                                 <button class="btn btn-info" style="margin-bottom: 3px;"><a title="编辑里程碑信息" style="color: inherit; text-decoration: none;" href="/backend/timeline/info-edit/{{ timeline.id }}/">编辑</a></button>
                             </td>

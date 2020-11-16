@@ -38,9 +38,9 @@
                             </td>
                             <td>
                                 {% if flink.status.name == '正常' %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/abandon/{{ flink.id }}/">遗弃</a></button>
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="遗弃该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/lock-or-unlock/{{ flink.id }}/">遗弃</a></button>
                                 {% else %}
-                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/activate/{{ flink.id }}/">启用</a></button>
+                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="启用该友情链接" style="color: inherit; text-decoration: none;" href="/backend/flink/lock-or-unlock/{{ flink.id }}/">启用</a></button>
                                 {% endif %}
                                 <button id="{{ flink.id }}" onclick="saveChange(this.id)" class="btn btn-info" style="margin-bottom: 3px; display: none;">保存</button>
                             </td>
