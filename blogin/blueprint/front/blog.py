@@ -6,14 +6,14 @@
 @File    : blog_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
-    LikeStatistics, CommentStatistics, Tag, User, FriendLink
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute
 from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
-
-from blogin.utils import redirect_back
+import datetime
+from blogin.utils import redirect_back, MONTH
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -23,7 +23,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).\
+    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()). \
         paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []
@@ -40,6 +40,26 @@ def index():
     return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
                            pagination=pagination, blogs=blogs, cates=cates, categories=categories,
                            loves=loves, su=su, flinks=flinks)
+
+
+@blog_bp.route('/get-contribution/', methods=['POST'])
+def get_contribution():
+    # 获取开始月份结束月份，长度为三个月
+    result = []
+    e_month = datetime.datetime.now().month
+    year = datetime.datetime.now().year
+    s_month = e_month - 2
+    e_month = str(year) + '-' + MONTH.get(e_month)
+
+    if s_month <= 0:
+        s_month = str(year - 1) + '-' + MONTH.get(s_month)
+    else:
+        s_month = str(year) + '-' + str(s_month) + '-01'
+
+    contributes = Contribute.query.filter(Contribute.date >= s_month).filter(Contribute.date <= e_month).all()
+    for con in contributes:
+        result.append([str(con.date), con.contribute_counts])
+    return jsonify({'start': s_month, 'end': e_month, 'data': result})
 
 
 @blog_bp.route('/blog/article/<blog_id>/')

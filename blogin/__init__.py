@@ -12,7 +12,7 @@ from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
 import click
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
-    oauth
+    oauth, aps
 from blogin.monitor import start_monitor_thread
 from blogin.setting import basedir
 import os
@@ -32,6 +32,7 @@ from blogin.blueprint.front.oauth import oauth_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space, super_split, conv_list
+from blogin import task
 import logging
 
 
@@ -42,7 +43,9 @@ def create_app(config_name=None):
     app.jinja_env.filters['split'] = split_space
     app.jinja_env.filters['ssplit'] = super_split
     app.jinja_env.filters['slist'] = conv_list
+
     app.config.from_object(config[config_name])
+    app.config['SCHEDULER_API_ENABLED'] = True
     register_extension(app)
     register_blueprint(app)
     register_cmd(app)
@@ -90,6 +93,7 @@ def error_execute(app: Flask):
 def register_extension(app: Flask):
     migrate.init_app(app, db)
     db.init_app(app)
+    db.app = app
     bootstrap.init_app(app)
     moment.init_app(app)
     ckeditor.init_app(app)
@@ -99,6 +103,8 @@ def register_extension(app: Flask):
     mail.init_app(app)
     whooshee.init_app(app)
     oauth.init_app(app)
+    aps.init_app(app)
+    aps.start()
 
 
 # 注册蓝图
@@ -191,4 +197,3 @@ def register_log(app: Flask):
     file_handler.setLevel(logging.DEBUG)
     # if not app.debug:
     app.logger.addHandler(file_handler)
-

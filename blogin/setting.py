@@ -9,6 +9,7 @@
 import os
 import sys
 from dotenv import load_dotenv
+
 load_dotenv('.env')
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -28,7 +29,6 @@ class Operators:
 
 
 class BaseConfig:
-
     # Paginate configure
     BLOGIN_BLOG_PER_PAGE = 8
     BLOGIN_COMMENT_PER_PAGE = 10
@@ -72,16 +72,19 @@ class BaseConfig:
     EXPIRE_TIME = 60 * 10
 
     # Photo Configure
-    PHOTO_NEED_RESIZE = 1024*1024
+    PHOTO_NEED_RESIZE = 1024 * 1024
 
     # BAIDU Trans appid
     BAIDU_TRANS_APPID = os.getenv('BAIDU_TRANS_APPID')
     BAIDU_TRANS_KEY = os.getenv('BAIDU_TRANS_KEY')
 
+    # APScheduler config
+    SCHEDULER_API_ENABLED = True
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8mb4'.format(BaseConfig.DATABASE_USER,
-                                                                                         BaseConfig.DATABASE_PWD)
+                                                                                            BaseConfig.DATABASE_PWD)
     REDIS_URL = "redis://localhost"
 
 
@@ -93,7 +96,7 @@ class TestingConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@localhost/blog?charset=utf8mb4'.format(BaseConfig.DATABASE_USER,
-                                                                                         BaseConfig.DATABASE_PWD)
+                                                                                            BaseConfig.DATABASE_PWD)
     REDIS_URL = "redis://localhost"
 
 

@@ -15,7 +15,7 @@ from flask_login import login_required, current_user
 from blogin.setting import basedir
 from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
 from blogin.models import Photo, Tag
-from blogin.utils import create_path
+from blogin.utils import create_path, update_contribution
 from blogin.extension import db
 from blogin.decorators import permission_required
 
@@ -74,6 +74,8 @@ def add_photo():
             if tag not in photo.tags:
                 photo.tags.append(tag)
                 db.session.commit()
+        update_contribution()
+        db.session.commit()
         flash('相片添加完成~', 'success')
         return redirect(url_for('gallery_bp.index'))
     return render_template('backend/addPhoto.html', form=form)
@@ -120,6 +122,7 @@ def info_edit(photo_id):
     if form.validate_on_submit():
         photo.title = form.photo_title.data
         photo.description = form.photo_desc.data
+        update_contribution()
         db.session.commit()
         return redirect(url_for('.photo_edit'))
     form.photo_title.data = photo.title
