@@ -414,3 +414,11 @@ class ThirdParty(db.Model):
         tp = ThirdParty(name='qq')
         db.session.add(tp)
         db.session.commit()
+
+
+class Contribute(db.Model):
+    __tablename__ = 'contribute'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='table id')
+    date = db.Column(db.DATE, default=datetime.today(), comment='contribute date')
+    contribute_counts = db.Column(db.INTEGER, default=0)
