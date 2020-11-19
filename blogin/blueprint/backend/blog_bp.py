@@ -11,12 +11,11 @@ import os
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, current_app, \
     send_from_directory
 from flask_ckeditor import upload_fail, upload_success
-
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States
+from blogin.models import BlogType, Blog, States, Contribute
 from blogin.extension import db
-from blogin.utils import get_current_time, create_path
+from blogin.utils import get_current_time, create_path, update_contribution
 from flask_login import login_required
 from blogin.decorators import permission_required, db_exception_handle
 
@@ -52,6 +51,7 @@ def blog_create():
         blg = Blog(title=title, type_id=cate.id, introduce=introduce, content=content, pre_img=blog_img_path,
                    is_private=level - 1, state=state)
         cate.counts += 1
+        update_contribution()
         db.session.add(blg)
         db.session.commit()
 
@@ -68,7 +68,8 @@ def blog_edit():
     page = request.args.get('page', 1, type=int)
     blog_type_datas = []
     types = BlogType.query.all()
-    pagination = Blog.query.order_by(Blog.create_time).paginate(page=page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
+    pagination = Blog.query.order_by(Blog.create_time).paginate(page=page,
+                                                                per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     for _type in types:
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
@@ -95,7 +96,9 @@ def blog_content_edit(blog_id):
         cate = BlogType.query.filter_by(id=type).first()
         blog.type_id = cate.id
         blog.introduce = form.brief_content.data
+        update_contribution()
         db.session.commit()
+
         return redirect(url_for('blog_bp.blog_article', blog_id=blog_id))
 
     form.title.data = blog.title
@@ -150,6 +153,7 @@ def blog_category_add():
         return jsonify({"is_exists": True})
     cate = BlogType(name=category_name, description=desc)
     db.session.add(cate)
+    update_contribution()
     db.session.commit()
     return jsonify({"is_exists": False})
 

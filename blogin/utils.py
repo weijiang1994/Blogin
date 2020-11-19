@@ -30,6 +30,30 @@ from PIL import Image, ImageDraw, ImageFont
 from blogin.extension import db
 from blogin.setting import basedir
 from imageio import imread
+from blogin.models import Contribute
+
+MONTH = {1: '01-31',
+         2: '02-28',
+         3: '03-31',
+         4: '04-30',
+         5: '05-31',
+         6: '06-30',
+         7: '07-31',
+         8: '08-31',
+         9: '09-30',
+         10: '10-31',
+         11: '11-30',
+         12: '12-31',
+         -1: '11-01',
+         0: '12-01'
+         }
+
+
+def update_contribution():
+    td = datetime.date.today()
+    con = Contribute.query.filter_by(date=td).first()
+    con.contribute_counts += 1
+
 
 # IP查询工具配置
 IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,region,regionName,city,lat,lon,query"
