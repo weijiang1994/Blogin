@@ -35,5 +35,4 @@ def auto_insert_data():
         if not com:
             comm = CommentStatistics(date=date, times=0)
             db.session.add(comm)
-
         db.session.commit()
