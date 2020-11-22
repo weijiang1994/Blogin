@@ -23,15 +23,15 @@
                     {% for plan in plans %}
                         <tr>
                             <td><i class="fa fa-tasks"></i> {{ plan.title }}</td>
-                            <td>{{ plan.total }}</td>
-                            <td><input class="form-control" value="{{ plan.done_count }}"> </td>
+                            <td><input class="form-control" id="total{{ plan.id }}" value="{{ plan.total }}"></td>
+                            <td><input class="form-control" id="done{{ plan.id }}" value="{{ plan.done_count }}"> </td>
                             <td>{{ plan.timestamps }}</td>
                             <td>{{ plan.is_done }}</td>
                             <td>
                                 {% if plan.is_done == 0 %}
                                     <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="完成" style="color: inherit; text-decoration: none;" href="#">完成</a></button>
                                 {% endif %}
-                                <button class="btn btn-info" style="margin-bottom: 3px;"><a title="保存" style="color: inherit; text-decoration: none;" href="#/">保存</a></button>
+                                <button class="btn btn-info" id="{{ plan.id }}" style="margin-bottom: 3px; display: none"><a title="保存" style="color: inherit; text-decoration: none;" href="#/">保存</a></button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -41,4 +41,20 @@
             </div>
         </div>
     </main>
+    <script>
+        $('input').bind('input propertychange', function(){
+            // 监听输入框变化
+            if($(this).val()){
+                let btnID = this.id;
+                if (btnID.startsWith('total')){
+                    btnID = btnID.split('total')[1]
+                }else {
+                    btnID = btnID.split('done')[1]
+                }
+                $("#"+btnID).show();
+            }else{
+                console.log("不能清空信息!");
+            }
+        })
+    </script>
 {% endblock %}

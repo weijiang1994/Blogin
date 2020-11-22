@@ -13,8 +13,8 @@
     <div  class="card-body p-2 f-15">
         {% for plan in plans %}
             <p style="margin-bottom: 2px">{{ plan.title }}</p>
-            <div class="progress">
-                <div class="progress-bar bg-success" style="width:{{ (plan.done_count / plan.total) * 100 }}%"></div>
+            <div class="progress" style="height: 10px">
+                <div class="progress-bar bg-info" style="width:{{ (plan.done_count / plan.total) * 100 }}%"></div>
             </div>
         {% endfor %}
     </div>
