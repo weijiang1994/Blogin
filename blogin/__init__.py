@@ -115,7 +115,7 @@ def scheduler_init(app):
     """
     if platform.system() != 'Windows':
         fcntl = __import__("fcntl")
-        f = open(basedir+'scheduler.lock', 'wb')
+        f = open(basedir+'/scheduler.lock', 'wb')
         try:
             fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
             aps.init_app(app)
