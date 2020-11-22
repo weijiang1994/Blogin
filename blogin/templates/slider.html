@@ -8,6 +8,20 @@
 </div>
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
+        <strong><i class="fa fa-tasks"></i> 近期计划</strong>
+    </div>
+    <div  class="card-body p-2 f-15">
+        {% for plan in plans %}
+            <p style="margin-bottom: 2px">{{ plan.title }}</p>
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:{{ (plan.done_count / plan.total) * 100 }}%"></div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
         <strong><i class="fa fa-github"></i> 最近动态</strong>
     </div>
     <div  class="card-body p-2 f-15">
@@ -158,7 +172,7 @@
                 left: 'center',
             },
             tooltip: {
-                position: 'right',
+                position: 'top',
                 backgroundColor: '#000000',
                 formatter: function (p) {
                     let format = echarts.format.formatTime('yyyy-MM-dd', p.data[0]);
