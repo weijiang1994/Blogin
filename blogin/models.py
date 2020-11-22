@@ -422,3 +422,15 @@ class Contribute(db.Model):
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='table id')
     date = db.Column(db.DATE, default=datetime.today(), comment='contribute date')
     contribute_counts = db.Column(db.INTEGER, default=0)
+
+
+class Plan(db.Model):
+    __tablename__ = 'plan'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='table id')
+    title = db.Column(db.String(50), nullable=False)
+    total = db.Column(db.INTEGER, nullable=False)
+    done_count = db.Column(db.INTEGER, nullable=False, default=0)
+    is_done = db.Column(db.INTEGER, default=0, nullable=False)
+    timestamps = db.Column(db.DATE, default=datetime.today())
+    done_time = db.Column(db.DATE)

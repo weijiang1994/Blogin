@@ -12,15 +12,14 @@ from bs4 import BeautifulSoup
 from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_required
 
-from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm
+from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm, AddPlanForm
 from blogin import basedir
 from blogin.decorators import permission_required
-from blogin.models import Timeline, FriendLink, States, Soul
+from blogin.models import Timeline, FriendLink, States, Soul, Plan
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
 from blogin.emails import send_server_warning_mail
-from flask_login import login_required
 
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
@@ -328,3 +327,34 @@ def soul():
     pagination = Soul.query.paginate(page=page, per_page=100)
     souls = pagination.items
     return render_template("backend/soul.html", souls=souls, pagination=pagination)
+
+
+@other_bp.route('/plan/add/', methods=['GET', 'POST'])
+@login_required
+@permission_required
+def add_plan():
+    form = AddPlanForm()
+    if form.validate_on_submit():
+        plans = Plan.query.filter_by(is_done=0).all()
+        if len(plans) >= 3:
+            flash('你已经有三条计划了,不要好高骛远哦!', 'info')
+            return redirect(url_for('blog_bp.index'))
+        plan = Plan.query.filter_by(title=form.title.data).first()
+        if plan:
+            flash('该计划已经存在', 'info')
+            return render_template('backend/addPlan.html', form=form)
+
+        plan = Plan(title=form.title.data, total=form.total.data, timestamps=form.timestamps.data)
+        db.session.add(plan)
+        db.session.commit()
+        flash('添加计划成功', 'success')
+        return redirect(url_for('.add_plan'))
+    return render_template('backend/addPlan.html', form=form)
+
+
+@other_bp.route('/plan/edit/', methods=['GET', 'POST'])
+@login_required
+@permission_required
+def edit_plan():
+    plans = Plan.query.all()
+    return render_template('backend/editPlan.html', plans=plans)

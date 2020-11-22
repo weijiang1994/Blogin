@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
-    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan
 from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -35,11 +35,12 @@ def index():
         loves = 0
     else:
         loves = loves.counts
+    plans = Plan.query.filter_by(is_done=0).all()
     su = User.query.filter(User.email == '804022023@qq.com').first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
                            pagination=pagination, blogs=blogs, cates=cates, categories=categories,
-                           loves=loves, su=su, flinks=flinks)
+                           loves=loves, su=su, flinks=flinks, plans=plans)
 
 
 @blog_bp.route('/get-contribution/', methods=['POST'])

@@ -11,7 +11,7 @@ from datetime import datetime
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, SelectField, TextAreaField, FileField, SubmitField, DateTimeField
+from wtforms import StringField, SelectField, TextAreaField, FileField, SubmitField, DateTimeField, DateField
 from wtforms.validators import Length, DataRequired, ValidationError
 from blogin.models import BlogType, FriendLink
 
@@ -109,3 +109,15 @@ class AddFlinkForm(FlaskForm):
     def validate_link(self, filed):
         if FriendLink.query.filter_by(link=filed.data.lower()).first():
             raise ValidationError('该URL已经被添加')
+
+
+class AddPlanForm(FlaskForm):
+    title = StringField(u'计划名称', validators=[DataRequired(),
+                                                Length(min=2, max=20, message='计划标题长度在2-20个字符之间')],
+                        render_kw={'class': '', 'rows': 50, 'placeholder': '请输入计划的标题名称'}
+                        )
+    total = StringField(u'总进度', validators=[DataRequired()],
+                        render_kw={'class': '', 'rows': 50, 'type': 'number', 'placeholder': '请输入计划的总进度'}
+                        )
+    timestamps = DateField(u'开始时间', default=datetime.today())
+    submit = SubmitField(u'添加计划')

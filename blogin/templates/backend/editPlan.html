@@ -1,0 +1,44 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    编辑计划
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {% include "_flash.html" %}
+            <div class="table-responsive">
+                {% if plans %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>总进度</th>
+                        <th>已完成</th>
+                        <th>时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for plan in plans %}
+                        <tr>
+                            <td><i class="fa fa-tasks"></i> {{ plan.title }}</td>
+                            <td>{{ plan.total }}</td>
+                            <td><input class="form-control" value="{{ plan.done_count }}"> </td>
+                            <td>{{ plan.timestamps }}</td>
+                            <td>{{ plan.is_done }}</td>
+                            <td>
+                                {% if plan.is_done == 0 %}
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="完成" style="color: inherit; text-decoration: none;" href="#">完成</a></button>
+                                {% endif %}
+                                <button class="btn btn-info" style="margin-bottom: 3px;"><a title="保存" style="color: inherit; text-decoration: none;" href="#/">保存</a></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}
