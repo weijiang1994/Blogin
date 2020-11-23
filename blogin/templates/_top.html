@@ -1,0 +1,67 @@
+<style>
+    .arrow{
+        border: 9px solid transparent;
+        border-bottom-color: #3DA0DB;
+        width: 0px;
+        height: 0px;
+        top:0px
+    }
+    .stick{
+        width: 8px;
+        height: 14px;
+        border-radius: 1px;
+        background-color: #3DA0DB;
+        top:15px;
+    }
+    #back_top div{
+        position: absolute;
+        margin: auto;
+        right: 0px;
+        left: 0px;
+    }
+    #back_top{
+        background-color: #dddddd;
+        height: 38px;
+        width: 38px;
+        border-radius: 3px;
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        right: 50px;
+        bottom: 100px;
+        display: none;
+    }
+</style>
+<div id="article"></div>
+<div id="back_top">
+    <div class="arrow"></div>
+    <div class="stick"></div>
+</div>
+
+<script>
+    $(function(){
+
+        $(window).scroll(function(){  //只要窗口滚动,就触发下面代码
+
+            var scrollt = document.documentElement.scrollTop + document.body.scrollTop; //获取滚动后的高度
+
+            if( scrollt > 300 ){  //判断滚动后高度超过200px,就显示
+
+                $("#back_top").fadeIn(400); //淡入
+
+            }else{
+
+                $("#back_top").stop().fadeOut(400); //如果返回或者没有超过,就淡出.必须加上stop()停止之前动画,否则会出现闪动
+
+            }
+
+        });
+
+        $("#back_top").click(function(){ //当点击标签的时候,使用animate在200毫秒的时间内,滚到顶部
+
+            $("html,body").animate({scrollTop:"0px"},200);
+
+        });
+
+    });
+</script>

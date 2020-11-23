@@ -18,6 +18,7 @@
 {% block content %}
     <main style="background: #e3e3e3">
         <div class="container">
+        {% include "_top.html" %}
             {% for message in get_flashed_messages(with_categories=True) %}
                 <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
