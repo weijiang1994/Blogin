@@ -104,7 +104,7 @@
     
     ```shell script
     sudo apt-get install mysql
-```
+    ```
     
 2. 安装redis
 
