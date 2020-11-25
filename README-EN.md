@@ -2,6 +2,8 @@
 
 Blogin is a personal blog website that base on flask development.
 
+[中文文档](https://github.com/weijiang1994/Blogin/blob/master/README.md)
+
 ## Introduce
 
 The personal blog site developed by the Flask Python Web framework consists of two parts: the front-end and the back-end.
@@ -158,6 +160,10 @@ The personal blog site developed by the Flask Python Web framework consists of t
    # github oauth id and key
    GITHUB_CLIENT_ID='your github client id'
    GITHUB_CLIENT_SECRET='your github client secret'
+   # baidu ocr key
+   OCR_KEY='your key'
+   OCR_SECRET='your secret'
+   OCR_TOKEN='your token'
    ```
 
    **The mail server can apply for gmail mailbox or other mailbox. Please surf the Internet for the specific application process. It is very simple and will not be described here. **

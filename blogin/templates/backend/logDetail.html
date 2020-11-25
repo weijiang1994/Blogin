@@ -30,6 +30,7 @@
 {% block content %}
     <main>
         <div class="container-fluid">
+            {% include "_top.html" %}
             {% if 'access' in path %}
                 <div class="hide-div fixed-div">
                     <p style="margin-bottom: 5px; border-bottom: 1px solid;"><b>IP查询结果显示</b></p>
@@ -39,7 +40,7 @@
                 </div>
             {% endif %}
             <div class="container">
-                <h3><b>{{ path }} 日志</b></h3>
+                <h3 style="word-break: break-all"><b>{{ path }} 日志</b></h3>
                 <div class="row-fluid" style="padding: 10px; margin-bottom: 20px; border-radius: 3px; background: #ddddee; border: 1px solid;">
                     {% for content in contents %}
                         <p class="log" style="word-break: break-all;">{{ content|safe }}</p>

@@ -1,6 +1,8 @@
 # Blogin
 
 使用Flask搭建的个人博客网站2.0版本，1.0版本已经停止更新。
+
+[English Document](https://github.com/weijiang1994/Blogin/blob/master/README-EN.md)
 ## 功能介绍
 
 依赖于Flask Python Web框架开发的个人博客网站，包含有前台与后台两个部分。
@@ -163,6 +165,10 @@
    # github第三方登录id以及key
    GITHUB_CLIENT_ID='your github client id'
    GITHUB_CLIENT_SECRET='your github client secret'
+   # baidu ocr key
+   OCR_KEY='your key'
+   OCR_SECRET='your secret'
+   OCR_TOKEN='your token'
    ```
 
    **邮件服务器可以申请QQ邮箱或者163邮箱，具体申请流程请网上冲浪，十分简单，这里不做描述。**
