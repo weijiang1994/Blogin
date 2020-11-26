@@ -85,7 +85,9 @@ def blog_cate(cate_id):
     cate = BlogType.query.filter_by(id=cate_id).first()
     categories = BlogType.query.all()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
-    return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks)
+    plans = Plan.query.filter_by(is_done=0).all()
+    return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
+                           plans=plans)
 
 
 @blog_bp.route('/loveme/')
@@ -171,6 +173,7 @@ def archive():
     categories = BlogType.query.all()
     archives = {}
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
+    plans = Plan.query.filter_by(is_done=0).all()
     for blog in blogs:
         current_year = str(blog.create_time).split(' ')[0].split('-')[0]
         current_month = str(blog.create_time).split(' ')[0].split('-')[1]
@@ -190,7 +193,7 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
-    return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks)
+    return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans)
 
 
 TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],

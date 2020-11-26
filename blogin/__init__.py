@@ -110,8 +110,8 @@ def register_extension(app: Flask):
 def scheduler_init(app):
     """
     保证系统只启动一次定时任务
-    :param app:
-    :return:
+    :param app: 当前flask实例
+    :return: None
     """
     if platform.system() != 'Windows':
         fcntl = __import__("fcntl")
