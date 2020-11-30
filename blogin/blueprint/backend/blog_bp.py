@@ -13,9 +13,9 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States, Contribute
+from blogin.models import BlogType, Blog, States, BlogHistory
 from blogin.extension import db
-from blogin.utils import get_current_time, create_path, update_contribution
+from blogin.utils import get_current_time, create_path, update_contribution, get_md5
 from flask_login import login_required
 from blogin.decorators import permission_required, db_exception_handle
 
@@ -97,10 +97,14 @@ def blog_content_edit(blog_id):
         cate = BlogType.query.filter_by(id=type).first()
         blog.type_id = cate.id
         blog.introduce = form.brief_content.data
+        blog.update_time = get_current_time()
         update_contribution()
-        db.session.commit()
-        with open(basedir + 'history' + blog.title+'.txt') as f:
+        history_file_path = basedir + '/history/'+ get_md5(get_current_time()) + '.txt'
+        with open(history_file_path, 'w', encoding='utf-8') as f:
             f.write(history_content)
+        bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=get_current_time())
+        db.session.add(bh)
+        db.session.commit()
 
         return redirect(url_for('blog_bp.blog_article', blog_id=blog_id))
 
