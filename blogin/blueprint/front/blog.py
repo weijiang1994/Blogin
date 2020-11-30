@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
-    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory
 from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -71,13 +71,14 @@ def blog_article(blog_id):
     cate = BlogType.query.filter_by(id=blog.type_id).first()
     # 顶级评论
     comments = BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
+    histories = BlogHistory.query.filter_by(blog_id=blog_id).order_by(BlogHistory.timestamps.desc()).all()
 
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
             order_by(BlogComment.timestamp.asc()).all()
         replies.append(reply)
     db.session.commit()
-    return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies)
+    return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies, histories=histories)
 
 
 @blog_bp.route('/blog/cate/<cate_id>/', methods=['GET', 'POST'])
@@ -88,6 +89,15 @@ def blog_cate(cate_id):
     plans = Plan.query.filter_by(is_done=0).all()
     return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
                            plans=plans)
+
+
+@blog_bp.route('/blog/history/<h_id>/')
+def blog_history(h_id):
+    bh = BlogHistory.query.get_or_404(h_id)
+    with open(bh.save_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    blog = Blog.query.get_or_404(bh.blog_id)
+    return render_template('main/blog_history.html', content=content, blog=blog)
 
 
 @blog_bp.route('/loveme/')

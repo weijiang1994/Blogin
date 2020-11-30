@@ -215,6 +215,13 @@ def resize_img(path, w_zoom, h_zoom):
     img = img.resize((int(width * w_zoom), int(height * h_zoom)), Image.ANTIALIAS)
     return img
 
+import hashlib
+
+def get_md5(s):
+    m = hashlib.md5()
+    if isinstance(s, str):
+        m.update(s.encode('utf-8'))
+    return m.hexdigest()
 
 class AddMark2RT(ImageAddMarkBase):
     def __init__(self, *args, **kwargs):

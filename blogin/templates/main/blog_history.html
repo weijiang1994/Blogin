@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    {{ share.load() }}
+    {{ ckeditor.load_code_theme() }}
+    <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
+    <link type="text/css" href="/static/css/style.css">
+    {{ moment.locale(auto_detect=True) }}
+{% endblock %}
+{% block title %}
+    {{ blog.title }}
+{% endblock %}
+{% block content %}
+    <main style="background: #e3e3e3">
+        <div class="container">
+            {% include "_top.html" %}
+            {% for message in get_flashed_messages(with_categories=True) %}
+                <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message[1] }}
+                </div>
+            {% endfor %}
+            <div class="blog-content-div">
+                <div class="text-center">
+                    <h2 class="blog-title">{{ blog.title }}</h2>
+                </div>
+                <div class="text-center">
+                    <span class="badge badge-important"><i class="fa fa-calendar"></i> {{blog.create_time}}</span>
+                    <span class="badge badge-important"><i class="fa fa-book"></i> {{blog.read_times}}</span>
+                    <hr>
+                </div>
+                <div class="text-muted">
+                    <h1 class="introduce-h1">简介</h1>
+                    {{ blog.introduce }}
+                    <hr>
+                </div>
+                <div class="div-article">
+                    <article>
+                        {{ content|safe }}
+                    </article>
+                </div>
+            </div>
+            <div class="blog-content-div">
+                <article>
+                    {{article_content|safe}}
+                    <div class="cc">
+                        <div>版权声明：<i class="fa fa-cc-paypal"></i>原创不易,转载请注明出处～</div>
+                        <div>文章连接：<a class="text-info" href="http://2dogz.cn/blog/article/{{ blog.id }}/">http://2dogz.cn/blog/article/{{ blog.id }}/</a></div>
+                    </div>
+                    <div class="text-center">
+                        {{ share.create(addition_class='text-center',title='')}}
+                    </div>
+                </article>
+                <div class="text-center">
+                    <button data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-outline-success"><i class="fa fa-heart-o"></i>打赏</button>
+                </div>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-coffee"></i>给作者买杯咖啡吧～</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="fa fa-close"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <i class="fa fa-weixin"></i>微信<img class="img-fluid" src="/static/img/donate/wechatpay.png">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <i class="fa fa-cc-paypal"></i>支付宝<img class="img-fluid" src="/static/img/donate/alipay.jpg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+{% endblock %}

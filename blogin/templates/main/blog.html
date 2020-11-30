@@ -9,6 +9,21 @@
         .ck-editor__editable {
             min-height: 100px;
         }
+        @media screen and (min-width: 1554px){
+            .history-fixed-div {
+                position: fixed;
+                top: 6.5em;
+                left: 9em;
+                margin: 5px;
+                padding: 10px;
+                border-radius: 5px;
+                background: #ffffff;
+                width: 15em;
+            }
+        }
+        .p-line-bottom{
+            border-bottom: 1px solid #cccccc;
+        }
     </style>
     {{ moment.locale(auto_detect=True) }}
 {% endblock %}
@@ -17,8 +32,22 @@
 {% endblock %}
 {% block content %}
     <main style="background: #e3e3e3">
+        {% if histories %}
+            <div class="history-fixed-div">
+                <p class="text-muted p-line-bottom"><b>历史修改版本</b></p>
+                <ol>
+                    {% for history in histories %}
+                        <li>
+                            <a target="_blank" class="text-info-a" href="{{ url_for('blog_bp.blog_history', h_id=history.id) }}">{{ history.timestamps }}</a><br>
+                        </li>
+                    {% endfor %}
+                </ol>
+
+            </div>
+        {% endif %}
+
         <div class="container">
-        {% include "_top.html" %}
+            {% include "_top.html" %}
             {% for message in get_flashed_messages(with_categories=True) %}
                 <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
