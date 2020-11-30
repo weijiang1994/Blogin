@@ -134,6 +134,7 @@ class Blog(db.Model):
     blog_types = db.relationship('BlogType', back_populates='blogs')
     comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
     state = db.relationship('States', back_populates='blog')
+    blog_history = db.relationship('BlogHistory', back_populates='blog', cascade='all')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
@@ -156,6 +157,7 @@ class BlogComment(db.Model):
     author = db.relationship('User', back_populates='blog_comments')
     replies = db.relationship('BlogComment', back_populates='replied', cascade='all')
     replied = db.relationship('BlogComment', back_populates='replies', remote_side=[id])
+
 
 
 class States(db.Model):
@@ -434,3 +436,14 @@ class Plan(db.Model):
     is_done = db.Column(db.INTEGER, default=0, nullable=False)
     timestamps = db.Column(db.DATE, default=datetime.today())
     done_time = db.Column(db.DATE)
+
+
+class BlogHistory(db.Model):
+    __tablename__ = 'blog_history'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    blog_id = db.Column(db.INTEGER, db.ForeignKey('blog.id'))
+    save_path = db.Column(db.String(100), nullable=False)
+    timestamps = db.Column(db.DateTime, default=datetime.now)
+
+    blog = db.relationship('Blog', back_populates='blog_history')

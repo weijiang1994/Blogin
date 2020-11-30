@@ -85,6 +85,7 @@ def blog_content_edit(blog_id):
     form = EditPostForm()
     blog = Blog.query.get_or_404(blog_id)
     if form.validate_on_submit():
+        history_content = blog.content
         filename = form.blog_img_file.data.filename
         if filename != '':
             blog_img_path = save_blog_img(filename, form)
@@ -98,6 +99,8 @@ def blog_content_edit(blog_id):
         blog.introduce = form.brief_content.data
         update_contribution()
         db.session.commit()
+        with open(basedir + 'history' + blog.title+'.txt') as f:
+            f.write(history_content)
 
         return redirect(url_for('blog_bp.blog_article', blog_id=blog_id))
 
@@ -153,7 +156,6 @@ def blog_category_add():
         return jsonify({"is_exists": True})
     cate = BlogType(name=category_name, description=desc)
     db.session.add(cate)
-    update_contribution()
     db.session.commit()
     return jsonify({"is_exists": False})
 
