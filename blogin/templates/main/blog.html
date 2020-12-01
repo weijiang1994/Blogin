@@ -9,16 +9,22 @@
         .ck-editor__editable {
             min-height: 100px;
         }
-        @media screen and (min-width: 1554px){
+        @media screen and (min-width: 1367px){
             .history-fixed-div {
                 position: fixed;
                 top: 6.5em;
-                left: 9em;
+                user-select: none;
+                left: calc((100vw - 1000px)/2 - 330px);
                 margin: 5px;
                 padding: 10px;
                 border-radius: 5px;
                 background: #ffffff;
                 width: 15em;
+            }
+        }
+        @media screen and (max-width: 1660px) {
+            .history-fixed-div{
+                display: none;
             }
         }
         .p-line-bottom{

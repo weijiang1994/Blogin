@@ -13,7 +13,7 @@ from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
-from blogin.utils import redirect_back, MONTH
+from blogin.utils import redirect_back
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -45,22 +45,15 @@ def index():
 
 @blog_bp.route('/get-contribution/', methods=['POST'])
 def get_contribution():
-    # 获取开始月份结束月份，长度为三个月
+    # 获取开始日期结束日期，长度为90天
+    t = datetime.date.today()
+    s_day = t + datetime.timedelta(days=-89)
     result = []
-    e_month = datetime.datetime.now().month
-    year = datetime.datetime.now().year
-    s_month = e_month - 2
-    e_month = str(year) + '-' + MONTH.get(e_month)
+    contributes = Contribute.query.filter(Contribute.date >= s_day).filter(Contribute.date <= t).all()
 
-    if s_month <= 0:
-        s_month = str(year - 1) + '-' + MONTH.get(s_month)
-    else:
-        s_month = str(year) + '-' + str(s_month) + '-01'
-
-    contributes = Contribute.query.filter(Contribute.date >= s_month).filter(Contribute.date <= e_month).all()
     for con in contributes:
         result.append([str(con.date), con.contribute_counts])
-    return jsonify({'start': s_month, 'end': e_month, 'data': result})
+    return jsonify({'start': str(s_day), 'end': str(t), 'data': result})
 
 
 @blog_bp.route('/blog/article/<blog_id>/')
