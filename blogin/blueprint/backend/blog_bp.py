@@ -33,7 +33,7 @@ def blog_create():
     if form.validate_on_submit():
         # 获取表单中信息
         title = form.title.data
-        type = form.blog_type.choices[int(form.blog_type.data) - 1][0]
+        type = form.blog_type.data
         level = form.blog_level.data
         content = form.body.data
         introduce = form.brief_content.data
@@ -93,13 +93,13 @@ def blog_content_edit(blog_id):
 
         blog.content = form.body.data
         blog.title = form.title.data
-        type = form.blog_type.choices[int(form.blog_type.data) - 1][0]
+        type = form.blog_type.data
         cate = BlogType.query.filter_by(id=type).first()
         blog.type_id = cate.id
         blog.introduce = form.brief_content.data
         blog.update_time = get_current_time()
         update_contribution()
-        history_file_path = basedir + '/history/'+ get_md5(get_current_time()) + '.txt'
+        history_file_path = basedir + '/history/' + get_md5(get_current_time()) + '.txt'
         with open(history_file_path, 'w', encoding='utf-8') as f:
             f.write(history_content)
         bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=get_current_time())
