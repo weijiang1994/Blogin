@@ -101,7 +101,7 @@
 
 ### 后台功能介绍
 
-<details open>
+<details>
   <summary><b>1.内容管理</b></summary>
 <div align="left">
     <ul>
