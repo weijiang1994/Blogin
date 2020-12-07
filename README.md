@@ -10,7 +10,7 @@
 
 <details open>
   <summary><b>1.个人博客</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>主页展示每条博客简短介绍</li>
     <li>支持博客分类</li>
@@ -21,7 +21,7 @@
 </details>
 <details>
   <summary><b>2.个人相册</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>支持tag标签</li>
     <li>支持评论点赞</li>
@@ -32,7 +32,7 @@
 
 <details>
   <summary><b>3.在线工具</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>在线词云图生成工具</li>
     <li>多端翻译工具</li>
@@ -45,7 +45,7 @@
 
 <details>
   <summary><b>4.评论系统</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>支持评论、删除、举报功能</li>
     <li>支持评论子回复功能</li>
@@ -55,7 +55,7 @@
 
 <details>
   <summary><b>5.用户个人资料(网站用户)</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>用户个人动态展示</li>
     <li>未读消息提醒(有人回复你的评论)</li>
@@ -67,7 +67,7 @@
 
 <details>
   <summary><b>6.唐宋诗词</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>随机显示一首唐宋诗</li>
     <li>随机显示一首宋词</li>
@@ -79,7 +79,7 @@
 
 <details>
   <summary><b>7.毒鸡汤文本</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>随机一条毒鸡汤文案</li>
     <li>提供获取毒鸡汤文案的API接口</li>
@@ -90,7 +90,7 @@
 
 <details>
   <summary><b>8.其他</b></summary>
-<div align="center">
+<div align="left">
     <ul>
     <li>支持个人计划制定</li>
     <li>支持近三个月contribute热力图显示</li>
@@ -100,18 +100,6 @@
 </details>
 
 ### 后台功能介绍
-
-<details>
-  <summary><b>1.内容管理</b></summary>
-<div align="center">
-    <b>博客管理</b>
-    <ul>
-    <li>支持个人计划制定</li>
-    <li>支持近三个月contribute热力图显示</li>
-    <li>网站更新里程碑记录</li>
-    </ul>
-</div>
-</details>
 
 1. **内容管理**
 
