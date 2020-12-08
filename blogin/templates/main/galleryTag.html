@@ -29,7 +29,7 @@
                 {% for photo in photos %}
                     <div class="border-card card photo-card">
                         <a href="/gallery/photo/{{ photo.id }}" class="card-thumbnail">
-                            <img class="card-img-top portrait" src="{{ photo.save_path }}">
+                            <img class="card-img-top portrait" src="{{ photo.save_path_s }}">
                         </a>
                         <div class="card-body">
                             <a class="photo-link" href="/gallery/photo/{{ photo.id }}"> {{ photo.title }} </a>
