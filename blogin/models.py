@@ -159,7 +159,6 @@ class BlogComment(db.Model):
     replied = db.relationship('BlogComment', back_populates='replies', remote_side=[id])
 
 
-
 class States(db.Model):
     __tablename__ = 'states'
 
