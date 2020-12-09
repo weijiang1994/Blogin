@@ -2,6 +2,7 @@
     {% if comment.delete_flag==1 %}
         {% if replies[loop.index0]|length == 0 %}
         {% else %}
+            <!--suppress ALL -->
             <div class="comment">
                 <div class="comment-thumbnail">
                     <a>
@@ -263,7 +264,7 @@
         }, 800);
         sessionStorage.setItem('rep_id', i);
         sessionStorage.setItem('receive_u', u);
-        sessionStorage.setItem('parent', p)
+        sessionStorage.setItem('parent', p);
         $("#replyUser").text("回复 @"+u).removeAttr('hidden');
         $("#cancelReplyBtn").removeAttr('hidden');
         $("#replyBtn").removeAttr('hidden');
