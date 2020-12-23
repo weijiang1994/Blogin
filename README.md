@@ -1,6 +1,8 @@
 # Blogin
 
-使用Flask搭建的个人博客网站2.0版本，1.0版本已经停止更新。
+![python-depend.svg](https://7.dusays.com/2020/12/11/507ca007c94c0.svg)
+
+使用Flask+Bootstrap4开发的个人博客系统。
 
 [English Document](https://github.com/weijiang1994/Blogin/blob/master/README-EN.md)
 ## 功能介绍
