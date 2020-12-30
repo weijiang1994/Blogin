@@ -8,7 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 history
-test/
+sample/
 .vscode/
 whooshee/
 migrations/
@@ -47,7 +47,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit sample / coverage reports
 htmlcov/
 .tox/
 .nox/
