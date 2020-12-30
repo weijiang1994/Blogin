@@ -235,8 +235,8 @@ def register_cmd(app: Flask):
 def register_log(app: Flask):
     app.logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler = RotatingFileHandler('logs/blogin.log', maxBytes=10 * 1024 * 1024, backupCount=10)
+    file_handler = RotatingFileHandler(basedir+'/logs/blogin.log', maxBytes=10 * 1024 * 1024, backupCount=10)
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
-    # if not app.debug:
-    app.logger.addHandler(file_handler)
+    if not app.debug:
+        app.logger.addHandler(file_handler)
