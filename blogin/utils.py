@@ -52,7 +52,8 @@ MONTH = {1: '01-31',
 def update_contribution():
     td = datetime.date.today()
     con = Contribute.query.filter_by(date=td).first()
-    con.contribute_counts += 1
+    if con:
+        con.contribute_counts += 1
 
 
 # IP查询工具配置
