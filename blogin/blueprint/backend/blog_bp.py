@@ -18,6 +18,7 @@ from blogin.extension import db
 from blogin.utils import get_current_time, create_path, update_contribution, get_md5
 from flask_login import login_required
 from blogin.decorators import permission_required, db_exception_handle
+import datetime
 
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
@@ -97,12 +98,12 @@ def blog_content_edit(blog_id):
         cate = BlogType.query.filter_by(id=type).first()
         blog.type_id = cate.id
         blog.introduce = form.brief_content.data
-        blog.update_time = get_current_time()
+        blog.update_time = datetime.datetime.now()
         update_contribution()
         history_file_path = basedir + '/history/' + get_md5(get_current_time()) + '.txt'
         with open(history_file_path, 'w', encoding='utf-8') as f:
             f.write(history_content)
-        bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=get_current_time())
+        bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=datetime.datetime.now())
         db.session.add(bh)
         db.session.commit()
 

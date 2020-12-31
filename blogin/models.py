@@ -446,3 +446,10 @@ class BlogHistory(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.now)
 
     blog = db.relationship('Blog', back_populates='blog_history')
+
+
+class One(db.Model):
+    __tablename__ = 'one'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    content = db.Column(db.String(512), nullable=False, default='')

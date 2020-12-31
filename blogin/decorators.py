@@ -7,6 +7,7 @@
 @Software: PyCharm
 """
 from datetime import datetime
+from datetime import date
 from functools import wraps
 
 from flask import Markup, flash, url_for, redirect, abort
@@ -66,7 +67,8 @@ def statistic_traffic(db, obj):
     def decorator(func):
         @wraps(func)
         def decorated_function(*args, **kwargs):
-            td = datetime.today().strftime('%Y-%m-%d')
+            # td = datetime.today().strftime('%Y-%m-%d')
+            td = date.today()
             vst = obj.query.filter_by(date=td).first()
             if vst is None:
                 new_vst = obj(date=td, times=1)
