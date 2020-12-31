@@ -13,7 +13,8 @@ from blogin.extension import db
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
-from blogin.utils import redirect_back
+from blogin.utils import redirect_back, github_social
+import requests
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -71,7 +72,8 @@ def blog_article(blog_id):
             order_by(BlogComment.timestamp.asc()).all()
         replies.append(reply)
     db.session.commit()
-    return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies, histories=histories)
+    return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies,
+                           histories=histories)
 
 
 @blog_bp.route('/blog/cate/<cate_id>/', methods=['GET', 'POST'])
@@ -207,3 +209,21 @@ TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon
 def timeline():
     timelines = Timeline.query.filter_by(abandon=0).order_by(Timeline.timestamp.desc()).all()
     return render_template('main/timeline.html', timelines=timelines)
+
+
+# noinspection PyTypeChecker
+@blog_bp.route('/load-github/', methods=['POST'])
+def load_github():
+    star, fork, watcher, user_info, repo_info = github_social()
+    return jsonify({'star': star.text,
+                    'fork': fork.text,
+                    'watcher': watcher.text,
+                    'avatar': user_info.json()['avatar_url'],
+                    'repo_desc': repo_info.json()['description']
+                    })
+
+
+@blog_bp.route('/load-one/', methods=['POST'])
+def load_one():
+    res = requests.get('http://api.youngam.cn/api/one.php')
+    return jsonify({'one': res.json()['data'][0]['text']})

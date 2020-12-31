@@ -1,16 +1,38 @@
 <!-- 每日一句 -->
+<!--suppress ALL -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <b><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句【From ONE】</b>
+        <b><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
     </div>
     <div id="oneWord" class="card-body p-2 f-15">
+        <i class="fa fa-spinner fa-spin f-hint"></i>
     </div>
 </div>
+
+<div class="card mb-3 mt-2">
+    <div class="card-header p-2 f-17">
+        <strong><i class="fa fa-github"></i> Github</strong>
+    </div>
+    <div  class="card-body p-2 f-15">
+        <div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">
+            <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar" alt="avatar" src="{{ url_for('static', filename='github-avatar.png') }}"></a>
+            <div class="ml-2">
+                <h5 class="mb-0"><b>Blogin</b></h5>
+                <small id="repoDesc"><i class="fa fa-spinner fa-spin f-hint"></i></small>
+            </div>
+            <a class="btn btn-sm btn-light h-25" href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>
+        </div>
+        <div id="shield-svg" class="text-left pr-1">
+            <i class="fa fa-spinner fa-spin f-hint"></i>
+        </div>
+    </div>
+</div>
+
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
         <strong><i class="fa fa-tasks"></i> 近期计划</strong>
     </div>
-    <div  class="card-body p-2 f-15">
+    <div class="card-body p-2 f-15">
         {% for plan in plans %}
             <p style="margin-bottom: 2px">{{ plan.title }}</p>
             <div class="progress" style="height: 10px">
@@ -122,22 +144,36 @@
     // 打开页面自动加载
     $(function () {
         $(document).ready(function () {
-            getOne();
+            loadOne();
+            loadGithub();
         });
     })
-
-    // 获取每日一句
-    function getOne(){
+    // 加载每日一句、github仓库信息
+    function loadOne(){
         $.ajax({
-            type: "GET",
-            url: "http://api.youngam.cn/api/one.php",
-            dataType: "json",
-            success: function(result){
-                $("#oneWord").text(result['data'][0]['text']+'  ———— 「ONE · 一个」');
-                return false;
+            type: 'post',
+            url: '/load-one/',
+            success: function (res){
+                 $("#oneWord").text(res.one);
             }
-        });
+        })
     }
+
+    function loadGithub(){
+        $.ajax({
+            type: 'post',
+            url: '/load-github/',
+            success: function (res){
+                $(".f-hint").hide();
+                $("#shield-svg").append(res.star);
+                $("#shield-svg").append(res.fork);
+                $("#shield-svg").append(res.watcher);
+                $('#repoDesc').text(res.repo_desc);
+                $("#githubAvatar").attr('src', res.avatar);
+            }
+        })
+    }
+
 
     var myChart = echarts.init(document.getElementById('contribute'));
 
@@ -148,22 +184,6 @@
             generateCalendar(response);
         }
     })
-
-    // 模拟数据
-    function getVirtualData(year) {
-        year = year || '2020';
-        var date = +echarts.number.parseDate(year + '-11-01');
-        var end = +echarts.number.parseDate(year + 1 + '-1-31');
-        var dayTime = 3600 * 24 * 1000;
-        var data = [];
-        for (var time = date; time <= end; time += dayTime) {
-            data.push([
-                echarts.format.formatTime('yyyy-MM-dd', time),
-                Math.floor(Math.random() * 20)
-            ]);
-        }
-        return data;
-    }
 
     function generateCalendar(data){
         let option = {

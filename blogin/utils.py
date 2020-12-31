@@ -47,6 +47,20 @@ MONTH = {1: '01-31',
          -1: '11-01',
          0: '12-01'
          }
+GITHUB_STAR = 'https://img.shields.io/github/stars/weijiang1994/Blogin?style=social'
+GITHUB_FORK = 'https://img.shields.io/github/forks/weijiang1994/Blogin?style=social'
+GITHUB_WATCHER = 'https://img.shields.io/github/watchers/weijiang1994/Blogin?style=social'
+USER_API = 'https://api.github.com/users/weijiang1994'
+REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
+
+
+def github_social():
+    star = requests.get(GITHUB_STAR)
+    fork = requests.get(GITHUB_FORK)
+    watcher = requests.get(GITHUB_WATCHER)
+    user_info = requests.get(USER_API)
+    repo_info = requests.get(REPO_API)
+    return star, fork, watcher, user_info, repo_info
 
 
 def update_contribution():
@@ -216,13 +230,16 @@ def resize_img(path, w_zoom, h_zoom):
     img = img.resize((int(width * w_zoom), int(height * h_zoom)), Image.ANTIALIAS)
     return img
 
+
 import hashlib
+
 
 def get_md5(s):
     m = hashlib.md5()
     if isinstance(s, str):
         m.update(s.encode('utf-8'))
     return m.hexdigest()
+
 
 class AddMark2RT(ImageAddMarkBase):
     def __init__(self, *args, **kwargs):
