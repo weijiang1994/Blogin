@@ -2,19 +2,6 @@
 {% from "macro.html" import render_pagination with context %}
 {% block head %}
     {{ super() }}
-    <style>
-        .hint-div-right {
-            position: fixed;
-            top: 6.5em;
-            right: 0em;
-            margin: 5px;
-            padding: 10px;
-            border: #eeccdd 1px solid;
-            border-radius: 5px;
-            width: 12em;
-            background: #73ff19;
-        }
-    </style>
 {% endblock %}
 {% block title %}
     毒鸡汤
@@ -70,7 +57,7 @@
             function saveChange(linkId){
                 let title = $("#title"+linkId).val();
 
-                if (title == ""){
+                if (title === ""){
                     alert("请输入毒鸡汤信息!");
                     return false;
                 }
@@ -79,7 +66,7 @@
                     type:"post",
                     data:{"title": title, 'id': linkId},
                     success: function (res){
-                        if (res.tag == 1){
+                        if (res.tag === 1){
                             $("#"+linkId).hide();
                             $("#hintSaveSuccess").removeAttr("hidden");
                             $("#hintSaveSuccess").show().delay(2000).hide(500);

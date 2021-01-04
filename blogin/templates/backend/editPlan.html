@@ -8,6 +8,9 @@
             {% include "_flash.html" %}
             <div class="table-responsive">
                 {% if plans %}
+                    <div hidden="hidden" id="hintSaveSuccess" class="hint-div-right">
+                        <h5 id="hintText"><b><i class="fa fa-check"></i> 毒鸡汤制作成功!</b></h5>
+                    </div>
                     <table class="table table-hover">
                     <thead>
                     <tr>
@@ -28,10 +31,16 @@
                             <td>{{ plan.timestamps }}</td>
                             <td>{{ plan.is_done }}</td>
                             <td>
-                                {% if plan.is_done == 0 %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="完成" style="color: inherit; text-decoration: none;" href="#">完成</a></button>
+                                {% if plan.is_done %}
+                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a title="完成" style="color: inherit; text-decoration: none;" href="{{ url_for('other_bp.plan_done_or_reboot', plan_id=plan.id) }}">
+                                        重启
+                                    </a></button>
+                                {% else %}
+                                    <button class="btn btn-success" style="margin-bottom: 3px;"><a title="完成" style="color: inherit; text-decoration: none;" href="{{ url_for('other_bp.plan_done_or_reboot', plan_id=plan.id) }}">
+                                        完成
+                                    </a></button>
                                 {% endif %}
-                                <button class="btn btn-info" id="{{ plan.id }}" style="margin-bottom: 3px; display: none"><a title="保存" style="color: inherit; text-decoration: none;" href="#/">保存</a></button>
+                                <button class="btn btn-info" id="{{ plan.id }}" onclick="saveEdit(this.id)" style="margin-bottom: 3px; display: none">保存</button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -56,5 +65,30 @@
                 console.log("不能清空信息!");
             }
         })
+
+        function saveEdit(id){
+            console.log('button id is ', id);
+            let total = $("#total"+id).val();
+            let done = $("#done"+id).val();
+            if (total === '' || done === ''){
+                alert('关键信息不能为空！');
+                return false;
+            }
+            console.log('发送保存信息!');
+            console.log(total);
+            console.log(done);
+            $.ajax({
+                url:"/backend/plan/content-edit/",
+                type: 'post',
+                data: {'total': total, 'done': done, 'id': id},
+                success: function (res){
+                    if (res.tag === 1){
+                        $("#hintText").text(res.info);
+                        $("#hintSaveSuccess").removeAttr("hidden");
+                        $("#hintSaveSuccess").show().delay(2000).hide(500);
+                    }
+                }
+            })
+        }
     </script>
 {% endblock %}

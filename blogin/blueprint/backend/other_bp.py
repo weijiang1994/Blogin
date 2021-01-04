@@ -358,3 +358,35 @@ def add_plan():
 def edit_plan():
     plans = Plan.query.all()
     return render_template('backend/editPlan.html', plans=plans)
+
+
+@other_bp.route('/plan/done-or-reboot/<plan_id>')
+@login_required
+@permission_required
+def plan_done_or_reboot(plan_id):
+    plan = Plan.query.get_or_404(plan_id)
+    if plan.is_done:
+        plan.is_done = 0
+        flash('计划重启!', 'info')
+    else:
+        plan.is_done = 1
+        plan.done_time = datetime.now()
+        flash('计划完成!', 'info')
+    db.session.commit()
+    return redirect(url_for('.edit_plan'))
+
+
+@other_bp.route('/plan/content-edit/', methods=['POST'])
+@login_required
+@permission_required
+def plan_content_edit():
+    total = request.form.get('total')
+    done = request.form.get('done')
+    pid = request.form.get('id')
+    if total < done:
+        return jsonify({'tag': 1, 'info': '计划总量必须大于完成量!'})
+    plan = Plan.query.get_or_404(pid)
+    plan.done_count = done
+    plan.total = total
+    db.session.commit()
+    return jsonify({'tag': 1, 'info': '计划编辑完成!'})
