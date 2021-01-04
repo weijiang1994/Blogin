@@ -26,8 +26,8 @@
                     {% for plan in plans %}
                         <tr>
                             <td><i class="fa fa-tasks"></i> {{ plan.title }}</td>
-                            <td><input class="form-control" id="total{{ plan.id }}" value="{{ plan.total }}"></td>
-                            <td><input class="form-control" id="done{{ plan.id }}" value="{{ plan.done_count }}"> </td>
+                            <td><input class="form-control" id="total{{ plan.id }}" type="number" value="{{ plan.total }}"></td>
+                            <td><input class="form-control" id="done{{ plan.id }}" type="number" value="{{ plan.done_count }}"> </td>
                             <td>{{ plan.timestamps }}</td>
                             <td>{{ plan.is_done }}</td>
                             <td>

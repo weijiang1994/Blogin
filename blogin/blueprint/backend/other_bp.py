@@ -383,7 +383,7 @@ def plan_content_edit():
     total = request.form.get('total')
     done = request.form.get('done')
     pid = request.form.get('id')
-    if total < done:
+    if int(total) < int(done):
         return jsonify({'tag': 1, 'info': '计划总量必须大于完成量!'})
     plan = Plan.query.get_or_404(pid)
     plan.done_count = done
