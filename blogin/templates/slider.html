@@ -1,8 +1,15 @@
 <!-- 每日一句 -->
 <!--suppress ALL -->
 <div class="card mb-3 mt-2">
-    <div class="card-header p-2 f-17">
-        <b><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
+    <div class="card-header">
+        <div class="d-flex">
+            <b class="flex-grow-1"><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
+            {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o"></i></a>
+            {% else %}
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o"></i></a>
+            {% endif %}
+        </div>
     </div>
     <div id="oneWord" class="card-body p-2 f-15">
         <i class="fa fa-spinner fa-spin f-hint"></i>

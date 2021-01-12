@@ -29,6 +29,7 @@ class Operators:
 
 
 class BaseConfig:
+    BLOG_THEMES = {'light': 'light', 'dark': 'dark'}
     # Paginate configure
     BLOGIN_BLOG_PER_PAGE = 8
     BLOGIN_COMMENT_PER_PAGE = 10

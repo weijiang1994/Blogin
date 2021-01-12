@@ -44,6 +44,15 @@ def index():
                            loves=loves, su=su, flinks=flinks, plans=plans)
 
 
+@blog_bp.route('/themes/<string:theme_name>/')
+def change_theme(theme_name):
+    if theme_name not in current_app.config['BLOG_THEMES'].keys():
+        abort(404)
+    response = redirect(url_for('.index'))
+    response.set_cookie('blog_theme', current_app.config['BLOG_THEMES'].get(theme_name), max_age=30 * 24 * 60 * 60)
+    return response
+
+
 @blog_bp.route('/get-contribution/', methods=['POST'])
 def get_contribution():
     # 获取开始日期结束日期，长度为90天
