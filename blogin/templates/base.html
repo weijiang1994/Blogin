@@ -13,7 +13,11 @@
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}" >
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+            <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        {% else %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/darkly.bootstrap.min.css') }}">
+        {% endif %}
         <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
         <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
