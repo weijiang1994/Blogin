@@ -188,12 +188,16 @@ def archive():
     archives = {}
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     plans = Plan.query.filter_by(is_done=0).all()
+    years = []
+    months = []
     for blog in blogs:
         current_year = blog.create_time.year
         current_month = blog.create_time.month
         # 如果当前年份不存在,那么当前月份也不存在
         if not archives.get(current_year):
             # 记录当前年份以及当前月份
+            years.append(current_year)
+            months.append(current_month)
             archives[current_year] = {current_month: []}
             archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                   str(blog.create_time).split(' ')[0][5:]])
@@ -201,6 +205,7 @@ def archive():
             # 如果当前年份存在,月份不存在,则更新一条数据到当前年份中
             if not archives.get(current_year).get(current_month):
                 archives.get(current_year).update({current_month: []})
+                months.append(current_month)
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
             else:
@@ -208,7 +213,9 @@ def archive():
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
     print(archives)
-    return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans)
+    print(archives.items())
+    return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans,
+                           years=years, months=months)
 
 
 TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],
