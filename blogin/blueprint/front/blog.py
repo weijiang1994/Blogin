@@ -189,8 +189,8 @@ def archive():
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     plans = Plan.query.filter_by(is_done=0).all()
     for blog in blogs:
-        current_year = str(blog.create_time).split(' ')[0].split('-')[0]
-        current_month = str(blog.create_time).split(' ')[0].split('-')[1]
+        current_year = blog.create_time.year
+        current_month = blog.create_time.month
         # 如果当前年份不存在,那么当前月份也不存在
         if not archives.get(current_year):
             # 记录当前年份以及当前月份
@@ -207,6 +207,7 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
+    print(archives)
     return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans)
 
 
