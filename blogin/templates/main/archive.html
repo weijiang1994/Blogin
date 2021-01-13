@@ -65,9 +65,9 @@
                 <div class="col-md-8">
                     <div style="background: white;margin-top: 10px;" class="card-body f-16 archive">
                         <ul class="pl-4 timeline">
-                            {% for year in archives.items() %}
-                                <li class="timeline-items"><h4>{{ year[0] }}</h4>
-                                    {% for month in year[1].items() %}
+                            {% for year in years %}
+                                <li class="timeline-items"><h4>{{ year }}</h4>
+                                    {% for month in archives[year].items() %}
                                         <ul class="pl-4">
                                             <li style="list-style-type: none"><b>{{ month[0] }} 月 (共 {{ month[1]|length }} 篇)</b>
                                                 <ul class="pl-4">
