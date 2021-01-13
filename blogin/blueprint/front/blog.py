@@ -212,8 +212,6 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
-    print(archives)
-    print(archives.items())
     return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans,
                            years=years, months=months)
 

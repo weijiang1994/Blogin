@@ -67,17 +67,19 @@
                         <ul class="pl-4 timeline">
                             {% for year in years %}
                                 <li class="timeline-items"><h4>{{ year }}</h4>
-                                    {% for month in archives[year].items() %}
-                                        <ul class="pl-4">
-                                            <li style="list-style-type: none"><b>{{ month[0] }} 月 (共 {{ month[1]|length }} 篇)</b>
-                                                <ul class="pl-4">
-                                                    {% for blog in month[1] %}
-                                                        <li class="text-info timeline-items">&nbsp;&nbsp;
-                                                            <a class="text-info-a" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </li>
-                                        </ul>
+                                    {% for month in months %}
+                                        {% if archives[year][month]|length > 0 %}
+                                            <ul class="pl-4">
+                                                <li style="list-style-type: none"><b>{{ month }} 月 (共 {{ archives[year][month]|length }} 篇)</b>
+                                                    <ul class="pl-4">
+                                                        {% for blog in archives[year][month] %}
+                                                            <li class="text-info timeline-items">&nbsp;&nbsp;
+                                                                <a class="text-info-a" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        {% endif %}
                                     {% endfor %}
                                 </li>
                             {% endfor %}
