@@ -194,7 +194,7 @@ def archive():
         # 如果当前年份不存在,那么当前月份也不存在
         if not archives.get(current_year):
             # 记录当前年份以及当前月份
-            archives.setdefault(current_year, {current_month: []})
+            archives[current_year] = {current_month: []}
             archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                   str(blog.create_time).split(' ')[0][5:]])
         else:
