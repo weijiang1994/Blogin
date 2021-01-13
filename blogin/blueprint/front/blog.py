@@ -9,7 +9,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory
-from blogin.extension import db
+from blogin.extension import db, rd
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
@@ -229,12 +229,26 @@ def timeline():
 # noinspection PyTypeChecker
 @blog_bp.route('/load-github/', methods=['POST'])
 def load_github():
-    star, fork, watcher, user_info, repo_info = github_social()
-    return jsonify({'star': star.text,
-                    'fork': fork.text,
-                    'watcher': watcher.text,
-                    'avatar': user_info.json()['avatar_url'],
-                    'repo_desc': repo_info.json()['description']
+    star = rd.get('star')
+    if star is None:
+        star, fork, watcher, user_info, repo_info = github_social()
+        avatar = user_info.json()['avatar_url']
+        repo_desc = repo_info.json()['description']
+        rd.set('star', star.text)
+        rd.set('fork', fork.text)
+        rd.set('watcher', watcher.text)
+        rd.set('avatar', avatar)
+        rd.set('repo_desc', repo_desc)
+    else:
+        fork = rd.get('fork')
+        watcher = rd.get('watcher')
+        avatar = rd.get('avatar')
+        repo_desc = rd.get('repo_desc')
+    return jsonify({'star': star,
+                    'fork': fork,
+                    'watcher': watcher,
+                    'avatar': avatar,
+                    'repo_desc': repo_desc
                     })
 
 

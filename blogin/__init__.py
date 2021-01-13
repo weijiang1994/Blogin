@@ -238,7 +238,6 @@ def register_cmd(app: Flask):
         for blog in blogs:
             current_year = blog.create_time.year
             current_month = blog.create_time.month
-            print('当前年份{},当前月份{}'.format(current_year, current_month))
             # 如果当前年份不存在,那么当前月份也不存在
             if not archives.get(current_year):
                 # 记录当前年份以及当前月份
@@ -255,7 +254,6 @@ def register_cmd(app: Flask):
                     # 年月都存在则直接将数据拼接到后面
                     archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                           str(blog.create_time).split(' ')[0][5:]])
-            print(archives)
 
 
 def register_log(app: Flask):
