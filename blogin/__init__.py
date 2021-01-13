@@ -115,7 +115,7 @@ def scheduler_init(app):
     """
     if platform.system() != 'Windows':
         fcntl = __import__("fcntl")
-        f = open(basedir+'/scheduler.lock', 'wb')
+        f = open(basedir + '/scheduler.lock', 'wb')
         try:
             fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
             aps.init_app(app)
@@ -131,7 +131,7 @@ def scheduler_init(app):
         atexit.register(unlock)
     else:
         msvcrt = __import__('msvcrt')
-        f = open(basedir+'scheduler.lock', 'wb')
+        f = open(basedir + 'scheduler.lock', 'wb')
         try:
             msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
             aps.init_app(app)
@@ -234,17 +234,15 @@ def register_cmd(app: Flask):
     @app.cli.command()
     def archive():
         blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
-        categories = BlogType.query.all()
         archives = {}
-        flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
-        plans = Plan.query.filter_by(is_done=0).all()
         for blog in blogs:
             current_year = blog.create_time.year
             current_month = blog.create_time.month
+            print('当前年份{},当前月份{}'.format(current_year, current_month))
             # 如果当前年份不存在,那么当前月份也不存在
             if not archives.get(current_year):
                 # 记录当前年份以及当前月份
-                archives.setdefault(current_year, {current_month: []})
+                archives[current_year] = {current_month: []}
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
             else:
@@ -259,10 +257,11 @@ def register_cmd(app: Flask):
                                                                           str(blog.create_time).split(' ')[0][5:]])
         print(archives)
 
+
 def register_log(app: Flask):
     app.logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler = RotatingFileHandler(basedir+'/logs/blogin.log', maxBytes=10 * 1024 * 1024, backupCount=10)
+    file_handler = RotatingFileHandler(basedir + '/logs/blogin.log', maxBytes=10 * 1024 * 1024, backupCount=10)
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
     if not app.debug:
