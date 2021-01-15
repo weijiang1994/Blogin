@@ -48,7 +48,7 @@ def index():
 def change_theme(theme_name):
     if theme_name not in current_app.config['BLOG_THEMES'].keys():
         abort(404)
-    response = redirect(url_for('.index'))
+    response = redirect(request.referrer)
     response.set_cookie('blog_theme', current_app.config['BLOG_THEMES'].get(theme_name), max_age=30 * 24 * 60 * 60)
     return response
 
@@ -229,19 +229,38 @@ def timeline():
 # noinspection PyTypeChecker
 @blog_bp.route('/load-github/', methods=['POST'])
 def load_github():
+    theme = request.form.get('theme')
+
     star = rd.get('star')
     if star is None:
-        star, fork, watcher, user_info, repo_info = github_social()
+        star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info = github_social()
         avatar = user_info.json()['avatar_url']
         repo_desc = repo_info.json()['description']
+        # 获取浅色主题的shield
         rd.set('star', star.text)
         rd.set('fork', fork.text)
         rd.set('watcher', watcher.text)
+
+        # 获取深色主题的shield
+        rd.set('star_dark', star_dark.text)
+        rd.set('fork_dark', fork_dark.text)
+        rd.set('watcher_dark', watcher_dark.text)
+
         rd.set('avatar', avatar)
         rd.set('repo_desc', repo_desc)
+        star = star.text
+
+        if theme == 'dark':
+            star = star_dark.text
     else:
-        fork = rd.get('fork')
-        watcher = rd.get('watcher')
+        if theme == 'dark':
+            fork = rd.get('fork_dark')
+            watcher = rd.get('watcher_dark')
+            star = rd.get('star_dark')
+        else:
+            fork = rd.get('fork')
+            watcher = rd.get('watcher')
+
         avatar = rd.get('avatar')
         repo_desc = rd.get('repo_desc')
     return jsonify({'star': star,

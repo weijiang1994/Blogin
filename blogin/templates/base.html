@@ -15,8 +15,10 @@
         <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
             <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+            <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}" >
         {% else %}
             <link rel="stylesheet" href="{{ url_for('static', filename='css/darkly.bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}" >
         {% endif %}
         <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
         <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -37,8 +39,8 @@
     </head>
 {% endblock %}
 {% block nav %}
-    <nav class="navbar navbar-expand-lg bg-light navbar-light justify-content-between">
-        <a class="navbar-brand" href="/">Blogin</a>
+    <nav class="navbar navbar-expand-lg bg-nav justify-content-between">
+        <a class="navbar-brand nav-text" href="/">Blogin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -56,23 +58,29 @@
             </form>
             {% if not current_user.is_authenticated %}
                 <ul class="navbar-nav f-17">
-                    <li class="nav-item"><a class="nav-link" href="/auth/login/">登录</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/auth/register/">注册</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/login/">登录</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/register/">注册</a></li>
                 </ul>
             {% else %}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="欢迎回来,{{ current_user.username }}~">
+                        <a class="nav-link dropdown-toggle nav-text" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="欢迎回来,{{ current_user.username }}~">
                             <img class="avatar" src="{{ current_user.avatar }}" alt={{ current_user.username }}>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mt-0 rounded-0 border-0" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item pl-3" href="/accounts/profile/{{ current_user.id }}/"><i class="fa fa-fw fa-user mr-2"></i>个人资料</a>
+                            <a class="dropdown-item pl-3 " href="/accounts/profile/{{ current_user.id }}/"><i class="fa fa-fw fa-user mr-2"></i>个人资料</a>
                             {% if ntf_counts %}
                                 <a href="/accounts/profile" class="dropdown-item pl-3"><i class="fa fa-fw fa-bell mr-2"></i>消息 <span class="badge badge-info">{{ ntf_counts }}</span>
                             {% endif %}
                             {% if current_user.role_id == 1 %}
                                 <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i class="fa fa-fw fa-magnet mr-2"></i>后台管理</a>
                             {% endif %}
+                            {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
+                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o mr-2"></i>夜间模式</a>
+                            {% else %}
+                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o mr-2"></i>日间模式</a>
+                            {% endif %}
+
                             </a>
                             <a class="dropdown-item pl-3" href="/auth/logout"><i class="fa fa-fw fa-sign-out mr-2"></i>退出</a>
                         </div>
@@ -80,19 +88,18 @@
                 </ul>
             {% endif %}
         </div>
-
     </nav>
 {% endblock %}
 {% block content %}
 {% endblock %}
 {% block footer %}
-    <footer class="container-fluid mt-4 py-0 bg-light">
+    <footer class="container-fluid mt-4 py-0 bg-footer">
         <div class="card-body text-center px-0 f-14">
             <p class="card-text mb-1">Copyright&nbsp;©&nbsp;<span id="year-info">2020</span>
-                <a href="https://github.com/weijiang1994" class="gray-a"  target="_blank" title="博客作者的Github">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
+                <a href="https://github.com/weijiang1994" class="text-decoration-none footer-a"  target="_blank" title="博客作者的Github">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
             </p>
             <p class="mb-0">
-                <a href="http://beian.miit.gov.cn/" class="gray-a"  target="_blank">湘ICP备2020018236号-1</a>&nbsp;<span id="web-day"> 网站已续航 900 天</span>
+                <a href="http://beian.miit.gov.cn/" class="text-decoration-none footer-a"  target="_blank">湘ICP备2020018236号-1</a>&nbsp;<span id="web-day"> 网站已续航 900 天</span>
             </p>
             <script>
                 function getNewYear(){

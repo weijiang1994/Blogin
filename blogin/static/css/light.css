@@ -1,0 +1,115 @@
+.blog-content-brief-div{
+    background-color: #eeeeee;
+    border-radius: 5px;
+}
+
+
+.bg-nav, .bg-footer{
+    background-color: #f8f9fa!important;
+    color: #999999;
+}
+
+.nav-text{
+    color: #999999;
+}
+.nav-text:hover{
+    color: #777777;
+}
+
+.nav-active{
+    color: #777777;
+}
+
+.blog-content-div {
+    margin: 10px 0px 10px 0px;
+    padding: 10px 5px 10px 5px;
+    border-radius: 5px;
+    border: .1rem solid #ebebeb;
+    background-color: rgb(239 239 239 / 0.3);
+}
+
+.introduce-h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    padding: 0 10px;
+    border-left: 5px solid #20c997;
+    background-color: #f7f7f7;
+    line-height: 2em;
+}
+
+@media screen and (min-width: 1367px){
+    .history-fixed-div {
+        position: fixed;
+        top: 6.5em;
+        user-select: none;
+        left: calc((100vw - 1000px)/2 - 330px);
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        background: rgb(239 239 239 / 0.3);
+        width: 15em;
+    }
+}
+@media screen and (max-width: 1660px) {
+    .history-fixed-div{
+        display: none;
+    }
+}
+
+/*自定义CKEditor 渲染样式*/
+blockquote {
+    font: 14px/22px normal helvetica, sans-serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    padding: 10px 10px 10px 15px;
+    border-left: 3px solid #70b8f0;
+    background-color:rgba(0,132,255,.08);
+    border-radius: 0px 8px 8px 0px ;
+}
+
+.marker{
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,.05);
+    border-radius: 6px;
+}
+
+article>h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 10px 0 10px 0;
+    padding: 0 10px;
+    border-left: 5px solid #20c997;
+    background-color: #f7f7f7;
+    line-height: 2em;
+}
+
+article>h2 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #28a745;
+}
+
+article>h3 {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #28a745;
+}
+
+blockquote>p {
+    font: 14px/22px normal helvetica, sans-serif;
+    margin: 5px 0px 5px 0px;
+    font-style:italic;
+}
+
+.login-hint {
+    background-color: #ddddee;
+    border-radius: 5px;
+}
