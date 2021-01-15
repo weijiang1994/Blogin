@@ -58,12 +58,12 @@
     博客归档
 {% endblock %}
 {% block content %}
-    <main style="background: #eeeeee">
+    <main>
         <div class="container">
             {% include "_flash.html" %}
             <div class="row">
                 <div class="col-md-8">
-                    <div style="background: white;margin-top: 10px;" class="card-body f-16 archive">
+                    <div class="card-body f-16 archive blog-content-brief-div mt-2">
                         <ul class="pl-4 timeline">
                             {% for year in years %}
                                 <li class="timeline-items"><h4>{{ year }}</h4>

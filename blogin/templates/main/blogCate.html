@@ -3,13 +3,13 @@
     {{ cate.name }}分类下所有文章
 {% endblock %}
 {% block content %}
-    <main style="background: #e3e3e3">
+    <main>
         {{ moment.include_moment() }}　　
         {{ moment.locale(auto_detect=True) }}
-        <div class="container">
+        <div class="container mt-2">
             <div class="row">
-                <div style="margin-top: 10px" class="col-md-8">
-                    <div class="description bg-white px-3 pt-3 pb-1">
+                <div class="col-md-8">
+                    <div class="description px-3 pt-3 pb-1 blog-content-brief-div">
                         <p class="float-right mb-0">共<span class="mx-2 text-info">{{ blogs|length }}</span>篇</p>
                         <h5 class="f-17"><strong>文章分类：{{ cate.name }}</strong></h5>
                         <p style="padding-top: 8px" class="f-16">{{ cate.description }}</p>
@@ -17,7 +17,7 @@
                     <div class="summary-list">
                         {% for blog in blogs %}
                             {% if blog.delete_flag == 1 %}
-                                <div style="background: white; border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div">
+                                <div style="border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div">
                                     <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
                                         <a href="/blog/article/{{ blog.id }}/" target="_blank">
                                             <img class="w-100 article-img" src="{{ blog.pre_img }}" alt="{{ blog.title }}">
@@ -50,25 +50,4 @@
             </div>
         </div>
     </main>
-    <script>
-        // 打开页面自动加载
-        $(function () {
-            $(document).ready(function () {
-                getOne();
-            });
-        })
-
-        // 获取每日一句
-        function getOne(){
-            $.ajax({
-                type: "GET",
-                url: "http://api.youngam.cn/api/one.php",
-                dataType: "json",
-                success: function(result){
-                    $("#oneWord").text(result['data'][0]['text']+'  ———— 「ONE · 一个」');
-                    return false;
-                }
-            });
-        }
-    </script>
 {% endblock %}

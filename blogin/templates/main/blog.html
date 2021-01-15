@@ -3,30 +3,19 @@
     {{ super() }}
     {{ share.load() }}
     {{ ckeditor.load_code_theme() }}
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docoo.css') }}" >
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/monokai.css') }}" >
+    {% endif %}
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
     <link type="text/css" href="/static/css/style.css">
     <style>
         .ck-editor__editable {
             min-height: 100px;
+            color: #0a0a0a;
         }
-        @media screen and (min-width: 1367px){
-            .history-fixed-div {
-                position: fixed;
-                top: 6.5em;
-                user-select: none;
-                left: calc((100vw - 1000px)/2 - 330px);
-                margin: 5px;
-                padding: 10px;
-                border-radius: 5px;
-                background: #ffffff;
-                width: 15em;
-            }
-        }
-        @media screen and (max-width: 1660px) {
-            .history-fixed-div{
-                display: none;
-            }
-        }
+
         .p-line-bottom{
             border-bottom: 1px solid #cccccc;
         }
@@ -37,7 +26,7 @@
     {{ blog.title }}
 {% endblock %}
 {% block content %}
-    <main style="background: #e3e3e3">
+    <main>
         {% if histories %}
             <div class="history-fixed-div">
                 <p class="text-muted p-line-bottom"><b>历史修改版本</b></p>
@@ -48,7 +37,6 @@
                         </li>
                     {% endfor %}
                 </ol>
-
             </div>
         {% endif %}
 
@@ -61,8 +49,7 @@
                 </div>
             {% endfor %}
             <nav style="padding-top: 10px" aria-label="breadcrumb">
-
-                <ol class="breadcrumb bg-white">
+                <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a class="text-info-a" href="/">首页</a>
                     </li>

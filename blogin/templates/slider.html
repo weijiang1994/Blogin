@@ -1,16 +1,14 @@
 <!-- 每日一句 -->
 <!--suppress ALL -->
-<div class="card mb-3 mt-2">
+<div class="card mb-3">
     <div class="card-header p-2 f-17">
         <div class="d-flex">
             <b class="flex-grow-1"><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
-            <div class="d-none">
-                {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
-                    <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o"></i></a>
-                {% else %}
-                    <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o"></i></a>
-                {% endif %}
-            </div>
+            {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o"></i></a>
+            {% else %}
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o"></i></a>
+            {% endif %}
         </div>
     </div>
     <div id="oneWord" class="card-body p-2 f-15">
@@ -31,7 +29,7 @@
             </div>
             <a class="btn btn-sm btn-light h-25" id="githubStar" hidden="hidden" href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>
         </div>
-        <div id="shield-svg" class="text-left pr-1">
+        <div id="shield-svg" class="text-left pr-1 d-flex">
             <i class="fa fa-spinner fa-spin f-hint"></i>
         </div>
     </div>
@@ -130,6 +128,7 @@
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/jquery.cookies.js') }}"></script>
 <script>
     // 打开页面自动加载
     $(function () {
@@ -150,14 +149,16 @@
     }
 
     function loadGithub(){
+        let theme = $.cookie('blog_theme');
         $.ajax({
             type: 'post',
             url: '/load-github/',
+            data: {'theme': theme},
             success: function (res){
                 $(".f-hint").hide();
-                $("#shield-svg").append(res.star);
-                $("#shield-svg").append(res.fork);
-                $("#shield-svg").append(res.watcher);
+                $("#shield-svg").append('<div class="mr-1">'+res.star+'</div>');
+                $("#shield-svg").append('<div class="mr-1">'+res.fork+'</div>');
+                $("#shield-svg").append('<div class="mr-1">'+res.watcher+'</div>');
                 $('#repoDesc').text(res.repo_desc);
                 $("#githubAvatar").attr('src', res.avatar);
                 $("#githubStar").attr('hidden', false);
