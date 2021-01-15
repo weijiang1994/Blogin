@@ -44,19 +44,24 @@ def auto_insert_data():
 @aps.task('interval', id='update_github_info', minutes=5)
 def update_github_info():
     try:
-        star, fork, watcher, user_info, repo_info = github_social()
-        print(datetime.datetime.now())
+        star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info = github_social()
         if star.status_code == 200:
             rd.set('star', star.text)
         if fork.status_code == 200:
             rd.set('fork', fork.text)
         if watcher.status_code == 200:
             rd.set('watcher', watcher.text)
+        if star_dark.status_code == 200:
+            rd.set('star_dark', star_dark.text)
+        if fork_dark.status_code == 200:
+            rd.set('fork_dark', fork_dark.text)
+        if watcher_dark.status_code == 200:
+            rd.set('watcher_dark', watcher_dark.text)
         if user_info.status_code == 200:
             rd.set('avatar', user_info.json()['avatar_url'])
         if repo_info.status_code == 200:
             rd.set('repo_desc', repo_info.json()['description'])
     except:
         import traceback
-        with open(basedir + 'logs/task.log', 'a') as f:
+        with open(basedir + '/logs/task.log', 'a') as f:
             f.write(traceback.print_exc())

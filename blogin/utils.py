@@ -50,6 +50,11 @@ MONTH = {1: '01-31',
 GITHUB_STAR = 'https://img.shields.io/github/stars/weijiang1994/Blogin?style=social'
 GITHUB_FORK = 'https://img.shields.io/github/forks/weijiang1994/Blogin?style=social'
 GITHUB_WATCHER = 'https://img.shields.io/github/watchers/weijiang1994/Blogin?style=social'
+
+GITHUB_STAR_DARK = 'https://img.shields.io/github/stars/weijiang1994/Blogin?style=flat-square'
+GITHUB_FORK_DARK = 'https://img.shields.io/github/forks/weijiang1994/Blogin?style=flat-square'
+GITHUB_WATCHER_DARK = 'https://img.shields.io/github/watchers/weijiang1994/Blogin?style=flat-square'
+
 USER_API = 'https://api.github.com/users/weijiang1994'
 REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
 
@@ -58,9 +63,12 @@ def github_social():
     star = requests.get(GITHUB_STAR)
     fork = requests.get(GITHUB_FORK)
     watcher = requests.get(GITHUB_WATCHER)
+    star_dark = requests.get(GITHUB_STAR_DARK)
+    fork_dark = requests.get(GITHUB_FORK_DARK)
+    watcher_dark = requests.get(GITHUB_WATCHER_DARK)
     user_info = requests.get(USER_API)
     repo_info = requests.get(REPO_API)
-    return star, fork, watcher, user_info, repo_info
+    return star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info
 
 
 def update_contribution():

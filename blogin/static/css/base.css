@@ -137,12 +137,7 @@ main {
     margin: 5px 0px 5px 0px;
 }
 
-.blog-content-div{
-    margin: 10px 0px 10px 0px;
-    padding: 10px 5px 10px 5px;
-    border-radius: 5px;
-    background: white;
-}
+
 
 .blog-title{
     color: #17a2b8!important;
@@ -150,15 +145,6 @@ main {
     font-weight: bold;
 }
 
-.introduce-h1 {
-    font-size: 22px;
-    font-weight: 600;
-    margin: 10px 0 10px 0;
-    padding: 0 10px;
-    border-left: 5px solid #20c997;
-    background-color: #f7f7f7;
-    line-height: 2em;
-}
 
 .summary-list.avatar {
     width:1.2rem;
@@ -227,4 +213,12 @@ main {
     border-left: 3px solid #20c997;
     padding-left: 3px;
     font-weight: bold;
+}
+
+.footer-a{
+    color: inherit;
+}
+
+.footer-a:hover{
+    color: inherit;
 }

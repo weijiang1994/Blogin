@@ -4,7 +4,7 @@
     Home
 {% endblock %}
 {% block content %}
-    <main style="background: #e3e3e3">
+    <main>
         {{ moment.include_moment() }}　　
         {{ moment.locale(auto_detect=True) }}
         <br>
@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <!-- 网站个人资料 -->
-                    <div class="card mb-3 mt-2">
+                    <div class="card mb-3">
                         <div class="text-muted card-header ">
                             <strong>Blogin</strong>的个人资料
                         </div>
@@ -36,7 +36,7 @@
                     <!-- 博客列表 -->
                     <div class="summary-list">
                         {% for blog in blogs %}
-                            <div style="background: white; border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div">
+                            <div class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div">
                                 <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
                                     <a href="/blog/article/{{ blog.id }}/">
                                         <img class="w-100 article-img" src="{{ blog.pre_img }}" alt="{{ blog.title }}">

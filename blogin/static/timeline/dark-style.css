@@ -17,7 +17,6 @@ html * {
 body {
   font-size: 100%;
   color: #7f8c97;
-  background-color: #e9f0f5;
 }
 
 
@@ -63,7 +62,7 @@ Main components
   left: 18px;
   height: 100%;
   width: 4px;
-  background: #d7e4ed;
+  background: #303030;
 }
 @media only screen and (min-width: 1170px) {
   #cd-timeline {
@@ -110,7 +109,8 @@ Main components
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+  /*box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);*/
+  box-shadow: 0 0 0 4px #484444, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-img img {
   display: block;
@@ -156,19 +156,22 @@ Main components
 .cd-timeline-content {
   position: relative;
   margin-left: 60px;
-  background: white;
+  background: #303030;
   border-radius: 0.25em;
   padding: 1em;
-  box-shadow: 0 3px 0 #d7e4ed;
+  box-shadow: 0 3px 0 #202020;
 }
 .cd-timeline-content:after {
   content: "";
   display: table;
   clear: both;
+  color: #303030;
 }
+
 .cd-timeline-content h2 {
   color: #303e49;
 }
+
 .cd-timeline-content p, .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
   font-size: 13px;
   font-size: 0.8125rem;
@@ -196,6 +199,7 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
   padding: .8em 0;
   opacity: 0;
 }
+
 .cd-timeline-content::before {
   content: '';
   position: absolute;
@@ -204,8 +208,9 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
   height: 0;
   width: 0;
   border: 7px solid transparent;
-  border-right: 7px solid white;
+  border-right: 7px solid #303030;
 }
+
 @media only screen and (min-width: 768px) {
   .cd-timeline-content h2 {
     font-size: 20px;
@@ -230,7 +235,8 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
     top: 24px;
     left: 100%;
     border-color: transparent;
-    border-left-color: white;
+    border-left-color: #303030;
+
   }
   .cd-timeline-content .cd-read-more {
     float: left;
@@ -251,7 +257,7 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
     left: auto;
     right: 100%;
     border-color: transparent;
-    border-right-color: white;
+    border-right-color: #303030;
   }
   .cd-timeline-block:nth-child(even) .cd-timeline-content .cd-read-more {
     float: right;
