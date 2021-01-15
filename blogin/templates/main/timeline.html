@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'timeline/style.css') }}" >
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'timeline/style.css') }}" >
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'timeline/dark-style.css') }}" >
+    {% endif %}
+
 {% endblock %}
 {% block title %}
     MileStone
@@ -14,7 +19,7 @@
                 <section id="cd-timeline" class="cd-container">
                     {% for timeline in timelines %}
                         <div class="cd-timeline-block">
-                            <div class="cd-timeline-img cd-location ">
+                            <div class="cd-timeline-img cd-location">
                                 <img src="../static/img/cd-icon-location.svg">
                             </div>
                             <div class="cd-timeline-content">

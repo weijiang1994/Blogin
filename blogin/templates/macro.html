@@ -74,7 +74,7 @@
                 {{ body }}
             </div>
             <div class="card-footer">
-                <button class="btn btn-secondary float-right"><a style="color: inherit; text-decoration: none" href="/tool/{{ link }}/">开始使用</a></button>
+                <button class="btn btn-success float-right"><a style="color: inherit; text-decoration: none" href="/tool/{{ link }}/">开始使用</a></button>
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
 
 {% macro tool_bread(name, s_name) %}
     <nav style="padding-top: 10px" aria-label="breadcrumb">
-        <ol class="breadcrumb bg-white">
+        <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a class="text-info-a" href="/">首页</a>
             </li>
@@ -195,7 +195,7 @@
 
 {% macro nav_item(endpoint, text, fa) %}
     <li class="nav-item" style="margin-right: 50px;">
-        <a class="nav-link {% if request.endpoint and request.endpoint==endpoint %}active{% endif %}" href="{{ url_for(endpoint) }}">
+        <a class="nav-link nav-text {% if request.endpoint and request.endpoint==endpoint %}nav-active{% endif %}" href="{{ url_for(endpoint) }}">
             <i class="{{ fa }}"></i>
             {{ text }}
         </a>
@@ -204,7 +204,7 @@
 
 {% macro dropmenu(endpoint) %}
     <li class="nav-item dropdown {% if request.endpoint == endpoint %}active{% endif %}">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link nav-text dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-subway"></i> SOUL
         </a>
         <div class="dropdown-menu mt-0 rounded-0 border-0" aria-labelledby="navbarDropdown">
