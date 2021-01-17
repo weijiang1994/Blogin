@@ -31,7 +31,7 @@
                             <img alt="{{ photo.title }}" class="card-img-top portrait" src="{{ photo.save_path_s }}">
                         </a>
                         <div class="card-body">
-                            <a class="photo-link" href="/gallery/photo/{{ photo.id }}"> {{ photo.title }} </a>
+                            <a class="text-decoration-none text-muted" href="/gallery/photo/{{ photo.id }}"> {{ photo.title }} </a>
                             <div class="row">
                                 <div class="col-lg-4">
                                     <i class="fa fa-comment"></i> {{ photo.comments|length }}
