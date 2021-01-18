@@ -110,3 +110,9 @@ blockquote p {
     background-color: #424242d6;
     border-radius: 5px;
 }
+
+.m-block-text{
+    background-color: #a4a1a126!important;
+    border-radius: 3px;
+    border: 0 solid !important;
+}
