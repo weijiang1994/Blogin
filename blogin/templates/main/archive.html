@@ -59,11 +59,11 @@
 {% endblock %}
 {% block content %}
     <main>
-        <div class="container">
+        <div class="container mt-2">
             {% include "_flash.html" %}
             <div class="row">
                 <div class="col-md-8">
-                    <div class="card-body f-16 archive blog-content-brief-div mt-2">
+                    <div class="card-body f-16 archive blog-content-brief-div">
                         <ul class="pl-4 timeline">
                             {% for year in years %}
                                 <li class="timeline-items"><h4>{{ year }}</h4>
