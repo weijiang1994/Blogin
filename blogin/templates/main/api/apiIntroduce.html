@@ -2,6 +2,11 @@
 {% block head %}
     {{ super() }}
     {{ ckeditor.load_code_theme() }}
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docoo.css') }}" >
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/monokai.css') }}" >
+    {% endif %}
     <link type="text/css" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@22.0.0/build/ckeditor.min.js"></script>
     <style>
