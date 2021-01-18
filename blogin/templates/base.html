@@ -15,14 +15,16 @@
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}" >
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
-            <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+{#            <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">#}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.0/bootstrap4/bootstrap.4.3.1.min.css">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}" >
         {% else %}
             <link rel="stylesheet" href="{{ url_for('static', filename='css/darkly.bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}" >
         {% endif %}
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
-        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{#        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>#}
+        <script src="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.0/bootstrap4/bootstrap.4.3.1.min.js"></script>
         {#        <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
         {#        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}#}
