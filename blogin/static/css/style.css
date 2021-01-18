@@ -221,11 +221,6 @@
     margin-top: 30px;
 }
 
-.comment-body {
-    margin-left: 60px;
-    min-height: 50px;
-}
-
 .comment-thumbnail {
     position: absolute;
 }
