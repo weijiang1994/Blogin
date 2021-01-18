@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% from "macro.html" import nav_item, dropmenu with context %}
+<!--suppress ALL -->
 <html lang="zh-hans">
 {% block head %}
     <head>
@@ -25,7 +26,7 @@
         {#        <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
         {#        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}#}
-        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.26.0/moment.min.js') }}
+        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js') }}
         <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
 
         <style>
