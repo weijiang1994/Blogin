@@ -3,6 +3,8 @@
 {% block head%}
     {{super()}}
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+{#    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>#}
+
     <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/backend.css') }}">
