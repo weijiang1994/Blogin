@@ -3,7 +3,7 @@
     {{ super() }}
     {{ ckeditor.load_code_theme() }}
     <link type="text/css" href="/static/css/style.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@22.0.0/build/ckeditor.min.js"></script>
     <style>
         .fixed-div-right {
             position: fixed;
@@ -23,8 +23,8 @@
     个人网站API介绍
 {% endblock %}
 {% block content %}
-    <main style="background: #eeeeee">
-        <div class="fixed-div-right">
+    <main>
+        <div class="history-fixed-div">
             <h4><b>目录</b></h4>
             <ul>
                 <li><a class="text-info-a" href="#soul">毒鸡汤</a></li>
@@ -33,7 +33,7 @@
             </ul>
         </div>
         <br>
-        <div style="background: white" class="container">
+        <div class="container blog-content-div">
             <br>
             <h4 class="text-center"><b>网站API使用介绍</b></h4>
             <hr>
