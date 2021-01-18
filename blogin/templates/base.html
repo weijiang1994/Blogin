@@ -6,13 +6,13 @@
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - Blogin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}" >
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ck.css') }}" >
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}" >
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
             <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}" >
@@ -20,10 +20,12 @@
             <link rel="stylesheet" href="{{ url_for('static', filename='css/darkly.bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}" >
         {% endif %}
-        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
         <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+        {#        <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+        {#        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}#}
+        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.26.0/moment.min.js') }}
         <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
 
         <style>
