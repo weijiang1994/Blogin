@@ -33,13 +33,15 @@
             </ul>
         </div>
         <br>
-        <div class="container blog-content-div">
+        <div class="container">
             <br>
             <h4 class="text-center"><b>网站API使用介绍</b></h4>
             <hr>
-            <article>
-                {{ blog.content|safe }}
-            </article>
+            <div class=" blog-content-div">
+                <article>
+                    {{ blog.content|safe }}
+                </article>
+            </div>
         </div>
     </main>
 {% endblock %}
