@@ -30,6 +30,7 @@ parts/
 sdist/
 var/
 wheels/
+res/config.ini
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
