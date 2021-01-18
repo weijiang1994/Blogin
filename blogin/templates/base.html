@@ -15,20 +15,15 @@
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
-            {#            <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">#}
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/bootstrap.4.3.1.min.css">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}">
         {% else %}
-            {#            <link rel="stylesheet" href="{{ url_for('static', filename='css/darkly.bootstrap.min.css') }}">#}
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/darkly.bootstrap.min.css">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}">
         {% endif %}
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
-        {#        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>#}
         <script src="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/bootstrap.4.3.1.min.js"></script>
-        {#        <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-        {#        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}#}
         {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js')}}
         <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
         <style>
@@ -81,9 +76,9 @@
                                 <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i class="fa fa-fw fa-magnet mr-2"></i>后台管理</a>
                             {% endif %}
                             {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
-                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o mr-2"></i>夜间模式</a>
+                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-fw fa-moon-o mr-2"></i>夜间模式</a>
                             {% else %}
-                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o mr-2"></i>日间模式</a>
+                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-fw fa-sun-o mr-2"></i>日间模式</a>
                             {% endif %}
 
                             </a>
