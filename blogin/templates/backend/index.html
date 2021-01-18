@@ -1,7 +1,7 @@
 {% extends "backend/base.html" %}
 {% block head %}
     {{ super() }}
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/3.8.5/echarts-en.common.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
     <style>
         .card-body{
             border: #cccccc 2px solid;
@@ -9,7 +9,6 @@
             padding: 15px;
             margin:20px 0 20px 0;
         }
-
         .card-body:hover{
             transform: scale(1.01);
         }
