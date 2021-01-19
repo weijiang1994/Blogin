@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 gunicorn_conf.py
+test.txt
 # Distribution / packaging
 history
 sample/
