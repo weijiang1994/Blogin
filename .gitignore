@@ -5,7 +5,8 @@ __pycache__/
 
 # C extensions
 *.so
-gun.py
+gunicorn_conf.py
+test.txt
 # Distribution / packaging
 history
 sample/
