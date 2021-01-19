@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+gun.py
 # Distribution / packaging
 history
 sample/
@@ -30,6 +30,7 @@ parts/
 sdist/
 var/
 wheels/
+res/config.ini
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
