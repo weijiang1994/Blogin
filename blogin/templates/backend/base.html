@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 {% extends "bootstrap/base.html" %}
 {% block head%}
-    {{super()}}
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-{#    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>#}
-
+    <!--suppress ALL -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/backend.css') }}">
@@ -117,4 +117,6 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block content %}
 {% endblock %}
