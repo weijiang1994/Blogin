@@ -12,11 +12,12 @@ from blogin.extension import db, aps, rd
 import datetime
 from blogin.utils import github_social
 from blogin.setting import basedir
+import traceback
 
 
 def write_task_log(info):
-    with open(basedir + '/logs/log.task', 'a') as f:
-        f.write(str(datetime.datetime.now()) + " " + info)
+    with open(basedir + '/logs/task.log', 'a') as f:
+        f.write(str(datetime.datetime.now()) + " " + info + '\n')
 
 
 @aps.task('cron', id='do_job_3', day='*', hour='00', minute='00', second='50')
@@ -68,6 +69,29 @@ def update_github_info():
         if repo_info.status_code == 200:
             rd.set('repo_desc', repo_info.json()['description'])
         write_task_log('更新github仓库信息成功!')
-    except:
-        import traceback
-        write_task_log(str(traceback.print_exc()))
+    except Exception as e:
+        write_task_log('更新github仓库信息失败!失败原因:' + str(e.args) + '\n' +
+                       str(traceback.format_exc()))
+
+
+@aps.task('cron', id='update_baidu_token', day='11, 20', hour='15', minute='43', second='05')
+def update_bd_token():
+    import configparser
+    import requests
+    c = configparser.ConfigParser()
+    c.read(basedir + '/res/config.ini')
+    ak = c.get('baidu', 'ak')
+    sk = c.get('baidu', 'sk')
+    url = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s' % (
+        ak, sk)
+    try:
+        res = requests.get(url)
+        if res.status_code == 200:
+            token = res.json().get('access_token')
+            c.set('baidu', 'token', token)
+            c.write(open(basedir + '/res/config.ini', 'r+'))
+            write_task_log('更新百度OCR token成功!')
+        else:
+            write_task_log('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
+    except Exception as e:
+        write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
