@@ -14,6 +14,11 @@ from blogin.utils import github_social
 from blogin.setting import basedir
 
 
+def write_task_log(info):
+    with open(basedir + '/logs/log.task', 'a') as f:
+        f.write(str(datetime.datetime.now()) + " " + info)
+
+
 @aps.task('cron', id='do_job_3', day='*', hour='00', minute='00', second='50')
 def auto_insert_data():
     """
@@ -62,7 +67,7 @@ def update_github_info():
             rd.set('avatar', user_info.json()['avatar_url'])
         if repo_info.status_code == 200:
             rd.set('repo_desc', repo_info.json()['description'])
+        write_task_log('更新github仓库信息成功!')
     except:
         import traceback
-        with open(basedir + '/logs/task.log', 'a') as f:
-            f.write(traceback.print_exc())
+        write_task_log(str(traceback.print_exc()))
