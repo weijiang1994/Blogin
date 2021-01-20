@@ -66,17 +66,3 @@ def update_github_info():
         import traceback
         with open(basedir + '/logs/task.log', 'a') as f:
             f.write(traceback.print_exc())
-
-
-# 每月10号，20号自动更新百度AI平台secret key
-@aps.task('cron', id='update_baidu_ocr', day='10,20', hour='00', minute='00', second='50')
-def update_baidu_ocr():
-    with open(basedir + '.env') as f:
-        pass
-
-
-@aps.task('interval', id='test_job_eventlet', minutes=1)
-def test():
-    with open(basedir + 'test.txt', 'w') as f:
-        import datetime
-        f.write(str(datetime.datetime.now()))
