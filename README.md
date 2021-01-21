@@ -217,6 +217,12 @@
 ## 开始
 
 ### 依赖安装
+* Linux用户可以通过根目录的`install.sh`文件一键安装，如果出现错误也可以同Windows用户一样按照下面的步骤进行安装。
+   ```bash
+      cd Blogin
+      ./install.sh
+   ```
+
 
 1. 安装MySQL
     进入MySQL或者mariaDB官网下载对应系统的安装包，进行安装即可。Linux用户可以通过命令进行安装
