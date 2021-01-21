@@ -101,7 +101,7 @@ def blog_history(h_id):
     with open(bh.save_path, 'r', encoding='utf-8') as f:
         content = f.read()
     blog = Blog.query.get_or_404(bh.blog_id)
-    return render_template('main/blog_history.html', content=content, blog=blog)
+    return render_template('main/blog-history.html', content=content, blog=blog)
 
 
 @blog_bp.route('/loveme/')

@@ -6,12 +6,17 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
     <link type="text/css" href="/static/css/style.css">
     {{ moment.locale(auto_detect=True) }}
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docoo.css') }}" >
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/monokai.css') }}" >
+    {% endif %}
 {% endblock %}
 {% block title %}
     {{ blog.title }}
 {% endblock %}
 {% block content %}
-    <main style="background: #e3e3e3">
+    <main>
         <div class="container">
             {% include "_top.html" %}
             {% for message in get_flashed_messages(with_categories=True) %}
