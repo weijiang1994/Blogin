@@ -41,7 +41,7 @@
 @media screen and (min-width: 1367px){
     .history-fixed-div {
         position: fixed;
-        top: 6.5em;
+        top: 8.5em;
         user-select: none;
         left: calc((100vw - 1000px)/2 - 330px);
         margin: 5px;

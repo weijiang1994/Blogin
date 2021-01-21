@@ -37,8 +37,6 @@ read -p "please input mail server key" mail_key
 read -p "please input crsf secret" secret
 
 
-cd Blogin
-
 git clone https://github.com/weijiang1994/Blogin.git
 cd Blogin
 python3 -m venv venv
