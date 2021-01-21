@@ -6,7 +6,7 @@ read -p "请输入数据库主机名:" hostname
 read -p "请输入数据库端口号:" port
 read -p "请输入数据库连接用户名:" db_username
 read -p "请输入数据库连接密码:" db_password
-db_name = 'blog'
+db_name='blog'
 
 LOGIN_CMD="mysql -h${hostname} -P${port} -u${db_username} -p${db_password}"
 
