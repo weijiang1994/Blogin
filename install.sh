@@ -1,7 +1,10 @@
 #!/bin/bash
-#sudo apt-get install mysql-server-5.7
-#sudo apt-get install redis-server
-#sudo service redis-server start
+# 安装mysql、redis数据库并启动
+sudo apt-get install mysql-server-5.7
+sudo apt-get install redis-server
+sudo service redis-server start
+
+# 创建mysql数据库
 read -p "请输入数据库主机名:" hostname
 read -p "请输入数据库端口号:" port
 read -p "请输入数据库连接用户名:" db_username
