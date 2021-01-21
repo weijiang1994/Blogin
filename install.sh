@@ -2,10 +2,10 @@
 #sudo apt-get install mysql-server-5.7
 #sudo apt-get install redis-server
 #sudo service redis-server start
-read -p "please input mysql hostname:" hostname
-read -p "please input mysql port:" port
-read -p "please input mysql username:" db_username
-read -p "please input mysql password:" db_password
+read -p "请输入数据库主机名:" hostname
+read -p "请输入数据库端口号:" port
+read -p "请输入数据库连接用户名:" db_username
+read -p "请输入数据库连接密码:" db_password
 db_name = 'blog'
 
 LOGIN_CMD="mysql -h${hostname} -P${port} -u${db_username} -p${db_password}"
@@ -20,7 +20,6 @@ create_database() {
     create_db_sql="CREATE DATABASE IF NOT EXISTS ${db_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
     echo ${create_db_sql} | ${LOGIN_CMD}
 
-
     if [ $? -ne 0 ]
     then
         echo "create database ${db_name} failed..."
@@ -31,15 +30,51 @@ create_database() {
 }
 
 create_database
-read -p "please input mail server" mail_server
-read -p "please input mail username" mail_username
-read -p "please input mail server key" mail_key
-read -p "please input crsf secret" secret
+read -r -p "是否输入.env文件关键信息(需要准备好相关信息)? [Y/n] " input
+
+if [ $input == Y -o $input == y ]; then
+      read -p "请输入邮箱服务配置:" mail_server
+      read -p "请输入邮箱服务用户名:" mail_username
+      read -p "请输入邮箱服务key:" mail_key
+      read -p "请输入防跨域攻击secret:" secret
+      read -p "请输入github client id:" github_client_id
+      read -p "请输入github client secret:" github_client_secret
+    else
+      echo "跳过.env文件信息输入"
+fi
+
+# 创建文件并根据用户是否输入信息来填写或者保留空值
+if [ $input == y -o $input == Y ]; then
+cat>.env<<EOF
+MAIL_SERVER=$mail_server
+MAIL_USERNAME=$mail_username
+MAIL_PASSWORD=$mail_key
+SECRET_KEY=$secret
+DATABASE_USER=$db_username
+DATABASE_PWD=$db_password
+BAIDU_TRANS_APPID=''
+BAIDU_TRANS_KEY=''
+GITHUB_CLIENT_ID=$github_client_id
+GITHUB_CLIENT_SECRET=$github_client_secret
+EOF
+    else
+cat>.env<<EOF
+ MAIL_SERVER=''
+ MAIL_USERNAME=''
+ MAIL_PASSWORD=''
+ SECRET_KEY=''
+ DATABASE_USER=$db_username
+ DATABASE_PWD=$db_password
+ BAIDU_TRANS_APPID=''
+ BAIDU_TRANS_KEY=''
+ GITHUB_CLIENT_ID=''
+ GITHUB_CLIENT_SECRET=''
+EOF
+fi
 
 
-git clone https://github.com/weijiang1994/Blogin.git
-cd Blogin
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirments.txt -i https://pypi.douban.com/simple
+flask admin
 flask run
