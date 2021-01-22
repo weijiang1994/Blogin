@@ -7,6 +7,7 @@
 @Software: PyCharm
 """
 from blogin.models import Contribute, VisitStatistics, LikeStatistics, CommentStatistics
+from apscheduler.executors.base import BaseExecutor
 from flask import current_app
 from blogin.extension import db, aps, rd
 import datetime
@@ -48,7 +49,7 @@ def auto_insert_data():
 
 
 # noinspection PyBroadException
-@aps.task('interval', id='update_github_info', minutes=5)
+@aps.task('interval', id='update_github_info', max_instances=1, minutes=10)
 def update_github_info():
     try:
         star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info = github_social()
@@ -70,11 +71,11 @@ def update_github_info():
             rd.set('repo_desc', repo_info.json()['description'])
         write_task_log('更新github仓库信息成功!')
     except Exception as e:
-        write_task_log('更新github仓库信息失败!失败原因:' + str(e.args) + '\n' +
+        write_task_log('更新github仓库信息失败!失败原因:\n' + str(e.args) + '\n' +
                        str(traceback.format_exc()))
 
 
-@aps.task('cron', id='update_baidu_token', day='11, 20', hour='15', minute='43', second='05')
+@aps.task('cron', id='update_baidu_token', day='5, 20', hour='15', minute='43', second='05')
 def update_bd_token():
     import configparser
     import requests
@@ -95,3 +96,11 @@ def update_bd_token():
             write_task_log('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
     except Exception as e:
         write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
+
+
+@aps.task('interval', id='get_all_jobs', seconds=60*10)
+def get_all_jobs():
+    jobs = aps.get_jobs()
+    # exe = aps._scheduler._executors.get('default')
+    # print(exe._instances)
+    write_task_log(str(jobs))
