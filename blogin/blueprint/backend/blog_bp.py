@@ -13,7 +13,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States, BlogHistory
+from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path, update_contribution, get_md5
 from flask_login import login_required
@@ -53,6 +53,7 @@ def blog_create():
                    is_private=level - 1, state=state)
         cate.counts += 1
         update_contribution()
+
         db.session.add(blg)
         db.session.commit()
 

@@ -424,6 +424,8 @@ class Contribute(db.Model):
     date = db.Column(db.DATE, default=datetime.today(), comment='contribute date')
     contribute_counts = db.Column(db.INTEGER, default=0)
 
+    con_detail = db.relationship('ContributeDetail', back_populates='cont', cascade='all')
+
 
 class Plan(db.Model):
     __tablename__ = 'plan'
@@ -453,3 +455,15 @@ class One(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     content = db.Column(db.String(512), nullable=False, default='')
+
+
+class ContributeDetail(db.Model):
+    __tablename__ = 'contribute_detail'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    cont_id = db.Column(db.INTEGER, db.ForeignKey('contribute.id'))
+    timestamps = db.Column(db.DateTime, default=datetime.now().strftime('%H:%m:%S'))
+    title = db.Column(db.String(256), default='', nullable=False)
+    detail_link = db.Column(db.String(256), default='', nullable=False)
+
+    cont = db.relationship('Contribute', back_populates='con_detail')
