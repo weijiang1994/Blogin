@@ -273,5 +273,5 @@ def load_github():
 
 @blog_bp.route('/load-one/', methods=['POST'])
 def load_one():
-    res = requests.get('http://api.youngam.cn/api/one.php')
-    return jsonify({'one': res.json()['data'][0]['text']})
+    one = rd.get('one')
+    return jsonify({'one': one})
