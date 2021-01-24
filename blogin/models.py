@@ -467,3 +467,11 @@ class ContributeDetail(db.Model):
     detail_link = db.Column(db.String(256), default='', nullable=False)
 
     cont = db.relationship('Contribute', back_populates='con_detail')
+
+
+class OneSentence(db.Model):
+    __tablename__ = 'one_sentence'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    content = db.Column(db.String(512), default='', nullable=False)
+    day = db.Column(db.DATE, default=datetime.today())

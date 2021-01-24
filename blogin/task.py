@@ -6,7 +6,7 @@
 @File    : task.py
 @Software: PyCharm
 """
-from blogin.models import Contribute, VisitStatistics, LikeStatistics, CommentStatistics
+from blogin.models import Contribute, VisitStatistics, LikeStatistics, CommentStatistics, OneSentence
 from apscheduler.executors.base import BaseExecutor
 from flask import current_app
 from blogin.extension import db, aps, rd
@@ -21,6 +21,28 @@ def write_task_log(info):
         f.write(str(datetime.datetime.now()) + " " + info + '\n')
 
 
+@aps.task('cron', id='get_one', day='*', hour='00', minute='00', second='03')
+def get_one():
+    try:
+        with db.app.app_context():
+            date = datetime.date.today()
+            one = OneSentence.query.filter_by(day=date).first()
+            if not one:
+                import requests
+                from bs4 import BeautifulSoup
+                res = requests.get('http://wufazhuce.com/', timeout='30')
+                bs = BeautifulSoup(res.text, 'html.parser')
+                attr = {'class': 'fp-one-cita'}
+                d = bs.find_all('div', attrs=attr)
+                one = OneSentence(content=d[0].text, day=date)
+                db.session.add(one)
+                db.session.commit()
+                write_task_log('插入每日一句成功!')
+                rd.set('one', d[0].text)
+    except:
+        write_task_log('插入每日一句失败,错误原因:\n' + str(traceback.format_exc()))
+
+
 @aps.task('cron', id='do_job_3', day='*', hour='00', minute='00', second='50')
 def auto_insert_data():
     """
@@ -32,7 +54,6 @@ def auto_insert_data():
         visit = VisitStatistics.query.filter_by(date=date).first()
         lk = LikeStatistics.query.filter_by(date=date).first()
         com = CommentStatistics.query.filter_by(date=date).first()
-
         if not contribute:
             con = Contribute(contribute_counts=0, date=date)
             db.session.add(con)
@@ -98,9 +119,11 @@ def update_bd_token():
         write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
 
+"""
 @aps.task('interval', id='get_all_jobs', seconds=60*10)
 def get_all_jobs():
     jobs = aps.get_jobs()
     # exe = aps._scheduler._executors.get('default')
     # print(exe._instances)
     write_task_log(str(jobs))
+"""
