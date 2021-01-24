@@ -21,7 +21,7 @@ def write_task_log(info):
         f.write(str(datetime.datetime.now()) + " " + info + '\n')
 
 
-@aps.task('cron', id='get_one', day='*', hour='00', minute='00', second='03')
+@aps.task('cron', id='get_one', day='*', hour='08', minute='10', second='00')
 def get_one():
     try:
         with db.app.app_context():
