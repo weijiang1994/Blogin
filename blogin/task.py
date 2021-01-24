@@ -30,7 +30,7 @@ def get_one():
             if not one:
                 import requests
                 from bs4 import BeautifulSoup
-                res = requests.get('http://wufazhuce.com/', timeout='30')
+                res = requests.get('http://wufazhuce.com/', timeout=30)
                 bs = BeautifulSoup(res.text, 'html.parser')
                 attr = {'class': 'fp-one-cita'}
                 d = bs.find_all('div', attrs=attr)
