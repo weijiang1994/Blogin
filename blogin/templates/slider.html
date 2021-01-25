@@ -130,6 +130,7 @@
 </div>
 <script src="{{ url_for('static', filename='js/jquery.cookies.js') }}"></script>
 <script>
+    let theme = $.cookie('blog_theme');
     // 打开页面自动加载
     $(function () {
         $(document).ready(function () {
@@ -149,7 +150,6 @@
     }
 
     function loadGithub(){
-        let theme = $.cookie('blog_theme');
         $.ajax({
             type: 'post',
             url: '/load-github/',
@@ -165,8 +165,6 @@
             }
         })
     }
-
-
     var myChart = echarts.init(document.getElementById('contribute'));
 
     $.ajax({
@@ -178,6 +176,19 @@
     })
 
     function generateCalendar(data){
+        let item0Color = null;
+        let bgColor = null;
+        let borderColor = null;
+        // 根据主题来指定热力图的属性
+        if (theme === 'light' || theme === undefined){
+            item0Color='#EBEDF0';
+            bgColor = '#ffffff';
+            borderColor = '#ffffff';
+        }else {
+            item0Color='#444444';
+            bgColor = '#303030';
+            borderColor = '#303030';
+        }
         let option = {
             title: {
                 top: 30,
@@ -192,6 +203,13 @@
                 }
             },
             visualMap: {
+                textStyle:{
+                    color: '#B9B8CE',
+                    fontFamily: 'sans-serif',
+                    fontSize: 12,
+                    fontStyle: 'normal',
+                    fontWeight: 'normal'
+                },
                 show: false,
                 min: 0,
                 max: 10,
@@ -222,7 +240,7 @@
                     },
                     {
                         value: 0,
-                        color: '#EBEDF0',
+                        color: item0Color,
                         label: '0'
                     }
                 ]
@@ -236,8 +254,8 @@
                     show:false,
                 },
                 itemStyle:{
-                    color: '#ffffff',
-                    borderColor: '#ffffff',
+                    color: bgColor,
+                    borderColor: borderColor,
                     borderWidth: 3,
                     borderType: 'solid',
                 },
@@ -252,7 +270,6 @@
                 }
             }
         };
-
         myChart.setOption(option);
     }
 
