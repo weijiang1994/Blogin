@@ -57,16 +57,24 @@
                                 <span class="label label-info">{{ user.third_party.name }}</span>
                             </td>
                             <td>
-                                {% if user.role_id == 1 %}
-                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为普通用户" style="color: inherit; text-decoration: none;" href="/backend/interactive/set-user/{{ user.id }}/">用户</a></button>
-                                {% else %}
-                                    <button class="btn btn-info" style="margin-bottom: 3px;"><a title="设置为管理员" style="color: inherit; text-decoration: none;" href="/backend/interactive/set-admin/{{ user.id }}/">管理员</a></button>
-                                {% endif %}
-                                {% if user.statuses.id == 1 %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/interactive/lock/{{ user.id }}/">禁用</a></button>
-                                {% else %}
-                                    <button class="btn btn-danger" style="margin-bottom: 3px;"><a style="color: inherit; text-decoration: none;" href="/backend/interactive/unlock/{{ user.id }}/">解除</a></button>
-                                {% endif %}
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        操作
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                                        <li>{% if user.role_id == 1 %}
+                                            <a class="dropdown-item" href="/backend/interactive/set-user/{{ user.id }}/">用户</a>
+                                        {% else %}
+                                            <a class="dropdown-item" href="/backend/interactive/set-admin/{{ user.id }}/">管理员</a>
+                                        {% endif %}</li>
+                                        <li>{% if user.statuses.id == 1 %}
+                                            <a class="dropdown-item" href="/backend/interactive/lock/{{ user.id }}/">禁用</a>
+                                        {% else %}
+                                            <a class="dropdown-item" href="/backend/interactive/unlock/{{ user.id }}/">解除</a>
+                                        {% endif %}</li>
+                                    </ul>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
