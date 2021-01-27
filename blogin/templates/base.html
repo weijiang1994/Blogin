@@ -16,7 +16,7 @@
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
 {#            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/bootstrap.4.3.1.min.css">#}
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/material.bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/flatly.bootstrap.min.css') }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}">
         {% else %}
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/darkly.bootstrap.min.css">
