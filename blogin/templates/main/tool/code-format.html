@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% from "macro.html" import tool_bread with context %}
+{% block title %}
+    代码在线格式化工具
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .code-format-textarea{
+            border:0;
+            border-radius:5px;
+            background-color:rgba(241,241,241,.98);
+            width: 100%;
+            padding: 10px;
+            resize: none;
+            outline: none;
+            overflow-y: scroll;
+            height: 600px;
+            background-color:#343a40;
+            scrollbar-arrow-color:yellow;
+            scrollbar-base-color:lightsalmon;
+            color: #cccccc;
+        }
+        ::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 10px;
+            height: 1px;
+        }
+        ::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            background: #3c3c3c;
+        }
+        ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: #343a40;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            {{ tool_bread("代码在线格式化", "CodeFormat") }}
+            <div class="blog-content-brief-div p-3 mt-2">
+                <label>语言选择:
+                    <select id="language" class="form-control">
+                        <option>JSON</option>
+                        <option>Python</option>
+                        <option>HTML</option>
+                        <option>CSS</option>
+                        <option>Javascript</option>
+                    </select>
+                </label>
+                <label>缩进:
+                    <select id="indent" class="form-control">
+                        <option value="2">2个空格</option>
+                        <option value="4">4个空格</option>
+                    </select>
+                </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <textarea id="originCode" class="code-format-textarea"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <textarea id="formatCode" class="code-format-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button class="btn btn-sm btn-outline-info mr-2" onclick="formatCode()">格式化</button>
+                    <button class="btn btn-sm btn-outline-success" onclick="copyFormatCode()">复制格式化代码</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function formatCode(){
+            let code = $("#originCode").val();
+            let language = $("#language").val();
+            let indent = $("#indent").val();
+            $.ajax({
+                url: '/tool/code-format/',
+                type: 'post',
+                data: {'indent': indent, 'language': language, 'code': code},
+                success: function (res){
+                    if (res.tag === 1){
+                        $("#formatCode").empty();
+                        $("#formatCode").val(res.code);
+                    }
+                }
+            })
+        }
+
+        function copyFormatCode(){
+            let e = document.getElementById("formatCode");
+            e.select();
+            document.execCommand("Copy");
+            alert('格式化代码已复制到剪贴板!');
+        }
+    </script>
+{% endblock %}

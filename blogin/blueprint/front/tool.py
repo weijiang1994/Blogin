@@ -16,10 +16,10 @@ from sqlalchemy.sql.expression import func
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
-    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar
+    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar, format_json
 import re
 from blogin.extension import rd
-
+import json
 from blogin.models import SongCi, Poem, Poet, SongCiAuthor
 
 tool_bp = Blueprint('tool_bp', __name__, url_prefix='/tool')
@@ -271,7 +271,7 @@ def search_shi_author_ajax():
     if t.split('-')[-1] == 'ci':
         poet = SongCiAuthor.query.filter_by(name=author).first()
         if poet is not None:
-            return jsonify({'code': 200, 'id': '/tool/ci-song/'+str(poet.id)+'/', 'name': author})
+            return jsonify({'code': 200, 'id': '/tool/ci-song/' + str(poet.id) + '/', 'name': author})
         else:
             return jsonify({'code': 400, 'info': '查无此人!'})
 
@@ -352,3 +352,15 @@ def search():
         return render_template('main/tool/search.html', tag=1, results=results, pagination=pagination, sctype=type1,
                                mode=mode, keyword=keyword, type2=type2)
     return render_template('main/tool/search.html', tag=0)
+
+
+@tool_bp.route('/code-format/', methods=['GET', 'POST'])
+def code_format():
+    if request.method == 'POST':
+        code = request.form.get('code')
+        language = request.form.get('language')
+        indent = request.form.get('indent')
+        if language == 'JSON':
+            code = format_json(json.loads(code), indent=indent)
+            return jsonify({'tag': 1, 'code': code})
+    return render_template('main/tool/code-format.html')
