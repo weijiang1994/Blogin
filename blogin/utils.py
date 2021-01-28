@@ -62,6 +62,10 @@ USER_API = 'https://api.github.com/users/weijiang1994'
 REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
 
 
+def format_json(code, indent):
+    return json.dumps(code, indent=int(indent), ensure_ascii=False, separators=(',', ': '))
+
+
 def github_social():
     star = requests.get(GITHUB_STAR, timeout=30)
     fork = requests.get(GITHUB_FORK, timeout=30)
