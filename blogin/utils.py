@@ -31,6 +31,7 @@ from blogin.extension import db
 from blogin.setting import basedir
 from imageio import imread
 from blogin.models import Contribute
+from bs4 import BeautifulSoup
 
 config_ini = configparser.ConfigParser()
 config_ini.read(basedir + '/res/config.ini', encoding='utf-8')
@@ -64,6 +65,21 @@ REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
 
 def format_json(code, indent):
     return json.dumps(code, indent=int(indent), ensure_ascii=False, separators=(',', ': '))
+
+
+def format_html(code):
+    soup = BeautifulSoup(code, 'html.parser')
+    return soup.prettify()
+
+
+def format_python(code):
+    fn = basedir + '/uploads/code-format/' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.py'
+    with open(fn, 'w') as f:
+        f.write(code)
+    res = os.system('black ' + fn)
+    if not res:
+        with open(fn, 'r') as f:
+            return f.read()
 
 
 def github_social():

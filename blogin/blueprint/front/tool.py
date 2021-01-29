@@ -9,6 +9,7 @@
 import datetime
 import os
 import random
+import requests
 
 from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory, flash, abort
@@ -16,7 +17,8 @@ from sqlalchemy.sql.expression import func
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
-    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar, format_json
+    AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar, format_json, \
+    format_html, format_python
 import re
 from blogin.extension import rd
 import json
@@ -361,6 +363,26 @@ def code_format():
         language = request.form.get('language')
         indent = request.form.get('indent')
         if language == 'JSON':
-            code = format_json(json.loads(code), indent=indent)
+            try:
+                code = format_json(json.loads(code), indent=indent)
+                return jsonify({'tag': 1, 'code': code})
+            except:
+                return jsonify({'tag': 0, 'info': '不是正确的json数据！'})
+        if language == 'HTML':
+            code = format_html(code)
+            return jsonify({'tag': 1, 'code': code})
+        if language == 'Python':
+            code = format_python(code)
             return jsonify({'tag': 1, 'code': code})
     return render_template('main/tool/code-format.html')
+
+
+@tool_bp.route('/get-itf-data/', methods=['POST'])
+def get_outer_itf_data():
+    try:
+        itf = request.form.get('itf')
+        res = requests.get(itf, timeout=15)
+        if res.status_code == 200:
+            return jsonify({'tag': 1, 'code': res.text})
+    except:
+        return jsonify({'tag': 0, 'code': '未知原因接口数据获取失败!'})

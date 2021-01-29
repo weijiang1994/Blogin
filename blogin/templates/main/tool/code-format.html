@@ -1,41 +1,7 @@
 {% extends "base.html" %}
-{% from "macro.html" import tool_bread with context %}
+{% from "macro.html" import tool_bread, toast with context %}
 {% block title %}
     代码在线格式化工具
-{% endblock %}
-{% block head %}
-    {{ super() }}
-    <style>
-        .code-format-textarea{
-            border:0;
-            border-radius:5px;
-            background-color:rgba(241,241,241,.98);
-            width: 100%;
-            padding: 10px;
-            resize: none;
-            outline: none;
-            overflow-y: scroll;
-            height: 600px;
-            background-color:#343a40;
-            scrollbar-arrow-color:yellow;
-            scrollbar-base-color:lightsalmon;
-            color: #cccccc;
-        }
-        ::-webkit-scrollbar {/*滚动条整体样式*/
-            width: 10px;
-            height: 1px;
-        }
-        ::-webkit-scrollbar-track {/*滚动条里面轨道*/
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            border-radius: 10px;
-            background: #3c3c3c;
-        }
-        ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-            border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-            background: #343a40;
-        }
-    </style>
 {% endblock %}
 {% block content %}
     <main>
@@ -45,10 +11,8 @@
                 <label>语言选择:
                     <select id="language" class="form-control">
                         <option>JSON</option>
-                        <option>Python</option>
                         <option>HTML</option>
-                        <option>CSS</option>
-                        <option>Javascript</option>
+                        <option>Python</option>
                     </select>
                 </label>
                 <label>缩进:
@@ -56,6 +20,14 @@
                         <option value="2">2个空格</option>
                         <option value="4">4个空格</option>
                     </select>
+                </label>
+                <label>网络接口:
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="interface" id="interface" placeholder="请输入接口地址" aria-required="true" aria-describedby="captcha" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-sm btn-info" onclick="getInterfaceData()" id="sendCaptcha">获取数据</button>
+                        </div>
+                    </div>
                 </label>
                 <div class="row">
                     <div class="col-md-6">
@@ -65,9 +37,11 @@
                         <textarea id="formatCode" class="code-format-textarea"></textarea>
                     </div>
                 </div>
+                {{ toast() }}
                 <div class="d-flex">
                     <button class="btn btn-sm btn-outline-info mr-2" onclick="formatCode()">格式化</button>
-                    <button class="btn btn-sm btn-outline-success" onclick="copyFormatCode()">复制格式化代码</button>
+                    <button class="btn btn-sm btn-outline-success mr-2" onclick="copyFormatCode()">复制格式化代码</button>
+                    <button class="btn btn-sm btn-outline-danger mr-2" onclick="clearResult()">清空结果</button>
                 </div>
             </div>
         </div>
@@ -85,6 +59,9 @@
                     if (res.tag === 1){
                         $("#formatCode").empty();
                         $("#formatCode").val(res.code);
+                        showToast('代码格式化成功!', 1500);
+                    }else {
+                        showToast(res.info, 1500);
                     }
                 }
             })
@@ -94,7 +71,34 @@
             let e = document.getElementById("formatCode");
             e.select();
             document.execCommand("Copy");
-            alert('格式化代码已复制到剪贴板!');
+            showToast('格式化代码已复制到剪贴板!', 1000);
+        }
+
+        function clearResult(){
+            $("#originCode").val('');
+            $("#formatCode").val('');
+        }
+
+        function getInterfaceData(){
+            let itf = $("#interface").val();
+            if (itf === ''){
+                showToast('接口地址不能为空!', 1500);
+                return false;
+            }
+            $.ajax({
+                url: '/tool/get-itf-data/',
+                type: 'post',
+                data: {'itf': itf},
+                success: function (res){
+                    if (res.tag === 1){
+                        $("#originCode").val('');
+                        $("#originCode").val(res.code.toString());
+                        showToast('获取接口数据成功!', 1500);
+                    }else
+                        showToast(res.code, 1500);
+
+                }
+            })
         }
     </script>
 {% endblock %}
