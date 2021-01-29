@@ -17,6 +17,7 @@ import re
 import urllib
 from urllib.parse import urlparse, urljoin
 import base64
+import subprocess
 
 import execjs
 import requests
@@ -73,13 +74,20 @@ def format_html(code):
 
 
 def format_python(code):
+    not_done = True
+    timeout = 0
     fn = basedir + '/uploads/code-format/' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.py'
     with open(fn, 'w') as f:
         f.write(code)
+    # ret = subprocess.run(['black ', fn], timeout=20)
     res = os.system('black ' + fn)
-    if not res:
-        with open(fn, 'r') as f:
-            return f.read()
+    while not_done and timeout < 1000:
+        if res == 0:
+            not_done = False
+        timeout += 1
+
+    with open(fn, 'r') as f:
+        return f.read()
 
 
 def github_social():
