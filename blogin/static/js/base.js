@@ -64,3 +64,11 @@ function imgShow(outerdiv, innerdiv, bigimg, _this){
         $(this).fadeOut("fast");
     });
 }
+
+function showToast(msg, timeout){
+    $('#m-toast-inner-text').text(msg);
+        $('#m-toast-pop').fadeIn();
+        setTimeout(function() {
+            $('#m-toast-pop').fadeOut();
+        }, timeout);
+}

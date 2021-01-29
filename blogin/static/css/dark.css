@@ -117,4 +117,63 @@ blockquote p {
     border: 0 solid !important;
 }
 
+.m-toast-pop {
+    display: none;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+    text-align: center;
+}
+.m-toast-inner {
+    position: absolute;
+    left:50%;
+    top:50%;
+    width: 100%;
+    transform:translate(-50%,-50%);
+    -webkit-transform:translate(-50%,-50%);
+    text-align: center;
+}
+.m-toast-inner-text{
+    display: inline-block;
+    margin: 0 22px;
+    padding: 19px 21px;
+    font-size: 16px;
+    color: #0a0a0a;
+    letter-spacing: 0;
+    line-height: 22px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 10px;
+}
 
+.code-format-textarea{
+    border:0;
+    border-radius:5px;
+    background-color:rgba(241,241,241,.98);
+    width: 100%;
+    padding: 10px;
+    resize: none;
+    outline: none;
+    overflow-y: scroll;
+    height: 600px;
+    background-color:#343a40;
+    scrollbar-arrow-color:yellow;
+    scrollbar-base-color:lightsalmon;
+    color: #cccccc;
+}
+::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;
+    height: 1px;
+}
+::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: #3c3c3c;
+}
+::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #343a40;
+}
