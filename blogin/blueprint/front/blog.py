@@ -75,14 +75,18 @@ def blog_article(blog_id):
     # 顶级评论
     comments = BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
     histories = BlogHistory.query.filter_by(blog_id=blog_id).order_by(BlogHistory.timestamps.desc()).all()
-
+    # 获取上一篇下一篇
+    next_post = Blog.query.filter(Blog.id > blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
+    pre_post = Blog.query.filter(Blog.id < blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
+    print(next_post)
+    print(pre_post)
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
             order_by(BlogComment.timestamp.asc()).all()
         replies.append(reply)
     db.session.commit()
     return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies,
-                           histories=histories)
+                           histories=histories, next_post=next_post, pre_post=pre_post)
 
 
 @blog_bp.route('/blog/cate/<cate_id>/', methods=['GET', 'POST'])
