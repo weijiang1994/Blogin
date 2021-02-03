@@ -44,7 +44,7 @@
                                 <div class="media-body">
                                     <div class="text-muted mb-2 f-12">
                                         <span class="badge badge-inverse"><i class="fa fa-user"></i> 清水</span>
-                                        <span class="badge badge-inverse"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
+                                        <span class="badge badge-inverse" title="{{ blog.create_time }}"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
                                     </div>
                                     <h5 class="text-info">
                                         <a style="text-decoration: none;" class="text-info" href="/blog/article/{{ blog.id }}/">{{ blog.title }}</a>
