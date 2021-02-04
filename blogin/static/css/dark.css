@@ -177,3 +177,27 @@ blockquote p {
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     background: #343a40;
 }
+
+.a-link{
+    color: white;
+    text-decoration: none;
+}
+
+.a-link:hover{
+    color: rgba(126,126,126,0.85);
+}
+
+.li-fade{
+    color: #aaaaaa;
+}
+
+.li-fade:hover{
+    color: #cccccc;
+}
+
+.moment-div{
+    background: #4a4a4a;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
