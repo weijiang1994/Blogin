@@ -64,6 +64,11 @@ USER_API = 'https://api.github.com/users/weijiang1994'
 REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
 
 
+def is_empty(value, show=None):
+    if len(value) == 0 and show:
+        return show
+
+
 def format_json(code, indent):
     return json.dumps(code, indent=int(indent), ensure_ascii=False, separators=(',', ': '))
 
