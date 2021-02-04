@@ -65,6 +65,8 @@ REPO_API = 'https://api.github.com/repos/weijiang1994/Blogin'
 
 
 def is_empty(value, show=None):
+    if len(value) > 0:
+        return value
     if len(value) == 0 and show:
         return show
 
