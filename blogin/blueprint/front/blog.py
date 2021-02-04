@@ -78,8 +78,6 @@ def blog_article(blog_id):
     # 获取上一篇下一篇
     next_post = Blog.query.filter(Blog.id > blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
     pre_post = Blog.query.filter(Blog.id < blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
-    print(next_post)
-    print(pre_post)
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
             order_by(BlogComment.timestamp.asc()).all()
