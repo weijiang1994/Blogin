@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "macro.html" import moment_card, photo_moment_card, render_pagination with context %}
+{% from "macro.html" import moment_card, photo_moment_card, render_pagination, profile_header with context %}
 {% block title %}
     {{ current_user.username }}的个人主页
 {% endblock %}
@@ -9,38 +9,7 @@
         <div class="container">
             <br>
             {% include "_flash.html" %}
-            <div class="card">
-                <div class="text-muted card-header">
-                    <strong>{{ current_user.username }}</strong>的个人资料
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-3">
-                            <img class="img-fluid rounded " src="{{ current_user.avatar }}">
-                        </div>
-                        <div class="col-9">
-                            <h3><strong>{{ current_user.username }}</strong></h3>
-                            {% if not current_user.confirm %}
-                                <p class="text-danger">您的账号邮箱还未确认，请尽快前往邮箱确认开启全部功能!</p>
-                            {% endif %}
-                            <p class="text-muted">个人网站: <i class="fa fa-link"></i> <a class="text-info-a" href="{{ current_user.website }}" target="_blank">{{ current_user.website }}</a></p>
-                            <p class="text-muted">创建时间: <i class="fa fa-clock-o"></i> {{ current_user.create_time }}</p>
-                            <p class="text-muted">注册邮箱: <i class="fa fa-envelope"></i> {{ current_user.email }}</p>
-                            <p class="text-muted">个性签名: <i class="fa fa-text-width"></i> {{ current_user.slogan }}</p>
-                            <br>
-                            {% if not current_user.confirm %}
-                                <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/auth/resend-confirm/">认证邮件</a></button>
-                            {% else %}
-                                {% if current_user.third_party.name == 'default' %}
-                                    <button class="btn btn-danger float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/password/change/">修改密码</a></button>
-                                {% endif %}
-                                <button class="btn btn-success float-right gutter-right"><a style="color: white;text-decoration: none" href="/accounts/profile/edit/">编辑资料</a></button>
-
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{ profile_header() }}
             <br>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
