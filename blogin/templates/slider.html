@@ -45,8 +45,8 @@
         {% endif %}
         {% for plan in plans %}
             <p style="margin-bottom: 2px">{{ plan.title }}</p>
-            <div class="progress" style="height: 10px">
-                <div class="progress-bar bg-info" title="计划周期{{ plan.total }},已完成{{ plan.done_count }}" style="width:{{ (plan.done_count / plan.total) * 100 }}%"></div>
+            <div class="progress" title="计划周期{{ plan.total }},已完成{{ plan.done_count }}" style="height: 10px">
+                <div class="progress-bar bg-info" style="width:{{ (plan.done_count / plan.total) * 100 }}%"></div>
             </div>
         {% endfor %}
     </div>
