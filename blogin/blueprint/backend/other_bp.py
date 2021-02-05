@@ -35,7 +35,7 @@ def add_timeline():
         content = form.timeline_content.data
         if content[-1] != '；':
             flash('里程碑内容请以分号结尾!', 'danger')
-            return render_template('backend/addTimeline.html', form=form)
+            return render_template('backend/add-timeline.html', form=form)
 
         # 分割并拼接里程碑内容
         milestone_body = splice_tm_content(content)
@@ -46,7 +46,7 @@ def add_timeline():
         db.session.commit()
         flash('里程碑添加成功!', 'success')
         return redirect(url_for('blog_bp.timeline'))
-    return render_template('backend/addTimeline.html', form=form)
+    return render_template('backend/add-timeline.html', form=form)
 
 
 def splice_tm_content(content):
@@ -275,7 +275,7 @@ def add_flink():
         db.session.add(flink)
         db.session.commit()
         return redirect(url_for('blog_bp.index'))
-    return render_template('backend/addFlink.html', form=form)
+    return render_template('backend/add-flink.html', form=form)
 
 
 @other_bp.route('/flink/edit/', methods=['GET', 'POST'])
@@ -342,14 +342,14 @@ def add_plan():
         plan = Plan.query.filter_by(title=form.title.data).first()
         if plan:
             flash('该计划已经存在', 'info')
-            return render_template('backend/addPlan.html', form=form)
+            return render_template('backend/add-plan.html', form=form)
 
         plan = Plan(title=form.title.data, total=form.total.data, timestamps=form.timestamps.data)
         db.session.add(plan)
         db.session.commit()
         flash('添加计划成功', 'success')
         return redirect(url_for('.add_plan'))
-    return render_template('backend/addPlan.html', form=form)
+    return render_template('backend/add-plan.html', form=form)
 
 
 @other_bp.route('/plan/edit/', methods=['GET', 'POST'])

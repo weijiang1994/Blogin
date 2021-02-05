@@ -29,7 +29,7 @@ be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 def blog_create():
     form = PostForm()
     if request.method == 'GET':
-        return render_template('backend/createBlog.html', form=form)
+        return render_template('backend/create-blog.html', form=form)
 
     if form.validate_on_submit():
         # 获取表单中信息
@@ -60,7 +60,7 @@ def blog_create():
         return redirect(url_for('blog_bp.index'))
     else:
         flash('不能提交包含空的表单!', 'danger')
-        return render_template('backend/createBlog.html', form=form)
+        return render_template('backend/create-blog.html', form=form)
 
 
 @be_blog_bp.route('/admin/blog/edit/')
