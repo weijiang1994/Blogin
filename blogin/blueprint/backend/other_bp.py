@@ -15,7 +15,7 @@ from flask_login import current_user, login_required
 from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm, AddPlanForm
 from blogin import basedir
 from blogin.decorators import permission_required
-from blogin.models import Timeline, FriendLink, States, Soul, Plan
+from blogin.models import Timeline, FriendLink, States, Soul, Plan, One
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
@@ -390,3 +390,14 @@ def plan_content_edit():
     plan.total = total
     db.session.commit()
     return jsonify({'tag': 1, 'info': '计划编辑完成!'})
+
+
+@other_bp.route('/one/content/', methods=['GET', 'POST'])
+@login_required
+@permission_required
+def one_content():
+    page = request.args.get('page', default=1, type=int)
+    pagination = One.query.order_by(One.id.asc()).paginate(per_page=10, page=page)
+    ones = pagination.items
+    print(ones)
+    return render_template('backend/one.html', pagination=pagination, ones=ones, page=page)

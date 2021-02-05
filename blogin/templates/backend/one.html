@@ -1,0 +1,31 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    一句话
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container mt-2">
+            <div class="table-responsive">
+                {% if ones %}
+                    <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>内容</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for one in ones %}
+                        <tr>
+                            <td> {{ one.id }}</td>
+                            <td> {{ one.content }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+{% endblock %}
