@@ -78,7 +78,7 @@ def add_photo():
         db.session.commit()
         flash('相片添加完成~', 'success')
         return redirect(url_for('gallery_bp.index'))
-    return render_template('backend/addPhoto.html', form=form)
+    return render_template('backend/add-photo.html', form=form)
 
 
 @be_photo_bp.route('/edit/')

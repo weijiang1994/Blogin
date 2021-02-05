@@ -85,7 +85,7 @@ def blog_comment():
                                                                             per_page=current_app.config[
                                                                                 'LOGIN_LOG_PER_PAGE'])
     comments = pagination.items
-    return render_template('backend/blog_comments.html', comments=comments, pagination=pagination)
+    return render_template('backend/blog-comments.html', comments=comments, pagination=pagination)
 
 
 @user_m_bp.route('/lock/blog-comment/<int:com_id>')
