@@ -397,6 +397,6 @@ def plan_content_edit():
 @permission_required
 def one_content():
     page = request.args.get('page', default=1, type=int)
-    pagination = OneSentence.query.order_by(OneSentence.day.desc()).paginate(per_page=10, page=page)
+    pagination = OneSentence.query.order_by(OneSentence.day.desc()).paginate(per_page=20, page=page)
     ones = pagination.items
     return render_template('backend/one.html', pagination=pagination, ones=ones, page=page)

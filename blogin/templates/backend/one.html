@@ -12,13 +12,15 @@
                     <tr>
                         <th>编号</th>
                         <th>内容</th>
+                        <th>日期</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for one in ones %}
                         <tr>
-                            <td> {{ one.id }}</td>
+                            <td> {{ (page - 1) * 20 + loop.index }}</td>
                             <td> {{ one.content }}</td>
+                            <td> {{ one.day }}</td>
                         </tr>
                     {% endfor %}
                 {% endif %}
