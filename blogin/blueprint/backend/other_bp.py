@@ -15,7 +15,7 @@ from flask_login import current_user, login_required
 from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm, AddPlanForm
 from blogin import basedir
 from blogin.decorators import permission_required
-from blogin.models import Timeline, FriendLink, States, Soul, Plan, One
+from blogin.models import Timeline, FriendLink, States, Soul, Plan, OneSentence
 from blogin.extension import db
 import psutil
 from blogin.extension import rd
@@ -397,7 +397,6 @@ def plan_content_edit():
 @permission_required
 def one_content():
     page = request.args.get('page', default=1, type=int)
-    pagination = One.query.order_by(One.id.asc()).paginate(per_page=10, page=page)
+    pagination = OneSentence.query.order_by(OneSentence.day.desc()).paginate(per_page=10, page=page)
     ones = pagination.items
-    print(ones)
     return render_template('backend/one.html', pagination=pagination, ones=ones, page=page)
