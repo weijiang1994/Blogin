@@ -13,7 +13,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail
+from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path, update_contribution, get_md5
 from flask_login import login_required
@@ -28,17 +28,24 @@ be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 @permission_required
 def blog_create():
     form = PostForm()
-    if request.method == 'GET':
-        return render_template('backend/create-blog.html', form=form)
 
+    drafts = DraftBlog.query.filter_by(tag=0).all()
+    draft_id = request.args.get('draft-id')
+    if draft_id:
+        c_draft = DraftBlog.query.get_or_404(draft_id)
+        form.title.data = c_draft.title
+        form.body.data = c_draft.content
+
+    if request.method == 'GET':
+        return render_template('backend/create-blog.html', drafts=drafts, form=form)
     if form.validate_on_submit():
         # 获取表单中信息
         title = form.title.data
-        type = form.blog_type.data
-        level = form.blog_level.data
         content = form.body.data
         introduce = form.brief_content.data
         filename = form.blog_img_file.data.filename
+        _type = form.blog_type.data
+        level = form.blog_level.data
 
         current_time = get_current_time()
         current_time = current_time.split(' ')[0]
@@ -47,16 +54,14 @@ def blog_create():
         form.blog_img_file.data.save(basedir + '/uploads/image/' + current_time + '/' + filename)
         blog_img_path = '/backend/blog/img/' + current_time + '/' + filename
 
-        cate = BlogType.query.filter_by(id=type).first()
+        cate = BlogType.query.filter_by(id=_type).first()
         state = States.query.get_or_404(1)
         blg = Blog(title=title, type_id=cate.id, introduce=introduce, content=content, pre_img=blog_img_path,
                    is_private=level - 1, state=state)
         cate.counts += 1
         update_contribution()
-
         db.session.add(blg)
         db.session.commit()
-
         return redirect(url_for('blog_bp.index'))
     else:
         flash('不能提交包含空的表单!', 'danger')

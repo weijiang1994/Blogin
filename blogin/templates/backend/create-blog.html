@@ -2,11 +2,42 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block head %}
     {{super()}}
+    <style>
+        @media screen and (min-width: 1367px){
+            .draft-fixed-div {
+                position: fixed;
+                top: 8.5em;
+                user-select: none;
+                left: calc((100vw - 1000px)/2 - 330px);
+                margin: 5px;
+                padding: 10px;
+                border-radius: 5px;
+                background: rgb(239 239 239 / 0.3);
+                width: 15em;
+            }
+        }
+        @media screen and (max-width: 1660px) {
+            .draft-fixed-div{
+                display: none;
+            }
+        }
+    </style>
 {% endblock %}
 {% block title %}创建博客{% endblock %}
 {%block content%}
     <body>
     <div class="container">
+        <div class="draft-fixed-div">
+            <h5><b>当前草稿</b></h5>
+            <ul>
+                {% for d in drafts %}
+                    <li><a href="/backend/admin/blog/create/?draft-id={{ d.id }}">{{ d.title }}</a><a title="删除草稿" onclick="showConfirm()" class="btn btn-sm" href="/backend/delete-draft/{{ d.id }}/">×</a></li>
+                {% endfor %}
+            </ul>
+            <div class="text-right">
+                <button class="btn btn-success">保存草稿</button>
+            </div>
+        </div>
         {% for message in get_flashed_messages(with_categories=True) %}
             <div style="margin-top: 5px" class="alert alert-{{ message[0] }}">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -41,6 +72,13 @@
     {{ ckeditor.config(name='body') }}
     <br>
     <script>
+
+        function showConfirm(){
+            let r = confirm('确认删除该草稿吗?');
+            if (r!==true){
+                return false;
+            }
+        }
 
         $(function () {
             $(document).ready(function () {
