@@ -475,3 +475,14 @@ class OneSentence(db.Model):
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     content = db.Column(db.String(512), default='', nullable=False)
     day = db.Column(db.DATE, default=datetime.today())
+
+
+class DraftBlog(db.Model):
+    __tablename__ = 'draft'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(256), nullable=False, comment='blog title')
+    content = db.Column(db.Text, nullable=False)
+    timestamps = db.Column(db.DateTime, default=datetime.now)
+    brief = db.Column(db.String(512), default='', comment='blog brief introduce')
+    tag = db.Column(db.INTEGER, default=1, comment='is is draft? 0: no 1: yes')

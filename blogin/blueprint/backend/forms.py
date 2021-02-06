@@ -29,6 +29,7 @@ class PostForm(FlaskForm):
                               validators=[DataRequired(), FileAllowed(['png', 'jpg'], '只接收png和jpg图片')],
                               render_kw={'value': "上传", 'class': 'btn btn-default'})
     body = CKEditorField('Body', validators=[DataRequired(message='请输入博客内容')])
+    save = SubmitField(u'保存草稿')
     submit = SubmitField(u'发布博客')
 
     def __init__(self, *args, **kwargs):
