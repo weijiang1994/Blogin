@@ -1,0 +1,18 @@
+pre{
+    position: relative;
+}
+pre:before{
+    display: block;
+    content: "";
+    height: 32px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 20px;
+    background-color: #141313!important;
+    padding: 0 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+

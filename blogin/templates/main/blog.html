@@ -5,8 +5,10 @@
     {{ ckeditor.load_code_theme() }}
     {% if request.cookies.get('blog_theme', 'light') == 'light' %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docoo.css') }}" >
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pre-light.css') }}">
     {% else %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/monokai.css') }}" >
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pre-dark.css') }}">
     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@22.0.0/build/ckeditor.min.js"></script>
     <link type="text/css" href="/static/css/style.css">
@@ -18,6 +20,31 @@
 
         .p-line-bottom{
             border-bottom: 1px solid #cccccc;
+        }
+        pre:after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: #fc625d;
+            width: 10px;
+            height: 10px;
+            top: 0;
+            left: 15px;
+            margin-top: 11px;
+            -webkit-box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+            box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+        }
+        code{
+            margin-top: 1.6rem;
+        }
+        pre code {
+            background: 0 0;
+            text-shadow: none;
+            padding: 0;
+        }
+        pre span{
+            word-break: break-all;
+            -ms-word-wrap: break-word;
         }
     </style>
     {{ moment.locale(auto_detect=True) }}
