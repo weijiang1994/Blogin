@@ -28,16 +28,16 @@ be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 @permission_required
 def blog_create():
     form = PostForm()
-
-    drafts = DraftBlog.query.filter_by(tag=0).all()
+    drafts = DraftBlog.query.filter_by(tag=1).all()
     draft_id = request.args.get('draft-id')
-    if draft_id:
-        c_draft = DraftBlog.query.get_or_404(draft_id)
-        form.title.data = c_draft.title
-        form.body.data = c_draft.content
-
     if request.method == 'GET':
-        return render_template('backend/create-blog.html', drafts=drafts, form=form)
+        if draft_id:
+            c_draft = DraftBlog.query.get_or_404(draft_id)
+            form.title.data = c_draft.title
+            form.body.data = c_draft.content
+            form.brief_content.data = c_draft.brief
+        return render_template('backend/create-blog.html', drafts=drafts, form=form, draft_id=draft_id)
+
     if form.validate_on_submit():
         # 获取表单中信息
         title = form.title.data
@@ -65,7 +65,7 @@ def blog_create():
         return redirect(url_for('blog_bp.index'))
     else:
         flash('不能提交包含空的表单!', 'danger')
-        return render_template('backend/create-blog.html', form=form)
+        return render_template('backend/create-blog.html', form=form, drafts=drafts, draft_id=draft_id)
 
 
 @be_blog_bp.route('/admin/blog/edit/')
@@ -195,3 +195,32 @@ def upload():
     f.save(os.path.join(current_app.config['BLOGIN_UPLOAD_PATH'], filename))
     url = url_for('be_blog_bp.uploaded_files', filename=filename)
     return upload_success(url=url)
+
+
+@be_blog_bp.route('/delete-draft/', methods=['POST'])
+@permission_required
+def delete_draft():
+    did = request.form.get('did')
+    d = DraftBlog.query.get_or_404(did)
+    d.tag = 1
+    db.session.commit()
+    return jsonify({'tag': 1, 'info': '删除草稿成功!'})
+
+
+@be_blog_bp.route('/save-draft/', methods=['POST'])
+@permission_required
+def save_draft():
+    did = request.form.get('did')
+    title = request.form.get('title')
+    content = request.form.get('content')
+    brief = request.form.get('brief')
+    if did != 'None':
+        d = DraftBlog.query.get_or_404(did)
+        d.content = content
+        d.title = title
+        d.brief = brief
+    else:
+        d = DraftBlog(title=title, content=content, brief=brief)
+        db.session.add(d)
+    db.session.commit()
+    return jsonify({'tag': 1, 'info': '保存草稿成功'})
