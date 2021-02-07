@@ -8,17 +8,12 @@
                 position: fixed;
                 top: 8.5em;
                 user-select: none;
-                left: calc((100vw - 1000px)/2 - 330px);
+                left: calc((100vw - 1000px)/2 - 400px);
                 margin: 5px;
                 padding: 10px;
                 border-radius: 5px;
                 background: rgb(239 239 239 / 0.3);
-                width: 15em;
-            }
-        }
-        @media screen and (max-width: 1660px) {
-            .draft-fixed-div{
-                display: none;
+                width: 20em;
             }
         }
     </style>
@@ -29,13 +24,13 @@
     <div class="container">
         <div class="draft-fixed-div">
             <h5><b>当前草稿</b></h5>
-            <ul>
+            <ul id="drafts">
                 {% for d in drafts %}
-                    <li><a href="/backend/admin/blog/create/?draft-id={{ d.id }}">{{ d.title }}</a><a title="删除草稿" onclick="showConfirm()" class="btn btn-sm" href="/backend/delete-draft/{{ d.id }}/">×</a></li>
+                    <li id="li{{ d.id }}"><a href="/backend/admin/blog/create/?draft-id={{ d.id }}">{{ d.title }}</a><a title="删除草稿" id="{{ d.id }}" onclick="showConfirm(this.id)" class="btn btn-sm">×</a></li>
                 {% endfor %}
             </ul>
             <div class="text-right">
-                <button class="btn btn-success">保存草稿</button>
+                <button data-id="{{ draft_id }}" onclick="saveDraft($(this).data('id'))" class="btn btn-success">保存草稿</button>
             </div>
         </div>
         {% for message in get_flashed_messages(with_categories=True) %}
@@ -72,11 +67,20 @@
     {{ ckeditor.config(name='body') }}
     <br>
     <script>
-
-        function showConfirm(){
+        function showConfirm(did){
+            console.log(did);
             let r = confirm('确认删除该草稿吗?');
             if (r!==true){
                 return false;
+            }else {
+                $.ajax({
+                    url: '/backend/delete-draft/',
+                    type: 'post',
+                    data:{'did': did},
+                    success: function (){
+                        $("#li"+did).remove();
+                    }
+                })
             }
         }
 
@@ -107,6 +111,28 @@
             });
         });
 
+        function saveDraft(did){
+            let title = $("#title").val();
+            let brief = $("#brief_content").val();
+            let content = CKEDITOR.instances.body.getData();
+            if (title === '' && brief === '' && content === ''){
+                alert('啥都没有输入就不要保存草稿了,浪费空间!');
+                return false;
+            }
+            $.ajax({
+                url: '/backend/save-draft/',
+                type: 'post',
+                data: {'did': did, 'brief': brief, 'content': content, 'title': title},
+                success: function (res){
+                    if (res.tag === 1){
+                        alert(res.info);
+                    }else {
+                        alert('保存草稿失败!');
+                    }
+                }
+            })
+
+        }
     </script>
     </body>
 {% endblock %}
