@@ -19,7 +19,7 @@ user_m_bp = Blueprint('user_m_bp', __name__, url_prefix='/backend/interactive')
 @login_required
 @permission_required
 def index():
-    page = request.args.get('page')
+    page = request.args.get('page', type=int, default=1)
     pagination = User.query.order_by(User.create_time).paginate(page=page,
                                                                 per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
     users = pagination.items
