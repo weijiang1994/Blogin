@@ -21,7 +21,7 @@
     </div>
     <div  class="card-body p-2 f-15">
         <div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">
-            <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar" alt="avatar" src="{{ url_for('static', filename='img/github.png') }}"></a>
+            <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar" alt="avatar" src="{{ url_for('static', filename='github-avatar.png') }}"></a>
             <div class="ml-2">
                 <h5 class="mb-0"><b>Blogin</b></h5>
                 <small id="repoDesc"><i class="fa fa-spinner fa-spin f-hint"></i></small>
@@ -157,7 +157,7 @@
                 $("#shield-svg").append('<div class="mr-1">'+res.fork+'</div>');
                 $("#shield-svg").append('<div class="mr-1">'+res.watcher+'</div>');
                 $('#repoDesc').text(res.repo_desc);
-                // $("#githubAvatar").attr('src', res.avatar);
+                $("#githubAvatar").attr('src', res.avatar);
                 $("#githubStar").attr('hidden', false);
             }
         })
