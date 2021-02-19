@@ -14,6 +14,7 @@ import datetime
 from blogin.utils import github_social
 from blogin.setting import basedir
 import traceback
+import requests
 
 
 def write_task_log(info):
@@ -67,6 +68,18 @@ def auto_insert_data():
             comm = CommentStatistics(date=date, times=0)
             db.session.add(comm)
         db.session.commit()
+
+
+@aps.task('interval', id='update_github_avatar', max_instances=1, minutes=30)
+def update_github_avatar():
+    try:
+        res = requests.get(rd.get('avatar'), timeout=30)
+        with open(basedir + '/static/img/github.png', 'wb') as f:
+            f.write(res.content)
+        write_task_log('更新github头像成功!')
+    except Exception as e:
+        write_task_log('更新github头像失败!失败原因:\n' + str(e.args) + '\n' +
+                       str(traceback.format_exc()))
 
 
 # noinspection PyBroadException
