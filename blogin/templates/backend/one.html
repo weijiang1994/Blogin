@@ -1,4 +1,6 @@
 {% extends "backend/base.html" %}
+{% from "macro.html" import render_pagination with context %}
+
 {% block title %}
     一句话
 {% endblock %}
@@ -26,6 +28,9 @@
                 {% endif %}
                 </tbody>
                 </table>
+                <div class="text-right mt-2">
+                    {{ render_pagination(pagination) }}
+                </div>
             </div>
         </div>
 
