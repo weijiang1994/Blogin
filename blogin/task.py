@@ -11,7 +11,7 @@ from apscheduler.executors.base import BaseExecutor
 from flask import current_app
 from blogin.extension import db, aps, rd
 import datetime
-from blogin.utils import github_social
+from blogin.utils import github_social, get_md5, get_current_time
 from blogin.setting import basedir
 import traceback
 import requests
@@ -73,9 +73,21 @@ def auto_insert_data():
 @aps.task('interval', id='update_github_avatar', max_instances=1, minutes=30)
 def update_github_avatar():
     try:
-        res = requests.get(rd.get('avatar'), timeout=30)
-        with open(basedir + '/static/img/github.png', 'wb') as f:
+        link = rd.get('avatar')
+        res = requests.get(link, timeout=30)
+        md5 = get_md5(str(get_current_time()))
+        with open(basedir + '/uploads/github/{}.png'.format(md5), 'wb') as f:
             f.write(res.content)
+
+        # 移除上一次任务存储的图片
+        pre_md5 = rd.get('pre_md5')
+        if pre_md5:
+            import os
+            os.remove(basedir + '/uploads/github/{}.png'.format(pre_md5))
+
+        # 更新redis中local_avatar的值
+        rd.set('local_avatar', '/tool/github/{}.png'.format(md5))
+        rd.set('pre_md5', md5)
         write_task_log('更新github头像成功!')
     except Exception as e:
         write_task_log('更新github头像失败!失败原因:\n' + str(e.args) + '\n' +
