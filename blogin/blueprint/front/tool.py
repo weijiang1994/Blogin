@@ -86,12 +86,15 @@ def query_ip_addr():
 def word_cloud():
     if request.method == 'POST':
         tag = request.form.get('tag')
+        bg = request.form.get('bg')
+        if bg == 'None':
+            bg = None
         img = request.files['img']
         filename = img.filename
         img.save(basedir + '/uploads/wordcloud/' + filename)
         if tag == '0':
             content = request.form.get('content')
-            wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
+            wc = WordCloud(txt=content, bg=bg, img=basedir + '/uploads/wordcloud/' + filename)
             result = wc.generate()
         else:
             content = request.files['txt']
@@ -102,7 +105,7 @@ def word_cloud():
                 return jsonify({'tag': 0, 'info': '上传txt请小于1.6M!'})
             with open(basedir + '/uploads/wordcloud/' + content.filename) as f:
                 content = f.read()
-            wc = WordCloud(txt=content, img=basedir + '/uploads/wordcloud/' + filename)
+            wc = WordCloud(txt=content, bg=bg, img=basedir + '/uploads/wordcloud/' + filename)
             result = wc.generate()
         if result:
             return jsonify({'tag': 1, 'wc': '/tool/wordcloud/' + result,

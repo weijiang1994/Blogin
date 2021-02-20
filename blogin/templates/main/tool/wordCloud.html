@@ -44,12 +44,19 @@
                             <div id="textarea" contenteditable="true" data-text=""></div>
                         </div>
                         <div class="col-md-4">
-                            <label>文本文件</label>
-                            <input type="file" id="txt">
-                            <br>
+
+                            <label>文本:</label>
+                            <input type="file" id="txt"><br>
+
                             <label>底片:</label>
+                            <input type="file" id="img">
+
+                            <label for="color">背景:</label>
+                            <input type="color" name="color" id="color"><span class="ml-3 p-1" id="colorVal">#000000</span><br>
+
+                            <label for="transparentColor">透明:</label>
+                            <input type="checkbox" name="transparent" id="transparentColor">
                             <br>
-                            <input type="file" id="img"><br>
                             <span class="text-muted">Tip:</span>
                             <ul>
                                 <li>优先使用txt文本作为分词内容</li>
@@ -96,24 +103,52 @@
         </div>
     </main>
     <script>
+        function colorReverse(color){
+            let oldColorValue="0x"+color.replace(/#/g,"");
+            let str="000000"+(0xFFFFFF-oldColorValue).toString(16);
+            return "#" + str.substring(str.length-6,str.length);
+        }
+
+        $("#transparentColor").on('click', function (){
+            if (this.checked){
+                $("#color").attr('disabled', 'disabled');
+            }else {
+                $("#color").removeAttr('disabled');
+            }
+        })
+
+        $("#color").on('change', function (){
+            $("#colorVal").text($(this).val());
+            $("#colorVal").css('background-color', $(this).val());
+            $("#colorVal").css('color', colorReverse($(this).val()));
+        })
+
         function generateWordCloud(){
             let img = $("#img")[0].files[0];
             let txt = $("#txt")[0].files[0];
+            let bg;
+            if ($("#transparentColor")[0].checked){
+                bg = 'None'
+            }else {
+                bg = $("#color").val();
+            }
             let content = $("#textarea").text();
             let data = new FormData()
-            if (img == undefined || (txt==undefined && content=='')){
+            if (img === undefined || (txt===undefined && content==='')){
                 alert('请输入关键信息~');
                 return false;
             }
             $("#wcHint").removeAttr('hidden');
-            if (txt == undefined){
+            if (txt === undefined){
                 data.append('tag', 0);
                 data.append('content', content);
                 data.append('img', img);
+                data.append('bg', bg);
             }else {
                 data.append('tag', 1);
                 data.append('txt', txt);
                 data.append('img', img);
+                data.append('bg', bg);
             }
             $.ajax({
                 url:"/tool/word-cloud/",

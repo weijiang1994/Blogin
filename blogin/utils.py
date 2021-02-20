@@ -26,6 +26,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 import jieba
 import wordcloud as wc
+from wordcloud import STOPWORDS
 from PIL import Image, ImageDraw, ImageFont
 
 from blogin.extension import db
@@ -523,26 +524,30 @@ class IPQuery:
 
 
 class WordCloud:
-    def __init__(self, txt=None, img=None):
+    def __init__(self, txt=None, img=None, bg='black'):
         self.txt = txt
         self.img = img
         self.words = None
+        self.bg = bg
 
     def cut(self):
         self.words = jieba.cut(self.txt)
         self.words = ' '.join(self.words)
 
     def generate(self):
+        print('类里面bg', self.bg)
         try:
             mask = imread(self.img)
             self.cut()
-            w = wc.WordCloud(font_path=basedir + r'/res/STFangsong.ttf', mask=mask, width=len(mask[0]),
-                             height=len(mask), background_color="white",
-                             max_words=20)
+            w = wc.WordCloud(collocations=False,
+                             font_path=basedir + r'/res/STFangsong.ttf',
+                             mask=mask,
+                             background_color=self.bg,
+                             mode='RGBA')
             w.generate(self.words)
             pre = str(datetime.datetime.now()).split(' ')[1].replace(':', '')
-            w.to_file(basedir + '/uploads/wordcloud/' + pre + '.jpg')
-            return pre + '.jpg'
+            w.to_file(basedir + '/uploads/wordcloud/' + pre + '.png')
+            return pre + '.png'
         except:
             import traceback
             traceback.print_exc()
