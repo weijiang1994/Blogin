@@ -29,15 +29,9 @@ pre:after {
     -webkit-box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
     box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
 }
-code{
-    margin-top: 1.6rem;
+
+pre>code{
+    overflow-y: hidden;
+    overflow-x: scroll;
 }
-pre code {
-    background: 0 0;
-    text-shadow: none;
-    padding: 0;
-}
-pre span{
-    word-break: break-all;
-    -ms-word-wrap: break-word;
-}
+

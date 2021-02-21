@@ -16,3 +16,7 @@ pre:before{
     border-top-right-radius: 4px;
 }
 
+pre>code{
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
