@@ -57,16 +57,6 @@
 }
 
 /*自定义CKEditor 渲染样式*/
-/*blockquote {*/
-/*    font: 14px/22px normal helvetica, sans-serif;*/
-/*    margin-top: 10px;*/
-/*    margin-bottom: 10px;*/
-/*    margin-left: 0px;*/
-/*    padding: 10px 10px 10px 15px;*/
-/*    border-left: 3px solid #70b8f0;*/
-/*    background-color:rgba(0,132,255,.08);*/
-/*    border-radius: 0px 8px 8px 0px ;*/
-/*}*/
 .m-blockquote{
     position: relative;
     padding: 23px 5px 0 5px;
@@ -150,6 +140,7 @@ blockquote p {
     overflow: auto;
     text-align: center;
 }
+
 .m-toast-inner {
     position: absolute;
     left:50%;
@@ -159,6 +150,7 @@ blockquote p {
     -webkit-transform:translate(-50%,-50%);
     text-align: center;
 }
+
 .m-toast-inner-text{
     display: inline-block;
     margin: 0 22px;
@@ -186,15 +178,18 @@ blockquote p {
     scrollbar-base-color:lightsalmon;
     color: #cccccc;
 }
+
 ::-webkit-scrollbar {/*滚动条整体样式*/
     width: 10px;
     height: 1px;
 }
+
 ::-webkit-scrollbar-track {/*滚动条里面轨道*/
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     border-radius: 10px;
     background: #3c3c3c;
 }
+
 ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
