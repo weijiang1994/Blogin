@@ -35,3 +35,8 @@ pre>code{
     overflow-x: scroll;
 }
 
+pre>code::-webkit-scrollbar-thumb:horizontal {
+    border-radius: 0px;
+    border-top: 1px solid #f8f8ff;
+}
+
