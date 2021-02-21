@@ -57,15 +57,38 @@
 }
 
 /*自定义CKEditor 渲染样式*/
-blockquote {
-    font: 14px/22px normal helvetica, sans-serif;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 0px;
-    padding: 10px 10px 10px 15px;
-    border-left: 3px solid #70b8f0;
-    background-color:rgba(0,132,255,.08);
-    border-radius: 0px 8px 8px 0px ;
+/*blockquote {*/
+/*    font: 14px/22px normal helvetica, sans-serif;*/
+/*    margin-top: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    margin-left: 0px;*/
+/*    padding: 10px 10px 10px 15px;*/
+/*    border-left: 3px solid #70b8f0;*/
+/*    background-color:rgba(0,132,255,.08);*/
+/*    border-radius: 0px 8px 8px 0px ;*/
+/*}*/
+.m-blockquote{
+    position: relative;
+    padding: 23px 5px 0 5px;
+    background-color: #393939!important;
+    border-radius: 4px;
+    color: white;
+}
+
+.m-blockquote:before{
+    display: block;
+    color: white;
+    font-weight: bold;
+    content: "\26A0 提示";
+    height: 25px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #272822;
+    padding: 0 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
 
 .marker{
