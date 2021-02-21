@@ -58,17 +58,6 @@
 }
 
 /*自定义CKEditor 渲染样式*/
-blockquote {
-    font: 14px/22px normal helvetica, sans-serif;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 0px;
-    padding: 10px 10px 10px 15px;
-    border-left: 3px solid #70b8f0;
-    background-color:rgba(0,132,255,.08);
-    border-radius: 0px 8px 8px 0px ;
-}
-
 .marker{
     padding: .2em .4em;
     margin: 0;
@@ -106,7 +95,6 @@ article>h3 {
 blockquote>p {
     font: 14px/22px normal helvetica, sans-serif;
     margin: 5px 0px 5px 0px;
-    font-style:italic;
 }
 
 .login-hint {
@@ -196,4 +184,27 @@ blockquote>p {
     padding: 5px;
     border-radius: 5px;
     margin-bottom: 5px;
+}
+
+.m-blockquote{
+    position: relative;
+    padding: 23px 5px 0 5px;
+    background-color: #dbfaf4;
+    border-radius: 4px;
+}
+
+.m-blockquote:before{
+    display: block;
+    color: white;
+    font-weight: bold;
+    content: "\26A0 提示";
+    height: 25px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #1abc9c;
+    padding: 0 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
 }
