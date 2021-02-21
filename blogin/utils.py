@@ -535,7 +535,6 @@ class WordCloud:
         self.words = ' '.join(self.words)
 
     def generate(self):
-        print('类里面bg', self.bg)
         try:
             mask = imread(self.img)
             self.cut()
