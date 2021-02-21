@@ -197,7 +197,7 @@ blockquote p {
 }
 ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 0 5px #174848;
     background: #343a40;
 }
 
