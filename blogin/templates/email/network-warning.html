@@ -1,0 +1,10 @@
+<p>Hello, Admin!</p>
+<div>
+    <p>检测到存在异常流量，详情如下</p>
+    <ul>
+        {% for ip, count in blacklist %}
+            <li>IP:<span style="color: red">{{ ip }}</span> 请求次数:<span style="color: red">{{ count }}</span></li>
+        {% endfor %}
+    </ul>
+    <h4>后台已经将异常流量加入黑名单!请同步<a href="https://console.cloud.tencent.com/vpc/securitygroup?rid=16&rid=16" target="_blank">腾讯云</a>安全组策略!</h4>
+</div>

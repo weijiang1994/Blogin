@@ -102,6 +102,7 @@ def register_extension(app: Flask):
     share.init_app(app)
     avatar.init_app(app)
     mail.init_app(app)
+    mail.app = app
     whooshee.init_app(app)
     oauth.init_app(app)
     scheduler_init(app)
