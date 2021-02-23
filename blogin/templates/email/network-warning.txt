@@ -1,0 +1,9 @@
+Hello, Admin!
+
+    检测到存在异常流量，详情如下
+
+        {% for ip, count in blacklist %}
+            IP:{{ ip }} 次数:{{ count }}</li>
+        {% endfor %}
+
+    后台已经将异常流量加入黑名单!请同步腾讯云安全组策略!

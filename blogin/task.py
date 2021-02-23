@@ -9,10 +9,11 @@
 from blogin.models import Contribute, VisitStatistics, LikeStatistics, CommentStatistics, OneSentence
 from apscheduler.executors.base import BaseExecutor
 from flask import current_app
-from blogin.extension import db, aps, rd
+from blogin.extension import db, aps, rd, mail
 import datetime
 from blogin.utils import github_social, get_md5, get_current_time
 from blogin.setting import basedir
+from blogin.emails import send_network_warning_email
 import traceback
 import requests
 
@@ -143,3 +144,44 @@ def update_bd_token():
     except Exception as e:
         write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
+
+@aps.task('interval', id='network_monitor', minutes=3)
+def network_monitor():
+    last_time = rd.get('lt_net_monitor')
+    if not last_time:
+        last_time = datetime.datetime.now()
+    else:
+        last_time = datetime.datetime.strptime(last_time, '%H:%M')
+    times = []
+    for i in range(3):
+        t = last_time + datetime.timedelta(minutes=i + 1)
+        times.append(t.strftime('%H:%M'))
+    result = {}
+    with open('/var/log/nginx/access.log', 'r') as f:
+        lines = f.read().split('\n')
+        for line in lines:
+            if times[0] in line or times[1] in line or times[2] in line:
+                l = line.split()
+                if l[0] not in result.keys():
+                    result.setdefault(l[0], 1)
+                else:
+                    count = result.get(l[0]) + 1
+                    result[l[0]] = count
+    blacklist = []
+    for key in result.keys():
+        if result.get(key) > 150:
+            blacklist.append((key, result.get(key)))
+
+    rd.set('lt_net_monitor', times[-1])
+    try:
+        with mail.app.app_context():
+            if len(blacklist):
+                send_network_warning_email(blacklist=blacklist)
+                with open('/etc/nginx/blacklist.conf', 'a+') as f:
+                    for b in blacklist:
+                        f.write('deny {};\n'.format(b))
+                import os
+                os.popen('sudo nginx -s reload')
+        write_task_log('封禁异常流量IP成功!')
+    except Exception as e:
+        write_task_log('封禁异常流量IP失败!原因:\n'+str(e.args))
