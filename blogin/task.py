@@ -71,7 +71,6 @@ def auto_insert_data():
         db.session.commit()
 
 
-@aps.task('interval', id='update_github_avatar', max_instances=1, minutes=30)
 def update_github_avatar():
     try:
         link = rd.get('avatar')
