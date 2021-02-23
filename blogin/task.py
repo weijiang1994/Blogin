@@ -143,12 +143,3 @@ def update_bd_token():
     except Exception as e:
         write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
-
-"""
-@aps.task('interval', id='get_all_jobs', seconds=60*10)
-def get_all_jobs():
-    jobs = aps.get_jobs()
-    # exe = aps._scheduler._executors.get('default')
-    # print(exe._instances)
-    write_task_log(str(jobs))
-"""
