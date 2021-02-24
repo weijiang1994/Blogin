@@ -15,7 +15,7 @@ from blogin.decorators import statistic_traffic
 import datetime
 from blogin.utils import redirect_back, github_social
 import requests
-
+from blogin.emails import send_comment_email
 blog_bp = Blueprint('blog_bp', __name__)
 
 
@@ -138,20 +138,27 @@ def new_comment():
     blog_id = request.form.get('blogID')
     reply_id = request.form.get('replyID')
     parent_id = request.form.get('parentID')
+    admin = User.query.filter_by(email='804022023@qq.com').first()
     author = current_user._get_current_object()
     notify = comment
     blog = Blog.query.get_or_404(blog_id)
     comment = BlogComment(body=comment, author=author, blog=blog)
     if reply_id:
-        comment.replied = BlogComment.query.get_or_404(reply_id)
+        pbc = BlogComment.query.get_or_404(reply_id)
+        comment.replied = pbc
         # title = Blog.query.get_or_404(blog_id).title
         new_notify = Notification(type=0, target_id=blog_id, send_user=author.username,
                                   receive_id=comment.replied.author_id, msg=notify, target_name=blog.title)
         db.session.add(new_notify)
+        send_comment_email(user=pbc.author, blog=blog)
+
     if parent_id:
         comment.parent_id = parent_id
+
     db.session.add(comment)
     db.session.commit()
+    if not reply_id:
+        send_comment_email(user=admin, blog=blog)
     return redirect(request.referrer)
 
 

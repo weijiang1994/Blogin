@@ -1,0 +1,2 @@
+Hi, {{ username }}
+您在Blogin上的评论收到了新的回复!进入网页查看{{ url_for('blog_bp.blog_article', blog_id=blog.id, _external=True) }}详情!
