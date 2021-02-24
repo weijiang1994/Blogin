@@ -43,6 +43,7 @@ class User(db.Model, UserMixin):
     create_time = db.Column(db.DateTime, default=datetime.now)
     slogan = db.Column(db.String(200), default='')
     recent_login = db.Column(db.DateTime, default=datetime.now)
+    received_email_tag = db.Column(db.INTEGER, default=1, comment='receive email notify')
     status = db.Column(db.INTEGER, db.ForeignKey('states.id'), default=1)
     reg_way = db.Column(db.INTEGER, db.ForeignKey('third_party.id'), default=1)
 

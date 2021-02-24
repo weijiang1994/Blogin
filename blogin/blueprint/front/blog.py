@@ -150,7 +150,8 @@ def new_comment():
         new_notify = Notification(type=0, target_id=blog_id, send_user=author.username,
                                   receive_id=comment.replied.author_id, msg=notify, target_name=blog.title)
         db.session.add(new_notify)
-        send_comment_email(user=pbc.author, blog=blog)
+        if pbc.author.received_email_tag:
+            send_comment_email(user=pbc.author, blog=blog)
 
     if parent_id:
         comment.parent_id = parent_id

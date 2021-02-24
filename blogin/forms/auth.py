@@ -83,4 +83,5 @@ class EditProfileForm(FlaskForm):
     website = StringField(u'个人网站', render_kw={'placeholder': '请输入个人网站', 'type': 'url'})
     avatar = FileField(u'个人头像', validators=[FileAllowed(['png', 'jpg'], '只接收png和jpg图片')])
     slogan = TextAreaField(u'个性签名', render_kw={'placeholder': '签名不超过200个字符'})
+    receive_email = BooleanField(u'邮件提醒', default=True)
     submit = SubmitField(u'保存', render_kw={'class': 'btn btn-secondary'})

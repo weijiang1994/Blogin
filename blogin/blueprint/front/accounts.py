@@ -24,12 +24,15 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @login_required
 def profile(user_id):
     page = request.args.get('page', 1, type=int)
-    pagination = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).paginate(page=page, per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
+    pagination = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).paginate(page=page,
+                                                                                                        per_page=
+                                                                                                        current_app.config[
+                                                                                                            'LOGIN_LOG_PER_PAGE'])
     logs = pagination.items
 
     blog_comments = BlogComment.query.filter_by(author_id=user_id).order_by(BlogComment.timestamp.desc()).all()
     photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
-    notifies = Notification.query.filter_by(receive_id=current_user.id, read=0).\
+    notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
         order_by(Notification.timestamp.desc()).all()
     return render_template('main/accountProfile.html', logs=logs, blogComments=blog_comments,
                            photoComments=photo_comments, notifies=notifies, pagination=pagination)
@@ -60,16 +63,17 @@ def edit_profile():
         new_name = form.user_name.data
         user.website = form.website.data
         user.slogan = form.slogan.data
+        user.received_email_tag = form.receive_email.data
         query_name_user = User.query.filter_by(username=new_name).first()
-        if query_name_user is not None and  query_name_user.id != current_user.id:
+        if query_name_user is not None and query_name_user.id != current_user.id:
             flash('用户名已存在', 'danger')
             return render_template('main/editProfile.html', form=form)
         user.username = form.user_name.data
         if form.avatar.data.filename:
             filename = form.avatar.data.filename
             filename = str(current_user.username) + filename
-            form.avatar.data.save(basedir + '/uploads/avatars/'+filename)
-            img_data = imread(basedir + '/uploads/avatars/'+filename)
+            form.avatar.data.save(basedir + '/uploads/avatars/' + filename)
+            img_data = imread(basedir + '/uploads/avatars/' + filename)
             if len(img_data) != len(img_data[0]):
                 flash('为了头像显示正常，请上传长宽一致的头像!', 'danger')
                 return render_template('main/editProfile.html', form=form)
@@ -80,6 +84,7 @@ def edit_profile():
     form.slogan.data = current_user.slogan
     form.website.data = current_user.website
     form.user_name.data = current_user.username
+    form.receive_email.data = current_user.received_email_tag
     return render_template('main/editProfile.html', form=form)
 
 
