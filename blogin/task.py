@@ -146,15 +146,11 @@ def update_bd_token():
 
 @aps.task('interval', id='network_monitor', minutes=3)
 def network_monitor():
-    last_time = rd.get('lt_net_monitor')
-    if not last_time:
-        last_time = datetime.datetime.now()
-    else:
-        last_time = datetime.datetime.strptime(last_time, '%H:%M')
+    scan_time = datetime.datetime.now()
     times = []
-    for i in range(3):
-        t = last_time + datetime.timedelta(minutes=i + 1)
-        times.append(t.strftime('%H:%M'))
+    for i in range(0, 3):
+        t = scan_time + datetime.timedelta(minutes=i-2)
+        times.append(t.strftime('%Y:%H:%M'))
     result = {}
     with open('/var/log/nginx/access.log', 'r') as f:
         lines = f.read().split('\n')
@@ -170,17 +166,16 @@ def network_monitor():
     for key in result.keys():
         if result.get(key) > 150:
             blacklist.append((key, result.get(key)))
-
-    rd.set('lt_net_monitor', times[-1])
     try:
         with mail.app.app_context():
             if len(blacklist):
                 send_network_warning_email(blacklist=blacklist)
                 with open('/etc/nginx/blacklist.conf', 'a+') as f:
                     for b in blacklist:
-                        f.write('deny {};\n'.format(b))
+                        f.write('deny {};\n'.format(b[0]))
                 import os
                 os.popen('sudo nginx -s reload')
-        write_task_log('封禁异常流量IP成功!')
+                write_task_log('封禁异常流量IP成功!详情:{}'.format(str(blacklist)))
+        write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{}'.format(str(scan_time), str(times)))
     except Exception as e:
         write_task_log('封禁异常流量IP失败!原因:\n'+str(e.args))
