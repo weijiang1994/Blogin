@@ -20,12 +20,12 @@ def confirm_required(func):
     def decorated_function(*args, **kwargs):
         if not current_user.confirm:
             message = Markup(
-                'Please confirm your account first.'
-                'Not receive the email?'
-                '<a class="alert-link" href="%s">Resend Confirm Email</a>' %
-                url_for('auth.resend_confirm_email'))
-            flash(message, 'warning.txt')
-            return redirect(url_for('main.index'))
+                '请先前往邮箱确认你的账号!'
+                '没有收到邮件?'
+                '<a class="alert-link" href="%s">重新发送确认邮件</a>' %
+                url_for('auth_bp.resend_confirm_mail'))
+            flash(message, 'warning')
+            return redirect(url_for('blog_bp.index'))
         return func(*args, **kwargs)
 
     return decorated_function
