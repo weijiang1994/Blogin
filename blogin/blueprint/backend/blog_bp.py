@@ -202,7 +202,7 @@ def upload():
 def delete_draft():
     did = request.form.get('did')
     d = DraftBlog.query.get_or_404(did)
-    d.tag = 1
+    d.tag = 0
     db.session.commit()
     return jsonify({'tag': 1, 'info': '删除草稿成功!'})
 
