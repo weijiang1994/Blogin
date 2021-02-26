@@ -8,7 +8,7 @@
         <div class="container">
             <br>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <div class="nav nav-pills flex-column" role="tablist" aria-orientation="vertical">
                         <div class="list-group">
                             <a {% if category == 'blog' %}style="color: #20c997"{% endif %} class="list-group-item text-info-a" href="{{ url_for('.search', q=q, category='blog') }}"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp; 博客</a>
