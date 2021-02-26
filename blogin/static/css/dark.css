@@ -1,3 +1,12 @@
+.tip { /* from github.com */
+    position: relative;
+    padding: 40px;
+    text-align: center;
+    background-color: #373839;
+    border-radius: 3px;
+    box-shadow: inset 0 0 10px rgba(27, 31, 35, 0.05);
+}
+
 .blog-content-brief-div{
     background-color: #303030;
     border-radius: 5px;

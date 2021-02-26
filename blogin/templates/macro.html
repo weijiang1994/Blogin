@@ -1,7 +1,7 @@
 {% macro photo_card(photo) %}
     <div class="photo-card card">
         <a class="card-thumbnail" href="{{ url_for('gallery_bp.photo', photo_id=photo.id) }}">
-            <img class="card-img-top portrait" src="{{ photo.save_path }}">
+            <img class="card-img-top portrait" src="{{ photo.save_path_s }}">
         </a>
         <p class="text-muted">{{ photo.title }}</p>
         <div class="card-body">
@@ -12,7 +12,7 @@
 {% endmacro %}
 
 {% macro blog_card(blog) %}
-    <div style="background: white; border-radius: 5px;" class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div">
+    <div class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div">
         <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
             <a href="/blog/article/{{ blog.id }}/">
                 <img class="w-100 article-img" src="{{ blog.pre_img }}" alt="{{ blog.title }}">
