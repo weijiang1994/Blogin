@@ -99,12 +99,27 @@
                                 <td><span class="label label-success">{{ blog.read_times }}</span></td>
                                 <td><span class="label label-default">{{ blog.state.name }}</span></td>
                                 <td>
-                                    <button class="btn btn-info"><a style="color:white; text-decoration: none" href="/backend/blog/edit/{{ blog.id }}">编辑</a></button>
-                                    {% if blog.delete_flag != 1 %}
-                                        <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/recover/{{ blog.id }}/">恢复</a></button>
-                                    {% else %}
-                                        <button class="btn btn-danger"><a style="color:white; text-decoration: none" class="text-info" href="/backend/blog/delete/{{ blog.id }}/">删除</a></button>
-                                    {% endif %}
+                                    <div  class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            操作
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right w-50" aria-labelledby="dropdownMenu1">
+                                            <li><a class="dropdown-item" href="/backend/blog/edit/{{ blog.id }}">编辑帖子</a></li>
+                                            {% if blog.delete_flag != 1 %}
+                                                <li><a class="dropdown-item" href="/backend/blog/recover/{{ blog.id }}/">恢复帖子</a></li>
+                                            {% else %}
+                                                <li><a class="dropdown-item" href="/backend/blog/delete/{{ blog.id }}/">隐藏帖子</a></li>
+                                            {% endif %}
+                                            {% if blog.is_top %}
+                                                <li><a class="dropdown-item" href="/backend/blog/top/{{ blog.id }}/">取消置顶</a></li>
+                                            {% else %}
+                                                <li><a class="dropdown-item" href="/backend/blog/top/{{ blog.id }}/">置顶帖子</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+
+
                                 </td>
                             </tr>
                         {% endfor %}

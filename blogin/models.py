@@ -131,6 +131,7 @@ class Blog(db.Model):
     update_time = db.Column(db.DateTime, nullable=False, default=datetime.now)
     read_times = db.Column(db.INTEGER, default=0)
     delete_flag = db.Column(db.INTEGER, db.ForeignKey('states.id'))
+    is_top = db.Column(db.INTEGER, default=0, comment='is it set top?')
 
     blog_types = db.relationship('BlogType', back_populates='blogs')
     comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
