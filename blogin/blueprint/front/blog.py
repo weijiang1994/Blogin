@@ -6,8 +6,8 @@
 @File    : blog_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics,\
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory
 from blogin.extension import db, rd
 from flask_login import current_user, login_required
@@ -24,7 +24,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()). \
+    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.is_top.desc(), Blog.create_time.desc()). \
         paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []

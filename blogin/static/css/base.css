@@ -238,3 +238,7 @@ main {
         text-align: center;
     }
 }
+
+.top-post-div{
+    position: relative;
+}

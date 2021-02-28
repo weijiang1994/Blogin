@@ -35,7 +35,7 @@
                     <!-- 博客列表 -->
                     <div class="summary-list">
                         {% for blog in blogs %}
-                            <div class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div">
+                            <div class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div {% if blog.is_top %}top-post-div{% endif %}">
                                 <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
                                     <a href="/blog/article/{{ blog.id }}/">
                                         <img class="w-100 article-img" src="{{ blog.pre_img }}" alt="{{ blog.title }}">

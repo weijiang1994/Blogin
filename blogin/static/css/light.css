@@ -1,3 +1,26 @@
+.top-post-div:after {
+    position: absolute;
+    top: 0.3rem;
+    right: -0.5rem;
+    z-index: 1;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 0;
+    height: 0;
+    border: 0.9375rem solid #0ab789;
+    border-left-color: transparent;
+    content: "置顶";
+}
+.top-post-div:before{
+    content: "";
+    position: absolute;
+    top: 2.1875rem;
+    left: 100%;
+    border: 0.25rem solid #0ab789;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
 .tip { /* from github.com */
     position: relative;
     padding: 40px;

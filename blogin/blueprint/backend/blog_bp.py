@@ -23,6 +23,25 @@ import datetime
 be_blog_bp = Blueprint('be_blog_bp', __name__, url_prefix='/backend')
 
 
+@be_blog_bp.route('/blog/top/<blog_id>/')
+@login_required
+@permission_required
+def set_top(blog_id):
+    blog = Blog.query.get_or_404(blog_id)
+    if blog.is_top:
+        blog.is_top = 0
+    else:
+        etp = Blog.query.filter_by(is_top=1).first()
+        if etp and etp.id != blog.id:
+            flash('已经存在了置顶文章,请先取消后再操作!', 'danger')
+            return redirect(request.referrer)
+        else:
+            blog.is_top = 1
+    db.session.commit()
+    flash('操作成功!', 'success')
+    return redirect(request.referrer)
+
+
 @be_blog_bp.route('/admin/blog/create/', methods=['GET', 'POST'])
 @login_required
 @permission_required
