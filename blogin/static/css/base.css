@@ -13,7 +13,9 @@
     border-left:4px solid #4a9c87;
     padding:10px 20px;
     background-color:rgba(0,0,0,.04);
-    margin:10px 0 20px}
+    margin:10px 0 20px
+}
+
 .avatar:hover {
     transform: rotate(360deg);
     -webkit-transform: rotate(360deg);
@@ -21,9 +23,11 @@
     -o-transform: rotate(360deg);
     -ms-transform: rotate(360deg);
 }
+
 a {
     color: inherit;
 }
+
 .article-img {
     cursor: pointer;
     transition: all 0.6s;
@@ -41,10 +45,6 @@ a {
     box-shadow:5px 5px 5px  #9d9d9d;
     transform: scale(1.01);
 }
-/*a:hover {*/
-/*    text-decoration: none;*/
-/*    color: #ea6f5a;*/
-/*}*/
 
 .h2,
 h2 {
@@ -60,9 +60,11 @@ h3 {
     margin-bottom: 5px;
     width: 150px;
 }
+
 html, body {
     height: 100%; /*让页面撑满窗体*/
 }
+
 .div-click:hover{
     color: #2aabd2;
 }
@@ -76,6 +78,7 @@ html, body {
 footer {
     color: rgba(0,0,0,.5);;
 }
+
 footer a:hover {
     color:#fff;
 }
@@ -90,15 +93,10 @@ body{
     height: 100%;
 }
 header{
-    /* 我们希望 header 采用固定的高度，只占用必须的空间 */
-    /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
     flex: 0 0 auto;
 }
 
 .main-content{
-    /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
-       而其他元素该属性值为0，因此不会得到多余的空间*/
-    /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
     flex: 1 0 auto;
 }
 
@@ -122,24 +120,19 @@ main {
 }
 
 /*个人动态区域的样式*/
-
-
 .moment-p{
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0 5px 0;
 }
 
 .moment-p.p{
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0 5px 0;
 }
-
-
 
 .blog-title{
     color: #17a2b8!important;
     font-size: 26px;
     font-weight: bold;
 }
-
 
 .summary-list.avatar {
     width:1.2rem;
@@ -173,6 +166,7 @@ main {
 .text-info-a {
     color: inherit;
 }
+
 .text-info-a:hover {
     text-decoration: none;
     color: #ea6f5a;
@@ -182,6 +176,7 @@ main {
     padding-bottom: 8px;
     border-bottom: 2px solid #f0f0f0;
 }
+
 .description strong {
     padding-bottom: 7px;
     border-bottom: 2px solid #00AAEE;
