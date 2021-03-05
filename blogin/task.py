@@ -144,24 +144,29 @@ def update_bd_token():
         write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
 
-@aps.task('interval', id='network_monitor', minutes=3)
+@aps.task('interval', id='network_monitor', minutes=1)
 def network_monitor():
+    # 获取检测检测时间段
     scan_time = datetime.datetime.now()
     times = []
-    for i in range(0, 3):
-        t = scan_time + datetime.timedelta(minutes=i-2)
+    for i in range(0, 2):
+        t = scan_time + datetime.timedelta(minutes=i-1)
         times.append(t.strftime('%Y:%H:%M'))
+
     result = {}
+    # 开始检测
     with open('/var/log/nginx/access.log', 'r') as f:
         lines = f.read().split('\n')
         for line in lines:
-            if times[0] in line or times[1] in line or times[2] in line:
+            if times[0] in line or times[1] in line:
                 l = line.split()
                 if l[0] not in result.keys():
                     result.setdefault(l[0], 1)
                 else:
                     count = result.get(l[0]) + 1
                     result[l[0]] = count
+
+    # 获取异常黑名单
     blacklist = []
     for key in result.keys():
         if result.get(key) > 150:
@@ -176,6 +181,7 @@ def network_monitor():
                 import os
                 os.popen('sudo nginx -s reload')
                 write_task_log('封禁异常流量IP成功!详情:{}'.format(str(blacklist)))
-        write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{}'.format(str(scan_time), str(times)))
+        write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{},检测详情:{}'.
+                       format(str(scan_time), str(times), str(result)))
     except Exception as e:
         write_task_log('封禁异常流量IP失败!原因:\n'+str(e.args))
