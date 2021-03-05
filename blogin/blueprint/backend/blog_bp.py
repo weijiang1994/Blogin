@@ -7,13 +7,13 @@
 @Software: PyCharm
 """
 import os
-
+from bs4 import BeautifulSoup
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, current_app, \
     send_from_directory
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog
+from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog, PostContent
 from blogin.extension import db
 from blogin.utils import get_current_time, create_path, update_contribution, get_md5
 from flask_login import login_required
@@ -65,6 +65,8 @@ def blog_create():
         filename = form.blog_img_file.data.filename
         _type = form.blog_type.data
         level = form.blog_level.data
+        bs = BeautifulSoup(content, 'html.parser')
+        catalogue = [link.get('id') for link in bs.find_all('a') if link.get('id')]
 
         current_time = get_current_time()
         current_time = current_time.split(' ')[0]
@@ -80,6 +82,7 @@ def blog_create():
         cate.counts += 1
         update_contribution()
         db.session.add(blg)
+        db.session.add(PostContent(content=str(catalogue), post_id=blg.id))
         db.session.commit()
         return redirect(url_for('blog_bp.index'))
     else:
@@ -124,6 +127,14 @@ def blog_content_edit(blog_id):
         blog.type_id = cate.id
         blog.introduce = form.brief_content.data
         blog.update_time = datetime.datetime.now()
+        bs = BeautifulSoup(form.body.data, 'html.parser')
+        catalogue = [link.get('id') for link in bs.find_all('a') if link.get('id')]
+        post_cate = PostContent.query.filter_by(post_id=blog.id).first()
+        if post_cate:
+            post_cate.content = str(catalogue)
+        else:
+            db.session.add(PostContent(content=str(catalogue), post_id=blog.id))
+
         update_contribution()
         history_file_path = basedir + '/history/' + get_md5(get_current_time()) + '.txt'
         with open(history_file_path, 'w', encoding='utf-8') as f:

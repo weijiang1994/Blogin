@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics,\
-    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent
 from blogin.extension import db, rd
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -75,16 +75,25 @@ def blog_article(blog_id):
     # 顶级评论
     comments = BlogComment.query.filter_by(blog_id=blog_id, parent_id=None).order_by(BlogComment.timestamp.desc()).all()
     histories = BlogHistory.query.filter_by(blog_id=blog_id).order_by(BlogHistory.timestamps.desc()).all()
+
     # 获取上一篇下一篇
     next_post = Blog.query.filter(Blog.id > blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
     pre_post = Blog.query.filter(Blog.id < blog_id, Blog.delete_flag == 1).order_by(Blog.id.desc()).first()
+
+    # 获取目录
+    content = PostContent.query.filter_by(post_id=blog.id).first()
+    print(content)
+    print(type(content))
+    if content:
+        content = eval(content.content)
+
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
             order_by(BlogComment.timestamp.asc()).all()
         replies.append(reply)
     db.session.commit()
     return render_template('main/blog.html', blog=blog, cate=cate, comments=comments, replies=replies,
-                           histories=histories, next_post=next_post, pre_post=pre_post)
+                           histories=histories, next_post=next_post, pre_post=pre_post, content=content)
 
 
 @blog_bp.route('/blog/cate/<cate_id>/', methods=['GET', 'POST'])

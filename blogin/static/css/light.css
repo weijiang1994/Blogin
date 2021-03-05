@@ -303,3 +303,11 @@ blockquote>p {
 .tab-div p{
     margin-bottom: 5px;
 }
+
+.content-a{
+    display: block;
+    padding-left: 5px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
