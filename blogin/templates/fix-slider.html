@@ -9,6 +9,11 @@
             <p id="historyTab" class="content-tab-fade" data-target="history">修改历史</p>
         </div>
         <div id="contentDiv" class="pb-2 pl-2">
+            {% if content %}
+                {% for c in content %}
+                    <a class="content-a" href="#{{ c }}">{{ c }}</a>
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div id="historyDiv" style="display: none" class="pb-2 pl-2">

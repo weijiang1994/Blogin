@@ -488,3 +488,11 @@ class DraftBlog(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.now)
     brief = db.Column(db.String(512), default='', comment='blog brief introduce')
     tag = db.Column(db.INTEGER, default=1, comment='is is draft? 0: no 1: yes')
+
+
+class PostContent(db.Model):
+    __tablename__ = 'post_content'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    content = db.Column(db.VARCHAR(500), default='', comment='')
+    post_id = db.Column(db.INTEGER)
