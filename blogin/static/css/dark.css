@@ -254,3 +254,65 @@ blockquote p {
     border-radius: 5px;
     margin-bottom: 5px;
 }
+
+/*浮动侧边栏样式*/
+.content-div{
+    position: fixed;
+    left: 0;
+    top: 10rem;
+    background-color: #2a2a2a;
+    width: 0;
+    z-index: 10000;
+}
+
+@media screen and (min-width: 1660px) {
+    .content-div{
+        display: none;
+    }
+}
+.btn-slider{
+    border-radius: 3px;
+    padding: 3px;
+    position: absolute;
+    text-decoration: none!important;
+    color: white;
+    background-color: #0ab789;
+}
+.btn-slider:hover{
+    color: white;
+}
+.content-tab{
+    border-bottom: 4px solid white;
+    flex-grow: 1;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.content-tab-fade{
+    border-bottom: 0;
+    flex-grow: 1;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.fade-btn{
+    float: right;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    color: white;
+}
+
+.slider-content{
+    display: none;
+    color: white;
+    background-color: #373737;
+    width: 240px;
+    border-radius: 5px;
+}
+
+.tab-div{
+    display: flex;
+}
+.tab-div p{
+    margin-bottom: 5px;
+}

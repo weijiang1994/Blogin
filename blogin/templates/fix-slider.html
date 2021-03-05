@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="content-div">
+    <a class="btn-slider" href="javascript:;">展开</a>
+    <br>
+    <div class="slider-content">
+        <button class="fade-btn"><i class="fa fa-angle-double-left"></i></button>
+        <br>
+        <div class="tab-div">
+            <p id="contentTab" class="content-tab" data-target="content">文章目录</p>
+            <p id="historyTab" class="content-tab-fade" data-target="history">修改历史</p>
+        </div>
+        <div id="contentDiv" class="pb-2 pl-2">
+        </div>
+
+        <div id="historyDiv" style="display: none" class="pb-2 pl-2">
+            {% if histories %}
+                <ol>
+                    {% for history in histories %}
+                        <li>
+                            <a target="_blank" class="text-info-a" href="{{ url_for('blog_bp.blog_history', h_id=history.id) }}">{{ history.timestamps }}</a><br>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".tab-div p").on('click', function (){
+        if ($(this).data('target') === 'content'){
+            $("#historyTab").removeAttr('class');
+            $("#historyTab").addClass('content-tab-fade');
+            $("#contentTab").removeAttr('class');
+            $("#contentTab").addClass('content-tab');
+            $("#contentDiv").show();
+            $("#historyDiv").css('display', 'none');
+        }else {
+            $("#historyTab").removeAttr('class');
+            $("#historyTab").addClass('content-tab');
+            $("#contentTab").removeAttr('class');
+            $("#contentTab").addClass('content-tab-fade');
+            $("#historyDiv").show();
+            $("#contentDiv").css('display', 'none');
+        }
+    })
+
+    $('.fade-btn').on('click', function (){
+        $(".btn-slider").show();
+        $(".slider-content").css('display', 'none');
+    })
+
+    $(".btn-slider").on('click', function (){
+        $(".slider-content").show();
+        $(this).css('display', 'none');
+    })
+</script>
