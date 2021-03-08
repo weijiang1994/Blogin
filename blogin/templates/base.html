@@ -40,7 +40,7 @@
     </head>
 {% endblock %}
 {% block nav %}
-    <nav class="navbar navbar-expand-lg bg-nav justify-content-between">
+    <nav style="flex: none" class="navbar navbar-expand-lg bg-nav justify-content-between">
         <a class="navbar-brand nav-text" href="/">Blogin</a>
         <button class="navbar-toggler {% if request.cookies.get('blog_theme', 'light')=='dark' %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
