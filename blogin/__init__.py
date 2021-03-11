@@ -30,6 +30,7 @@ from blogin.blueprint.front.tool import tool_bp
 from blogin.blueprint.front.soul import soul_bp
 from blogin.blueprint.front.api import api_bp
 from blogin.blueprint.front.oauth import oauth_bp
+from blogin.blueprint.front.rss import rss_bp
 from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space, super_split, conv_list, is_empty
@@ -166,6 +167,7 @@ def register_blueprint(app: Flask):
     app.register_blueprint(soul_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(oauth_bp)
+    app.register_blueprint(rss_bp)
 
 
 def register_cmd(app: Flask):
