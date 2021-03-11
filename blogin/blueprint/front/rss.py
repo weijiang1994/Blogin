@@ -21,20 +21,22 @@ def rss_feed():
     fg.title('Blogin')
     fg.description('Blogin是一个个人博客网站，后端使用Flask框架，前端使用Bootstrap4，主要分享一些编程类的技术以及一些陈词滥调的文章!')
     fg.link(href='https://2dogz.cn')
-    fg.language('zh')
     fg.id(str(len(blogs)))
     for blog in blogs:
         fe = fg.add_entry()
-        fe.title(blog.title)
+        fe.title('[{}]'.format(blog.blog_types.name)+blog.title)
         fe.id(blog.id)
         fe.link(href='https://2dogz.cn//blog/article/{}/'.format(blog.id))
         fe.description(blog.introduce)
         fe.guid(str(blog.id), permalink=False)  # Or: fe.guid(article.url, permalink=True)
         fe.author(name='Blogin', email='weijiang1994_1@qq.com')
         fe.content(blog.content)
-        # fe.category(category=[blog.blog_types.name])
-        # fe.pubDate(blog.create_time)
 
-    response = make_response(fg.atom_str(pretty=True))
-    response.headers.set('Content-Type', 'application/rss+xml')
+    rss_data = str(fg.atom_str(pretty=True), 'utf-8')
+    response = make_response(rss_data)
+    response.headers.set('Content-Type', 'rss+xml')
+    print(response)
+    from flask import Response
+    response: Response
+    print(response.charset)
     return response
