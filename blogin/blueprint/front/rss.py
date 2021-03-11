@@ -35,8 +35,4 @@ def rss_feed():
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     response = make_response(rss_data)
     response.headers.set('Content-Type', 'rss+xml')
-    print(response)
-    from flask import Response
-    response: Response
-    print(response.charset)
     return response
