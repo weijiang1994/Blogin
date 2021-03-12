@@ -496,3 +496,13 @@ class PostContent(db.Model):
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     content = db.Column(db.VARCHAR(500), default='', comment='')
     post_id = db.Column(db.INTEGER)
+
+
+class MessageBorder:
+    __tablename__ = 'msg_border'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    user = db.Column(db.String(255), nullable=False)
+    body = db.Column(db.String(512), nullable=False)
+    timestamps = db.Column(db.DateTime, default=datetime.now)
+    flag = db.Column(db.INTEGER, default=0, comment='is it not effect?')
