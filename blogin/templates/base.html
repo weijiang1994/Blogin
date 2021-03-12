@@ -45,16 +45,23 @@
         <button class="navbar-toggler {% if request.cookies.get('blog_theme', 'light')=='dark' %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse " id="collapsibleNavbar">
+        <div class="navbar-collapse collapse" id="collapsibleNavbar">
             <ul class="navbar-nav mr-auto">
                 {{ nav_item("blog_bp.index", '主页', 'fa fa-home') }}
                 {{ nav_item("gallery_bp.index", '相册', 'fa fa-photo') }}
                 {{ nav_item("blog_bp.archive", '归档', 'fa fa-archive') }}
                 {{ nav_item("tool_bp.index", '工具', 'fa fa-steam') }}
-                {{ dropmenu("soul_bp.index") }}
+
+                {{ dropmenu('SOUL', 'fa fa-subway',
+                            [['/soul/', 'fa fa-file-code-o mr-2', '毒鸡汤'],
+                             ['/ts-poem/', 'fa fa-file-text-o mr-2', '唐宋诗'],
+                             ['/song-ci/', 'fa fa-file-text mr-2', '宋词'],
+                             ['/api/introduce/', 'fa fa-exchange mr-2', 'API'],
+                             ['/rss-feed/', 'fa fa-rss-square mr-2', 'RSS源'],
+                             ['/timeline/', 'fa fa-list-ol mr-2', '建站日志']]) }}
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
-                <input class="form-control mr-sm-2" type="search" name="q" placeholder="输入关键字" aria-label="Search" required>
+                <input class="form-control mr-sm-2 " type="search" name="q" placeholder="输入关键字" aria-label="Search" required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
             </form>
             {% if not current_user.is_authenticated %}
