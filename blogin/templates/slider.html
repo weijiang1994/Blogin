@@ -83,9 +83,18 @@
 <!-- 留言板 -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-sticky-note"></i> 最近留言</strong>
+        <div class="d-flex">
+            <b class="flex-grow-1"><i class="fa fa-weixin" aria-hidden="true"></i> 近期留言</b>
+            <a style="margin-bottom: 0px" href="{{ url_for('msg_border_bp.index') }}"><i class="fa fa-angle-double-right"></i></a>
+        </div>
     </div>
-
+    <div class="card-body pl-3">
+        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+    </div>
 </div>
 <!-- 友情链接 -->
 <div class="card mb-3 mt-2">

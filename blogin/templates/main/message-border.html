@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% from "macro.html" import markdownHelp with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .header-text{
+            font-weight: bold;
+            font-size: 22px;
+            color: chocolate;
+            border-bottom: #0ab789 solid 4px;
+            display: inline;
+        }
+        .p-error-hint{
+            color: #f94b43;
+            display: none;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    留言板
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container mt-3">
+            <h3 class="header-text">Blogin的留言板</h3>
+            <div class="post-div post-comment">
+                <p id="commentPosition"></p>
+                {% if current_user.is_authenticated %}
+                    <div>
+                        <ul class="nav nav-pills " role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="pill" href="#addComment"><i class="fa fa-commenting mr-2"></i>留言</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="getMarkDownData()" data-toggle="pill" href="#previewComment"><i class="fa fa-print mr-2"></i>预览</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="addComment" class="tab-pane active">
+                                <textarea onkeydown="tab(this)" class="form-control mt-2 report-textarea" style="height: 150px!important;" id="commentContent" placeholder="请输入留言内容,支持markdown语法"></textarea>
+                                <div class="d-flex mt-1">
+                                    <a class="mb-1 text-decoration-none mr-2 a-link" href="#" id="commentEmoji" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-smile-o mr-1"></i>表情
+                                    </a>
+                                    <div class="dropdown-menu" id="emoji-list" aria-labelledby="commentEmoji">
+                                        {% for emoji_url in emoji_urls %}
+                                            <div style="padding:3px">
+                                                {% for emoji in emoji_url %}
+                                                    <button class="btn p-1">
+                                                        <img class="img-emoji"
+                                                             src="{{ url_for('static', filename='emojis/'+emoji[0]) }}"
+                                                             data-toggle="tooltip" data-placement="right"
+                                                             title="{{ emoji.1 }}" alt="{{ emoji.1 }}"
+                                                             data-emoji=":{{ emoji.1 }}:">
+                                                    </button>
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a onclick="upload()" class="mb-1 text-decoration-none mr-2 a-link span-hand"><i class="fa fa-photo mr-1"></i>图片</a>
+                                    <input type="file" id="uploadInput" onchange="uploadImage()" accept=".png" hidden="hidden">
+                                    <a href="#" class="mb-1 text-decoration-none mr-2 a-link" data-toggle="modal" data-target="#markdownHelp"><i class="fa fa-file mr-1"></i>帮助</a>
+                                    <p class="flex-grow-1 text-right mb-1 p-error-hint">请输入留言内容!</p>
+                                </div>
+                                <div class="d-flex flex-row-reverse">
+                                    <button class="btn btn-info" id="commentBtn" onclick="postComment()">留言</button>
+                                    <button hidden="hidden" id="replyBtn" onclick="replyComment()" class="btn btn-success mt-2">回复</button>
+                                    <button hidden="hidden" id="cancleReplyBtn" onclick="cancleReply()" class="btn btn-danger mt-2 mr-2">取消</button>
+                                    <a id="replyUserP" hidden="hidden" class="p-reply flex-grow-1 text-decoration-none"></a>
+                                </div>
+                            </div>
+                            <!-- 评论预览界面 -->
+                            <div id="previewComment" class="tab-pane fade">
+                                <div id="previewHtml" class="mt-2" style="min-height: 50px">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <div class="card-body text-center m-2 m-md-3 f-16" id="no-editor">
+                            <div>您尚未登录，
+                                <a href="/auth/login/"><span class="badge badge-info">登录</span></a> 或
+                                <a href="/auth/register/"><span class="badge badge-success">注册</span></a> 后评论
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {{ markdownHelp() }}
+    </main>
+    <script>
+        function postComment() {
+            comment = isEmpty();
+            if (!comment){
+                return false;
+            }
+            let postId = $("#postTitle").data("id");
+            $.ajax({
+                type:"post",
+                data: {"commentContent": comment, 'postId': postId},
+                url: "/post/post-comment/",
+                success: function (res) {
+                    window.location.reload();
+                }
+            })
+        }
+
+        function isEmpty() {
+            let comment = $("#commentContent").val();
+            // 防止一直按回车键输入空白的评论内容
+            if (comment.replace(/<br>/g, '').replace(/\s*/g, '') === ''){
+                $(".p-error-hint").slideDown(500);
+                $(".p-error-hint").show().delay(2000).hide(500);
+                return false;
+            }
+            if (!comment){
+                $(".p-error-hint").slideDown(500);
+                $(".p-error-hint").show().delay(2000).hide(500);
+                return false;
+            }
+            return comment;
+        }
+
+        function upload() {
+            $("#uploadInput").click();
+        }
+
+        function uploadImage() {
+            let img = $("#uploadInput")[0].files[0];
+            let formdata = new FormData();
+            formdata.append('file', img);
+            $.ajax({
+                url:"/normal/ajax-upload/",
+                type: "post",
+                async: false,
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    insertText(document.getElementById('commentContent'), res.imgPath)
+                }
+            })
+        }
+
+        function insertText(obj, str) {
+            if (document.selection) {
+                let sel = document.selection.createRange();
+                sel.text = str;
+            } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
+                let startPos = obj.selectionStart,
+                    endPos = obj.selectionEnd,
+                    cursorPos = startPos,
+                    tmpStr = obj.value;
+                obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+                cursorPos += str.length;
+                obj.selectionStart = obj.selectionEnd = cursorPos;
+            } else {
+                obj.value += str;
+            }
+        }
+
+        function getMarkDownData() {
+            let comment = $("#commentContent").val();
+            if (comment === ''){
+                $("#previewHtml").html('<p class="text-muted"><b>你什么都没有输入怎么预览啊?</b></p>')
+                return false;
+            }
+            let last = sessionStorage.getItem('md');
+            // 评论没有修改时,不发送预览请求
+            if (last){
+                if (last === comment){
+                    return false;
+                }
+            }
+            sessionStorage.setItem('md', comment);
+            $.ajax({
+                type:"post",
+                url: '/normal/comment/render-md/',
+                data: {'md': comment},
+                success: function (res) {
+                    $("#previewHtml").html(res.html);
+                }
+            })
+        }
+
+    </script>
+{% endblock %}

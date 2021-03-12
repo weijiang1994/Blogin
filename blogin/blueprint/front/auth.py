@@ -74,6 +74,9 @@ def login():
                 db.session.add(login_log)
                 db.session.commit()
                 flash('登录成功!', 'success')
+                print(request.args.get('next'))
+                if request.args.get('next'):
+                    return redirect(url_for(request.args.next))
                 return redirect(url_for('blog_bp.index'))
         elif user is None:
             flash('无效的邮箱或用户名.', 'danger')

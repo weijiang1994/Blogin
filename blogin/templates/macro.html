@@ -264,3 +264,74 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro markdownHelp() %}
+    <div class="modal fade" id="markdownHelp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Markdown语法帮助</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    可能有些同学对Markdown语法不是很了解,下面是一些简单的语法介绍!你们也可以访问这个<a href="https://www.runoob.com/markdown/md-tutorial.html" class="text-decoration-none" target="_blank">链接</a>学习怎么使用Markdown语法!
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">类型</th>
+                            <th scope="col">语法</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="table-secondary">
+                            <td>标题</td>
+                            <td># H1 ## H2 ### H3</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>粗体</td>
+                            <td>**bold**</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>无序表</td>
+                            <td>* a</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>有序表</td>
+                            <td>1. a</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>引用</td>
+                            <td>> 引用内容</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>链接</td>
+                            <td>[title](http://...)</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>图片</td>
+                            <td>![alt](http://...)</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>代码</td>
+                            <td>`code`</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>换行</td>
+                            <td>&lt;br&gt;</td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td>代码片段</td>
+                            <td>```python <br>
+                                def test():<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;print('Hello world!')<br>
+                                ```</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
