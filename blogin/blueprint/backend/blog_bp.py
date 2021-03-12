@@ -102,9 +102,24 @@ def blog_edit():
     blogs = pagination.items
     for _type in types:
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
-                                '/backend/editArticleType/' + str(_type.id)])
+                                '/backend/edit-article-cate/{}/'.format(str(_type.id))])
     return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs,
                            pagination=pagination)
+
+
+@be_blog_bp.route('/edit-article-cate/<cate_id>/', methods=['GET', 'POST'])
+@login_required
+@permission_required
+def edit_cate(cate_id):
+    cate = BlogType.query.get_or_404(cate_id)
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        cate.name = name
+        cate.description = description
+        db.session.commit()
+        flash('编辑类别信息成功!', 'success')
+    return render_template('backend/edit-blog-category.html', cate=cate)
 
 
 @be_blog_bp.route('/blog/edit/<int:blog_id>', methods=['GET', 'POST'])
