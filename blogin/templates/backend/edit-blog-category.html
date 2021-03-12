@@ -1,0 +1,24 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    博客类别信息编辑
+{% endblock %}
+
+{% block content %}
+    <body>
+    <div class="container mt-2">
+        {% include "_flash.html" %}
+        <h2>博客类别信息编辑</h2>
+        <form action="/backend/edit-article-cate/{{ cate.id }}/" method="post">
+            <label for="name">
+                类别名: <input class="form-control" name="name" type="text" value="{{ cate.name }}" placeholder="请输入类别名称" required>
+            </label>
+            <br>
+            <label for="description">
+                描述信息:<textarea class="form-control" required name="description" id="description" cols="30" rows="10">{{ cate.description }}</textarea>
+            </label>
+            <br>
+            <input type="submit" value="保存" class="btn btn-success">
+        </form>
+    </div>
+    </body>
+{% endblock %}
