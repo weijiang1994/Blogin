@@ -31,7 +31,6 @@ def rss_feed():
         fe.guid(str(blog.id), permalink=False)  # Or: fe.guid(article.url, permalink=True)
         fe.author(name='Blogin', email='weijiang1994_1@qq.com')
         fe.content(blog.content)
-
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     response = make_response(rss_data)
     response.headers.set('Content-Type', 'rss+xml')
