@@ -498,7 +498,7 @@ class PostContent(db.Model):
     post_id = db.Column(db.INTEGER)
 
 
-class MessageBorder:
+class MessageBorder(db.Model):
     __tablename__ = 'msg_border'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
