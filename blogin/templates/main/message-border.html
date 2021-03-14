@@ -26,18 +26,11 @@
         <div class="container mt-3">
             <h3 class="header-text">Blogin的留言板</h3>
             <ul class="mt-3 list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Cras justo odio
-                    <span class="badge badge-primary badge-pill">14</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Dapibus ac facilisis in
-                    <span class="badge badge-primary badge-pill">2</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Morbi leo risus
-                    <span class="badge badge-primary badge-pill">1</span>
-                </li>
+                {% for msg in msg_borders %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ msg.body|safe }}
+                    </li>
+                {% endfor %}
             </ul>
             <div class="post-div post-comment">
                 <p id="commentPosition"></p>
@@ -108,15 +101,15 @@
     </main>
     <script>
         function postComment() {
-            comment = isEmpty();
+            let comment = isEmpty();
             if (!comment){
                 return false;
             }
             let postId = $("#postTitle").data("id");
             $.ajax({
                 type:"post",
-                data: {"commentContent": comment, 'postId': postId},
-                url: "/post/post-comment/",
+                data: {"message": comment},
+                url: "/msg_border/leave_msg/",
                 success: function (res) {
                     window.location.reload();
                 }
@@ -174,6 +167,22 @@
                 obj.selectionStart = obj.selectionEnd = cursorPos;
             } else {
                 obj.value += str;
+            }
+        }
+
+        // 评论框按键监听事件
+        function tab(obj){
+            if (event.keyCode === 9){
+                event.preventDefault();
+                var indent = '    ';
+                var start = obj.selectionStart;
+                var end = obj.selectionEnd;
+                var selected = window.getSelection().toString();
+                selected = indent + selected.replace(/\n/g, '\n' + indent);
+                obj.value = obj.value.substring(0, start) + selected
+                    + obj.value.substring(end);
+                obj.setSelectionRange(start + indent.length, start
+                    + selected.length);
             }
         }
 
