@@ -56,6 +56,7 @@ class User(db.Model, UserMixin):
     third_party = db.relationship('ThirdParty', back_populates='user')
 
     receive_notify = db.relationship('Notification', back_populates='receive_user', cascade='all')
+    msg_border = db.relationship("MessageBorder", back_populates='msg_user', cascade='all')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -502,7 +503,9 @@ class MessageBorder(db.Model):
     __tablename__ = 'msg_border'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    user = db.Column(db.String(255), nullable=False)
-    body = db.Column(db.String(512), nullable=False)
+    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    body = db.Column(db.TEXT, nullable=False)
     timestamps = db.Column(db.DateTime, default=datetime.now)
     flag = db.Column(db.INTEGER, default=0, comment='is it not effect?')
+
+    msg_user = db.relationship('User', back_populates='msg_border')
