@@ -26,7 +26,7 @@ github = oauth.remote_app(
 )
 
 providers = {
-    'github': github
+    'github': github,
 }
 
 profile_endpoints = {
