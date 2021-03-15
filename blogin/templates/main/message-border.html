@@ -2,6 +2,7 @@
 {% from "macro.html" import markdownHelp with context %}
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/code.css') }}" >
     <style>
         .header-text{
             font-weight: bold;
@@ -16,6 +17,7 @@
             display: none;
             font-weight: bold;
         }
+
     </style>
 {% endblock %}
 {% block title %}
@@ -28,7 +30,15 @@
             <ul class="mt-3 list-group">
                 {% for msg in msg_borders %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ msg.body|safe }}
+                        <div>
+                            <div class="d-flex">
+                                <div><img class="avatar-s rounded" src="{{ msg.msg_user.avatar }}" alt="msg.msg_user.username"></div>
+                                <div class="pl-2 flex-grow-1">
+                                    <p class="mb-1"><span class="badge badge-info">{{ msg.msg_user.username }}</span>留言于{{ msg.timestamps }}</p>
+                                    <div class="flex-grow-1">{{ msg.body|safe }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -105,7 +115,6 @@
             if (!comment){
                 return false;
             }
-            let postId = $("#postTitle").data("id");
             $.ajax({
                 type:"post",
                 data: {"message": comment},
@@ -189,7 +198,7 @@
         function getMarkDownData() {
             let comment = $("#commentContent").val();
             if (comment === ''){
-                $("#previewHtml").html('<p class="text-muted"><b>你什么都没有输入怎么预览啊?</b></p>')
+                $("#previewHtml").html('<p class="text-muted"><b>请输入留言后预览?</b></p>')
                 return false;
             }
             let last = sessionStorage.getItem('md');
@@ -202,7 +211,7 @@
             sessionStorage.setItem('md', comment);
             $.ajax({
                 type:"post",
-                url: '/normal/comment/render-md/',
+                url: '/tool/markdown/',
                 data: {'md': comment},
                 success: function (res) {
                     $("#previewHtml").html(res.html);

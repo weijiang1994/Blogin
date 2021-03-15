@@ -507,5 +507,5 @@ class MessageBorder(db.Model):
     body = db.Column(db.TEXT, nullable=False)
     timestamps = db.Column(db.DateTime, default=datetime.now)
     flag = db.Column(db.INTEGER, default=0, comment='is it not effect?')
-
+    plain_text = db.Column(db.TEXT, nullable=False)
     msg_user = db.relationship('User', back_populates='msg_border')
