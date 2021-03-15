@@ -7,6 +7,7 @@
 @Software: PyCharm
 """
 from flask import Blueprint, abort, redirect, url_for, flash
+from flask_oauthlib.client import OAuthResponse
 import os
 from blogin.models import User, ThirdParty
 from flask_login import current_user, login_user
@@ -25,12 +26,26 @@ github = oauth.remote_app(
     authorize_url='https://github.com/login/oauth/authorize'
 )
 
+gitee = oauth.remote_app(
+    name='gitee',
+    consumer_key=os.getenv('GITEE_CLIENT_ID'),
+    consumer_secret=os.getenv('GITEE_CLIENT_SECRET'),
+    request_token_params={'scope': 'user_info'},
+    base_url='https://gitee.com/api/v5/user',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://gitee.com/oauth/token',
+    authorize_url='https://gitee.com/oauth/authorize',
+)
+
 providers = {
     'github': github,
+    'gitee': gitee
 }
 
 profile_endpoints = {
-    'github': 'user'
+    'github': 'user',
+    'gitee': 'user'
 }
 
 oauth_bp = Blueprint('oauth_bp', __name__)
@@ -43,6 +58,13 @@ def get_social_profile(provider, token):
     if provider.name == 'github':
         username = response.data.get('login')
         website = response.data.get('html_url')
+        email = response.data.get('email')
+        bio = response.data.get('bio')
+        avatar = response.data.get('avatar_url')
+
+    if provider.name == 'gitee':
+        username = response.data.get('login')
+        website = response.data.get('blog')
         email = response.data.get('email')
         bio = response.data.get('bio')
         avatar = response.data.get('avatar_url')
@@ -73,7 +95,9 @@ def oauth_callback(provider_name):
         if response is not None:
             if provider_name == 'twitter':
                 access_token = response.get('oauth_token'), response.get('oauth_token_secret')
-            else:
+            if provider_name == 'github':
+                access_token = response.get('access_token')
+            if provider_name == 'gitee':
                 access_token = response.get('access_token')
         else:
             access_token = None
