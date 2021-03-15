@@ -10,7 +10,8 @@ import datetime
 import os
 import random
 import requests
-
+from bleach import clean, linkify
+from markdown import markdown
 from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory, flash, abort
 from sqlalchemy.sql.expression import func
@@ -18,7 +19,7 @@ from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
     BaiduTranslation, BAIDU_LANGUAGE, YoudaoTranslation, FONT_COLOR, AddMark2RT, AddMark2RB, \
     AddMark2LT, AddMark2LB, AddMark2Rotate, AddMark2Center, AddMark2Parallel, resize_img, Lunar, format_json, \
-    format_html, format_python
+    format_html, format_python, MyMDStyleExtension, EMOJI_INFOS
 import re
 from blogin.extension import rd
 import json
@@ -43,6 +44,23 @@ WEEKDAY = {
     6: '星期六',
     7: '星期天',
 }
+
+
+def to_html(raw):
+    allowed_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'abbr', 'b', 'br', 'blockquote', 'code', 'del', 'div',
+                    'em', 'img', 'p', 'pre', 'strong', 'span', 'ul', 'li', 'ol']
+    allowed_attributes = ['src', 'title', 'alt', 'href', 'class']
+    html = markdown(raw, output_format='html',
+                    extensions=['markdown.extensions.fenced_code',
+                                'markdown.extensions.codehilite',
+                                'markdown.extensions.tables', MyMDStyleExtension()])
+    clean_html = clean(html, tags=allowed_tags, attributes=allowed_attributes)
+    img_url = '<img class="img-emoji" src="/static/emojis/{}" title="{}" alt="{}">'
+    for i in EMOJI_INFOS:
+        for ii in i:
+            emoji_url = img_url.format(ii[0], ii[1], ii[1])
+            clean_html = re.sub(':{}:'.format(ii[1]), emoji_url, clean_html)
+    return linkify(clean_html)
 
 
 @tool_bp.route('/')
@@ -389,3 +407,10 @@ def get_outer_itf_data():
             return jsonify({'tag': 1, 'code': res.text})
     except:
         return jsonify({'tag': 0, 'code': '未知原因接口数据获取失败!'})
+
+
+@tool_bp.route('/markdown/', methods=['POST'])
+def get_markdown():
+    md = request.form.get('md')
+    html = to_html(md)
+    return jsonify({'html': html})
