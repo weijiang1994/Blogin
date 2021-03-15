@@ -213,8 +213,7 @@ def register_cmd(app: Flask):
                 click.echo('退出当前操作')
                 return
 
-            super_user = User(username=username, email=email, password=pwd, confirm=1,
-                              avatar='/static/img/admin/admin.jpg')
+            super_user = User(username=username, email=email, password=pwd, confirm=1, role_id=1)
             super_user.set_password(pwd)
             db.session.add(super_user)
             db.session.commit()
