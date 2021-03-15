@@ -7,7 +7,7 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
-from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics,\
+from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent
 from blogin.extension import db, rd
 from flask_login import current_user, login_required
@@ -16,6 +16,7 @@ import datetime
 from blogin.utils import redirect_back, github_social
 import requests
 from blogin.emails import send_comment_email
+
 blog_bp = Blueprint('blog_bp', __name__)
 
 
@@ -24,7 +25,8 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Blog.query.filter_by(delete_flag=1).order_by(Blog.is_top.desc(), Blog.create_time.desc()). \
+    pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0).order_by(Blog.is_top.desc(),
+                                                                                    Blog.create_time.desc()). \
         paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []
