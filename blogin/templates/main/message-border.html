@@ -2,7 +2,11 @@
 {% from "macro.html" import markdownHelp with context %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/code.css') }}" >
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/perldoc.css') }}">
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/material.css') }}" >
+    {% endif %}
     <style>
         .header-text{
             font-weight: bold;
@@ -26,6 +30,7 @@
 {% block content %}
     <main>
         <div class="container mt-3">
+            {% include "_flash.html" %}
             <h3 class="header-text">Blogin的留言板</h3>
             <ul class="mt-3 list-group">
                 {% for msg in msg_borders %}
@@ -34,9 +39,18 @@
                             <div><img class="avatar-s rounded" src="{{ msg.msg_user.avatar }}" alt="msg.msg_user.username"></div>
                             <div class="pl-2 flex-grow-1">
                                 <p class="mb-1"><span class="badge badge-info mr-2">{{ msg.msg_user.username }}</span>留言于<span><small><b>{{ msg.timestamps }}</b></small></span></p>
+                                <p class="d-lg-block d-none"><small><b>{{ msg.msg_user.slogan }}</b></small></p>
                             </div>
                         </div>
                         <div class="mt-2">{{ msg.body|safe }}</div>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.role_id == 1 %}
+                                <a class="float-right ml-2 text-decoration-none" href="/msg-border/operator/{{ msg.id }}/"><small>
+                                    屏蔽
+                                </small></a>
+                                <a class="float-right text-decoration-none" style="cursor: pointer" onclick="reply()"><small>回复</small></a>
+                            {% endif %}
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
@@ -56,9 +70,9 @@
                             <div id="addComment" class="tab-pane active">
                                 <textarea onkeydown="tab(this)" class="form-control mt-2 report-textarea" style="height: 150px!important;" id="commentContent" placeholder="请输入留言内容,支持markdown语法"></textarea>
                                 <div class="d-flex mt-1">
-                                    <a class="mb-1 text-decoration-none mr-2 a-link" href="#" id="commentEmoji" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-smile-o mr-1"></i>表情
-                                    </a>
+                                    <!-- <a class="mb-1 text-decoration-none mr-2 a-link" href="#" id="commentEmoji" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-smile-o mr-1"></i>表情
+                                    </a> -->
                                     <div class="dropdown-menu" id="emoji-list" aria-labelledby="commentEmoji">
                                         {% for emoji_url in emoji_urls %}
                                             <div style="padding:3px">
@@ -74,15 +88,15 @@
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    <a onclick="upload()" class="mb-1 text-decoration-none mr-2 a-link span-hand"><i class="fa fa-photo mr-1"></i>图片</a>
+                                    <!-- <a onclick="upload()" class="mb-1 text-decoration-none mr-2 a-link span-hand"><i class="fa fa-photo mr-1"></i>图片</a> -->
                                     <input type="file" id="uploadInput" onchange="uploadImage()" accept=".png" hidden="hidden">
-                                    <a href="#" class="mb-1 text-decoration-none mr-2 a-link" data-toggle="modal" data-target="#markdownHelp"><i class="fa fa-file mr-1"></i>帮助</a>
+                                    <a href="#" class="mb-1 text-decoration-none mr-2 a-link" data-toggle="modal" data-target="#markdownHelp"><i class="fa fa-question-circle mr-1"></i>帮助</a>
                                     <p class="flex-grow-1 text-right mb-1 p-error-hint">请输入留言内容!</p>
                                 </div>
                                 <div class="d-flex flex-row-reverse">
                                     <button class="btn btn-info" id="commentBtn" onclick="postComment()">留言</button>
                                     <button hidden="hidden" id="replyBtn" onclick="replyComment()" class="btn btn-success mt-2">回复</button>
-                                    <button hidden="hidden" id="cancleReplyBtn" onclick="cancleReply()" class="btn btn-danger mt-2 mr-2">取消</button>
+                                    <button hidden="hidden" id="cancelReplyBtn" onclick="cancelReply()" class="btn btn-danger mt-2 mr-2">取消</button>
                                     <a id="replyUserP" hidden="hidden" class="p-reply flex-grow-1 text-decoration-none"></a>
                                 </div>
                             </div>
@@ -94,11 +108,11 @@
                         </div>
                     </div>
                 {% else %}
-                    <div class="text-center">
+                    <div class="text-center border border-info">
                         <div class="card-body text-center m-2 m-md-3 f-16" id="no-editor">
                             <div>您尚未登录，
                                 <a href="/auth/login/"><span class="badge badge-info">登录</span></a> 或
-                                <a href="/auth/register/"><span class="badge badge-success">注册</span></a> 后评论
+                                <a href="/auth/register/"><span class="badge badge-success">注册</span></a> 后留言
                             </div>
                         </div>
                     </div>
@@ -108,6 +122,25 @@
         {{ markdownHelp() }}
     </main>
     <script>
+        function cancelReply() {
+            $("#commentBtn").removeAttr('hidden');
+            $("#replyBtn").attr('hidden', 'hidden');
+            $("#cancelReplyBtn").attr('hidden', 'hidden');
+            $("#replyUserP").html('');
+            $("#replyUserP").attr('hidden', 'hidden');
+        }
+
+        function reply(commentId, commentUser, commentUserId) {
+            $("#commentBtn").attr('hidden', 'hidden');
+            $("#replyBtn").removeAttr('hidden');
+            $("#cancelReplyBtn").removeAttr('hidden');
+            $("#replyUserP").removeAttr('hidden');
+            $("#replyUserP").html('@'+commentUser);
+            sessionStorage.setItem('commentId', commentId);
+            sessionStorage.setItem('commentUserId', commentUserId);
+            $('html,body').animate({ scrollTop: $("#commentPosition").offset().top - 100 }, 200)
+        }
+
         function postComment() {
             let comment = isEmpty();
             if (!comment){
@@ -116,7 +149,7 @@
             $.ajax({
                 type:"post",
                 data: {"message": comment},
-                url: "/msg_border/leave_msg/",
+                url: "/msg-border/leave-msg/",
                 success: function (res) {
                     window.location.reload();
                 }
@@ -181,10 +214,10 @@
         function tab(obj){
             if (event.keyCode === 9){
                 event.preventDefault();
-                var indent = '    ';
-                var start = obj.selectionStart;
-                var end = obj.selectionEnd;
-                var selected = window.getSelection().toString();
+                let indent = '    ';
+                let start = obj.selectionStart;
+                let end = obj.selectionEnd;
+                let selected = window.getSelection().toString();
                 selected = indent + selected.replace(/\n/g, '\n' + indent);
                 obj.value = obj.value.substring(0, start) + selected
                     + obj.value.substring(end);
@@ -218,13 +251,13 @@
         }
 
         function replyComment() {
-            comment = isEmpty();
+            let comment = isEmpty();
             if (!comment){
                 return false;
             }
-            commentId = sessionStorage.getItem('commentId');
-            commentUserId = sessionStorage.getItem('commentUserId');
-            postId = $("#postTitle").data('id');
+            let commentId = sessionStorage.getItem('commentId');
+            let commentUserId = sessionStorage.getItem('commentUserId');
+            let postId = $("#postTitle").data('id');
             $.ajax({
                 type: "post",
                 url: "/post/reply-comment/",

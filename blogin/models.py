@@ -504,6 +504,7 @@ class MessageBorder(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'))
+    parent_id = db.Column(db.INTEGER, default=0)
     body = db.Column(db.TEXT, nullable=False)
     timestamps = db.Column(db.DateTime, default=datetime.now)
     flag = db.Column(db.INTEGER, default=0, comment='is it not effect?')

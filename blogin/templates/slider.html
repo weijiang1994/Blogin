@@ -85,15 +85,13 @@
     <div class="card-header p-2 f-17">
         <div class="d-flex">
             <b class="flex-grow-1"><i class="fa fa-weixin" aria-hidden="true"></i> 近期留言</b>
-            <a style="margin-bottom: 0px" class="text-decoration-none" href="{{ url_for('msg_border_bp.index') }}">更多<i class="fa fa-angle-double-right"></i></a>
+            <a style="margin-bottom: 0px" class="text-decoration-none" href="{{ url_for('msg_border_bp.index') }}"><small>更多</small><i class="fa fa-angle-double-right"></i></a>
         </div>
     </div>
     <div class="card-body pl-3">
-        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
-        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
-        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
-        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
-        <p class="mb-1">test1: 博客最近在做什么新项目吗？</p>
+        {% for msg in msg_borders %}
+            <p class="mb-1">{{ msg.msg_user.username }}: {{ msg.plain_text|truncate(15) }}</p>
+        {% endfor %}
     </div>
 </div>
 <!-- 友情链接 -->

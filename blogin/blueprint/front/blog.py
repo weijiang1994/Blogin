@@ -8,7 +8,7 @@
 """
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
-    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent
+    LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder
 from blogin.extension import db, rd
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
@@ -26,7 +26,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 def index():
     page = request.args.get('page', 1, type=int)
     pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0).order_by(Blog.is_top.desc(),
-                                                                                    Blog.create_time.desc()). \
+                                                                                         Blog.create_time.desc()). \
         paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
     cates = []
@@ -41,9 +41,11 @@ def index():
     plans = Plan.query.filter_by(is_done=0).all()
     su = User.query.filter(User.email == '804022023@qq.com').first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
+    msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
+                      order_by(MessageBorder.timestamps.desc()).all()[0:5]
     return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
                            pagination=pagination, blogs=blogs, cates=cates, categories=categories,
-                           loves=loves, su=su, flinks=flinks, plans=plans)
+                           loves=loves, su=su, flinks=flinks, plans=plans, msg_borders=msg_borders)
 
 
 @blog_bp.route('/themes/<string:theme_name>/')
@@ -104,8 +106,10 @@ def blog_cate(cate_id):
     categories = BlogType.query.all()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     plans = Plan.query.filter_by(is_done=0).all()
+    msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
+                                             order_by(MessageBorder.timestamps.desc()).all()[0:5]
     return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
-                           plans=plans)
+                           plans=plans, msg_borders=msg_borders)
 
 
 @blog_bp.route('/blog/history/<h_id>/')
@@ -211,6 +215,8 @@ def archive():
     plans = Plan.query.filter_by(is_done=0).all()
     years = []
     months = []
+    msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
+                      order_by(MessageBorder.timestamps.desc()).all()[0:5]
     for blog in blogs:
         current_year = blog.create_time.year
         current_month = blog.create_time.month
@@ -233,8 +239,9 @@ def archive():
                 # 年月都存在则直接将数据拼接到后面
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
+
     return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans,
-                           years=years, months=months)
+                           years=years, months=months, msg_borders=msg_borders)
 
 
 TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],
