@@ -3,18 +3,7 @@
 {% block head %}
     {{ super() }}
     <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
-    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/perldoc.css') }}">
-    {% else %}
-        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/material.css') }}" >
-    {% endif %}
     <style>
-        .introduce-bg{
-            background-color: #5b5e5c42;
-            border-radius: 5px;
-            padding: 10px;
-            line-height: 30px;
-        }
         pre{
             max-height: 620px;
         }
@@ -38,17 +27,16 @@
                     <option value="{{ cate.id }}">{{ cate.name }}</option>
                 {% endfor %}
             </select>
-            <i class="fa fa-spin"></i>
             </label>
-            <br>
+            <div id="hintSpin" class="text-center hide">
+                <i class="fa fa-spinner fa-pulse"></i>正在加载请稍后...
+            </div>
             <p class="mb-1">订阅链接:</p>
             <div class="border border-info p-3 mb-3">
                 <a id="rss-link" href="https://2dogz.cn/rss-feed/" target="_blank">https://2dogz.cn/rss-feed/</a>
                 <button id="copyBtn" class="btn btn-sm btn-success float-right" data-clipboard-target="#rss-link">复制</button>
             </div>
-            <div id="xmlText">
-                {{ response|safe }}
-            </div>
+            <pre class="border border-info p-1" id="xmlText" lang="xml">{{ response }}</pre>
         </div>
     </main>
     <script>
@@ -59,16 +47,17 @@
         });
 
         clipboard.on('success', function (e) {
-            showToast('复制成功', 2);
+            showToast('复制成功', 1000);
         });
 
         clipboard.on('error', function (e) {
-            showToast(e, 2);
+            showToast(e, 1000);
         });
 
         function itemChange(){
             let cate_id = $("#category").val();
             $("#category").attr('disabled', true);
+            $("#hintSpin").show();
             $.ajax({
                 type: 'POST',
                 url: '/rss-feed/display-rss/',
@@ -76,14 +65,16 @@
                 success: function (res){
                     $("#rss-link").attr('href', res.url);
                     $("#rss-link").text(res.url);
-                    $("#xmlText").html(res.xml);
+                    $("#xmlText").text(res.xml);
+                    $("#hintSpin").hide();
                     $("#category").attr('disabled', false);
                 },
                 error: function (res){
+                    $("#hintSpin").hide();
                     $("#category").attr('disabled', false);
                 }
             })
-
         }
+
     </script>
 {% endblock %}

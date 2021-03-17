@@ -39,8 +39,6 @@ def rss_index():
     blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
-    rss_data = '```xml\n' + rss_data + '\n```'
-    rss_data = to_html(rss_data)
     return render_template('main/rss.html', cates=cates, response=rss_data)
 
 
@@ -73,7 +71,5 @@ def display_rss():
         blogs = Blog.query.filter(Blog.delete_flag == 1, Blog.type_id == cate_id).order_by(Blog.create_time.desc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
-    rss_data = '```xml\n' + rss_data + '\n```'
-    rss_data = to_html(rss_data)
     url = url_for('.rss_category_feed', cate_id=cate_id, _external=True)
     return {'url': url, 'xml': rss_data}
