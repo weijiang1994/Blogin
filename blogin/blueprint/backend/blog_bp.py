@@ -238,7 +238,7 @@ def upload():
     pre = random.randint(1, 10000)
     filename = str(pre) + f.filename
     f.save(os.path.join(current_app.config['BLOGIN_UPLOAD_PATH'], filename))
-    url = url_for('be_blog_bp.uploaded_files', filename=filename)
+    url = url_for('be_blog_bp.uploaded_files', filename=filename, _external=True)
     return upload_success(url=url)
 
 
