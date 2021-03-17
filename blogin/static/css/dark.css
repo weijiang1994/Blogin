@@ -1,3 +1,10 @@
+.introduce-bg{
+    background-color: #5b5e5c42;
+    border-radius: 5px;
+    padding: 10px;
+    line-height: 30px;
+}
+
 .top-post-div:after {
     position: absolute;
     top: 0.3rem;
