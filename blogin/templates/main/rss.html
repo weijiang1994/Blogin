@@ -1,10 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% from "macro.html" import toast with context %}
+{% block head %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+    {% if request.cookies.get('blog_theme', 'light') == 'light' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/perldoc.css') }}">
+    {% else %}
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'code-style/material.css') }}" >
+    {% endif %}
+    <style>
+        .introduce-bg{
+            background-color: #5b5e5c42;
+            border-radius: 5px;
+            padding: 10px;
+            line-height: 30px;
+        }
+        pre{
+            max-height: 620px;
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    RSS源订阅说明
+{% endblock %}
+{% block content %}
+    <main>
+        {{ toast() }}
+        <div class="container mt-2">
+            <h3 class="border-info border-bottom">RSS源订阅说明页面</h3>
+            <div class="introduce-bg">
+                <p class="mb-0">本页面提供说明本站RSS源订阅的一些基本功能，订阅用户可以操作下面的控件查看RSS源订阅效果。本站提供了所有文章RSS源订阅功能，
+                    同时也支持单个类别文章RSS源订阅，具体RSS-FEED请操作下面的组件获取。</p>
+            </div>
+            <label for="category">类别:<select onchange="itemChange()" class="form-control" name="category" id="category">
+                <option value="all">全部订阅</option>
+                {% for cate in cates %}
+                    <option value="{{ cate.id }}">{{ cate.name }}</option>
+                {% endfor %}
+            </select>
+            <i class="fa fa-spin"></i>
+            </label>
+            <br>
+            <p class="mb-1">订阅链接:</p>
+            <div class="border border-info p-3 mb-3">
+                <a id="rss-link" href="https://2dogz.cn/rss-feed/" target="_blank">https://2dogz.cn/rss-feed/</a>
+                <button id="copyBtn" class="btn btn-sm btn-success float-right" data-clipboard-target="#rss-link">复制</button>
+            </div>
+            <div id="xmlText">
+                {{ response|safe }}
+            </div>
+        </div>
+    </main>
+    <script>
+        let clipboard = new ClipboardJS('#copyBtn', {
+            text: function () {
+                return $("#rss-link").text();
+            }
+        });
+
+        clipboard.on('success', function (e) {
+            showToast('复制成功', 2);
+        });
+
+        clipboard.on('error', function (e) {
+            showToast(e, 2);
+        });
+
+        function itemChange(){
+            let cate_id = $("#category").val();
+            $("#category").attr('disabled', true);
+            $.ajax({
+                type: 'POST',
+                url: '/rss-feed/display-rss/',
+                data: {'cate-id': cate_id},
+                success: function (res){
+                    $("#rss-link").attr('href', res.url);
+                    $("#rss-link").text(res.url);
+                    $("#xmlText").html(res.xml);
+                    $("#category").attr('disabled', false);
+                },
+                error: function (res){
+                    $("#category").attr('disabled', false);
+                }
+            })
+
+        }
+    </script>
+{% endblock %}
