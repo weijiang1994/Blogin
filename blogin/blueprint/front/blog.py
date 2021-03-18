@@ -108,7 +108,7 @@ def blog_cate(cate_id):
     plans = Plan.query.filter_by(is_done=0).all()
     msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
                                              order_by(MessageBorder.timestamps.desc()).all()[0:5]
-    return render_template('main/blogCate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
+    return render_template('main/blog-cate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
                            plans=plans, msg_borders=msg_borders)
 
 

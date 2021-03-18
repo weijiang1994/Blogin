@@ -27,7 +27,7 @@ def song_ci():
     ci = SongCi.query.order_by(func.random()).limit(1)[0]
     now = datetime.date.today()
     lundar = Lunar(datetime.datetime.now())
-    return render_template('main/poem/songCi.html', ci=ci, now=now, lundar=lundar)
+    return render_template('main/poem/song-ci.html', ci=ci, now=now, lundar=lundar)
 
 
 @soul_bp.route('/ts-poem/')
@@ -35,4 +35,4 @@ def ts_poem():
     poem = Poem.query.order_by(func.random()).limit(1)[0]
     now = datetime.date.today()
     lundar = Lunar(datetime.datetime.now())
-    return render_template('main/poem/tsPoem.html', poem=poem, now=now, lundar=lundar)
+    return render_template('main/poem/ts-poem.html', poem=poem, now=now, lundar=lundar)

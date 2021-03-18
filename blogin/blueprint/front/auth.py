@@ -109,7 +109,7 @@ def confirm(token):
 
 @auth_bp.route('/forget-password/')
 def forget_pwd():
-    return render_template('main/auth/forgetPwd.html')
+    return render_template('main/auth/forget-pwd.html')
 
 
 @auth_bp.route('/password-reset/', methods=['GET', 'POST'])
@@ -125,7 +125,7 @@ def reset_password():
     token = generate_token(user=user, operation=Operations.RESET_PASSWORD)
     send_reset_password_email(user=user, token=token, ver_code=ver_code)
     flash('验证邮件发送成功，请到邮箱查看然后重置密码!', 'success')
-    return render_template('main/auth/pwdResetNext.html')
+    return render_template('main/auth/pwd-reset-next.html')
 
 
 @auth_bp.route('/reset-confirm/', methods=['POST', 'GET'])
@@ -140,23 +140,23 @@ def reset_confirm():
         # 如果输入的邮箱不存在
         if not usr:
             flash('邮箱不存在，请输入正确的邮箱~', 'danger')
-            return render_template('main/auth/resetPwd.html', form=form)
+            return render_template('main/auth/reset-pwd.html', form=form)
         # 如果验证码已经超出了有效时间
         if rd.get(usr.id) is None:
             flash('验证码已过期.', 'danger')
-            return render_template('main/auth/resetPwd.html', form=form)
+            return render_template('main/auth/reset-pwd.html', form=form)
         pwd = form.confirm_pwd.data
         ver_code = form.ver_code.data
 
         # 如果输入的验证码与redis中的不一致
         if ver_code != rd.get(usr.id):
             flash('验证码错误')
-            return render_template('main/auth/resetPwd.html', form=form)
+            return render_template('main/auth/reset-pwd.html', form=form)
         usr.set_password(pwd)
         db.session.commit()
         flash('密码重置成功!', 'success')
         return redirect(url_for('.login'))
-    return render_template('main/auth/resetPwd.html', form=form)
+    return render_template('main/auth/reset-pwd.html', form=form)
 
 
 @auth_bp.route('/resend-confirm/')

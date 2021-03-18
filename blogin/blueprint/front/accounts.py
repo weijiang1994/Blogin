@@ -34,7 +34,7 @@ def profile(user_id):
     photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
     notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
         order_by(Notification.timestamp.desc()).all()
-    return render_template('main/accountProfile.html', logs=logs, blogComments=blog_comments,
+    return render_template('main/account-profile.html', logs=logs, blogComments=blog_comments,
                            photoComments=photo_comments, notifies=notifies, pagination=pagination)
 
 
@@ -50,7 +50,7 @@ def change_password():
         db.session.commit()
         flash('密码修改成功,请重新登录.', 'success')
         return redirect(url_for('auth_bp.login'))
-    return render_template('main/changePassword.html', form=form)
+    return render_template('main/change-password.html', form=form)
 
 
 @accounts_bp.route('/profile/edit/', methods=['GET', 'POST'])
@@ -67,7 +67,7 @@ def edit_profile():
         query_name_user = User.query.filter_by(username=new_name).first()
         if query_name_user is not None and query_name_user.id != current_user.id:
             flash('用户名已存在', 'danger')
-            return render_template('main/editProfile.html', form=form)
+            return render_template('main/edit-profile.html', form=form)
         user.username = form.user_name.data
         if form.avatar.data.filename:
             filename = form.avatar.data.filename
@@ -76,7 +76,7 @@ def edit_profile():
             img_data = imread(basedir + '/uploads/avatars/' + filename)
             if len(img_data) != len(img_data[0]):
                 flash('为了头像显示正常，请上传长宽一致的头像!', 'danger')
-                return render_template('main/editProfile.html', form=form)
+                return render_template('main/edit-profile.html', form=form)
             user.avatar = '/accounts/avatar/' + filename
         db.session.commit()
         flash('资料修改成功!', 'success')
@@ -85,7 +85,7 @@ def edit_profile():
     form.website.data = current_user.website
     form.user_name.data = current_user.username
     form.receive_email.data = current_user.received_email_tag
-    return render_template('main/editProfile.html', form=form)
+    return render_template('main/edit-profile.html', form=form)
 
 
 @accounts_bp.route('/avatar/<filename>/')
