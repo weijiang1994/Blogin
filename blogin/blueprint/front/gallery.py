@@ -108,4 +108,4 @@ def delete_comment():
 def tag(tag_id):
     tags = Tag.query.get_or_404(tag_id)
     photos = Photo.query.with_parent(tags).filter_by(level=0).order_by(Photo.create_time.desc())
-    return render_template('main/galleryTag.html', photos=photos, tags=tags)
+    return render_template('main/gallery-tag.html', photos=photos, tags=tags)

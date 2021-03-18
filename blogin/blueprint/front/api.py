@@ -16,7 +16,7 @@ api_bp = Blueprint('api_bp', __name__, url_prefix='/api')
 @api_bp.route('/introduce/')
 def api_introduce():
     blog = Blog.query.filter_by(title='API介绍').first()
-    return render_template("main/api/apiIntroduce.html", blog=blog)
+    return render_template("main/api/api-introduce.html", blog=blog)
 
 
 @api_bp.route('/get-soul/')

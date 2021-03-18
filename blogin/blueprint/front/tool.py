@@ -131,7 +131,7 @@ def word_cloud():
         else:
             return jsonify({'tag': 0, 'info': '抱歉,词云生成出错了~'})
         return jsonify({'tag': 1})
-    return render_template('main/tool/wordCloud.html')
+    return render_template('main/tool/word-cloud.html')
 
 
 @tool_bp.route('/multi-translation/', methods=['GET', 'POST'])
