@@ -23,7 +23,7 @@ def index():
     pagination = User.query.order_by(User.create_time).paginate(page=page,
                                                                 per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
     users = pagination.items
-    return render_template('backend/userManager.html', pagination=pagination, users=users)
+    return render_template('backend/user-manager.html', pagination=pagination, users=users)
 
 
 @user_m_bp.route('/set-admin/<int:user_id>/')
