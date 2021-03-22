@@ -13,7 +13,7 @@
             {% include "_flash.html" %}
             <h3><b>用户管理</b></h3>
             <hr>
-            <div class="table-responsive">
+            <div class="table-responsive" style="padding-bottom: 25px">
                 {% if users %}
                     <table class="table table-hover">
                     <thead>
@@ -81,12 +81,10 @@
                 {% endif %}
                 </tbody>
                 </table>
-                <div style="text-align: right; margin-right: 15px;">
-                    {{ render_pagination(pagination) }}
-                </div>
             </div>
-
+            <div style="text-align: right; margin-right: 15px;">
+                {{ render_pagination(pagination) }}
+            </div>
         </div>
     </main>
-
 {% endblock %}
