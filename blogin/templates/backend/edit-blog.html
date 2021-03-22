@@ -72,7 +72,7 @@
             <div id="articleManage" class="container tab-pane active">
                 <br>
                 <button class="btn btn-success"><a style="color: white;" href="/backend/admin/blog/create/">添加新博客</a></button>
-                <div class="table-responsive">
+                <div class="table-responsive" style="padding-bottom: 45px">
                     {% if blogs %}
                         <table class="table table-hover">
                         <caption>已有博客文章</caption>
@@ -118,8 +118,6 @@
                                             {% endif %}
                                         </ul>
                                     </div>
-
-
                                 </td>
                             </tr>
                         {% endfor %}

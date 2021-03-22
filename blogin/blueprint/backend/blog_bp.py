@@ -98,12 +98,12 @@ def blog_edit():
     blog_type_datas = []
     types = BlogType.query.all()
     pagination = Blog.query.order_by(Blog.create_time).paginate(page=page,
-                                                                per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
+                                                                per_page=20)
     blogs = pagination.items
     for _type in types:
         blog_type_datas.append([_type.id, _type.name, _type.create_time, _type.counts, _type.description,
                                 '/backend/edit-article-cate/{}/'.format(str(_type.id))])
-    return render_template('backend/editBlog.html', blog_type_datas=blog_type_datas, blogs=blogs,
+    return render_template('backend/edit-blog.html', blog_type_datas=blog_type_datas, blogs=blogs,
                            pagination=pagination)
 
 
