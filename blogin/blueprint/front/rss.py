@@ -65,11 +65,12 @@ def rss_category_feed(cate_id):
 @rss_bp.route('/display-rss/', methods=['POST'])
 def display_rss():
     cate_id = request.form.get('cate-id')
+    url = url_for('.rss_category_feed', cate_id=cate_id, _external=True)
     if cate_id == 'all':
         blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+        url = url_for('.rss_feed', _external=True)
     else:
         blogs = Blog.query.filter(Blog.delete_flag == 1, Blog.type_id == cate_id).order_by(Blog.create_time.desc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
-    url = url_for('.rss_category_feed', cate_id=cate_id, _external=True)
     return {'url': url, 'xml': rss_data}
