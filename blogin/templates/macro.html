@@ -38,11 +38,11 @@
     {% if comment.replied_id %}
         <div class="moment-div">
             <p style="color: dodgerblue">{{ comment.replied.author.username }}</p>
-            <p class="moment-p">{{comment.replied.body|safe}}</p>
+            <p class="moment-p text-break">{{comment.replied.body|safe}}</p>
         </div>
     {% endif %}
     <div>
-        {{ comment.body|safe }}
+        <div class="text-break">{{ comment.body|safe }}</div>
         <p class="moment-p">来自:<a style="color: dodgerblue; text-decoration: none;" href="/blog/article/{{ comment.blog.id }}">{{ comment.blog.title }}</a></p>
         <hr>
     </div>
@@ -58,7 +58,7 @@
         </div>
     {% endif %}
     <div>
-        {{ comment.body|safe }}
+        <div class="text-break">{{ comment.body|safe }}</div>
         <p class="moment-p">来自:<a style="color: dodgerblue; text-decoration: none;" href="/gallery/photo/{{ comment.photo.id }}">{{ comment.photo.title }}</a></p>
         <hr>
     </div>
