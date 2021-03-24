@@ -30,7 +30,7 @@
                 {% endfor %}
             </ul>
             <div class="text-right">
-                <button data-id="{{ draft_id }}" onclick="saveDraft($(this).data('id'))" class="btn btn-success">保存草稿</button>
+                <button data-id="{{ draft_id }}" id="saveDraftBtn" onclick="saveDraft($(this).data('id'))" class="btn btn-success">保存草稿</button>
             </div>
         </div>
         {% for message in get_flashed_messages(with_categories=True) %}
@@ -125,6 +125,7 @@
                 data: {'did': did, 'brief': brief, 'content': content, 'title': title},
                 success: function (res){
                     if (res.tag === 1){
+                        $("#saveDraftBtn").data('id', res.draft_id)
                         alert(res.info);
                     }else {
                         alert('保存草稿失败!');

@@ -259,6 +259,7 @@ def save_draft():
     title = request.form.get('title')
     content = request.form.get('content')
     brief = request.form.get('brief')
+
     if did != 'None':
         d = DraftBlog.query.get_or_404(did)
         d.content = content
@@ -268,4 +269,4 @@ def save_draft():
         d = DraftBlog(title=title, content=content, brief=brief)
         db.session.add(d)
     db.session.commit()
-    return jsonify({'tag': 1, 'info': '保存草稿成功'})
+    return jsonify({'tag': 1, 'info': '保存草稿成功', 'draft_id': d.id})
