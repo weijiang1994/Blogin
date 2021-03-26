@@ -228,7 +228,6 @@ def register_cmd(app: Flask):
 
     @app.cli.command()
     def addtp():
-        print('添加第三方登录方式')
         third_party_name = input('请输入第三方登录方式:')
         tp = ThirdParty(name=third_party_name)
         db.session.add(tp)
