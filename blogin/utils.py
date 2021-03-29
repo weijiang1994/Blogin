@@ -35,7 +35,8 @@ from blogin.setting import basedir
 from imageio import imread
 from blogin.models import Contribute
 from bs4 import BeautifulSoup
-
+import logging
+from logging.handlers import RotatingFileHandler
 config_ini = configparser.ConfigParser()
 config_ini.read(basedir + '/res/config.ini', encoding='utf-8')
 
@@ -133,6 +134,19 @@ EMOJI_INFOS = [[('angry-face_1f620.png', 'angry-face'),
                 ('worried-face_1f61f.png', 'worried-face'),
                 ('yellow-heart_1f49b.png', 'yellow-heart'),
                 ('zipper-mouth-face_1f910.png', 'zipper-mouth-face')]]
+
+
+def log_util(log_name, log_path, max_size=2*1024*1024, backup_count=10):
+    logger = logging.getLogger(log_name)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    file_handler = RotatingFileHandler(log_path+'/'+log_name,
+                                       maxBytes=max_size,
+                                       backupCount=backup_count
+                                       )
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    logger.setLevel(logging.DEBUG)
+    return logger
 
 
 class MyMDStyleTreeProcessor(Treeprocessor):
