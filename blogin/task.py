@@ -11,11 +11,15 @@ from apscheduler.executors.base import BaseExecutor
 from flask import current_app
 from blogin.extension import db, aps, rd, mail
 import datetime
-from blogin.utils import github_social, get_md5, get_current_time
+from blogin.utils import github_social, get_md5, get_current_time, log_util
 from blogin.setting import basedir
 from blogin.emails import send_network_warning_email
 import traceback
 import requests
+
+log_path = basedir + '/logs/'
+logger = log_util(log_name='task.log',
+                  log_path=log_path)
 
 
 def write_task_log(info):
@@ -39,10 +43,10 @@ def get_one():
                 one = OneSentence(content=d[0].text, day=date)
                 db.session.add(one)
                 db.session.commit()
-                write_task_log('插入每日一句成功!')
+                logger.info('插入每日一句成功')
                 rd.set('one', d[0].text)
     except:
-        write_task_log('插入每日一句失败,错误原因:\n' + str(traceback.format_exc()))
+        logger.error('插入每日一句失败,错误原因:\n' + traceback.format_exc())
 
 
 @aps.task('cron', id='do_job_3', day='*', hour='00', minute='00', second='50')
@@ -88,10 +92,9 @@ def update_github_avatar():
         # 更新redis中local_avatar的值
         rd.set('local_avatar', '/tool/github/{}.png'.format(md5))
         rd.set('pre_md5', md5)
-        write_task_log('更新github头像成功!')
+        logger.info('更新github头像成功!')
     except Exception as e:
-        write_task_log('更新github头像失败!失败原因:\n' + str(e.args) + '\n' +
-                       str(traceback.format_exc()))
+        logger.error('更新github头像失败!失败原因:\n' + traceback.format_exc())
 
 
 # noinspection PyBroadException
@@ -115,10 +118,9 @@ def update_github_info():
             rd.set('avatar', user_info.json()['avatar_url'])
         if repo_info.status_code == 200:
             rd.set('repo_desc', repo_info.json()['description'])
-        write_task_log('更新github仓库信息成功!')
+        logger.info('更新github仓库信息成功!')
     except Exception as e:
-        write_task_log('更新github仓库信息失败!失败原因:\n' + str(e.args) + '\n' +
-                       str(traceback.format_exc()))
+        logger.error('更新github仓库信息失败!失败原因:\n'+traceback.format_exc())
 
 
 @aps.task('cron', id='update_baidu_token', day='5, 20', hour='15', minute='43', second='05')
@@ -137,11 +139,13 @@ def update_bd_token():
             token = res.json().get('access_token')
             c.set('baidu', 'token', token)
             c.write(open(basedir + '/res/config.ini', 'r+'))
-            write_task_log('更新百度OCR token成功!')
+            logger.info('更新百度OCR token成功')
         else:
-            write_task_log('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
+            logger.error('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
+            # write_task_log('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
     except Exception as e:
-        write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
+        logger.error('更新百度OCR失败，错误原因：\n' + traceback.format_exc())
+        # write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
 
 @aps.task('interval', id='network_monitor', minutes=1)
@@ -150,7 +154,7 @@ def network_monitor():
     scan_time = datetime.datetime.now()
     times = []
     for i in range(0, 2):
-        t = scan_time + datetime.timedelta(minutes=i-1)
+        t = scan_time + datetime.timedelta(minutes=i - 1)
         times.append(t.strftime('%Y:%H:%M'))
 
     result = {}
@@ -180,8 +184,11 @@ def network_monitor():
                         f.write('deny {};\n'.format(b[0]))
                 import os
                 os.popen('sudo nginx -s reload')
-                write_task_log('封禁异常流量IP成功!详情:{}'.format(str(blacklist)))
-        write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{},检测详情:{}'.
-                       format(str(scan_time), str(times), str(result)))
+                logger.info('封禁异常流量IP成功!详情:{}'.format(blacklist))
+                # write_task_log('封禁异常流量IP成功!详情:{}'.format(str(blacklist)))
+        logger.info('异常流量检测成功，检测时刻:{}，检测时间段:{}，检测详情:{}'.format(str(scan_time), str(times), str(result)))
+        # write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{},检测详情:{}'.
+        #                format(str(scan_time), str(times), str(result)))
     except Exception as e:
-        write_task_log('封禁异常流量IP失败!原因:\n'+str(e.args))
+        logger.info('封禁异常流量IP失败！原因：\n' + traceback.format_exc())
+        # write_task_log('封禁异常流量IP失败!原因:\n' + str(e.args))
