@@ -53,7 +53,9 @@ def db_exception_handle(db):
                 traceback.print_exc()
                 db.session.rollback()
                 abort(500)
+
         return decorated_function
+
     return decorator
 
 
@@ -67,7 +69,6 @@ def statistic_traffic(db, obj):
     def decorator(func):
         @wraps(func)
         def decorated_function(*args, **kwargs):
-            # td = datetime.today().strftime('%Y-%m-%d')
             td = date.today()
             vst = obj.query.filter_by(date=td).first()
             if vst is None:
@@ -77,5 +78,7 @@ def statistic_traffic(db, obj):
                 vst.times += 1
             db.session.commit()
             return func(*args, **kwargs)
+
         return decorated_function
+
     return decorator
