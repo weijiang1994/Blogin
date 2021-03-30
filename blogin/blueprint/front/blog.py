@@ -10,7 +10,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request,
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder, \
     OneSentence
-from blogin.extension import db, rd
+from blogin.extension import db, rd, cache
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
@@ -87,8 +87,6 @@ def blog_article(blog_id):
 
     # 获取目录
     content = PostContent.query.filter_by(post_id=blog.id).first()
-    print(content)
-    print(type(content))
     if content:
         content = eval(content.content)
 
@@ -257,6 +255,7 @@ def timeline():
 
 # noinspection PyTypeChecker
 @blog_bp.route('/load-github/', methods=['POST'])
+@cache.cached(timeout=5*60)
 def load_github():
     theme = request.form.get('theme')
 
@@ -301,6 +300,7 @@ def load_github():
 
 
 @blog_bp.route('/load-one/', methods=['POST'])
+@cache.cached(timeout=60*60)
 def load_one():
     one = rd.get('one')
     # 防止服务器重启之后清空了redis数据导致前端获取不到当日one内容
