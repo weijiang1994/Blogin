@@ -21,6 +21,7 @@ from flask_whooshee import Whooshee
 from flask_oauthlib.client import OAuth
 from flask_apscheduler import APScheduler
 import redis
+from flask_caching import Cache
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -36,6 +37,7 @@ pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
 rd = redis.Redis(connection_pool=pool)
 oauth = OAuth()
 aps = APScheduler()
+cache = Cache()
 
 
 @login_manager.user_loader
