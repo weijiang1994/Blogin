@@ -126,3 +126,14 @@ def unlock_or_lock_photo_comment(com_id):
     db.session.commit()
     flash('操作成功!', 'success')
     return redirect(url_for('.photo_comment'))
+
+
+@user_m_bp.route('/reset-password/<int:user_id>/')
+@login_required
+@permission_required
+def reset_user_password(user_id):
+    user = User.query.get_or_404(user_id)
+    user.set_password('12345678')
+    db.session.commit()
+    flash('用户密码重置成功!', 'success')
+    return redirect(request.referrer)
