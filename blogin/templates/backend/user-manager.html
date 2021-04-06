@@ -73,6 +73,7 @@
                                         {% else %}
                                             <a class="dropdown-item" href="/backend/interactive/unlock/{{ user.id }}/">解除</a>
                                         {% endif %}</li>
+                                    <li><a class="dropdown-item" onclick="return confirm('你确定要入库该版本么?');" href="{{ url_for('user_m_bp.reset_user_password', user_id=user.id) }}">重置密码</a></li>
                                     </ul>
                                 </div>
                             </td>
