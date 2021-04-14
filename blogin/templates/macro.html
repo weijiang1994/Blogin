@@ -258,7 +258,7 @@
             <p title="注册邮箱" class="text-muted p-mt-8"><i class="fa fa-envelope-o mr-2"></i>{{ current_user.email }}</p>
             <p title="加入时间" class="text-muted p-mt-8"><i class="fa fa-calendar mr-2"></i>{{ current_user.create_time }}</p>
             <p title="个性签名" class="text-muted p-mt-8"><i class="fa fa-file-text mr-2"></i>{{ current_user.slogan|isempty(show='这家伙很懒没有留下签名!') }}</p>
-            <a class="text-muted"href="{{ current_user.website }}" target="_blank"><i class="fa fa-internet-explorer mr-2"></i>{{ current_user.website|isempty('这家伙很懒没有留下个人网站!') }}</a>
+            <a class="text-muted" href="{{ current_user.website }}" target="_blank"><i class="fa fa-internet-explorer mr-2"></i>{{ current_user.website|isempty('这家伙很懒没有留下个人网站!') }}</a>
             <br>
             <div class="mt-2"><a href="/accounts/profile/edit/" class="btn btn-outline-success mr-2">资料编辑</a><a href="/accounts/password/change/" class="btn btn-outline-danger">修改密码</a></div>
         </div>
