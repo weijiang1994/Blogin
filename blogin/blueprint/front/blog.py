@@ -53,6 +53,7 @@ def index():
 def change_theme(theme_name):
     if theme_name not in current_app.config['BLOG_THEMES'].keys():
         abort(404)
+    cache.clear()
     response = redirect(request.referrer)
     response.set_cookie('blog_theme', current_app.config['BLOG_THEMES'].get(theme_name), max_age=30 * 24 * 60 * 60)
     return response
