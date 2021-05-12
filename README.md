@@ -3,6 +3,7 @@
 ![python-depend.svg](https://7.dusays.com/2020/12/11/507ca007c94c0.svg)
 
 使用Flask+Bootstrap4开发的个人博客系统。
+如果有帮助到你，还请金手**Star-Star-Star**一下啦，不甚感激~~~
 
 [English Document](https://github.com/weijiang1994/Blogin/blob/master/README-EN.md)
 ## 功能介绍
