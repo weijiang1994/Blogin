@@ -10,6 +10,9 @@
             <h3><b>博客评论管理</b></h3>
             <hr>
             <div class="table-responsive">
+                <div style="text-align: right; margin-right: 15px;">
+                    {{ render_pagination(pagination) }}
+                </div>
                 {% if comments %}
                     <table class="table table-hover">
                     <thead>

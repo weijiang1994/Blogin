@@ -13,6 +13,9 @@
             {% include "_flash.html" %}
             <h3><b>用户管理</b></h3>
             <hr>
+            <div style="text-align: right; margin-right: 15px;">
+                {{ render_pagination(pagination) }}
+            </div>
             <div class="table-responsive" style="padding-bottom: 25px">
                 {% if users %}
                     <table class="table table-hover">
@@ -73,7 +76,7 @@
                                         {% else %}
                                             <a class="dropdown-item" href="/backend/interactive/unlock/{{ user.id }}/">解除</a>
                                         {% endif %}</li>
-                                    <li><a class="dropdown-item" onclick="return confirm('你确定要入库该版本么?');" href="{{ url_for('user_m_bp.reset_user_password', user_id=user.id) }}">重置密码</a></li>
+                                        <li><a class="dropdown-item" onclick="return confirm('你确定要入库该版本么?');" href="{{ url_for('user_m_bp.reset_user_password', user_id=user.id) }}">重置密码</a></li>
                                     </ul>
                                 </div>
                             </td>
