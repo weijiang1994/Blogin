@@ -101,7 +101,7 @@
 /*自定义CKEditor 渲染样式*/
 .m-blockquote{
     position: relative;
-    padding: 23px 5px 8px 5px;
+    padding: 33px 5px 8px 5px;
     background-color: #393939!important;
     border-radius: 4px;
     color: white;
