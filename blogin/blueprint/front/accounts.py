@@ -7,7 +7,7 @@
 @Software: PyCharm
 """
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request, current_app
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from imageio import imread
 from wtforms import ValidationError
 
@@ -49,6 +49,7 @@ def change_password():
         user.set_password(form.confirm_pwd.data)
         db.session.commit()
         flash('密码修改成功,请重新登录.', 'success')
+        logout_user()
         return redirect(url_for('auth_bp.login'))
     return render_template('main/profile/change-password.html', form=form)
 
