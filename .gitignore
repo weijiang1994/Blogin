@@ -7,6 +7,7 @@ __pycache__/
 *.so
 gunicorn_conf.py
 test.txt
+logs/
 # Distribution / packaging
 history
 sample/
