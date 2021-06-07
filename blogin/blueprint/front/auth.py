@@ -39,7 +39,7 @@ def register():
         send_confirm_email(user=user, token=token)
         flash('注册成功,欢迎加入Blogin.', 'success')
         return redirect(url_for('.login'))
-    return render_template('main/register.html', form=form)
+    return render_template('main/auth/register.html', form=form)
 
 
 @auth_bp.route('/login/', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def login():
     if ban_ip is not None:
         if int(ban_ip) >= 5:
             flash('当前IP登录错误次数过多,已被禁止登录,请明天再试!', 'info')
-            return render_template('main/login.html', form=form)
+            return render_template('main/auth/login.html', form=form)
 
     if form.validate_on_submit():
         usr = form.usr_email.data
@@ -86,7 +86,7 @@ def login():
             else:
                 rd.set(str(request.remote_addr), str(int(ban_ip)+1), ex=60*60*24)
             flash('无效的密码', 'danger')
-    return render_template('main/login.html', form=form)
+    return render_template('main/auth/login.html', form=form)
 
 
 @auth_bp.route('/logout/', methods=['GET'])
