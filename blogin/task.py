@@ -142,10 +142,8 @@ def update_bd_token():
             logger.info('更新百度OCR token成功')
         else:
             logger.error('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
-            # write_task_log('更新百度OCR失败，错误代码:' + str(res.status_code) + '请求连接:' + url)
     except Exception as e:
         logger.error('更新百度OCR失败，错误原因：\n' + traceback.format_exc())
-        # write_task_log('更新百度OCR失败，错误原因:\n' + str(e.args) + '\n' + traceback.format_exc())
 
 
 @aps.task('interval', id='network_monitor', minutes=1)
@@ -185,10 +183,6 @@ def network_monitor():
                 import os
                 os.popen('sudo nginx -s reload')
                 logger.info('封禁异常流量IP成功!详情:{}'.format(blacklist))
-                # write_task_log('封禁异常流量IP成功!详情:{}'.format(str(blacklist)))
         logger.info('异常流量检测成功，检测时刻:{}，检测时间段:{}，检测详情:{}'.format(str(scan_time), str(times), str(result)))
-        # write_task_log('异常流量检测成功，检测时刻:{},检测时间段:{},检测详情:{}'.
-        #                format(str(scan_time), str(times), str(result)))
     except Exception as e:
         logger.info('封禁异常流量IP失败！原因：\n' + traceback.format_exc())
-        # write_task_log('封禁异常流量IP失败!原因:\n' + str(e.args))
