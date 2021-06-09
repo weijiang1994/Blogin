@@ -5,6 +5,8 @@
 使用Flask+Bootstrap4开发的个人博客系统。
 
 > 如果有帮助到你，还请金手**Star-Star-Star**一下啦，不甚感激~~~
+   
+在线演示地址: https://2dogz.cn
 
 [English Document](https://github.com/weijiang1994/Blogin/blob/master/README-EN.md)
 ## 功能介绍
@@ -349,10 +351,8 @@
    ```bash
    flask run
    ```
+   打开 http://127.0.0.1:5000 就可以看到页面了。
 
-   - 打开 http://127.0.0.1:5000 就可以看到页面了。
-   
-   - 在线演示地址: http://2dogz.cn
    
 7. issue
 
