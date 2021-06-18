@@ -36,7 +36,7 @@ def generate_rss(blogs):
 @rss_bp.route('/index/')
 def rss_index():
     cates = BlogType.query.all()
-    blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+    blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.asc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     return render_template('main/rss.html', cates=cates, response=rss_data)
@@ -44,7 +44,7 @@ def rss_index():
 
 @rss_bp.route('/')
 def rss_feed():
-    blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+    blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.asc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     response = make_response(rss_data)
@@ -57,7 +57,7 @@ def rss_feed():
 
 @rss_bp.route('/category/<cate_id>/')
 def rss_category_feed(cate_id):
-    blogs = Blog.query.filter(Blog.delete_flag == 1, Blog.type_id == cate_id).order_by(Blog.create_time.desc()).all()
+    blogs = Blog.query.filter(Blog.delete_flag == 1, Blog.type_id == cate_id).order_by(Blog.create_time.asc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     response = make_response(rss_data)
@@ -70,11 +70,11 @@ def display_rss():
     cate_id = request.form.get('cate-id')
     url = url_for('.rss_category_feed', cate_id=cate_id, _external=True)
     if cate_id == 'all':
-        blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
+        blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.asc()).all()
         url = url_for('.rss_feed', _external=True)
     else:
         blogs = Blog.query.filter(Blog.delete_flag == 1, Blog.type_id == cate_id).order_by(
-            Blog.create_time.desc()).all()
+            Blog.create_time.asc()).all()
     fg = generate_rss(blogs)
     rss_data = str(fg.atom_str(pretty=True), 'utf-8')
     return {'url': url, 'xml': rss_data}
