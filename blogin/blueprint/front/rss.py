@@ -25,7 +25,7 @@ def generate_rss(blogs):
         fe = fg.add_entry()
         fe.title('[{}]'.format(blog.blog_types.name) + blog.title)
         fe.id(blog.id)
-        fe.link(href='https://2dogz.cn//blog/article/{}/'.format(blog.id))
+        fe.link(href='https://2dogz.cn/blog/article/{}/'.format(blog.id))
         fe.description(blog.introduce)
         fe.guid(str(blog.id), permalink=False)  # Or: fe.guid(article.url, permalink=True)
         fe.author(name='Blogin', email='weijiang1994_1@qq.com')
