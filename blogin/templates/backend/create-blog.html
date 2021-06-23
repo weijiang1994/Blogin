@@ -30,7 +30,7 @@
                 {% endfor %}
             </ul>
             <div class="text-right">
-                <button data-id="{{ draft_id }}" id="saveDraftBtn" onclick="saveDraft($(this).data('id'))" class="btn btn-success">保存草稿</button>
+                <button data-id="{{ draft_id }}" id="saveDraftBtn" onclick="saveDraft($(this).data('id'), 2)" class="btn btn-success">保存草稿</button>
             </div>
         </div>
         {% for message in get_flashed_messages(with_categories=True) %}
@@ -68,7 +68,6 @@
     <br>
     <script>
         function showConfirm(did){
-            console.log(did);
             let r = confirm('确认删除该草稿吗?');
             if (r!==true){
                 return false;
@@ -86,6 +85,11 @@
 
         $(function () {
             $(document).ready(function () {
+                let tag = 1
+                setInterval(function (){
+                    let did = $("#saveDraftBtn").data('id')
+                    saveDraft(did, tag)
+                }, 30*1000)
             });
         })
 
@@ -111,12 +115,14 @@
             });
         });
 
-        function saveDraft(did){
+        function saveDraft(did, tag){
             let title = $("#title").val();
             let brief = $("#brief_content").val();
             let content = CKEDITOR.instances.body.getData();
             if (title === '' && brief === '' && content === ''){
-                alert('啥都没有输入就不要保存草稿了,浪费空间!');
+                if (tag === 2){
+                    alert('啥都没有输入就不要保存草稿了,浪费空间!');
+                }
                 return false;
             }
             $.ajax({
@@ -126,13 +132,17 @@
                 success: function (res){
                     if (res.tag === 1){
                         $("#saveDraftBtn").data('id', res.draft_id)
-                        alert(res.info);
+                        $("#saveDraftBtn").attr('data-id', res.draft_id)
+                        if (tag === 2){
+                            alert(res.info);
+                        }
                     }else {
-                        alert('保存草稿失败!');
+                        if (tag === 2){
+                            alert('保存草稿失败!');
+                        }
                     }
                 }
             })
-
         }
     </script>
     </body>
