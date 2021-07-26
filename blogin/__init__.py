@@ -34,7 +34,7 @@ from blogin.blueprint.front.rss import rss_bp
 from blogin.blueprint.front.msg_border import msg_border_bp
 from blogin.setting import config
 from blogin.models import *
-from blogin.utils import split_space, super_split, conv_list, is_empty
+from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini
 from blogin import task
 import logging
 
@@ -108,7 +108,8 @@ def register_extension(app: Flask):
     whooshee.init_app(app)
     oauth.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': 'redis'})
-    scheduler_init(app)
+    if config_ini.getboolean('base', 'scheduler'):
+        scheduler_init(app)
 
 
 def scheduler_init(app):
