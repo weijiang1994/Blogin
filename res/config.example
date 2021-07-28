@@ -1,0 +1,9 @@
+[baidu]
+ak =
+sk =
+token =
+
+[base]
+scheduler = True
+light_theme = flatly.bootstrap.min.css
+dark_theme = darkly.bootstrap.min.css
