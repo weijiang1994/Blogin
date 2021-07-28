@@ -37,6 +37,7 @@ from blogin.models import Contribute
 from bs4 import BeautifulSoup
 import logging
 from logging.handlers import RotatingFileHandler
+
 config_ini = configparser.ConfigParser()
 config_ini.read(basedir + '/res/config.ini', encoding='utf-8')
 
@@ -135,11 +136,13 @@ EMOJI_INFOS = [[('angry-face_1f620.png', 'angry-face'),
                 ('yellow-heart_1f49b.png', 'yellow-heart'),
                 ('zipper-mouth-face_1f910.png', 'zipper-mouth-face')]]
 
+BOOTSTRAP_SUFFIX = '.bootstrap.min.css'
 
-def log_util(log_name, log_path, max_size=2*1024*1024, backup_count=10):
+
+def log_util(log_name, log_path, max_size=2 * 1024 * 1024, backup_count=10):
     logger = logging.getLogger(log_name)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    file_handler = RotatingFileHandler(log_path+'/'+log_name,
+    file_handler = RotatingFileHandler(log_path + '/' + log_name,
                                        maxBytes=max_size,
                                        backupCount=backup_count
                                        )
@@ -147,6 +150,12 @@ def log_util(log_name, log_path, max_size=2*1024*1024, backup_count=10):
     logger.addHandler(file_handler)
     logger.setLevel(logging.DEBUG)
     return logger
+
+
+def get_theme(section='base', key='light_theme', frontend=True):
+    if frontend:
+        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], config_ini.get(section, key)+BOOTSTRAP_SUFFIX))
+    return config_ini.get(section, key)
 
 
 class MyMDStyleTreeProcessor(Treeprocessor):

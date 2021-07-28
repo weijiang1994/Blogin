@@ -20,7 +20,7 @@ from blogin.extension import db
 import psutil
 from blogin.extension import rd
 from blogin.emails import send_server_warning_mail
-
+from blogin.utils import basedir, get_theme, config_ini
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
@@ -270,7 +270,7 @@ def add_flink():
         name = form.name.data
         url = form.link.data
         desc = form.desc.data
-        status = States.query.filter(States.name=='正常').first()
+        status = States.query.filter(States.name == '正常').first()
         flink = FriendLink(name=name, link=url, flag=status.id, desc=desc)
         db.session.add(flink)
         db.session.commit()
@@ -400,3 +400,30 @@ def one_content():
     pagination = OneSentence.query.order_by(OneSentence.day.desc()).paginate(per_page=20, page=page)
     ones = pagination.items
     return render_template('backend/one.html', pagination=pagination, ones=ones, page=page)
+
+
+@other_bp.route('/config-theme/')
+@login_required
+@permission_required
+def config_theme():
+    light_themes = list(map(lambda x: x.split('.')[0], os.listdir(basedir + '/blogin/static/bootstrap4/light')))
+    dark_themes = list(map(lambda x: x.split('.')[0], os.listdir(basedir + '/blogin/static/bootstrap4/dark')))
+    if request.args.get('light-theme') and request.args.get('dark-theme'):
+        choose_light_theme = request.args.get('light-theme')
+        choose_dark_theme = request.args.get('dark-theme')
+        if choose_light_theme not in light_themes or choose_dark_theme not in dark_themes:
+            flash('别闹了,服务端未配置该主题!', 'danger')
+            return redirect(url_for('.config_theme'))
+        config_ini.set('base', 'light_theme', choose_light_theme)
+        config_ini.set('base', 'dark_theme', choose_dark_theme)
+        config_ini.write(open(basedir + '/res/config.ini', 'r+'))
+        flash('配置主题成功!', 'success')
+
+    current_light = get_theme(frontend=False)
+    current_dark = get_theme(key='dark_theme', frontend=False)
+
+    return render_template('backend/config-theme.html',
+                           light_themes=light_themes,
+                           dark_themes=dark_themes,
+                           current_dark=current_dark,
+                           current_light=current_light)

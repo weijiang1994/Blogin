@@ -34,7 +34,7 @@ from blogin.blueprint.front.rss import rss_bp
 from blogin.blueprint.front.msg_border import msg_border_bp
 from blogin.setting import config
 from blogin.models import *
-from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini
+from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, get_theme
 from blogin import task
 import logging
 
@@ -47,6 +47,7 @@ def create_app(config_name=None):
     app.jinja_env.filters['ssplit'] = super_split
     app.jinja_env.filters['slist'] = conv_list
     app.jinja_env.filters['isempty'] = is_empty
+    app.jinja_env.filters['theme'] = get_theme
     app.config.from_object(config[config_name])
     app.config['SCHEDULER_API_ENABLED'] = True
     register_extension(app)
