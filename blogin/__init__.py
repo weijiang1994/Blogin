@@ -9,7 +9,7 @@
 import atexit
 import platform
 from logging.handlers import RotatingFileHandler
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_wtf.csrf import CSRFError
 import click
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
@@ -34,7 +34,7 @@ from blogin.blueprint.front.rss import rss_bp
 from blogin.blueprint.front.msg_border import msg_border_bp
 from blogin.setting import config
 from blogin.models import *
-from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, get_theme
+from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, get_theme, BOOTSTRAP_SUFFIX
 from blogin import task
 import logging
 
@@ -47,7 +47,6 @@ def create_app(config_name=None):
     app.jinja_env.filters['ssplit'] = super_split
     app.jinja_env.filters['slist'] = conv_list
     app.jinja_env.filters['isempty'] = is_empty
-    app.jinja_env.filters['theme'] = get_theme
     app.config.from_object(config[config_name])
     app.config['SCHEDULER_API_ENABLED'] = True
     register_extension(app)
@@ -56,6 +55,13 @@ def create_app(config_name=None):
     error_execute(app)
     shell_handler(app)
     register_log(app)
+
+    @app.template_global()
+    def get_theme(section='base', key='light_theme', frontend=True):
+        if frontend:
+            return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], config_ini.get(section,
+                                                                                                          key) + BOOTSTRAP_SUFFIX))
+        return config_ini.get(section, key)
 
     return app
 
