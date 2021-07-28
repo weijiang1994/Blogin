@@ -1,0 +1,30 @@
+{% extends "backend/base.html" %}
+{% block title %}
+    主题配置
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container mt-2">
+            {% include "_flash.html" %}
+            <h3><b>主题配置</b></h3>
+            <hr>
+            <form>
+                <label for="light">亮色主题</label>
+                <div name="light">
+                    {% for light in light_themes %}
+                        <input type="radio" id="{{ light }}" name="light-theme" value="{{ light }}" {% if light == current_light %} checked {% endif %}>
+                        <label for="{{ light }}">{{ light }}</label>
+                    {% endfor %}
+                </div>
+                <label for="light">亮色主题</label>
+                <div name="dark">
+                    {% for dark in dark_themes %}
+                        <input type="radio" id="{{ dark }}" name="dark-theme" value="{{ dark }}" {% if dark == current_dark %} checked {% endif %}>
+                        <label for="{{ dark }}">{{ dark }}</label>
+                    {% endfor %}
+                </div>
+                <input type="submit" value="保存" class="btn btn-success">
+            </form>
+        </div>
+    </main>
+{% endblock %}
