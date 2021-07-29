@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% from "macro.html" import render_pager  with context %}
+{% block head %}
+    {{ super() }}
+    <style>
+        .title-brief {
+            font-size: 18px;
+        }
+    </style>
+{% endblock %}
 {% block title %}
     Home
 {% endblock %}
@@ -46,7 +54,7 @@
                                         <span class="badge badge-inverse"><i class="fa fa-user"></i> 清水</span>
                                         <span class="badge badge-inverse" title="{{ blog.create_time }}"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
                                     </div>
-                                    <h5>
+                                    <h5 class="title-brief">
                                         <a style="text-decoration: none;" href="/blog/article/{{ blog.id }}/">{{ blog.title }}</a>
                                     </h5>
                                     <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
