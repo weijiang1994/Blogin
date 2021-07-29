@@ -21,6 +21,7 @@ import psutil
 from blogin.extension import rd
 from blogin.emails import send_server_warning_mail
 from blogin.utils import basedir, get_theme, config_ini
+import configparser
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
 
@@ -408,19 +409,21 @@ def one_content():
 def config_theme():
     light_themes = list(map(lambda x: x.split('.')[0], os.listdir(basedir + '/blogin/static/bootstrap4/light')))
     dark_themes = list(map(lambda x: x.split('.')[0], os.listdir(basedir + '/blogin/static/bootstrap4/dark')))
+    config = configparser.ConfigParser()
+    config.read(basedir + '/res/config.ini')
     if request.args.get('light-theme') and request.args.get('dark-theme'):
         choose_light_theme = request.args.get('light-theme')
         choose_dark_theme = request.args.get('dark-theme')
         if choose_light_theme not in light_themes or choose_dark_theme not in dark_themes:
             flash('别闹了,服务端未配置该主题!', 'danger')
             return redirect(url_for('.config_theme'))
-        config_ini.set('base', 'light_theme', choose_light_theme)
-        config_ini.set('base', 'dark_theme', choose_dark_theme)
-        config_ini.write(open(basedir + '/res/config.ini', 'r+'))
+        config.set('base', 'light_theme', choose_light_theme)
+        config.set('base', 'dark_theme', choose_dark_theme)
+        config.write(open(basedir + '/res/config.ini', 'r+', encoding='utf-8'))
         flash('配置主题成功!', 'success')
 
-    current_light = get_theme(frontend=False)
-    current_dark = get_theme(key='dark_theme', frontend=False)
+    current_light = config.get('base', 'light_theme')
+    current_dark = config.get('base', 'dark_theme')
 
     return render_template('backend/config-theme.html',
                            light_themes=light_themes,
