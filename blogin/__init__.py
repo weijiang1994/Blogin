@@ -57,11 +57,12 @@ def create_app(config_name=None):
     register_log(app)
 
     @app.template_global()
-    def get_theme(section='base', key='light_theme', frontend=True):
-        if frontend:
-            return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], config_ini.get(section,
-                                                                                                          key) + BOOTSTRAP_SUFFIX))
-        return config_ini.get(section, key)
+    def get_theme(section='base', key='light_theme'):
+        import configparser
+        c = configparser.ConfigParser()
+        c.read(basedir + '/res/config.ini')
+        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], c.get(section,
+                                                                                             key) + BOOTSTRAP_SUFFIX))
 
     return app
 
