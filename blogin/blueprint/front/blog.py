@@ -29,19 +29,14 @@ blog_bp = Blueprint('blog_bp', __name__)
 @statistic_traffic(db, VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
-    pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0).order_by(Blog.is_top.desc(),
-                                                                                         Blog.create_time.desc()). \
-        paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
+    pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0
+                                   ).order_by(Blog.is_top.desc(), Blog.create_time.desc()
+                                              ).paginate(page, per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'])
     blogs = pagination.items
-    cates = []
-    for blog in blogs:
-        cates.append(BlogType.query.filter_by(id=blog.type_id).first().name)
+    cates = [BlogType.query.filter_by(id=blog.type_id).first().name for blog in blogs]
     categories = BlogType.query.all()
     loves = LoveMe.query.first()
-    if loves is None:
-        loves = 0
-    else:
-        loves = loves.counts
+    loves = 0 if loves is None else loves.counts
     plans = Plan.query.filter_by(is_done=0).all()
     su = User.query.filter(User.email == '804022023@qq.com').first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
