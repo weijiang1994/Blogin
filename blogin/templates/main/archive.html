@@ -82,8 +82,8 @@
                                                 <li style="list-style-type: none"><b>{{ month }} 月 (共 {{ archives[year][month]|length }} 篇)</b>
                                                     <ul class="pl-4">
                                                         {% for blog in archives[year][month] %}
-                                                            <li class="text-info timeline-items">&nbsp;&nbsp;
-                                                                <a class="text-info-a" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
+                                                            <li class="timeline-items">&nbsp;&nbsp;
+                                                                <a class="text-decoration-none" href="/blog/article/{{ blog[0] }}">{{ blog[2] }} {{blog[1] }}</a></li>
                                                         {% endfor %}
                                                     </ul>
                                                 </li>
