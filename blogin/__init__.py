@@ -9,7 +9,7 @@
 import atexit
 import platform
 from logging.handlers import RotatingFileHandler
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, session
 from flask_wtf.csrf import CSRFError
 import click
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
@@ -57,13 +57,12 @@ def create_app(config_name=None):
     register_log(app)
 
     @app.template_global()
-    def get_theme(section='base', key='light_theme'):
-        import configparser
-        c = configparser.ConfigParser()
-        c.read(basedir + '/res/config.ini')
-        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], c.get(section,
-                                                                                             key) + BOOTSTRAP_SUFFIX))
-
+    def get_theme(key='light_theme'):
+        if 'light' in key:
+            return url_for('static',
+                           filename='bootstrap4/light/{}'.format(session.get('light_theme', 'flatly') + BOOTSTRAP_SUFFIX))
+        return url_for('static',
+                       filename='bootstrap4/dark/{}'.format(session.get('dark_theme', 'darkly') + BOOTSTRAP_SUFFIX))
     return app
 
 
