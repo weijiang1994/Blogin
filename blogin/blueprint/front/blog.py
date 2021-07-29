@@ -6,7 +6,8 @@
 @File    : blog_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort, \
+    make_response, session
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder, \
     OneSentence
@@ -14,9 +15,11 @@ from blogin.extension import db, rd, cache
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
-from blogin.utils import redirect_back, github_social
+from blogin.utils import redirect_back, github_social, BOOTSTRAP_SUFFIX
 import requests
 from blogin.emails import send_comment_email
+from blogin.setting import basedir
+import configparser
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -42,8 +45,8 @@ def index():
     plans = Plan.query.filter_by(is_done=0).all()
     su = User.query.filter(User.email == '804022023@qq.com').first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
-    msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
-                      order_by(MessageBorder.timestamps.desc()).all()[0:5]
+    msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0
+                                             ).order_by(MessageBorder.timestamps.desc()).all()[0:5]
     return render_template('main/index.html', per_page=current_app.config['BLOGIN_BLOG_PER_PAGE'],
                            pagination=pagination, blogs=blogs, cates=cates, categories=categories,
                            loves=loves, su=su, flinks=flinks, plans=plans, msg_borders=msg_borders)
@@ -107,7 +110,7 @@ def blog_cate(cate_id):
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     plans = Plan.query.filter_by(is_done=0).all()
     msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
-                                             order_by(MessageBorder.timestamps.desc()).all()[0:5]
+                      order_by(MessageBorder.timestamps.desc()).all()[0:5]
     return render_template('main/blog-cate.html', cate=cate, categories=categories, blogs=cate.blogs, flinks=flinks,
                            plans=plans, msg_borders=msg_borders)
 
@@ -256,7 +259,7 @@ def timeline():
 
 # noinspection PyTypeChecker
 @blog_bp.route('/load-github/', methods=['POST'])
-@cache.cached(timeout=5*60)
+@cache.cached(timeout=5 * 60)
 def load_github():
     theme = request.form.get('theme')
 
@@ -301,7 +304,7 @@ def load_github():
 
 
 @blog_bp.route('/load-one/', methods=['POST'])
-@cache.cached(timeout=60*60)
+@cache.cached(timeout=60 * 60)
 def load_one():
     one = rd.get('one')
     # 防止服务器重启之后清空了redis数据导致前端获取不到当日one内容
