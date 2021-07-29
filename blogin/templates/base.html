@@ -7,8 +7,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - Blogin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ck.css') }}">
@@ -18,20 +19,23 @@
             <link rel="stylesheet" href="{{ get_theme() }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}">
         {% else %}
-            <link rel="stylesheet" href="{{ get_theme('base', 'dark_theme') }}">
+            <link rel="stylesheet" href="{{ get_theme('dark_theme') }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}">
         {% endif %}
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js" integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js"
+                integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/bootstrap.4.3.1.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js')}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+              integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js') }}
         <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
         <style>
-            .gray-a{
-                text-decoration:none;
-                color: rgba(0,0,0,.5);
+            .gray-a {
+                text-decoration: none;
+                color: rgba(0, 0, 0, .5);
             }
-            .gray-a:hover{
+
+            .gray-a:hover {
                 color: forestgreen;
                 text-decoration: none;
             }
@@ -44,10 +48,12 @@
             {% if request.cookies.get('blog_theme', 'light') == 'light' %}
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo" width="104px" height="36px">
             {% else %}
-                <img src="{{ url_for('static', filename='img/logo_black.png') }}" alt="logo" width="104px" height="36px">
+                <img src="{{ url_for('static', filename='img/logo_black.png') }}" alt="logo" width="104px"
+                     height="36px">
             {% endif %}
         </a>
-        <button class="navbar-toggler {% if request.cookies.get('blog_theme', 'light')=='dark' %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <button class="navbar-toggler {% if request.cookies.get('blog_theme', 'light')=='dark' %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}"
+                type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse" id="collapsibleNavbar">
@@ -66,7 +72,8 @@
                              ['/timeline/', 'fa fa-list-ol mr-2', '建站日志']]) }}
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
-                <input class="form-control mr-sm-2 " type="search" name="q" placeholder="输入关键字" aria-label="Search" required>
+                <input class="form-control mr-sm-2 " type="search" name="q" placeholder="输入关键字" aria-label="Search"
+                       required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
             </form>
             {% if not current_user.is_authenticated %}
@@ -77,21 +84,32 @@
             {% else %}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle nav-text" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="欢迎回来,{{ current_user.username }}~">
+                        <a class="nav-link dropdown-toggle nav-text" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           title="欢迎回来,{{ current_user.username }}~">
                             <img class="avatar" src="{{ current_user.avatar }}" alt={{ current_user.username }}>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right mt-0 rounded-0 border-0" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item pl-3 " href="/accounts/profile/{{ current_user.id }}/"><i class="fa fa-fw fa-user mr-2"></i>个人资料</a>
+                        <div class="dropdown-menu dropdown-menu-right mt-0 rounded-0 border-0"
+                             aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item pl-3 " href="/accounts/profile/{{ current_user.id }}/"><i
+                                    class="fa fa-fw fa-user mr-2"></i>个人资料</a>
                             {% if ntf_counts %}
-                                <a href="/accounts/profile" class="dropdown-item pl-3"><i class="fa fa-fw fa-bell mr-2"></i>消息 <span class="badge badge-info">{{ ntf_counts }}</span>
+                                <a href="/accounts/profile" class="dropdown-item pl-3">
+                                <i class="fa fa-fw fa-bell mr-2"></i>消息
+                                <span class="badge badge-info">{{ ntf_counts }}</span>
                             {% endif %}
                             {% if current_user.role_id == 1 %}
-                                <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i class="fa fa-fw fa-magnet mr-2"></i>后台管理</a>
+                                <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i
+                                        class="fa fa-fw fa-magnet mr-2"></i>后台管理</a>
                             {% endif %}
                             {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
-                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-fw fa-moon-o mr-2"></i>夜间模式</a>
+                                <a class="dropdown-item pl-3"
+                                   href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i
+                                        class="fa fa-fw fa-moon-o mr-2"></i>夜间模式</a>
                             {% else %}
-                                <a class="dropdown-item pl-3" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-fw fa-sun-o mr-2"></i>日间模式</a>
+                                <a class="dropdown-item pl-3"
+                                   href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i
+                                        class="fa fa-fw fa-sun-o mr-2"></i>日间模式</a>
                             {% endif %}
 
                             </a>
@@ -109,21 +127,25 @@
     <footer class="container-fluid mt-4 py-0 bg-footer">
         <div class="card-body text-center px-0 f-14">
             <p class="card-text mb-1">Copyright&nbsp;©&nbsp;<span id="year-info">2020</span>
-                <a href="https://github.com/weijiang1994" class="text-decoration-none footer-a"  target="_blank" title="博客作者的Github">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
+                <a href="https://github.com/weijiang1994" class="text-decoration-none footer-a" target="_blank"
+                   title="博客作者的Github">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
             </p>
             <p class="mb-0">
-                <a href="http://beian.miit.gov.cn/" class="text-decoration-none footer-a"  target="_blank">湘ICP备2020018236号-1</a>&nbsp;<span id="web-day"> 网站已续航 900 天</span>
+                <a href="http://beian.miit.gov.cn/" class="text-decoration-none footer-a" target="_blank">湘ICP备2020018236号-1</a>&nbsp;<span
+                    id="web-day"> 网站已续航 900 天</span>
             </p>
             <script>
-                function getNewYear(){
+                function getNewYear() {
                     let d = new Date();
                     let old = new Date('2020/08/28');
                     let x = document.getElementById("year-info");
                     x.innerHTML = d.getFullYear();
                     let y = document.getElementById("web-day");
                     let dd = Math.floor((d.getTime() - old.getTime()) / (24 * 3600 * 1000));
-                    let d_str = "| 网站已上线 " + dd + " 天";y.innerHTML=d_str;
+                    let d_str = "| 网站已上线 " + dd + " 天";
+                    y.innerHTML = d_str;
                 }
+
                 getNewYear();
             </script>
         </div>

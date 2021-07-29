@@ -9,7 +9,7 @@
 import os
 from datetime import datetime
 from bs4 import BeautifulSoup
-from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify, session
 from flask_login import current_user, login_required
 
 from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm, AddPlanForm
@@ -420,6 +420,8 @@ def config_theme():
         config.set('base', 'light_theme', choose_light_theme)
         config.set('base', 'dark_theme', choose_dark_theme)
         config.write(open(basedir + '/res/config.ini', 'r+', encoding='utf-8'))
+        session['light_theme'] = choose_light_theme
+        session['dark_theme'] = choose_dark_theme
         flash('配置主题成功!', 'success')
 
     current_light = config.get('base', 'light_theme')
