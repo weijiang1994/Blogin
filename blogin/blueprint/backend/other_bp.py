@@ -20,7 +20,7 @@ from blogin.extension import db
 import psutil
 from blogin.extension import rd
 from blogin.emails import send_server_warning_mail
-from blogin.utils import basedir, get_theme, config_ini
+from blogin.utils import basedir
 import configparser
 
 other_bp = Blueprint('other_bp', '__name__', url_prefix='/backend')
