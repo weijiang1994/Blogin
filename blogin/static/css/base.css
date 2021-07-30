@@ -4,16 +4,17 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .avatar {
     border-radius: 50%;
     width: 40px;
 }
 
-.cc{
-    border-left:4px solid #4a9c87;
-    padding:10px 20px;
-    background-color:rgba(0,0,0,.04);
-    margin:10px 0 20px
+.cc {
+    border-left: 4px solid #4a9c87;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, .04);
+    margin: 10px 0 20px
 }
 
 .avatar:hover {
@@ -37,12 +38,12 @@ a {
     transform: scale(1.05);
 }
 
-.gutter-right{
+.gutter-right {
     margin: 5px 0px 0px 5px;
 }
 
-.blog-column:hover{
-    box-shadow:5px 5px 5px  #9d9d9d;
+.blog-column:hover {
+    box-shadow: 5px 5px 5px #9d9d9d;
     transform: scale(1.01);
 }
 
@@ -55,7 +56,7 @@ h3 {
     font-size: 21px;
 }
 
-.div-click{
+.div-click {
     cursor: pointer;
     margin-bottom: 5px;
     width: 150px;
@@ -65,47 +66,48 @@ html, body {
     height: 100%; /*让页面撑满窗体*/
 }
 
-.div-click:hover{
+.div-click:hover {
     color: #2aabd2;
 }
 
-.ntf-comment-body{
+.ntf-comment-body {
     border: 1px dashed #9acfea;
     padding: 5px;
     border-radius: 5px;
 }
 
 footer {
-    color: rgba(0,0,0,.5);;
+    color: rgba(0, 0, 0, .5);;
 }
 
 footer a:hover {
-    color:#fff;
+    color: #fff;
 }
 
-html{
+html {
     height: 100%;
 }
 
-body{
+body {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
-header{
+
+header {
     flex: 0 0 auto;
 }
 
-.main-content{
+.main-content {
     flex: 1 0 auto;
 }
 
-footer{
+footer {
     /* 和 header 一样，footer 也采用固定高度*/
     /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
 }
 
-.profile-edit{
+.profile-edit {
     border-radius: 5px;
     border: 1px solid forestgreen;
     padding: 10px;
@@ -115,29 +117,29 @@ main {
     flex: 1 0 auto;
 }
 
-.help-block{
+.help-block {
     color: darkred;
 }
 
 /*个人动态区域的样式*/
-.moment-p{
+.moment-p {
     margin: 5px 0 5px 0;
 }
 
-.moment-p.p{
+.moment-p.p {
     margin: 5px 0 5px 0;
 }
 
-.blog-title{
-    color: #17a2b8!important;
+.blog-title {
+    color: #17a2b8 !important;
     font-size: 26px;
     font-weight: bold;
 }
 
 .summary-list.avatar {
-    width:1.2rem;
-    heigth:1.2rem;
-    margin-right:.2rem;
+    width: 1.2rem;
+    heigth: 1.2rem;
+    margin-right: .2rem;
     border-radius: 50%;
 }
 
@@ -154,7 +156,7 @@ main {
 }
 
 .blog-brief-div {
-    cursor: auto    ;
+    cursor: auto;
     transition: all 0.6s;
     margin: 10px 0px 10px 0px;
 }
@@ -191,49 +193,55 @@ main {
 .comment-thumbnail {
     position: absolute;
 }
+
 .avatar-s {
     width: 50px;
     height: 50px;
 }
 
-.pl-4{
+.pl-4 {
     padding: 8px;
 }
 
-.tool-title{
+.tool-title {
     border-left: 3px solid #20c997;
     padding-left: 3px;
     font-weight: bold;
 }
 
-.footer-a{
+.footer-a {
     color: inherit;
 }
 
-.footer-a:hover{
+.footer-a:hover {
     color: inherit;
 }
 
-.img-profile-bg{
+.img-profile-bg {
     border-radius: 8px;
     height: 150px;
     width: 150px;
 }
 
-.p-mt-8{
+.p-mt-8 {
     margin-bottom: 8px;
 }
 
-@media screen and (max-width: 567px){
-    .img-profile-bg{
+@media screen and (max-width: 567px) {
+    .img-profile-bg {
         height: 75px;
         width: 75px;
     }
-    .div-center-md{
+
+    .div-center-md {
         text-align: center;
     }
 }
 
-.top-post-div{
+.top-post-div {
     position: relative;
+}
+
+.title-brief {
+    font-size: 18px;
 }
