@@ -27,8 +27,8 @@
                                             <span class="badge badge-inverse"><i class="fa fa-user"></i> 清水</span>
                                             <span class="badge badge-inverse"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
                                         </div>
-                                        <h5 class="text-info">
-                                            <a style="text-decoration: none;" class="text-info" href="/blog/article/{{ blog.id }}/" target="_blank">{{ blog.title }}</a>
+                                        <h5 class="title-brief">
+                                            <a class="text-decoration-none" href="/blog/article/{{ blog.id }}/" target="_blank">{{ blog.title }}</a>
                                         </h5>
                                         <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(200) }}</p>
                                         <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
