@@ -23,6 +23,9 @@ accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 @accounts_bp.route('/profile/<int:user_id>/')
 @login_required
 def profile(user_id):
+    if user_id != current_user.id:
+        flash('您无法访问他人的主页!', 'info')
+        return redirect(url_for('.profile', user_id=current_user.id))
     page = request.args.get('page', 1, type=int)
     pagination = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).paginate(page=page,
                                                                                                         per_page=
