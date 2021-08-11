@@ -159,3 +159,13 @@ def get_ci_with_title():
         ls = {'title': ci.rhythmic, 'content': ci.content, 'author': '宋' + '·' + ci.authors.name, 'id': ci.id}
         result.get('result').append(ls)
     return jsonify(result)
+
+
+@api_bp.route('/cookies-test')
+def cookies_test():
+    from flask import make_response, Response
+    resp = make_response({'test': 123, 'code': 200})
+    resp.set_cookie("Itcast_1", "jiangwei", httponly=True)
+    resp.set_cookie("Itcast_2", "python_2")
+    resp.set_cookie("Itcast_3", "python_3", max_age=3600)
+    return resp
