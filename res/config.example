@@ -1,9 +1,13 @@
 [baidu]
-ak =
-sk =
-token =
+ak = example-baidu-ak
+sk = example-baidu-sk
+token = example-baidu-token
 
 [base]
 scheduler = True
-light_theme = flatly.bootstrap.min.css
-dark_theme = darkly.bootstrap.min.css
+light_theme = flatly
+dark_theme = darkly
+
+[admin]
+author_email = example@mail.com
+gallery_slogan = sample text
