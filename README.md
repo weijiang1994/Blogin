@@ -343,6 +343,7 @@
 
    ```bash
    cd Blogin
+   flask initdb
    flask admin
    ```
 
