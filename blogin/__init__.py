@@ -60,9 +60,9 @@ def create_app(config_name=None):
     def get_theme(key='light_theme'):
         if 'light' in key:
             return url_for('static',
-                           filename='bootstrap4/light/{}'.format(session.get('light_theme', 'flatly') + BOOTSTRAP_SUFFIX))
+                           filename='bootstrap4/light/{}'.format(session.get('light_theme', 'lux') + BOOTSTRAP_SUFFIX))
         return url_for('static',
-                       filename='bootstrap4/dark/{}'.format(session.get('dark_theme', 'darkly') + BOOTSTRAP_SUFFIX))
+                       filename='bootstrap4/dark/{}'.format(session.get('dark_theme', 'cyborg') + BOOTSTRAP_SUFFIX))
     return app
 
 
