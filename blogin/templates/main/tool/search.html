@@ -90,9 +90,9 @@
                             <p>总共查询到<b>{{ pagination.total }}</b>个结果</p>
                             {% if sctype == '词' %}
                                 {% for result in results %}
-                                    <div style="margin-bottom: 8px;" class="card bg-dark text-white">
+                                    <div style="margin-bottom: 8px;" class="card">
                                         <div class="text-muted card-header">
-                                            {{ result.rhythmic }}&nbsp;&nbsp;&nbsp;&nbsp;宋·{{ result.authors.name }}
+						<b>{{ result.rhythmic }}&nbsp;&nbsp;&nbsp;&nbsp;宋·{{ result.authors.name }}</b>
                                         </div>
                                         <div class="card-body">
                                             {{ result.content|safe }}
@@ -101,9 +101,9 @@
                                 {% endfor %}
                             {% else %}
                                 {% for result in results %}
-                                    <div style="margin-bottom: 8px;" class="card bg-dark text-white">
+                                    <div style="margin-bottom: 8px;" class="card">
                                         <div class="text-muted card-header">
-                                            {{ result.title }}&nbsp;&nbsp;&nbsp;&nbsp;{{ result.poets.dynasties.name }}·{{ result.poets.name }}
+						<b>{{ result.title }}&nbsp;&nbsp;&nbsp;&nbsp;{{ result.poets.dynasties.name }}·{{ result.poets.name }}</b>
                                         </div>
                                         <div class="card-body">
                                             {{ result.content|safe }}
