@@ -159,13 +159,6 @@ def log_util(log_name, log_path, max_size=2 * 1024 * 1024, backup_count=10):
     return logger
 
 
-def get_theme(section='base', key='light_theme', frontend=True):
-    if frontend:
-        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0],
-                                                                    config_ini.get(section, key) + BOOTSTRAP_SUFFIX))
-    return config_ini.get(section, key)
-
-
 class MyMDStyleTreeProcessor(Treeprocessor):
     def run(self, root):
         for child in root.getiterator():
