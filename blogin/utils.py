@@ -39,6 +39,13 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 config_ini = configparser.ConfigParser()
+
+
+def read_config():
+    config_ini.read(basedir + '/res/config.ini', encoding='utf-8')
+    return config_ini
+
+
 config_ini.read(basedir + '/res/config.ini', encoding='utf-8')
 
 EMOJI_INFOS = [[('angry-face_1f620.png', 'angry-face'),
@@ -154,7 +161,8 @@ def log_util(log_name, log_path, max_size=2 * 1024 * 1024, backup_count=10):
 
 def get_theme(section='base', key='light_theme', frontend=True):
     if frontend:
-        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0], config_ini.get(section, key)+BOOTSTRAP_SUFFIX))
+        return url_for('static', filename='bootstrap4/{}/{}'.format(key.split('_')[0],
+                                                                    config_ini.get(section, key) + BOOTSTRAP_SUFFIX))
     return config_ini.get(section, key)
 
 
