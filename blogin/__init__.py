@@ -34,7 +34,7 @@ from blogin.blueprint.front.rss import rss_bp
 from blogin.blueprint.front.msg_border import msg_border_bp
 from blogin.setting import config
 from blogin.models import *
-from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, get_theme, BOOTSTRAP_SUFFIX, read_config
+from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, BOOTSTRAP_SUFFIX, read_config
 from blogin import task
 import logging
 
@@ -62,13 +62,6 @@ def create_app(config_name=None):
         dark_theme = read_config().get('base', 'dark_theme')
         return dict(light=light_theme+BOOTSTRAP_SUFFIX, dark=dark_theme+BOOTSTRAP_SUFFIX)
 
-    @app.template_global()
-    def get_theme(key='light_theme'):
-        if 'light' in key:
-            return url_for('static',
-                           filename='bootstrap4/light/{}'.format(session.get('light_theme', 'lux') + BOOTSTRAP_SUFFIX))
-        return url_for('static',
-                       filename='bootstrap4/dark/{}'.format(session.get('dark_theme', 'cyborg') + BOOTSTRAP_SUFFIX))
     return app
 
 
