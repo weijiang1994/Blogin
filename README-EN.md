@@ -221,4 +221,4 @@ The personal blog site developed by the Flask Python Web framework consists of t
    ```
 
    - Input http://127.0.0.1:5000 on your browser, then you can see the index page.
-   - http://2dogz.cn online
+   - https://2dogz.cn online
