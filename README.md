@@ -221,7 +221,7 @@
 ## 开始
 
 ### 依赖安装
-* Linux用户可以通过根目录的`install.sh`文件一键安装，如果出现错误也可以同Windows用户一样按照下面的步骤进行安装。
+* `U系Linux`、`Mac`用户可以通过根目录的`install.sh`脚本文件一键安装，如果出现错误也可以同Windows用户一样按照下面的步骤进行安装。
    ```bash
       cd Blogin
       ./install.sh
