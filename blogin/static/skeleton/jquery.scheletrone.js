@@ -32,6 +32,7 @@
             // default options, used for instantion, if not explicitly set
             defaults = {
 			url         : '',
+            method: 'get',
             ajaxData    : {},
             debug        : {
                 log: false,
@@ -442,6 +443,7 @@
                             $.ajax({
                                 url: obj.options.url,
                                 dataType: "html",
+                                type: obj.options.method,
                                 data: obj.options.ajaxData,
                                 success: function(data) {
                                     
@@ -481,6 +483,7 @@
                     $.ajax({
                                 url: obj.options.url,
                                 dataType: "html",
+                                type: obj.options.method,
                                 data: obj.options.ajaxData,
                                 success: function(data) {
                                     
