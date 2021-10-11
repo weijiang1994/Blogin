@@ -4,14 +4,17 @@
         <div class="d-flex">
             <b class="flex-grow-1"><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
             {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
-                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i class="fa fa-moon-o"></i></a>
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i
+                        class="fa fa-moon-o"></i></a>
             {% else %}
-                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i class="fa fa-sun-o"></i></a>
+                <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i
+                        class="fa fa-sun-o"></i></a>
             {% endif %}
         </div>
     </div>
     <div id="oneWord" class="card-body p-2 f-15">
-        <i class="fa fa-spinner fa-spin f-hint"></i>
+        <!-- <i class="fa fa-spinner fa-spin f-hint"></i> -->
+        <p class="mb-1">每日一句</p>
     </div>
 </div>
 
@@ -20,18 +23,25 @@
     <div class="card-header p-2 f-17">
         <strong><i class="fa fa-github"></i> Github</strong>
     </div>
-    <div  class="card-body p-2 f-15">
-        <div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">
-            <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar" alt="avatar" src="{{ url_for('static', filename='github-avatar.png') }}"></a>
-            <div class="ml-2">
-                <h5 class="mb-0"><b>Blogin</b></h5>
-                <small id="repoDesc"><i class="fa fa-spinner fa-spin f-hint"></i></small>
+    <div class="card-body p-2 f-15">
+        <div id="github-card">
+            <div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;"
+                 class="d-flex">
+                <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar"
+                                                                                alt="avatar"
+                                                                                src="{{ url_for('static', filename='github-avatar.png') }}"></a>
+                <div class="ml-2">
+                    <h5 class="mb-0"><b>Blogin</b></h5>
+                    <small id="repoDesc"><i class="fa fa-spinner fa-spin f-hint"></i></small>
+                </div>
+                <a class="btn btn-sm btn-light h-25" id="githubStar" hidden="hidden"
+                   href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>
             </div>
-            <a class="btn btn-sm btn-light h-25" id="githubStar" hidden="hidden" href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>
+            <div id="shield-svg" class="text-left pr-1">
+                <p class="mb-1 d-block">shield</p>
+            </div>
         </div>
-        <div id="shield-svg" class="text-left pr-1 d-flex">
-            <i class="fa fa-spinner fa-spin f-hint"></i>
-        </div>
+
     </div>
 </div>
 
@@ -59,7 +69,7 @@
     <div class="card-header p-2 f-17">
         <strong><i class="fa fa-github"></i> 最近动态</strong>
     </div>
-    <div  class="card-body p-2 f-15">
+    <div class="card-body p-2 f-15">
         <div style="width:100%;height:130px;" id="contribute" class="row text-center">
         </div>
     </div>
@@ -73,8 +83,10 @@
     <ul class="list-group list-group-flush f-16">
         {% for category in categories %}
             <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
-                <a style="text-decoration: none" class="text-info-a" href="/blog/cate/{{ category.id }}/" title="查看应用部署分类下所有文章">{{ category.name }}</a>
-                <span class="badge badge-pill badge-success" title="当前分类下有{{ category.blogs|count }}篇文章">{{ category.blogs|count }}</span>
+                <a style="text-decoration: none" class="text-info-a" href="/blog/cate/{{ category.id }}/"
+                   title="查看应用部署分类下所有文章">{{ category.name }}</a>
+                <span class="badge badge-pill badge-success"
+                      title="当前分类下有{{ category.blogs|count }}篇文章">{{ category.blogs|count }}</span>
             </li>
         {% endfor %}
     </ul>
@@ -85,7 +97,8 @@
     <div class="card-header p-2 f-17">
         <div class="d-flex">
             <b class="flex-grow-1"><i class="fa fa-weixin" aria-hidden="true"></i> 近期留言</b>
-            <a style="margin-bottom: 0px" class="text-decoration-none" href="{{ url_for('msg_border_bp.index') }}"><small>更多</small><i class="fa fa-angle-double-right"></i></a>
+            <a style="margin-bottom: 0px" class="text-decoration-none"
+               href="{{ url_for('msg_border_bp.index') }}"><small>更多</small><i class="fa fa-angle-double-right"></i></a>
         </div>
     </div>
     <div class="card-body pl-3">
@@ -104,7 +117,8 @@
             {% for flink in flinks %}
                 <div class="w-50 float-left text-center mb-2">
                     <div class="mx-2">
-                        <a class="text-info-a" style="text-decoration: none" href="{{ flink.link }}" title="{{ flink.desc }}" target="_blank">
+                        <a class="text-info-a" style="text-decoration: none" href="{{ flink.link }}"
+                           title="{{ flink.desc }}" target="_blank">
                             {{ flink.name }}</a>
                     </div>
                 </div>
@@ -120,21 +134,26 @@
     <div class="card-body p-2 f-15">
         <div class="row text-center">
             <div class="col">
-                <a class="text-info-a" href="https://passport.ucloud.cn/?invitation_code=C1xC968B3780B59" target="_blank" title="ucloud云主机">
+                <a class="text-info-a" href="https://passport.ucloud.cn/?invitation_code=C1xC968B3780B59"
+                   target="_blank" title="ucloud云主机">
                     <img style="max-width:40px" alt="ucloud云主机"
                          src="{{ url_for('static', filename='/img/tg/ucloud-icon.png') }}">
                     <p class="mt-2">ucloud云</p>
                 </a>
             </div>
             <div class="col">
-                <a class="text-info-a" href="https://www.ucloud.cn/site/active/kuaijie.html?invitation_code=C1xC968B3780B59" target="_blank" title="ucloud云主机促销活动">
+                <a class="text-info-a"
+                   href="https://www.ucloud.cn/site/active/kuaijie.html?invitation_code=C1xC968B3780B59" target="_blank"
+                   title="ucloud云主机促销活动">
                     <img style="max-width:40px" alt="ucloud云主机促销活动"
                          src="{{ url_for('static', filename='/img/tg/ucloud-icon.png') }}">
                     <p class="mt-2">云主机促销</p>
                 </a>
             </div>
             <div class="col">
-                <a class="text-info-a" href="https://cloud.tencent.com/act/cps/redirect?redirect=33867&cps_key=fe0e7fca4790ebfb4c2f21565cdb3ce1&from=activity" target="_blank" title="腾讯云主机促销活动">
+                <a class="text-info-a"
+                   href="https://cloud.tencent.com/act/cps/redirect?redirect=33867&cps_key=fe0e7fca4790ebfb4c2f21565cdb3ce1&from=activity"
+                   target="_blank" title="腾讯云主机促销活动">
                     <img style="max-width:40px" alt="腾讯云主机促销活动"
                          src="{{ url_for('static', filename='/img/tg/ucloud-icon.png') }}">
                     <p class="mt-2">腾讯云促销</p>
@@ -153,56 +172,59 @@
             loadGithub();
         });
     })
+
     // 加载每日一句、github仓库信息
-    function loadOne(){
-        $.ajax({
-            type: 'post',
-            url: '/load-one/',
-            success: function (res){
-                $("#oneWord").text(res.one);
-            }
-        })
+    function loadOne() {
+        var instance = $('#oneWord').scheletrone({
+            url: "/load-one/",
+        });
+
+
     }
 
-    function loadGithub(){
-        $.ajax({
+    function loadGithub() {
+        let instance = $("#github-card").scheletrone({
+            url: '/load-github',
+        })
+        /*$.ajax({
             type: 'post',
             url: '/load-github/',
             data: {'theme': theme},
-            success: function (res){
+            success: function (res) {
                 $(".f-hint").hide();
-                $("#shield-svg").append('<div class="mr-1">'+res.star+'</div>');
-                $("#shield-svg").append('<div class="mr-1">'+res.fork+'</div>');
-                $("#shield-svg").append('<div class="mr-1">'+res.watcher+'</div>');
+                $("#shield-svg").append('<div class="mr-1">' + res.star + '</div>');
+                $("#shield-svg").append('<div class="mr-1">' + res.fork + '</div>');
+                $("#shield-svg").append('<div class="mr-1">' + res.watcher + '</div>');
                 $('#repoDesc').text(res.repo_desc);
                 $("#githubAvatar").attr('src', res.avatar);
                 $("#githubStar").attr('hidden', false);
             }
-        })
+        })*/
     }
+
     var myChart = echarts.init(document.getElementById('contribute'));
-    myChart.on('click', function (params){
+    myChart.on('click', function (params) {
         window.open('https://2dogz.cn/');
     })
     $.ajax({
-        url:'/get-contribution/',
+        url: '/get-contribution/',
         type: 'post',
         success: function (response) {
             generateCalendar(response);
         }
     })
 
-    function generateCalendar(data){
+    function generateCalendar(data) {
         let item0Color = null;
         let bgColor = null;
         let borderColor = null;
         // 根据主题来指定热力图的属性
-        if (theme === 'light' || theme === undefined){
-            item0Color='#EBEDF0';
+        if (theme === 'light' || theme === undefined) {
+            item0Color = '#EBEDF0';
             bgColor = '#ffffff';
             borderColor = '#ffffff';
-        }else {
-            item0Color='#444444';
+        } else {
+            item0Color = '#444444';
             bgColor = '#303030';
             borderColor = '#303030';
         }
@@ -220,7 +242,7 @@
                 }
             },
             visualMap: {
-                textStyle:{
+                textStyle: {
                     color: '#B9B8CE',
                     fontFamily: 'sans-serif',
                     fontSize: 12,
@@ -231,7 +253,7 @@
                 min: 0,
                 max: 10,
                 type: 'piecewise',
-                pieces:[
+                pieces: [
                     {
                         gt: 10,
                         color: '#2E6139',
@@ -265,12 +287,12 @@
             calendar: [{
                 left: 80,
                 top: 20,
-                center:true,
+                center: true,
                 range: [data.start, data.end],
-                splitLine:{
-                    show:false,
+                splitLine: {
+                    show: false,
                 },
-                itemStyle:{
+                itemStyle: {
                     color: bgColor,
                     borderColor: borderColor,
                     borderWidth: 3,
@@ -282,7 +304,7 @@
                 type: 'heatmap',
                 coordinateSystem: 'calendar',
                 data: data.data,
-                itemStyle:{
+                itemStyle: {
                     color: '#aaeecc'
                 }
             }
