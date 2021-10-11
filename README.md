@@ -292,10 +292,9 @@
    # github第三方登录id以及key
    GITHUB_CLIENT_ID='your github client id'
    GITHUB_CLIENT_SECRET='your github client secret'
-   # baidu ocr key
-   OCR_KEY='your key'
-   OCR_SECRET='your secret'
-   OCR_TOKEN='your token'
+   # gitee 第三方登录相关配置
+   GITEE_CLIENT_ID='your gitee client id'
+   GITEE_CLIENT_SECRET='your gitee client secret'
    ```
 
    **邮件服务器可以申请QQ邮箱或者163邮箱，具体申请流程请网上冲浪，十分简单，这里不做描述。**
@@ -343,7 +342,9 @@
 
    ```bash
    cd Blogin
+   # 初始化数据库以及相关配置
    flask initdb
+   # 创建管理员账号
    flask admin
    ```
 
