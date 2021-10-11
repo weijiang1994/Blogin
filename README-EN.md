@@ -160,10 +160,9 @@ The personal blog site developed by the Flask Python Web framework consists of t
    # github oauth id and key
    GITHUB_CLIENT_ID='your github client id'
    GITHUB_CLIENT_SECRET='your github client secret'
-   # baidu ocr key
-   OCR_KEY='your key'
-   OCR_SECRET='your secret'
-   OCR_TOKEN='your token'
+   # gitee oauth id and key
+   GITEE_CLIENT_ID='your gitee client id'
+   GITEE_CLIENT_SECRET='your gitee client secret'
    ```
 
    **The mail server can apply for gmail mailbox or other mailbox. Please surf the Internet for the specific application process. It is very simple and will not be described here. **
@@ -211,6 +210,9 @@ The personal blog site developed by the Flask Python Web framework consists of t
 
    ```shell
    cd Blogin
+   # init database and some configures
+   flask initdb
+   # create a admin account
    flask admin
    ```
 
