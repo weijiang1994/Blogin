@@ -253,32 +253,36 @@ def change_theme(theme_name):
 
 
 # noinspection PyTypeChecker
-@blog_bp.route('/load-github/', methods=['POST', 'GET'])
+@blog_bp.route('/load-github/', methods=['POST'])
 @cache.cached(timeout=5 * 60)
 def load_github():
     theme = request.form.get('theme')
-
     star = rd.get('star')
     if star is None:
         star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info = github_social()
         avatar = user_info.json()['avatar_url']
         repo_desc = repo_info.json()['description']
+
         # 获取浅色主题的shield
-        rd.set('star', star.text)
-        rd.set('fork', fork.text)
-        rd.set('watcher', watcher.text)
+        rd.set('star', star.text, ex=5*60)
+        rd.set('fork', fork.text, ex=5*60)
+        rd.set('watcher', watcher.text, ex=5*60)
 
         # 获取深色主题的shield
-        rd.set('star_dark', star_dark.text)
-        rd.set('fork_dark', fork_dark.text)
-        rd.set('watcher_dark', watcher_dark.text)
+        rd.set('star_dark', star_dark.text, ex=5*60)
+        rd.set('fork_dark', fork_dark.text, ex=5*60)
+        rd.set('watcher_dark', watcher_dark.text, ex=5*60)
 
-        rd.set('avatar', avatar)
-        rd.set('repo_desc', repo_desc)
+        rd.set('avatar', avatar, ex=5*60)
+        rd.set('repo_desc', repo_desc, ex=5*60)
         star = star.text
 
         if theme == 'dark':
             star = star_dark.text
+            fork, watcher = fork_dark.text, watcher_dark.text
+        else:
+            fork, watcher = fork.text, watcher.text
+
     else:
         if theme == 'dark':
             fork = rd.get('fork_dark')
