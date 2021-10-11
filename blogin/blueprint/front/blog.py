@@ -253,7 +253,7 @@ def timeline():
 
 
 # noinspection PyTypeChecker
-@blog_bp.route('/load-github/', methods=['POST'])
+@blog_bp.route('/load-github/', methods=['POST', 'GET'])
 @cache.cached(timeout=5 * 60)
 def load_github():
     theme = request.form.get('theme')
@@ -290,20 +290,38 @@ def load_github():
 
         avatar = rd.get('avatar')
         repo_desc = rd.get('repo_desc')
-    return jsonify({'star': star,
-                    'fork': fork,
-                    'watcher': watcher,
-                    'avatar': avatar,
-                    'repo_desc': repo_desc
-                    })
+    return f'<div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">\
+                <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar"\
+                                                                                alt="avatar"\
+                                                                                src="{avatar}"></a>\
+                <div class="ml-2">\
+                    <h5 class="mb-0"><b>Blogin</b></h5>\
+                    <small id="repoDesc">{repo_desc}</small>\
+                </div>\
+                <a class="btn btn-sm btn-light h-25" id="githubStar"\
+                   href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>\
+            </div>\
+            <div id="shield-svg" class="text-left pr-1 d-flex">\
+                <div class="mr-1">{star}</div><div class="mr-1">{fork}</div><div class="mr-1">{watcher}</div>\
+            </div>'
+    # return jsonify({'star': star,
+    #                 'fork': fork,
+    #                 'watcher': watcher,
+    #                 'avatar': avatar,
+    #                 'repo_desc': repo_desc
+    #                 })
 
 
-@blog_bp.route('/load-one/', methods=['POST'])
-@cache.cached(timeout=60 * 60)
+@blog_bp.route('/load-one/', methods=['POST', 'GET'])
 def load_one():
     one = rd.get('one')
     # 防止服务器重启之后清空了redis数据导致前端获取不到当日one内容
     if not one:
         one = OneSentence.query.filter_by(day=datetime.date.today()).first()
-        return jsonify({'one': one.content})
+        if request.method == 'GET':
+            return f"<p class='mb-1'>{one.content}</p>"
+        else:
+            return jsonify({'one': one.content})
+    if request.method == 'get':
+        return f"<p class='mb-1'>{one}</p>"
     return jsonify({'one': one})

@@ -14,12 +14,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ck.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'skeleton/jquery.skeleton.css') }}">
+        <script src="{{ url_for('static', filename='skeleton/jquery.scheletrone.js') }}"></script>
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         {% if request.cookies.get('blog_theme', 'light') == 'light' %}
             <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/light/' + light) }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}">
         {% else %}
-{#            <link rel="stylesheet" href="{{ get_theme('dark_theme') }}">#}
+            {#            <link rel="stylesheet" href="{{ get_theme('dark_theme') }}">#}
             <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/dark/' + dark) }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}">
         {% endif %}
