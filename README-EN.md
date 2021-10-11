@@ -201,7 +201,7 @@ The personal blog site developed by the Flask Python Web framework consists of t
 
    ```shell
      cd Blogin
-     pip install -r requirments.txt -i https://pypi.douban.com/simple
+     pip install -r requirements.txt -i https://pypi.douban.com/simple
    ```
 
 5. **Init database**
