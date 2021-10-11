@@ -47,16 +47,6 @@ def index():
                            loves=loves, su=su, flinks=flinks, plans=plans, msg_borders=msg_borders)
 
 
-@blog_bp.route('/themes/<string:theme_name>/')
-def change_theme(theme_name):
-    if theme_name not in current_app.config['BLOG_THEMES'].keys():
-        abort(404)
-    cache.clear()
-    response = redirect(request.referrer)
-    response.set_cookie('blog_theme', current_app.config['BLOG_THEMES'].get(theme_name), max_age=30 * 24 * 60 * 60)
-    return response
-
-
 @blog_bp.route('/get-contribution/', methods=['POST'])
 def get_contribution():
     # 获取开始日期结束日期，长度为90天
@@ -252,6 +242,16 @@ def timeline():
     return render_template('main/timeline.html', timelines=timelines)
 
 
+@blog_bp.route('/themes/<string:theme_name>/')
+def change_theme(theme_name):
+    if theme_name not in current_app.config['BLOG_THEMES'].keys():
+        abort(404)
+    cache.clear()
+    response = redirect(request.referrer)
+    response.set_cookie('blog_theme', current_app.config['BLOG_THEMES'].get(theme_name), max_age=30 * 24 * 60 * 60)
+    return response
+
+
 # noinspection PyTypeChecker
 @blog_bp.route('/load-github/', methods=['POST', 'GET'])
 @cache.cached(timeout=5 * 60)
@@ -322,6 +322,6 @@ def load_one():
             return "<p class='mb-1'>{}</p>".format(one.content)
         else:
             return jsonify({'one': one.content})
-    if request.method == 'get':
+    if request.method == 'GET':
         return "<p class='mb-1'>{}</p>".format(one)
     return jsonify({'one': one})

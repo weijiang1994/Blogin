@@ -184,7 +184,9 @@
 
     function loadGithub() {
         let instance = $("#github-card").scheletrone({
-            url: '/load-github',
+            url: '/load-github/',
+            method: 'post',
+            ajaxData: {'theme': theme}
         })
         /*$.ajax({
             type: 'post',
