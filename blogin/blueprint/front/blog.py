@@ -290,20 +290,20 @@ def load_github():
 
         avatar = rd.get('avatar')
         repo_desc = rd.get('repo_desc')
-    return f'<div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">\
+    return '<div style="border-bottom: 1px solid rgba(58,10,10,0.19); margin-bottom: 5px;padding-bottom: 3px;" class="d-flex">\
                 <a href="https://github.com/weijiang1994/" target="_blank"><img class="avatar-s" id="githubAvatar"\
                                                                                 alt="avatar"\
-                                                                                src="{avatar}"></a>\
+                                                                                src="{}"></a>\
                 <div class="ml-2">\
                     <h5 class="mb-0"><b>Blogin</b></h5>\
-                    <small id="repoDesc">{repo_desc}</small>\
+                    <small id="repoDesc">{}</small>\
                 </div>\
                 <a class="btn btn-sm btn-light h-25" id="githubStar"\
                    href="https://github.com/weijiang1994/Blogin" target="_blank">Star</a>\
             </div>\
             <div id="shield-svg" class="text-left pr-1 d-flex">\
-                <div class="mr-1">{star}</div><div class="mr-1">{fork}</div><div class="mr-1">{watcher}</div>\
-            </div>'
+                <div class="mr-1">{}</div><div class="mr-1">{}</div><div class="mr-1">{}</div>\
+            </div>'.format(avatar, repo_desc, star, fork, watcher)
     # return jsonify({'star': star,
     #                 'fork': fork,
     #                 'watcher': watcher,
@@ -319,9 +319,9 @@ def load_one():
     if not one:
         one = OneSentence.query.filter_by(day=datetime.date.today()).first()
         if request.method == 'GET':
-            return f"<p class='mb-1'>{one.content}</p>"
+            return "<p class='mb-1'>{}</p>".format(one.content)
         else:
             return jsonify({'one': one.content})
     if request.method == 'get':
-        return f"<p class='mb-1'>{one}</p>"
+        return "<p class='mb-1'>{}</p>".format(one)
     return jsonify({'one': one})
