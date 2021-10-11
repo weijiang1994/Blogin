@@ -84,7 +84,7 @@ fi
 
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirments.txt -i https://pypi.douban.com/simple
+pip install -r requirements.txt -i https://pypi.douban.com/simple
 flask initdb
 flask admin
 flask run
