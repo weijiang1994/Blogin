@@ -1,6 +1,6 @@
 #!/bin/bash
 # 安装mysql、redis数据库并启动
-sudo apt-get install mysql-server-5.7
+sudo apt-get install mysql-server
 sudo apt-get install redis-server
 sudo service redis-server start
 
@@ -42,6 +42,8 @@ if [ $input == Y -o $input == y ]; then
       read -p "请输入防跨域攻击secret:" secret
       read -p "请输入github client id:" github_client_id
       read -p "请输入github client secret:" github_client_secret
+      read -p "请输入gitee client secret:" gitee_client_id
+      read -p "请输入gitee client secret:" gitee_client_secret
     else
       echo "跳过.env文件信息输入"
 fi
@@ -59,6 +61,8 @@ BAIDU_TRANS_APPID=''
 BAIDU_TRANS_KEY=''
 GITHUB_CLIENT_ID=$github_client_id
 GITHUB_CLIENT_SECRET=$github_client_secret
+GITEE_CLIENT_ID=$gitee_client_id
+GITEE_CLIENT_SECRET=$gitee_client_secret
 EOF
     else
 cat>.env<<EOF
@@ -72,6 +76,8 @@ cat>.env<<EOF
  BAIDU_TRANS_KEY=''
  GITHUB_CLIENT_ID=''
  GITHUB_CLIENT_SECRET=''
+ GITEE_CLIENT_ID=''
+ GITEE_CLIENT_SECRET=''
 EOF
 fi
 
@@ -79,5 +85,6 @@ fi
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirments.txt -i https://pypi.douban.com/simple
+flask initdb
 flask admin
 flask run
