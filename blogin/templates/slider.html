@@ -83,7 +83,7 @@
         {% for category in categories %}
             <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
                 <a style="text-decoration: none" class="text-info-a" href="/blog/cate/{{ category.id }}/"
-                   title="查看应用{{ category.name }}下所有文章">{{ category.name }}</a>
+                   title="查看{{ category.name }}下所有文章">{{ category.name }}</a>
                 <span class="badge badge-pill badge-success"
                       title="当前分类下有{{ category.blogs|count }}篇文章">{{ category.blogs|count }}</span>
             </li>
