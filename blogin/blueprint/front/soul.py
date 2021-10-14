@@ -2,7 +2,6 @@
 # coding:utf-8
 @Time    : 2020/10/21
 @Author  : jiangwei
-@mail    : jiangwei1@kylinos.cn
 @File    : soul_bp
 @Software: PyCharm
 """

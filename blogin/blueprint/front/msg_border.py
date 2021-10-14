@@ -2,7 +2,6 @@
 # coding:utf-8
 @Time    : 2021/03/12
 @Author  : jiangwei
-@mail    : jiangwei1@kylinos.cn
 @File    : msg_border.py
 @Desc    : msg_border
 @Software: PyCharm

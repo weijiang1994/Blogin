@@ -2,7 +2,6 @@
 # coding:utf-8
 @Time    : 2020/10/14
 @Author  : jiangwei
-@mail    : jiangwei1@kylinos.cn
 @File    : index_bp
 @Software: PyCharm
 """
