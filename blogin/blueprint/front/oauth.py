@@ -2,7 +2,6 @@
 # coding:utf-8
 @Time    : 2020/10/26
 @Author  : jiangwei
-@mail    : jiangwei1@kylinos.cn
 @File    : oauth
 @Software: PyCharm
 """
