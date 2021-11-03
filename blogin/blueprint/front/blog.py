@@ -19,6 +19,7 @@ import requests
 from blogin.emails import send_comment_email
 from blogin.setting import basedir
 import configparser
+from blogin.task import get_one
 
 blog_bp = Blueprint('blog_bp', __name__)
 
@@ -321,6 +322,9 @@ def load_one():
     # 防止服务器重启之后清空了redis数据导致前端获取不到当日one内容
     if not one:
         one = OneSentence.query.filter_by(day=datetime.date.today()).first()
+        if not one:
+            get_one()
+            one = OneSentence.query.filter_by(day=datetime.date.today()).first()
         if request.method == 'GET':
             return "<p class='mb-1'>{}</p>".format(one.content)
         else:
