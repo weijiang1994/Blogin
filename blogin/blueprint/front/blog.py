@@ -5,8 +5,7 @@
 @File    : blog_bp
 @Software: PyCharm
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort, \
-    make_response, session
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder, \
     OneSentence
@@ -15,10 +14,7 @@ from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
 from blogin.utils import redirect_back, github_social, BOOTSTRAP_SUFFIX
-import requests
 from blogin.emails import send_comment_email
-from blogin.setting import basedir
-import configparser
 from blogin.task import get_one
 
 blog_bp = Blueprint('blog_bp', __name__)
@@ -308,12 +304,6 @@ def load_github():
             <div id="shield-svg" class="text-left pr-1 d-flex">\
                 <div class="mr-1">{}</div><div class="mr-1">{}</div><div class="mr-1">{}</div>\
             </div>'.format(avatar, repo_desc, star, fork, watcher)
-    # return jsonify({'star': star,
-    #                 'fork': fork,
-    #                 'watcher': watcher,
-    #                 'avatar': avatar,
-    #                 'repo_desc': repo_desc
-    #                 })
 
 
 @blog_bp.route('/load-one/', methods=['POST', 'GET'])

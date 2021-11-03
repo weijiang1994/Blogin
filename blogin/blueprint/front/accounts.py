@@ -8,7 +8,6 @@
 from flask import Blueprint, render_template, send_from_directory, flash, redirect, url_for, request, current_app
 from flask_login import login_required, current_user, logout_user
 from imageio import imread
-from wtforms import ValidationError
 
 from blogin.decorators import db_exception_handle, confirm_required
 from blogin.extension import db
