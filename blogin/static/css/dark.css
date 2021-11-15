@@ -1,3 +1,15 @@
+.copyBtn{
+    position:absolute;
+    top:3px;
+    right:2px;
+    z-index:999;
+    padding:2px;
+    font-size:13px;
+    background-color: #141313 !important;
+    cursor: pointer;
+    color: #5ca5f1
+}
+
 .introduce-bg{
     background-color: #5b5e5c42;
     border-radius: 5px;
