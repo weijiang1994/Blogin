@@ -197,8 +197,6 @@ def archive():
     archives = {}
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     plans = Plan.query.filter_by(is_done=0).all()
-    years = []
-    months = []
     msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0). \
                       order_by(MessageBorder.timestamps.desc()).all()[0:5]
     for blog in blogs:
@@ -207,8 +205,6 @@ def archive():
         # 如果当前年份不存在,那么当前月份也不存在
         if not archives.get(current_year):
             # 记录当前年份以及当前月份
-            years.append(current_year)
-            months.append(current_month)
             archives[current_year] = {current_month: []}
             archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                   str(blog.create_time).split(' ')[0][5:]])
@@ -216,7 +212,6 @@ def archive():
             # 如果当前年份存在,月份不存在,则更新一条数据到当前年份中
             if not archives.get(current_year).get(current_month):
                 archives.get(current_year).update({current_month: []})
-                months.append(current_month)
                 archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                       str(blog.create_time).split(' ')[0][5:]])
             else:
@@ -225,7 +220,7 @@ def archive():
                                                                       str(blog.create_time).split(' ')[0][5:]])
 
     return render_template('main/archive.html', archives=archives, categories=categories, flinks=flinks, plans=plans,
-                           years=years, months=months, msg_borders=msg_borders)
+                           msg_borders=msg_borders)
 
 
 TIMELINE_STYLE = [['cd-location', 'cd-icon-location.svg'], ['cd-movie', 'cd-icon-movie.svg'],
@@ -260,17 +255,17 @@ def load_github():
         repo_desc = repo_info.json()['description']
 
         # 获取浅色主题的shield
-        rd.set('star', star.text, ex=5*60)
-        rd.set('fork', fork.text, ex=5*60)
-        rd.set('watcher', watcher.text, ex=5*60)
+        rd.set('star', star.text, ex=5 * 60)
+        rd.set('fork', fork.text, ex=5 * 60)
+        rd.set('watcher', watcher.text, ex=5 * 60)
 
         # 获取深色主题的shield
-        rd.set('star_dark', star_dark.text, ex=5*60)
-        rd.set('fork_dark', fork_dark.text, ex=5*60)
-        rd.set('watcher_dark', watcher_dark.text, ex=5*60)
+        rd.set('star_dark', star_dark.text, ex=5 * 60)
+        rd.set('fork_dark', fork_dark.text, ex=5 * 60)
+        rd.set('watcher_dark', watcher_dark.text, ex=5 * 60)
 
-        rd.set('avatar', avatar, ex=5*60)
-        rd.set('repo_desc', repo_desc, ex=5*60)
+        rd.set('avatar', avatar, ex=5 * 60)
+        rd.set('repo_desc', repo_desc, ex=5 * 60)
         star = star.text
 
         if theme == 'dark':
