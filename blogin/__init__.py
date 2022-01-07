@@ -264,6 +264,7 @@ def register_cmd(app: Flask):
                     # 年月都存在则直接将数据拼接到后面
                     archives.get(current_year).get(current_month).append([blog.id, blog.title,
                                                                           str(blog.create_time).split(' ')[0][5:]])
+        print(archives)
 
 
 def register_log(app: Flask):
