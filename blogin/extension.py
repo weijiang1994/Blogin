@@ -21,6 +21,7 @@ from flask_oauthlib.client import OAuth
 from flask_apscheduler import APScheduler
 import redis
 from flask_caching import Cache
+from flask_babel import Babel
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -37,6 +38,7 @@ rd = redis.Redis(connection_pool=pool)
 oauth = OAuth()
 aps = APScheduler()
 cache = Cache()
+babel = Babel()
 
 
 @login_manager.user_loader
