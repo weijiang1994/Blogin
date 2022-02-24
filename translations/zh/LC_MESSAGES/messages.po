@@ -1,0 +1,96 @@
+# Chinese translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-02-24 17:47+0800\n"
+"PO-Revision-Date: 2022-02-24 17:48+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: blogin/templates/base.html:73
+msgid "Home"
+msgstr "主页"
+
+#: blogin/templates/base.html:74
+msgid "Gallery"
+msgstr "相册"
+
+#: blogin/templates/base.html:75
+msgid "Archive"
+msgstr "归档"
+
+#: blogin/templates/base.html:76
+msgid "Tool"
+msgstr "工具"
+
+#: blogin/templates/base.html:79
+msgid "DJT"
+msgstr "毒鸡汤"
+
+#: blogin/templates/base.html:80
+msgid "Poem"
+msgstr "唐宋诗"
+
+#: blogin/templates/base.html:81
+msgid "Ci"
+msgstr "宋词"
+
+#: blogin/templates/base.html:84
+msgid "Timeline"
+msgstr "建站日志"
+
+#: blogin/templates/base.html:87
+msgid "Input Keyword"
+msgstr "搜索关键字"
+
+#: blogin/templates/base.html:89
+msgid "Search"
+msgstr "搜索"
+
+#: blogin/templates/base.html:93
+msgid "Login"
+msgstr "登录"
+
+#: blogin/templates/base.html:94
+msgid "Register"
+msgstr "注册"
+
+#: blogin/templates/base.html:101
+msgid "Welcome"
+msgstr "欢迎"
+
+#: blogin/templates/base.html:107
+msgid "Profile"
+msgstr "个人资料"
+
+#: blogin/templates/base.html:110
+msgid "Notify"
+msgstr "通知"
+
+#: blogin/templates/base.html:115
+msgid "Manage"
+msgstr "后台管理"
+
+#: blogin/templates/base.html:120
+msgid "Dark"
+msgstr "夜间模式"
+
+#: blogin/templates/base.html:124
+msgid "Light"
+msgstr "日间模式"
+
+#: blogin/templates/base.html:128
+msgid "Log Out"
+msgstr "注销"
+

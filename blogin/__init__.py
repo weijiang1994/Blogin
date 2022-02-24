@@ -55,11 +55,21 @@ def create_app(config_name=None):
     shell_handler(app)
     register_log(app)
 
+    @babel.localeselector
+    def get_language():
+        from flask import request
+        cookie = request.cookies.get('local-language')
+        print(cookie)
+        if cookie in ['zh', 'en']:
+            return cookie
+
+        return request.accept_languages.best_match(app.config.get('BABEL_DEFAULT_LOCALE'))
+
     @app.context_processor
     def inject_stage_and_region():
         light_theme = read_config().get('base', 'light_theme')
         dark_theme = read_config().get('base', 'dark_theme')
-        return dict(light=light_theme+BOOTSTRAP_SUFFIX, dark=dark_theme+BOOTSTRAP_SUFFIX)
+        return dict(light=light_theme + BOOTSTRAP_SUFFIX, dark=dark_theme + BOOTSTRAP_SUFFIX)
 
     return app
 

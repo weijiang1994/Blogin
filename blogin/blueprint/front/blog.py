@@ -9,14 +9,14 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request,
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder, \
     OneSentence
-from blogin.extension import db, rd, cache
+from blogin.extension import db, rd, cache, babel
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
 from blogin.utils import redirect_back, github_social, BOOTSTRAP_SUFFIX
 from blogin.emails import send_comment_email
 from blogin.task import get_one
-
+from flask_babel import gettext as _
 blog_bp = Blueprint('blog_bp', __name__)
 
 
