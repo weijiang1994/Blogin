@@ -70,3 +70,4 @@ Whoosh==2.7.4
 wordcloud==1.8.0
 WTForms==2.3.3
 zipp==1.2.0
+flask_babel
