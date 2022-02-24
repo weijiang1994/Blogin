@@ -70,62 +70,62 @@
         </button>
         <div class="navbar-collapse collapse" id="collapsibleNavbar">
             <ul class="navbar-nav mr-auto">
-                {{ nav_item("blog_bp.index", '主页', 'fa fa-home') }}
-                {{ nav_item("gallery_bp.index", '相册', 'fa fa-photo') }}
-                {{ nav_item("blog_bp.archive", '归档', 'fa fa-archive') }}
-                {{ nav_item("tool_bp.index", '工具', 'fa fa-steam') }}
+                {{ nav_item("blog_bp.index", _('Home'), 'fa fa-home') }}
+                {{ nav_item("gallery_bp.index", _('Gallery'), 'fa fa-photo') }}
+                {{ nav_item("blog_bp.archive", _('Archive'), 'fa fa-archive') }}
+                {{ nav_item("tool_bp.index", _('Tool'), 'fa fa-steam') }}
 
                 {{ dropmenu('SOUL', 'fa fa-subway',
-                            [['/soul/', 'fa fa-file-code-o mr-2', '毒鸡汤'],
-                             ['/ts-poem/', 'fa fa-file-text-o mr-2', '唐宋诗'],
-                             ['/song-ci/', 'fa fa-file-text mr-2', '宋词'],
+                            [['/soul/', 'fa fa-file-code-o mr-2', _('DJT')],
+                             ['/ts-poem/', 'fa fa-file-text-o mr-2', _('Poem')],
+                             ['/song-ci/', 'fa fa-file-text mr-2', _('Ci')],
                              ['/api/introduce/', 'fa fa-exchange mr-2', 'API'],
-                             ['/rss-feed/index/', 'fa fa-rss-square mr-2', 'RSS源'],
-                             ['/timeline/', 'fa fa-list-ol mr-2', '建站日志']]) }}
+                             ['/rss-feed/index/', 'fa fa-rss-square mr-2', 'RSS'],
+                             ['/timeline/', 'fa fa-list-ol mr-2', _('Timeline')]]) }}
             </ul>
             <form class="form-inline my-2 my-lg-0 mr-4 f-17" method="get" action="/search">
-                <input class="form-control mr-sm-2 " type="search" name="q" placeholder="输入关键字" aria-label="Search"
+                <input class="form-control mr-sm-2 " type="search" name="q" placeholder="{{ _('Input Keyword') }}" aria-label="Search"
                        required>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ _('Search') }}</button>
             </form>
             {% if not current_user.is_authenticated %}
                 <ul class="navbar-nav f-17">
-                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/login/">登录</a></li>
-                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/register/">注册</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/login/">{{ _('Login') }}</a></li>
+                    <li class="nav-item"><a class="nav-link nav-text" href="/auth/register/">{{ _('Register') }}</a></li>
                 </ul>
             {% else %}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle nav-text" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                           title="欢迎回来,{{ current_user.username }}~">
+                           title="{{ _('Welcome') }},{{ current_user.username }}~">
                             <img class="avatar" src="{{ current_user.avatar }}" alt={{ current_user.username }}>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mt-0 rounded-0 border-0"
                              aria-labelledby="navbarDropdown">
                             <a class="dropdown-item pl-3 " href="/accounts/profile/{{ current_user.id }}/"><i
-                                    class="fa fa-fw fa-user mr-2"></i>个人资料</a>
+                                    class="fa fa-fw fa-user mr-2"></i>{{_('Profile')}}</a>
                             {% if ntf_counts %}
                                 <a href="/accounts/profile" class="dropdown-item pl-3">
-                                <i class="fa fa-fw fa-bell mr-2"></i>消息
+                                <i class="fa fa-fw fa-bell mr-2"></i>{{ _('Notify') }}
                                 <span class="badge badge-info">{{ ntf_counts }}</span>
                             {% endif %}
                             {% if current_user.role_id == 1 %}
                                 <a class="dropdown-item pl-3" href="/backend/admin/index/ "><i
-                                        class="fa fa-fw fa-magnet mr-2"></i>后台管理</a>
+                                        class="fa fa-fw fa-magnet mr-2"></i>{{ _('Manage') }}</a>
                             {% endif %}
                             {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
                                 <a class="dropdown-item pl-3"
                                    href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i
-                                        class="fa fa-fw fa-moon-o mr-2"></i>夜间模式</a>
+                                        class="fa fa-fw fa-moon-o mr-2"></i>{{_('Dark')}}</a>
                             {% else %}
                                 <a class="dropdown-item pl-3"
                                    href="{{ url_for('blog_bp.change_theme', theme_name='light') }}"><i
-                                        class="fa fa-fw fa-sun-o mr-2"></i>日间模式</a>
+                                        class="fa fa-fw fa-sun-o mr-2"></i>{{ _('Light') }}</a>
                             {% endif %}
 
                             </a>
-                            <a class="dropdown-item pl-3" href="/auth/logout"><i class="fa fa-fw fa-sign-out mr-2"></i>退出</a>
+                            <a class="dropdown-item pl-3" href="/auth/logout"><i class="fa fa-fw fa-sign-out mr-2"></i>{{ _('Log Out') }}</a>
                         </div>
                     </li>
                 </ul>
