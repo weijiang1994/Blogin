@@ -12,7 +12,7 @@ from flask import Flask, render_template, url_for, session
 from flask_wtf.csrf import CSRFError
 import click
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
-    oauth, aps, cache
+    oauth, aps, cache, babel
 from blogin.monitor import start_monitor_thread
 from blogin.setting import basedir
 import os
@@ -112,6 +112,7 @@ def register_extension(app: Flask):
     mail.app = app
     whooshee.init_app(app)
     oauth.init_app(app)
+    babel.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': 'redis'})
     if config_ini.getboolean('base', 'scheduler'):
         scheduler_init(app)

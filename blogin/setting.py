@@ -81,6 +81,10 @@ class BaseConfig:
     # APScheduler config
     SCHEDULER_API_ENABLED = True
 
+    # Babel config
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC+8'
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@127.0.0.1/blog?charset=utf8mb4'.format(BaseConfig.DATABASE_USER,
