@@ -2,7 +2,7 @@
 <div class="card mb-3">
     <div class="card-header p-2 f-17">
         <div class="d-flex">
-            <b class="flex-grow-1"><i class="fa fa-coffee" aria-hidden="true"></i> 每日一句</b>
+            <b class="flex-grow-1"><i class="fa fa-coffee" aria-hidden="true"></i> {{ _('One') }}</b>
             {% if  request.cookies.get('blog_theme', 'light') == 'light' %}
                 <a style="margin-bottom: 0px" href="{{ url_for('blog_bp.change_theme', theme_name='dark') }}"><i
                         class="fa fa-moon-o"></i></a>
@@ -47,11 +47,11 @@
 <!-- 近期计划卡片 -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-tasks"></i> 近期计划</strong>
+        <strong><i class="fa fa-tasks"></i> {{ _('TODO') }}</strong>
     </div>
     <div class="card-body p-2 f-15">
         {% if not plans %}
-            <div class="text-center"><p class="text-muted"><b>没有正在进行的计划!</b></p>
+            <div class="text-center"><p class="text-muted"><b>{{ _('No Plan!') }}</b></p>
             </div>
         {% endif %}
         {% for plan in plans %}
@@ -66,7 +66,7 @@
 <!-- 最近动态卡片 -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-github"></i> 最近动态</strong>
+        <strong><i class="fa fa-github"></i> {{ _('Activity') }}</strong>
     </div>
     <div class="card-body p-2 f-15">
         <div style="width:100%;height:130px;" id="contribute" class="row text-center">
@@ -77,7 +77,7 @@
 <!-- 博客分类 -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-book"></i> 文章分类</strong>
+        <strong><i class="fa fa-book"></i> {{ _('Category') }}</strong>
     </div>
     <ul class="list-group list-group-flush f-16">
         {% for category in categories %}
@@ -95,9 +95,9 @@
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
         <div class="d-flex">
-            <b class="flex-grow-1"><i class="fa fa-weixin" aria-hidden="true"></i> 近期留言</b>
+            <b class="flex-grow-1"><i class="fa fa-weixin" aria-hidden="true"></i> {{ _("Message Board") }}</b>
             <a style="margin-bottom: 0px" class="text-decoration-none"
-               href="{{ url_for('msg_border_bp.index') }}"><small>更多</small><i class="fa fa-angle-double-right"></i></a>
+               href="{{ url_for('msg_border_bp.index') }}"><small>{{ _('More') }}</small><i class="fa fa-angle-double-right"></i></a>
         </div>
     </div>
     <div class="card-body pl-3">
@@ -109,7 +109,7 @@
 <!-- 友情链接 -->
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-link"></i> 友情链接</strong>
+        <strong><i class="fa fa-link"></i> {{ _("Links") }}</strong>
     </div>
     <div class="card-body px-0 py-3">
         <div class="tool-list">
@@ -128,7 +128,7 @@
 
 <div class="card mb-3 mt-2">
     <div class="card-header p-2 f-17">
-        <strong><i class="fa fa-paper-plane"></i> 云购优惠</strong>
+        <strong><i class="fa fa-paper-plane"></i> {{ _("Poster") }}</strong>
     </div>
     <div class="card-body p-2 f-15">
         <div class="row text-center">
@@ -164,7 +164,7 @@
 <script src="{{ url_for('static', filename='js/jquery.cookies.js') }}"></script>
 <script>
     let theme = $.cookie('blog_theme');
-    // 打开页面自动加载
+    // load slider infomation
     $(function () {
         $(document).ready(function () {
             loadOne();
@@ -172,7 +172,7 @@
         });
     })
 
-    // 加载每日一句、github仓库信息
+    // get one sentence and github repository information
     function loadOne() {
         var instance = $('#oneWord').scheletrone({
             url: "/load-one/",
@@ -219,7 +219,7 @@
         let item0Color = null;
         let bgColor = null;
         let borderColor = null;
-        // 根据主题来指定热力图的属性
+        // define heat map theme with user theme
         if (theme === 'light' || theme === undefined) {
             item0Color = '#EBEDF0';
             bgColor = '#ffffff';
