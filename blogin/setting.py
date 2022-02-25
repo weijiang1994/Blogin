@@ -84,6 +84,7 @@ class BaseConfig:
     # Babel config
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC+8'
+    BABEL_TRANSLATION_DIRECTORIES = basedir + '/translations'
 
 
 class DevelopmentConfig(BaseConfig):
