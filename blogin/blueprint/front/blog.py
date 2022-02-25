@@ -317,3 +317,11 @@ def load_one():
     if request.method == 'GET':
         return "<p class='mb-1'>{}</p>".format(one)
     return jsonify({'one': one})
+
+
+@blog_bp.route('/change-local/<language>')
+def change_local(language):
+    resp = redirect(request.referrer)
+    if language:
+        resp.set_cookie('local-language', language, 30 * 24 * 60 * 60)
+    return resp
