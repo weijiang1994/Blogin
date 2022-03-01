@@ -27,44 +27,44 @@
 {% block content %}
     <main>
         <div class="container">
-            {{ tool_bread("OCR在线工具", "OCR") }}
+            {{ tool_bread(_('OCR'), "OCR") }}
             <div class="blog-content-brief-div p-3 mt-2">
                 <article>
-                    <p class="tool-title">工具说明:</p>
+                    <p class="tool-title">{{ _('Tool Introduce') }}:</p>
                     <ul>
-                        <li>OCR工具是基于百度的AI开发平台进行开发的，地址<a class="text-info-a" href="https://cloud.baidu.com/doc/OCR/s/zk3h7xw5e">百度AI平台</a></li>
-                        <li>目前具有图片文字、身份证<b><i>(正面)</i></b>、银行卡、驾驶证、车牌识别等功能</li>
-                        <li>由于使用的是免费的API每天都有接口调用限制，如出现识别失败的问题，可能就是次数限制，尽请谅解，毕竟人穷买不起付费版~</li>
-                        <li><strong>选择识别类型后请上传正确的图片！！！识别结果仅供参考~</strong></li>
+                        <li>{{ _("The OCR tool is developed based on Baidu's AI development platform") }}，<a class="text-info-a" href="https://cloud.baidu.com/doc/OCR/s/zk3h7xw5e">{{ _('Baidu AI Platform') }}</a></li>
+                        <li>{{ _("At present, it has the functions of picture text, ID card (front), bank card, driver's license, license plate recognition, etc.") }}</li>
+                        <li>{{ _("Since the free API is used, there is a daily limit on interface calls. If there is a problem of recognition failure, it may be the limit of the number of times.") }}</li>
+                        <li><strong>{{ _("Please upload the correct image after selecting the recognition type! ! ! The identification result is for reference only~") }}</strong></li>
                     </ul>
-                    <p class="tool-title">工具使用:</p>
+                    <p class="tool-title">{{ _('Tool-Using') }}:</p>
                     <form id="upload" enctype="multipart/form-data">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <p>识别类型:</p>
+                                    <p>{{ _('Identification Type') }}:</p>
                                     <select id="ocrCategory" class="form-control">
-                                        <option>文字识别</option>
-                                        <option>身份证识别</option>
-                                        <option>银行卡识别</option>
-                                        <option>驾驶证识别</option>
-                                        <option>车牌识别</option>
+                                        <option>{{ _("Text Recognition") }}</option>
+                                        <option>{{ _("IDCard Recognition") }}</option>
+                                        <option>{{ _("Bank Card Recognition") }}</option>
+                                        <option>{{ _("Drive Card Recognition") }}</option>
+                                        <option>{{ _("Car license recognizer") }}</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <p>识别图片:</p>
+                                    <p>{{ _("Origin Image") }}:</p>
                                     <input required id="image" name="img" style="height: 2.4rem;border: 1px solid #cccccc;padding: 3px;border-radius: 3px;" type="file">
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-secondary" onclick="startOCR()">开始识别</button>
+                    <button class="btn btn-secondary" onclick="startOCR()">{{ _('Recognition') }}</button>
                     <hr>
                     <div hidden="hidden" id="ocrHint" class="text-center">
-                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>正在进行OCR文字识别,请稍后...</b></p>
+                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>{{ _('Recogniting, Please wait...') }}</b></p>
                     </div>
                     <div id="resultDiv" hidden="hidden" class="no-results">
-                        <p class="tool-title">识别结果:</p>
+                        <p class="tool-title">{{ _('Recognition Result') }}:</p>
                         <p class="text-muted" id="nums"></p>
                         <div class="row">
                             <div class="col-md-4">

@@ -11,10 +11,10 @@
             {% include "_flash.html" %}
             <div class="row">
                 <div class="col-lg-8">
-                    <!-- 网站个人资料 -->
+                    <!-- Author's brief information -->
                     <div class="card mb-3">
                         <div class="text-muted card-header ">
-                            <strong>Blogin</strong>的个人资料
+                            <strong>{{ _('ClearWater') }}</strong>{{ _("'s Profile") }}
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -23,16 +23,16 @@
                                 </div>
                                 <div class="col-9">
                                     <h3><strong>Blogin</strong></h3>
-                                    <p class="text-muted">个人网站: <i class="fa fa-link"></i> <a class="text-muted gray-a" href="http://2dogz.cn" target="_blank">Blogin的个人网站</a></p>
-                                    <p class="text-muted">建站时间: <i class="fa fa-clock-o"></i> 2020-08-27</p>
-                                    <p class="text-muted">联系邮箱: <i class="fa fa-envelope"></i> <a class="text-decoration-none text-muted" href="mailto:weijiang1994_1@qq.com">weijiang1994_1@qq.com</a></p>
+                                    <p class="text-muted">{{ _('Website') }}: <i class="fa fa-link"></i> <a class="text-muted gray-a" href="http://2dogz.cn" target="_blank">{{ _("ClearWater's Website") }}</a></p>
+                                    <p class="text-muted">{{ _('Start') }}: <i class="fa fa-clock-o"></i> 2020-08-27</p>
+                                    <p class="text-muted">{{ _('Email') }}: <i class="fa fa-envelope"></i> <a class="text-decoration-none text-muted" href="mailto:weijiang1994_1@qq.com">weijiang1994_1@qq.com</a></p>
                                     <br>
-                                    <a href="/loveme/" title="总共被点赞{{ loves }}次" class="btn btn-danger float-right"><i class="fa fa-heart-o"></i></a>
+                                    <a href="/loveme/" title="{{ _('Like times %(loves)s', loves=loves) }}" class="btn btn-danger float-right"><i class="fa fa-heart-o"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- 博客列表 -->
+                    <!-- Post list -->
                     <div class="summary-list">
                         {% for blog in blogs %}
                             <div class="media mb-1 mb-sm-2 p-2 p-lg-3 blog-brief-div blog-content-brief-div {% if blog.is_top %}top-post-div{% endif %}">
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="media-body">
                                     <div class="text-muted mb-2 f-12">
-                                        <span class="badge badge-inverse"><i class="fa fa-user"></i> 清水</span>
+                                        <span class="badge badge-inverse"><i class="fa fa-user"></i> {{_('ClearWater')}}</span>
                                         <span class="badge badge-inverse" title="{{ blog.create_time }}"><i class="fa fa-calendar-times-o ml-2 mr-1"></i>{{ moment(blog.create_time, local=True).fromNow(refresh=True) }}</span>
                                     </div>
                                     <h5 class="title-brief">
@@ -52,7 +52,7 @@
                                     <p class="d-none d-sm-block mb-2 f-15">{{ blog.introduce|striptags|truncate(100) }}</p>
                                     <p class="d-block d-sm-none mb-2 f-15">{{ blog.introduce|striptags|truncate(50) }}</p>
                                     <div class="text-muted mb-0 f-12">
-                                        <a style="text-decoration: none;" href="/blog/cate/{{ blog.type_id }}/" title="查看当前分类下更多文章">
+                                        <a style="text-decoration: none;" href="/blog/cate/{{ blog.type_id }}/" title="{{ _('More post') }}">
                                             <span class="badge badge-inverse"><i class="fa fa-book mr-1"></i>{{ cates[loop.index0] }}</span>
                                         </a>
                                         <span class="badge badge-inverse"><i class="fa fa-eye ml-2 mr-1"></i>{{ blog.read_times }}</span>

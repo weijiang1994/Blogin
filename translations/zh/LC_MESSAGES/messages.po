@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-24 17:47+0800\n"
+"POT-Creation-Date: 2022-02-25 17:49+0800\n"
 "PO-Revision-Date: 2022-02-24 17:48+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: blogin/templates/base.html:73
+#: blogin/templates/base.html:73 blogin/templates/main/blog.html:88
 msgid "Home"
 msgstr "主页"
 
-#: blogin/templates/base.html:74
+#: blogin/templates/base.html:74 blogin/templates/main/gallery.html:27
 msgid "Gallery"
 msgstr "相册"
 
@@ -93,4 +93,299 @@ msgstr "日间模式"
 #: blogin/templates/base.html:128
 msgid "Log Out"
 msgstr "注销"
+
+#: blogin/templates/base.html:143
+msgid "Author's Github"
+msgstr "博客作者的Github"
+
+#: blogin/templates/base.html:161
+msgid "Online"
+msgstr "网站已上线"
+
+#: blogin/templates/base.html:161
+msgid "day"
+msgstr "天"
+
+#: blogin/templates/slider.html:5
+msgid "One"
+msgstr "每日一句"
+
+#: blogin/templates/slider.html:50
+msgid "TODO"
+msgstr "近期计划"
+
+#: blogin/templates/slider.html:54
+msgid "No Plan!"
+msgstr "暂无正在进行的计划！"
+
+#: blogin/templates/slider.html:69
+msgid "Activity"
+msgstr "最近活动"
+
+#: blogin/templates/slider.html:80
+msgid "Category"
+msgstr "文章类别"
+
+#: blogin/templates/slider.html:98
+msgid "Message Board"
+msgstr "留言板"
+
+#: blogin/templates/slider.html:100
+msgid "More"
+msgstr "更多"
+
+#: blogin/templates/slider.html:112
+msgid "Links"
+msgstr "友情链接"
+
+#: blogin/templates/slider.html:131
+msgid "Poster"
+msgstr "云购优惠"
+
+#: blogin/templates/main/archive.html:67
+msgid "Post Archive"
+msgstr "博客归档"
+
+#: blogin/templates/main/blog.html:66
+msgid "Modify Record"
+msgstr "修改历史记录"
+
+#: blogin/templates/main/blog.html:94
+msgid "Position"
+msgstr "当前位置"
+
+#: blogin/templates/main/blog.html:97
+msgid "Edit"
+msgstr "编辑"
+
+#: blogin/templates/main/blog.html:112
+msgid "Introduce"
+msgstr "简介"
+
+#: blogin/templates/main/blog.html:126
+msgid "Copyright"
+msgstr "版权声明"
+
+#: blogin/templates/main/blog.html:126
+msgid "Write is not easy, please indicate the source when reprinting!"
+msgstr "原创不易，转载请注明出处~"
+
+#: blogin/templates/main/blog.html:127
+msgid "Post Link"
+msgstr "文章链接"
+
+#: blogin/templates/main/blog.html:136
+msgid "Sponsor"
+msgstr "打赏"
+
+#: blogin/templates/main/blog.html:156
+msgid "Buy Coffee~"
+msgstr "给作者买杯咖啡吧~"
+
+#: blogin/templates/main/blog.html:166
+msgid "Wechat"
+msgstr "微信"
+
+#: blogin/templates/main/blog.html:170
+msgid "Alipay"
+msgstr "支付宝"
+
+#: blogin/templates/main/blog.html:182
+#, python-format
+msgid "%(count)s comments"
+msgstr "%(count)s条评论"
+
+#: blogin/templates/main/gallery.html:27
+msgid "Photography is poor three generations"
+msgstr "摄影穷三代"
+
+#: blogin/templates/main/gallery.html:48
+msgid "Random"
+msgstr "换一批"
+
+#: blogin/templates/main/index.html:17 blogin/templates/main/index.html:46
+msgid "ClearWater"
+msgstr "清水"
+
+#: blogin/templates/main/index.html:17
+msgid "'s Profile"
+msgstr "的个人资料"
+
+#: blogin/templates/main/index.html:26
+msgid "Website"
+msgstr "个人网站"
+
+#: blogin/templates/main/index.html:26
+msgid "ClearWater's Website"
+msgstr "清水的个人网站"
+
+#: blogin/templates/main/index.html:27
+msgid "Start"
+msgstr "建站时间"
+
+#: blogin/templates/main/index.html:28
+msgid "Email"
+msgstr "联系邮箱"
+
+#: blogin/templates/main/index.html:30
+#, python-format
+msgid "Like times %(loves)s"
+msgstr "总共被点赞%(loves)s次"
+
+#: blogin/templates/main/index.html:55
+msgid "More post"
+msgstr "查看更多当前分类下博客"
+
+#: blogin/templates/main/tool/ocr.html:30
+#: blogin/templates/main/tool/tool.html:23
+msgid "OCR"
+msgstr "OCR工具"
+
+#: blogin/templates/main/tool/ocr.html:33
+msgid "Tool Introduce"
+msgstr "工具说明"
+
+#: blogin/templates/main/tool/ocr.html:35
+msgid "The OCR tool is developed based on Baidu's AI development platform"
+msgstr "OCR工具是基于百度AI开发平台的API开发的"
+
+#: blogin/templates/main/tool/ocr.html:35
+msgid "Baidu AI Platform"
+msgstr "百度AI开放平台"
+
+#: blogin/templates/main/tool/ocr.html:36
+msgid ""
+"At present, it has the functions of picture text, ID card (front), bank "
+"card, driver's license, license plate recognition, etc."
+msgstr "目前具有图片文字、身份证(正面)、银行卡、驾驶证、车牌识别等功能"
+
+#: blogin/templates/main/tool/ocr.html:37
+msgid ""
+"Since the free API is used, there is a daily limit on interface calls. If"
+" there is a problem of recognition failure, it may be the limit of the "
+"number of times."
+msgstr "由于使用的是免费的API每天都有接口调用限制，如出现识别失败的问题，可能就是次数限制，尽请谅解，毕竟人穷买不起付费版~"
+
+#: blogin/templates/main/tool/ocr.html:38
+msgid ""
+"Please upload the correct image after selecting the recognition type! ! !"
+" The identification result is for reference only~"
+msgstr "选择识别类型后请上传正确的图片！！！识别结果仅供参考~"
+
+#: blogin/templates/main/tool/ocr.html:40
+msgid "Tool-Using"
+msgstr "工具使用"
+
+#: blogin/templates/main/tool/ocr.html:45
+msgid "Identification Type"
+msgstr "识别类型"
+
+#: blogin/templates/main/tool/ocr.html:47
+msgid "Text Recognition"
+msgstr "文字识别"
+
+#: blogin/templates/main/tool/ocr.html:48
+msgid "IDCard Recognition"
+msgstr "身份证识别"
+
+#: blogin/templates/main/tool/ocr.html:49
+msgid "Bank Card Recognition"
+msgstr "银行卡识别"
+
+#: blogin/templates/main/tool/ocr.html:50
+msgid "Drive Card Recognition"
+msgstr "驾驶证识别"
+
+#: blogin/templates/main/tool/ocr.html:51
+msgid "Car license recognizer"
+msgstr "车牌识别"
+
+#: blogin/templates/main/tool/ocr.html:55
+msgid "Origin Image"
+msgstr "识别图片"
+
+#: blogin/templates/main/tool/ocr.html:61
+msgid "Recognition"
+msgstr "开始识别"
+
+#: blogin/templates/main/tool/ocr.html:64
+msgid "Recognition, Please wait..."
+msgstr "正在进行OCR文字识别,请稍后..."
+
+#: blogin/templates/main/tool/ocr.html:67
+msgid "Recognition Result"
+msgstr "识别结果"
+
+#: blogin/templates/main/tool/tool.html:16
+msgid "Online Tools"
+msgstr "在线工具"
+
+#: blogin/templates/main/tool/tool.html:23
+msgid ""
+"Online OCR tools are based on Baidu AI platform interface developed, "
+"50,000 times a day for free calls, if the recognition failure must be "
+"because the blogger poor, free daily number was used up."
+msgstr "在线OCR工具是基于百度AI平台接口进行开发的，每天50000次的免费调用，如果识别失败那一定是因为博主穷，每天免费次数被用完了。"
+
+#: blogin/templates/main/tool/tool.html:24
+msgid "IP Query"
+msgstr "IP查询工具"
+
+#: blogin/templates/main/tool/tool.html:24
+msgid ""
+"The IP query tool is based on the ipfree interface for querying. Due to "
+"the external network source used, the query time may be a bit slow or "
+"timed out."
+msgstr "IP查询工具是基于ipfree接口进行查询，由于使用的外网源，可能查询的时间有点较慢，或者超时。"
+
+#: blogin/templates/main/tool/tool.html:25
+msgid "WordCloud"
+msgstr "词云图制作"
+
+#: blogin/templates/main/tool/tool.html:25
+msgid ""
+"Word cloud map is a popular visualization tool at present. This tool "
+"realizes word cloud map creation through jieba library, save and "
+"download."
+msgstr "词云图是目前比较流行的可视化工具，本工具通过jieba库实现词云图制作，保存下载。"
+
+#: blogin/templates/main/tool/tool.html:26
+msgid "Multi Translate"
+msgstr "多端翻译"
+
+#: blogin/templates/main/tool/tool.html:26
+msgid ""
+"The multi-terminal translation tool integrates multiple translation "
+"interfaces, including Baidu, Youdao, Google, etc., and multiple results "
+"for one text."
+msgstr "多端翻译工具集成了多个翻译接口，包含有百度、有道、谷歌等，一条文本多个结果。"
+
+#: blogin/templates/main/tool/tool.html:27
+msgid "Image Process"
+msgstr "图像工具"
+
+#: blogin/templates/main/tool/tool.html:27
+msgid ""
+"Image processing tools can mainly do some simple operations on images, "
+"such as cropping, scaling, adding text, etc. The functions are relatively"
+" simple."
+msgstr "图像工具主要是可以做一些图像的简单操作，比如裁剪、缩放、添加文字等，功能较为简单。"
+
+#: blogin/templates/main/tool/tool.html:28
+msgid "ShiCi Query"
+msgstr "唐宋诗词查询"
+
+#: blogin/templates/main/tool/tool.html:28
+msgid ""
+"Contains 320,000 Tang and Song poems and 150,000 Song poems, thanks to "
+"the contributors of the chinese-poem repository on github."
+msgstr "包含有32万首唐宋诗，15万首宋词，感谢github上chinese-poem仓库的贡献者。"
+
+#: blogin/templates/main/tool/tool.html:29
+msgid "Code Format"
+msgstr "代码格式化"
+
+#: blogin/templates/main/tool/tool.html:29
+msgid "Format messy code for formatted output, such as json data, HTML code, etc."
+msgstr "将格式混乱代码进行格式化输出，如json数据、HTML代码等。"
 

@@ -63,7 +63,7 @@
     <main>
         {% if histories %}
             <div class="history-fixed-div">
-                <p class="text-muted p-line-bottom"><b>历史修改版本</b></p>
+                <p class="text-muted p-line-bottom"><b>{{ _('Modify Record') }}</b></p>
                 <ol>
                     {% for history in histories %}
                         <li>
@@ -85,16 +85,16 @@
             <nav style="padding-top: 10px" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a class="text-info-a" href="/">首页</a>
+                        <a class="text-info-a" href="/">{{ _('Home') }}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a class="text-info-a" href="/blog/cate/{{ cate.id }}/">{{ cate.name }}</a>
                     </li>
                     <li class="breadcrumb-item active d-none d-md-block" aria-current="page">{{ blog.title }}</li>
-                    <li class="breadcrumb-item active d-md-none" aria-current="page">当前位置</li>
+                    <li class="breadcrumb-item active d-md-none" aria-current="page">{{ _('Position') }}</li>
                     {% if current_user.role_id == 1 %}
                         <li class="breadcrumb-item float-right" aria-current="page"><a
-                                href="/backend/blog/edit/{{ blog.id }}">编辑文章</a></li>
+                                href="/backend/blog/edit/{{ blog.id }}">{{ _('Edit') }}</a></li>
                     {% endif %}
                 </ol>
             </nav>
@@ -109,7 +109,7 @@
                     <hr>
                 </div>
                 <div class="text-muted">
-                    <h1 class="introduce-h1">简介</h1>
+                    <h1 class="introduce-h1">{{ _('Introduce') }}</h1>
                     {{ blog.introduce }}
                     <hr>
                 </div>
@@ -123,8 +123,8 @@
                 <article>
                     {{ article_content|safe }}
                     <div class="cc">
-                        <div>版权声明：<i class="fa fa-cc-paypal"></i>原创不易,转载请注明出处～</div>
-                        <div>文章连接：<a class="text-info" href="http://2dogz.cn/blog/article/{{ blog.id }}/">http://2dogz.cn/blog/article/{{ blog.id }}/</a>
+                        <div>{{ _('Copyright') }}：<i class="fa fa-cc-paypal"></i> {{ _('Write is not easy, please indicate the source when reprinting!') }}</div>
+                        <div>{{ _('Post Link')}}：<a class="text-info" href="http://2dogz.cn/blog/article/{{ blog.id }}/">http://2dogz.cn/blog/article/{{ blog.id }}/</a>
                         </div>
                     </div>
                     <div class="text-center">
@@ -133,7 +133,7 @@
                 </article>
                 <div class="text-center">
                     <button data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-outline-success"><i
-                            class="fa fa-heart-o"></i>打赏
+                            class="fa fa-heart-o"></i>{{ _('Sponsor') }}
                     </button>
                 </div>
                 <div class="d-flex">
@@ -153,7 +153,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-coffee"></i>给作者买杯咖啡吧～
+                                <h5 class="modal-title" id="exampleModalCenterTitle"><i class="fa fa-coffee"></i> {{ _('Buy Coffee~') }}
                                 </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true" class="fa fa-close"></span>
@@ -163,11 +163,11 @@
                                 <div class="text-center">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <i class="fa fa-weixin"></i>微信<img class="img-fluid"
+                                            <i class="fa fa-weixin"></i> {{ _('Wechat') }}<img class="img-fluid"
                                                                                src="/static/img/donate/wechatpay.png">
                                         </div>
                                         <div class="col-md-6">
-                                            <i class="fa fa-cc-paypal"></i>支付宝<img class="img-fluid"
+                                            <i class="fa fa-cc-paypal"></i> {{ _('Alipay') }}<img class="img-fluid"
                                                                                    src="/static/img/donate/alipay.jpg">
                                         </div>
                                     </div>
@@ -179,7 +179,7 @@
             </div>
             <div class="blog-content-div">
                 {% include "comment.html" %}
-                <p class="text-muted"><strong>当前共有{{ comments|length }}条评论</strong></p>
+                <p class="text-muted"><strong>{{ _('%(count)s comments', count=comments|length) }}</strong></p>
                 <hr>
                 {% include "commentContent.html" %}
             </div>
