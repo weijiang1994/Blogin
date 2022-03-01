@@ -13,20 +13,20 @@
     </style>
 {% endblock %}
 {% block title %}
-    在线小工具
+    {{ _('Online Tools') }}
 {% endblock %}
 {% block content %}
     <main>
         <div class="container">
             <br>
             <div class="row">
-                {{ tool_card("在线OCR工具", "在线OCR工具是基于百度AI平台接口进行开发的，每天50000次的免费调用，如果识别失败那一定是因为博主穷，每天免费次数被用完了。", "ocr", "fa fa-image") }}
-                {{ tool_card("IP查询工具", "IP查询工具是基于ipfree接口进行查询，由于使用的外网源，可能查询的时间有点较慢，或者超时。", "query-ip", "fa fa-address-card") }}
-                {{ tool_card("词云图制作", "词云图是目前比较流行的可视化工具，本工具通过jieba库实现词云图制作，保存下载。", 'word-cloud', "fa fa-cloud") }}
-                {{ tool_card("多端翻译", "多端翻译工具集成了多个翻译接口，包含有百度、有道、谷歌等，一条文本多个结果。", 'multi-translation', "fa fa-language") }}
-                {{ tool_card("图像工具", "图像工具主要是可以做一些图像的简单操作，比如裁剪、缩放、添加文字等，功能较为鸡肋。", 'image-pro', "fa fa-photo") }}
-                {{ tool_card("唐宋诗词", "包含有32万首唐宋诗，15万首宋词，感谢github上chinese-poem仓库的贡献者。", 'poem-tang', "fa fa-file-o") }}
-                {{ tool_card("代码格式化", "将格式混乱代码进行格式化输出，如json数据、HTML代码等。", 'code-format', "fa fa-code") }}
+                {{ tool_card(_('OCR'), _('Online OCR tools are based on Baidu AI platform interface developed, 50,000 times a day for free calls, if the recognition failure must be because the blogger poor, free daily number was used up.'), "ocr", "fa fa-image") }}
+                {{ tool_card(_('IP Query'), _('The IP query tool is based on the ipfree interface for querying. Due to the external network source used, the query time may be a bit slow or timed out.'), "query-ip", "fa fa-address-card") }}
+                {{ tool_card(_('WordCloud'), _('Word cloud map is a popular visualization tool at present. This tool realizes word cloud map creation through jieba library, save and download.'), 'word-cloud', "fa fa-cloud") }}
+                {{ tool_card(_('Multi Translate'), _('The multi-terminal translation tool integrates multiple translation interfaces, including Baidu, Youdao, Google, etc., and multiple results for one text.'), 'multi-translation', "fa fa-language") }}
+                {{ tool_card(_('Image Process'), _('Image processing tools can mainly do some simple operations on images, such as cropping, scaling, adding text, etc. The functions are relatively simple.'), 'image-pro', "fa fa-photo") }}
+                {{ tool_card(_('ShiCi Query'), _('Contains 320,000 Tang and Song poems and 150,000 Song poems, thanks to the contributors of the chinese-poem repository on github.'), 'poem-tang', "fa fa-file-o") }}
+                {{ tool_card(_('Code Format'), _('Format messy code for formatted output, such as json data, HTML code, etc.'), 'code-format', "fa fa-code") }}
             </div>
         </div>
     </main>

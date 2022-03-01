@@ -140,7 +140,7 @@
         <div class="card-body text-center px-0 f-14">
             <p class="card-text mb-1">Copyright&nbsp;©&nbsp;<span id="year-info">2020</span>
                 <a href="https://github.com/weijiang1994" class="text-decoration-none footer-a" target="_blank"
-                   title="博客作者的Github">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
+                   title="{{ _("Author's Github") }}">Blogin</a>.&nbsp;Design&nbsp;by&nbsp;Flask1.01.
             </p>
             <p class="mb-0">
                 <a href="http://beian.miit.gov.cn/" class="text-decoration-none footer-a" target="_blank">湘ICP备2020018236号-1</a>&nbsp;<span
@@ -158,7 +158,7 @@
                     x.innerHTML = d.getFullYear();
                     let y = document.getElementById("web-day");
                     let dd = Math.floor((d.getTime() - old.getTime()) / (24 * 3600 * 1000));
-                    let d_str = "| 网站已上线 " + dd + " 天";
+                    let d_str = "| {{ _('Online') }} " + dd + " {{ _('day') }}";
                     y.innerHTML = d_str;
                 }
 
