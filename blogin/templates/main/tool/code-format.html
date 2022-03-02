@@ -1,31 +1,31 @@
 {% extends "base.html" %}
 {% from "macro.html" import tool_bread, toast with context %}
 {% block title %}
-    代码在线格式化工具
+    {{ _('Code Format') }}
 {% endblock %}
 {% block content %}
     <main>
         <div class="container">
-            {{ tool_bread("代码在线格式化", "CodeFormat") }}
+            {{ tool_bread(_("Code Format"), _("Code Format")) }}
             <div class="blog-content-brief-div p-3 mt-2">
-                <label>语言选择:
+                <label>{{_('Program')}}:
                     <select id="language" class="form-control">
                         <option>JSON</option>
                         <option>HTML</option>
                         <option>Python</option>
                     </select>
                 </label>
-                <label>缩进:
+                <label>{{_('Indent')}}:
                     <select id="indent" class="form-control">
-                        <option value="2">2个空格</option>
-                        <option value="4">4个空格</option>
+                        <option value="2">{{ _('Two Space')}}</option>
+                        <option value="4">{{ _('Four Space') }}</option>
                     </select>
                 </label>
-                <label>网络接口:
+                <label>{{ _('API') }}:
                     <div class="input-group">
-                        <input type="text" class="form-control" name="interface" id="interface" placeholder="请输入接口地址" aria-required="true" aria-describedby="captcha" required>
+                        <input type="text" class="form-control" name="interface" id="interface" placeholder="{{ _('Input API URL') }}" aria-required="true" aria-describedby="captcha" required>
                         <div class="input-group-append">
-                            <button class="btn btn-sm btn-info" onclick="getInterfaceData()" id="sendCaptcha">获取数据</button>
+                            <button class="btn btn-sm btn-info" onclick="getInterfaceData()" id="sendCaptcha">{{_('Get')}}</button>
                         </div>
                     </div>
                 </label>
@@ -39,9 +39,9 @@
                 </div>
                 {{ toast() }}
                 <div class="d-flex">
-                    <button class="btn btn-sm btn-outline-info mr-2" onclick="formatCode()">格式化</button>
-                    <button class="btn btn-sm btn-outline-success mr-2" onclick="copyFormatCode()">复制格式化代码</button>
-                    <button class="btn btn-sm btn-outline-danger mr-2" onclick="clearResult()">清空结果</button>
+                    <button class="btn btn-sm btn-outline-info mr-2" onclick="formatCode()">{{_('Format')}}</button>
+                    <button class="btn btn-sm btn-outline-success mr-2" onclick="copyFormatCode()">{{ _('Copy') }}</button>
+                    <button class="btn btn-sm btn-outline-danger mr-2" onclick="clearResult()">{{ _('Clear') }}</button>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
                     if (res.tag === 1){
                         $("#formatCode").empty();
                         $("#formatCode").val(res.code);
-                        showToast('代码格式化成功!', 1500);
+                        showToast("{{ _('Format successful!') }}", 1500);
                     }else {
                         showToast(res.info, 1500);
                     }
@@ -71,7 +71,7 @@
             let e = document.getElementById("formatCode");
             e.select();
             document.execCommand("Copy");
-            showToast('格式化代码已复制到剪贴板!', 1000);
+            showToast('{{ _("Copy successful!") }}!', 1000);
         }
 
         function clearResult(){
@@ -82,7 +82,7 @@
         function getInterfaceData(){
             let itf = $("#interface").val();
             if (itf === ''){
-                showToast('接口地址不能为空!', 1500);
+                showToast('{{ _('API URL is empty!') }}!', 1500);
                 return false;
             }
             $.ajax({
@@ -93,7 +93,7 @@
                     if (res.tag === 1){
                         $("#originCode").val('');
                         $("#originCode").val(res.code.toString());
-                        showToast('获取接口数据成功!', 1500);
+                        showToast('{{ _('Get data successful!') }}!', 1500);
                     }else
                         showToast(res.code, 1500);
                 }
