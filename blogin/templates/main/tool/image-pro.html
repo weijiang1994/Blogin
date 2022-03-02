@@ -7,30 +7,30 @@
     </style>
 {% endblock %}
 {% block title %}
-    图片处理工具
+{{_('Image Process')}}
 {% endblock %}
 {% block content %}
     <main>
         <div class="container">
-            {{ tool_bread("图片制作工具", "图片工具") }}
+            {{ tool_bread(_('Image Process'), _('Image Process')) }}
             <div class="blog-content-brief-div p-3 mt-2">
                 <article>
-                    <p class="tool-title">工具说明:</p>
+                    <p class="tool-title">{{ _('Tool Introduce') }}:</p>
                     <ul>
-                        <li>图片处理工具主要是采用opencv库以及PIL对图片进行一些简单的处理；</li>
-                        <li>目前包含有图片缩放、添加水印、证件照换底等功能；</li>
-                        <li>添加水印建议选择水平铺满、45°铺满效果比较好，其他方式效果不太好，因为添加水印的坐标受水印文字长度以及字体大小受限制;</li>
-                        <li>服务器配置不太够，上传处理的图片请不要太大!!!</li>
+                        <li>{{ _('Image process tool base on opencv and PIL library;') }}</li>
+                        <li>{{ _('Currently contains functions such as image zooming, adding watermarks and changing the background of ID photos.') }}</li>
+                        <li>{{ _('Adding a watermark is recommended to choose the horizontal pavement, 45 ° pavement effect is better, the effect of other ways is not so good, because the coordinates of the watermark added by the watermark text length and font size is limited;') }}</li>
+                        <li>{{ _('Server performance is not possible, please do not upload the processed images too big!!!') }}</li>
                     </ul>
-                    <p class="tool-title">工具使用:</p>
+                    <p class="tool-title">{{ _('Tool-Using') }}:</p>
                     <form id="upload" enctype="multipart/form-data">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
                                     <select onclick="changeFunction()" id="proType" class="form-control">
-                                        <option>图片缩放</option>
-                                        <option>添加水印</option>
-                                        <option>证件照换底</option>
+                                        <option>{{ _('Zoom') }}</option>
+                                        <option>{{ _('Add Watermark') }}</option>
+                                        <option>{{ _('Replace Background') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -39,52 +39,52 @@
                                 <div class="col-md-4">
                                     <div id="resizeDiv" class="row">
                                         <div class="col">
-                                            <label>缩放模式:</label>
+                                            <label>{{ _('Zoom Mode') }}:</label>
                                             <select id="resizeType" class="form-control">
-                                                <option>放大</option>
-                                                <option>缩小</option>
+                                                <option>{{ _('Zoom in') }}</option>
+                                                <option>{{ _('Zoom out') }}</option>
                                             </select>
                                         </div>
                                         <div style="margin-bottom: 10px;" class="col">
-                                            <label>高缩放比例:</label>
-                                            <input class="form-control" id="heightZoom" type="number" placeholder="高缩放比">
-                                            <label>宽缩放比例:</label>
-                                            <input class="form-control" id="widthZoom" type="number" placeholder="宽缩放比">
+                                            <label>{{ _('Height Scaling') }}:</label>
+                                            <input class="form-control" id="heightZoom" type="number" placeholder="{{ _('Height Scaling') }}">
+                                            <label>{{ _('Width Scaling') }}:</label>
+                                            <input class="form-control" id="widthZoom" type="number" placeholder="{{ _('Width Scaling') }}">
                                         </div>
 
                                     </div>
                                     <div hidden="hidden" id="markDiv" class="row">
                                         <div style="margin-bottom: 10px;" class="col">
-                                            <label>水印字体颜色:</label>
+                                            <label>{{ _('Font Color') }}:</label>
                                             <select id="markFontColor" class="form-control">
-                                                <option>红色</option>
-                                                <option>蓝色</option>
-                                                <option>白色</option>
-                                                <option>黑色</option>
+                                                <option>{{ _('Red') }}</option>
+                                                <option>{{ _('Blue') }}</option>
+                                                <option>{{ _('White') }}</option>
+                                                <option>{{ _('Black') }}</option>
                                             </select>
-                                            <label>水印位置:</label>
+                                            <label>{{ _('Mark Position') }}:</label>
                                             <select id="markPosition" class="form-control">
-                                                <option>左上角</option>
-                                                <option>左下角</option>
-                                                <option>右上角</option>
-                                                <option>右下角</option>
-                                                <option>中心</option>
-                                                <option>水平铺满</option>
-                                                <option>45°铺满</option>
+                                                <option>{{ _('top-left') }}</option>
+                                                <option>{{ _('bottom-left') }}</option>
+                                                <option>{{ _('top-right') }}</option>
+                                                <option>{{ _('bottom-right') }}</option>
+                                                <option>{{ _('center') }}</option>
+                                                <option>{{ _('Horizontal spread') }}</option>
+                                                <option>{{ _('45° spread') }}</option>
                                             </select>
-                                            <label>水印文字:</label>
-                                            <input class="form-control" placeholder="请输入水印文字" id="markText">
-                                            <label>文字大小:</label>
-                                            <input class="form-control" type="number" placeholder="请输入文字大小" id="textSize">
+                                            <label>{{ _('Mark Word') }}:</label>
+                                            <input class="form-control" placeholder="{{ _('Input mark word') }}" id="markText">
+                                            <label>{{ _('Word Size') }}:</label>
+                                            <input class="form-control" type="number" placeholder="{{ _('Input word size') }}" id="textSize">
                                         </div>
                                     </div>
                                     <div hidden="hidden" id="changeBackDiv" class="row">
                                         <div style="margin-bottom: 10px;" class="col">
-                                            <label>请选择目标底色:</label>
+                                            <label>{{ _('Background Color') }}:</label>
                                             <select id="backType" class="form-control">
-                                                <option>蓝底</option>
-                                                <option>红底</option>
-                                                <option>白底</option>
+                                                <option>{{ _('Blue') }}</option>
+                                                <option>{{ _('Red') }}</option>
+                                                <option>{{ _('White') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -95,20 +95,20 @@
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-secondary float-right" onclick="imgProcess()">处理</button>
+                    <button class="btn btn-secondary float-right" onclick="imgProcess()">{{ _('Process') }}</button>
                     <br>
                     <br>
                     <hr>
                     <div hidden="hidden" id="imgProHint" class="text-center">
-                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>图片正在进行处理，请稍后...</b></p>
+                        <p><b><i class="fa fa-circle-o-notch fa-spin fa-fw"></i>{{ _('Processing...') }}</b></p>
                     </div>
                     <div hidden="hidden" id="resultDiv">
-                        <p>处理结果:</p>
+                        <p>{{ _('Result') }}:</p>
                         <div class="row">
                             <div class="col-md-2"></div>
-                            <div style="margin-right: 20px;" class="col-md-4"><p>原图</p><img class="img-fluid" id="originImg">
+                            <div style="margin-right: 20px;" class="col-md-4"><p>{{ _('Original Image') }}</p><img class="img-fluid" id="originImg">
                             </div>
-                            <div class="col-md-4"><p>处理后的图</p><img class="img-fluid" id="proImage"></div>
+                            <div class="col-md-4"><p>{{ _('Process Result') }}</p><img class="img-fluid" id="proImage"></div>
                             <div class="col-md-2"></div>
                         </div>
                     </div>
@@ -119,11 +119,11 @@
     <script>
         function changeFunction(){
             let index = $("#proType").val();
-            if (index == '图片缩放'){
+            if (index === '{{ _("Zoom") }}'){
                 $("#resizeDiv").removeAttr('hidden');
                 $("#markDiv").attr('hidden', 'hidden');
                 $("#changeBackDiv").attr('hidden', 'hidden');
-            }else if (index == '添加水印'){
+            }else if (index === '{{ _("Add Watermark") }}'){
                 $("#resizeDiv").attr('hidden', 'hidden');
                 $("#markDiv").removeAttr('hidden');
                 $("#changeBackDiv").attr('hidden', 'hidden');
@@ -137,8 +137,8 @@
         function imgProcess(){
             let proType = $("#proType").val();
             let img = $("#image")[0].files[0];
-            if (img==undefined){
-                alert('请选择图片!');
+            if (img===undefined){
+                alert('{{ _('Please select a picture!') }}');
                 return false;
             }
             let formdata = new FormData();
@@ -151,34 +151,34 @@
             let fontColor = '';
             let markPosition = '';
 
-            if (proType == '图片缩放'){
+            if (proType === '{{ _("Zoom") }}'){
                 resizeType = $("#resizeType").val();
                 widthZoomNum = $("#heightZoom").val();
                 heightZoomNum = $("#heightZoom").val();
-                if (widthZoomNum == '' || heightZoomNum == ''){
-                    alert('请输入宽高缩放比例!');
+                if (widthZoomNum === '' || heightZoomNum === ''){
+                    alert('{{ _('Please input scale ratio!') }}');
                     return false;
                 }
-                if (resizeType == '放大'){
+                if (resizeType === '{{ _("Zoom in") }}'){
                     if (widthZoomNum <= 1 || heightZoomNum <= 1){
-                        alert('请输入大于1的数值!');
+                        alert('{{ _("Value must more than 1!") }}');
                         return false;
                     }
                 }else {
                     if (widthZoomNum >=1 || heightZoomNum >=1){
-                        alert('请输入小于1的数值!');
+                        alert('{{ _("Value must less than 1!") }}');
                         return false;
                     }
                 }
                 formdata.append('widthZoom', widthZoomNum);
                 formdata.append('heightZoom', heightZoomNum);
-            }else if (proType=='添加水印'){
+            }else if (proType==='{{ _("Add Watermark") }}'){
                 markText = $("#markText").val();
                 markTextSize = $("#textSize").val();
                 fontColor = $("#markFontColor").val();
                 markPosition = $("#markPosition").val();
-                if (markText == '' || markTextSize == ''){
-                    alert('请输入水印文字及其字体大小!');
+                if (markText === '' || markTextSize === ''){
+                    alert('{{ _("Please input watermark word and font size!") }}');
                     return false;
                 }
                 formdata.append('markText', markText);
@@ -186,7 +186,7 @@
                 formdata.append('markFontColor', fontColor);
                 formdata.append('markPosition', markPosition);
 
-            }else if (proType == '证件照换底'){
+            }else if (proType === '{{_("Replace Background")}}'){
 
             }
             formdata.append('proType', proType);
@@ -198,7 +198,7 @@
                 processData: false,
                 contentType: false,
                 success: function (res){
-                    if (res.tag == 0){
+                    if (res.tag === 0){
                         alert(res.info);
                         $("#imgProHint").attr('hidden', 'hidden');
                         return false;
