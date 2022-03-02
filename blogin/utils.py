@@ -36,6 +36,7 @@ from blogin.models import Contribute
 from bs4 import BeautifulSoup
 import logging
 from logging.handlers import RotatingFileHandler
+from flask_babel import gettext as T
 
 config_ini = configparser.ConfigParser()
 
@@ -288,8 +289,6 @@ LANGUAGE = {'中文': 'zh-CN', '英文': 'en', '日语': 'ja', '法语': 'fr', '
 
 TRAN_LANGUAGE = {'英译中': 'zh-CN', '中译英': 'en'}
 BAIDU_LANGUAGE = {'英译中': 'zh', '中译英': 'en'}
-
-FONT_COLOR = {'红色': (255, 0, 0, 50), '蓝色': (0, 0, 255, 50), '白色': (255, 255, 255, 50), '黑色': (0, 0, 0, 50)}
 
 
 class Operations:
