@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-25 17:49+0800\n"
+"POT-Creation-Date: 2022-03-02 15:55+0800\n"
 "PO-Revision-Date: 2022-02-24 17:48+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -236,14 +236,267 @@ msgstr "总共被点赞%(loves)s次"
 msgid "More post"
 msgstr "查看更多当前分类下博客"
 
+#: blogin/templates/main/tool/code-format.html:4
+#: blogin/templates/main/tool/code-format.html:9
+#: blogin/templates/main/tool/tool.html:29
+msgid "Code Format"
+msgstr "代码格式化"
+
+#: blogin/templates/main/tool/code-format.html:11
+msgid "Program"
+msgstr "语言"
+
+#: blogin/templates/main/tool/code-format.html:18
+msgid "Indent"
+msgstr "缩进"
+
+#: blogin/templates/main/tool/code-format.html:20
+msgid "Two Space"
+msgstr "2个空格"
+
+#: blogin/templates/main/tool/code-format.html:21
+msgid "Four Space"
+msgstr "4个空格"
+
+#: blogin/templates/main/tool/code-format.html:24
+msgid "API"
+msgstr "接口"
+
+#: blogin/templates/main/tool/code-format.html:26
+msgid "Input API URL"
+msgstr "请输入接口地址"
+
+#: blogin/templates/main/tool/code-format.html:28
+msgid "Get"
+msgstr "获取"
+
+#: blogin/templates/main/tool/code-format.html:42
+msgid "Format"
+msgstr "格式化"
+
+#: blogin/templates/main/tool/code-format.html:43
+msgid "Copy"
+msgstr "复制"
+
+#: blogin/templates/main/tool/code-format.html:44
+msgid "Clear"
+msgstr "清除"
+
+#: blogin/templates/main/tool/code-format.html:62
+msgid "Format successful!"
+msgstr "格式化成功！"
+
+#: blogin/templates/main/tool/code-format.html:74
+msgid "Copy successful!"
+msgstr "复制成功！"
+
+#: blogin/templates/main/tool/code-format.html:85
+msgid "API URL is empty!"
+msgstr "接口地址不能为空！"
+
+#: blogin/templates/main/tool/code-format.html:96
+msgid "Get data successful!"
+msgstr "获取接口数据成功！"
+
+#: blogin/templates/main/tool/image-pro.html:10
+#: blogin/templates/main/tool/image-pro.html:15
+#: blogin/templates/main/tool/tool.html:27
+msgid "Image Process"
+msgstr "图像工具"
+
+#: blogin/templates/main/tool/image-pro.html:18
+#: blogin/templates/main/tool/ocr.html:33
+msgid "Tool Introduce"
+msgstr "工具说明"
+
+#: blogin/templates/main/tool/image-pro.html:20
+msgid "Image process tool base on opencv and PIL library;"
+msgstr "图片处理工具主要是采用opencv库以及PIL对图片进行一些简单的处理；"
+
+#: blogin/templates/main/tool/image-pro.html:21
+msgid ""
+"Currently contains functions such as image zooming, adding watermarks and"
+" changing the background of ID photos."
+msgstr "目前包含有图片缩放、添加水印、证件照换底功能；"
+
+#: blogin/templates/main/tool/image-pro.html:22
+msgid ""
+"Adding a watermark is recommended to choose the horizontal pavement, 45 °"
+" pavement effect is better, the effect of other ways is not so good, "
+"because the coordinates of the watermark added by the watermark text "
+"length and font size is limited;"
+msgstr "添加水印建议选择水平铺满、45°铺满效果比较好，其他方式效果不太好，因为添加水印的坐标受水印文字长度以及字体大小受限制;"
+
+#: blogin/templates/main/tool/image-pro.html:23
+msgid ""
+"Server performance is not possible, please do not upload the processed "
+"images too big!!!"
+msgstr "服务器配置不太够，上传处理的图片请不要太大!!!"
+
+#: blogin/templates/main/tool/image-pro.html:25
+#: blogin/templates/main/tool/ocr.html:40
+msgid "Tool-Using"
+msgstr "工具使用"
+
+#: blogin/templates/main/tool/image-pro.html:31
+#: blogin/templates/main/tool/image-pro.html:122
+#: blogin/templates/main/tool/image-pro.html:154
+msgid "Zoom"
+msgstr "图片缩放"
+
+#: blogin/templates/main/tool/image-pro.html:32
+#: blogin/templates/main/tool/image-pro.html:126
+#: blogin/templates/main/tool/image-pro.html:175
+msgid "Add Watermark"
+msgstr "添加水印"
+
+#: blogin/templates/main/tool/image-pro.html:33
+#: blogin/templates/main/tool/image-pro.html:189
+msgid "Replace Background"
+msgstr "证件照换底"
+
+#: blogin/templates/main/tool/image-pro.html:42
+msgid "Zoom Mode"
+msgstr "缩放模式"
+
+#: blogin/templates/main/tool/image-pro.html:44
+#: blogin/templates/main/tool/image-pro.html:162
+msgid "Zoom in"
+msgstr "放大"
+
+#: blogin/templates/main/tool/image-pro.html:45
+msgid "Zoom out"
+msgstr "缩小"
+
+#: blogin/templates/main/tool/image-pro.html:49
+#: blogin/templates/main/tool/image-pro.html:50
+msgid "Height Scaling"
+msgstr "高度缩放比"
+
+#: blogin/templates/main/tool/image-pro.html:51
+#: blogin/templates/main/tool/image-pro.html:52
+msgid "Width Scaling"
+msgstr "宽度缩放比"
+
+#: blogin/templates/main/tool/image-pro.html:58
+msgid "Font Color"
+msgstr "字体颜色"
+
+#: blogin/templates/main/tool/image-pro.html:60
+#: blogin/templates/main/tool/image-pro.html:86
+msgid "Red"
+msgstr "红色"
+
+#: blogin/templates/main/tool/image-pro.html:61
+#: blogin/templates/main/tool/image-pro.html:85
+msgid "Blue"
+msgstr "蓝色"
+
+#: blogin/templates/main/tool/image-pro.html:62
+#: blogin/templates/main/tool/image-pro.html:87
+msgid "White"
+msgstr "白色"
+
+#: blogin/templates/main/tool/image-pro.html:63
+msgid "Black"
+msgstr "黑色"
+
+#: blogin/templates/main/tool/image-pro.html:65
+msgid "Mark Position"
+msgstr "水印位置"
+
+#: blogin/templates/main/tool/image-pro.html:67
+msgid "top-left"
+msgstr "左上角"
+
+#: blogin/templates/main/tool/image-pro.html:68
+msgid "bottom-left"
+msgstr "左下角"
+
+#: blogin/templates/main/tool/image-pro.html:69
+msgid "top-right"
+msgstr "右上角"
+
+#: blogin/templates/main/tool/image-pro.html:70
+msgid "bottom-right"
+msgstr "右下角"
+
+#: blogin/templates/main/tool/image-pro.html:71
+msgid "center"
+msgstr "中心"
+
+#: blogin/templates/main/tool/image-pro.html:72
+msgid "Horizontal spread"
+msgstr "水平铺满"
+
+#: blogin/templates/main/tool/image-pro.html:73
+msgid "45° spread"
+msgstr "45°铺满"
+
+#: blogin/templates/main/tool/image-pro.html:75
+msgid "Mark Word"
+msgstr "水印文字"
+
+#: blogin/templates/main/tool/image-pro.html:76
+msgid "Input mark word"
+msgstr "请输入水印文字"
+
+#: blogin/templates/main/tool/image-pro.html:77
+msgid "Word Size"
+msgstr "文字大小"
+
+#: blogin/templates/main/tool/image-pro.html:78
+msgid "Input word size"
+msgstr "请输入文字大小"
+
+#: blogin/templates/main/tool/image-pro.html:83
+msgid "Background Color"
+msgstr "请选择目标底色"
+
+#: blogin/templates/main/tool/image-pro.html:98
+msgid "Process"
+msgstr "处理"
+
+#: blogin/templates/main/tool/image-pro.html:103
+msgid "Processing..."
+msgstr "处理中"
+
+#: blogin/templates/main/tool/image-pro.html:106
+msgid "Result"
+msgstr "结果"
+
+#: blogin/templates/main/tool/image-pro.html:109
+msgid "Original Image"
+msgstr "原始图片"
+
+#: blogin/templates/main/tool/image-pro.html:111
+msgid "Process Result"
+msgstr "处理结果"
+
+#: blogin/templates/main/tool/image-pro.html:141
+msgid "Please select a picture!"
+msgstr "请选择一张图片"
+
+#: blogin/templates/main/tool/image-pro.html:159
+msgid "Please input scale ratio!"
+msgstr "请输入宽高缩放比例!"
+
+#: blogin/templates/main/tool/image-pro.html:164
+msgid "Value must more than 1!"
+msgstr "请输入大于1的数值!"
+
+#: blogin/templates/main/tool/image-pro.html:169
+msgid "Value must less than 1!"
+msgstr "请输入小于1的数值!"
+
+#: blogin/templates/main/tool/image-pro.html:181
+msgid "Please input watermark word and font size!"
+msgstr "请输入水印文字及其字体大小!"
+
 #: blogin/templates/main/tool/ocr.html:30
 #: blogin/templates/main/tool/tool.html:23
 msgid "OCR"
 msgstr "OCR工具"
-
-#: blogin/templates/main/tool/ocr.html:33
-msgid "Tool Introduce"
-msgstr "工具说明"
 
 #: blogin/templates/main/tool/ocr.html:35
 msgid "The OCR tool is developed based on Baidu's AI development platform"
@@ -271,10 +524,6 @@ msgid ""
 "Please upload the correct image after selecting the recognition type! ! !"
 " The identification result is for reference only~"
 msgstr "选择识别类型后请上传正确的图片！！！识别结果仅供参考~"
-
-#: blogin/templates/main/tool/ocr.html:40
-msgid "Tool-Using"
-msgstr "工具使用"
 
 #: blogin/templates/main/tool/ocr.html:45
 msgid "Identification Type"
@@ -309,7 +558,8 @@ msgid "Recognition"
 msgstr "开始识别"
 
 #: blogin/templates/main/tool/ocr.html:64
-msgid "Recognition, Please wait..."
+#, fuzzy
+msgid "Recogniting, Please wait..."
 msgstr "正在进行OCR文字识别,请稍后..."
 
 #: blogin/templates/main/tool/ocr.html:67
@@ -361,10 +611,6 @@ msgid ""
 msgstr "多端翻译工具集成了多个翻译接口，包含有百度、有道、谷歌等，一条文本多个结果。"
 
 #: blogin/templates/main/tool/tool.html:27
-msgid "Image Process"
-msgstr "图像工具"
-
-#: blogin/templates/main/tool/tool.html:27
 msgid ""
 "Image processing tools can mainly do some simple operations on images, "
 "such as cropping, scaling, adding text, etc. The functions are relatively"
@@ -380,10 +626,6 @@ msgid ""
 "Contains 320,000 Tang and Song poems and 150,000 Song poems, thanks to "
 "the contributors of the chinese-poem repository on github."
 msgstr "包含有32万首唐宋诗，15万首宋词，感谢github上chinese-poem仓库的贡献者。"
-
-#: blogin/templates/main/tool/tool.html:29
-msgid "Code Format"
-msgstr "代码格式化"
 
 #: blogin/templates/main/tool/tool.html:29
 msgid "Format messy code for formatted output, such as json data, HTML code, etc."
