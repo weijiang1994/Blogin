@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    {{ share.load() }}
+    {{ share.load(serve_local=True) }}
     {{ ckeditor.load_code_theme() }}
     {% if request.cookies.get('blog_theme', 'light') == 'light' %}
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/docoo.css') }}">

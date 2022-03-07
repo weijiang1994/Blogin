@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    {{ share.load() }}
+    {{ share.load(serve_local=True) }}
     {{ ckeditor.load_code_theme() }}
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
     <link type="text/css" href="/static/css/style.css">
