@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    {{ share.load() }}
+    {{ share.load(serve_local=True) }}
     {{ moment.locale(auto_detect=True) }}
     <script src="https://cdn.ckeditor.com/ckeditor5/22.0.0/classic/ckeditor.js"></script>
 {% endblock %}
