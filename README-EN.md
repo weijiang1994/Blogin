@@ -1,5 +1,9 @@
 # Blogin
 
+![python-depend.svg](https://7.dusays.com/2020/12/11/507ca007c94c0.svg)
+![stars](https://img.shields.io/github/stars/weijiang1994/blogin)
+![fork](https://img.shields.io/github/forks/weijiang1994/blogin)
+
 Blogin is a personal blog website that base on flask development.
 
 [中文文档](https://github.com/weijiang1994/Blogin/blob/master/README.md)

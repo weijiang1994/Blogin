@@ -1,6 +1,8 @@
 # Blogin
 
 ![python-depend.svg](https://7.dusays.com/2020/12/11/507ca007c94c0.svg)
+![stars](https://img.shields.io/github/stars/weijiang1994/blogin)
+![fork](https://img.shields.io/github/forks/weijiang1994/blogin)
 
 使用Flask+Bootstrap4开发的个人博客系统。
 
