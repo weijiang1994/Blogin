@@ -1,6 +1,6 @@
 # Blogin
 
-![python-depend.svg](https://7.dusays.com/2020/12/11/507ca007c94c0.svg)
+![python-depend.svg](https://img.shields.io/badge/PYTHON-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue)
 ![stars](https://img.shields.io/github/stars/weijiang1994/blogin)
 ![fork](https://img.shields.io/github/forks/weijiang1994/blogin)
 
