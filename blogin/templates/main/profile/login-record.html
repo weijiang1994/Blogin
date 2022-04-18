@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "macro.html" import render_pagination, profile_header with context %}
+{% block title %}
+    {{ current_user.username }}的登录日志
+{% endblock %}
+{% block content %}
+    {{ moment.locale(auto_detect=True) }}
+    <main>
+        <div class="container mt-3">
+            {% include "_flash.html" %}
+            {{ profile_header('login') }}
+            <div id="loginLog">
+                {% if logs|length %}
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>时间</th>
+                                <th>IP</th>
+                                <th>地点</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for log in logs %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ log.timestamp }}</td>
+                                    <td>{{ log.login_addr }}</td>
+                                    <td>{{ log.real_addr }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                <div class="float-right">
+                    {{ render_pagination(pagination) }}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

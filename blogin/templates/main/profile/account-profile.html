@@ -6,28 +6,10 @@
 {% block content %}
     {{ moment.locale(auto_detect=True) }}
     <main>
-        <div class="container">
-            <br>
+        <div class="container mt-3">
             {% include "_flash.html" %}
-            {{ profile_header() }}
-            <br>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active text-info-a" data-toggle="tab" href="#moment"><i class="fa fa-photo"></i> 动态</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-info-a" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读 <span class="badge badge-secondary">{{ notifies|length }}</span>
-                        {% if nft_counts %}
-                            <span class="badge badge-info">{{ nft_counts }}</span>
-                        {% endif %}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-info-a" data-toggle="tab" href="#loginLog"><i class="fa fa-history"></i> 登录日志</a>
-                </li>
-            </ul>
-
-            <div class="tab-content">
+            {{ profile_header('index') }}
+            <div class="tab-content mv-2">
                 <!-- 动态栏 -->
                 <div id="moment" class="container tab-pane active"><br>
                     <div style="margin-bottom: 20px">
@@ -83,35 +65,6 @@
 
                 </div>
 
-                <div id="loginLog" class="container tab-pane fade"><br>
-                    {% if logs|length %}
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th>序号</th>
-                                    <th>时间</th>
-                                    <th>IP</th>
-                                    <th>地点</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for log in logs %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ log.timestamp }}</td>
-                                        <td>{{ log.login_addr }}</td>
-                                        <td>{{ log.real_addr }}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% endif %}
-                    <div class="float-right">
-                        {{ render_pagination(pagination) }}
-                    </div>
-                </div>
             </div>
         </div>
         </div>

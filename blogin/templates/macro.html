@@ -248,7 +248,7 @@
     </div>
 {% endmacro %}
 
-{% macro profile_header() %}
+{% macro profile_header(tabName) %}
     <div class="row">
         <div class="col-md-3 col-lg-3 text-center">
             <img class="img-profile-bg" alt="{{ current_user.username }}" src="{{ current_user.avatar }}">
@@ -256,13 +256,33 @@
         <div class="col-md-9 col-lg-9 div-center-md">
             <h3>{{ current_user.username }}</h3>
             <p title="注册邮箱" class="text-muted p-mt-8"><i class="fa fa-envelope-o mr-2"></i>{{ current_user.email }}</p>
-            <p title="加入时间" class="text-muted p-mt-8"><i class="fa fa-calendar mr-2"></i>{{ current_user.create_time }}</p>
-            <p title="个性签名" class="text-muted p-mt-8"><i class="fa fa-file-text mr-2"></i>{{ current_user.slogan|isempty(show='这家伙很懒没有留下签名!') }}</p>
-            <a class="text-muted" href="{{ current_user.website }}" target="_blank"><i class="fa fa-internet-explorer mr-2"></i>{{ current_user.website|isempty('这家伙很懒没有留下个人网站!') }}</a>
+            <p title="加入时间" class="text-muted p-mt-8"><i class="fa fa-calendar mr-2"></i>{{ current_user.create_time }}
+            </p>
+            <p title="个性签名" class="text-muted p-mt-8"><i
+                    class="fa fa-file-text mr-2"></i>{{ current_user.slogan|isempty(show='这家伙很懒没有留下签名!') }}</p>
+            <a class="text-muted" href="{{ current_user.website }}" target="_blank"><i
+                    class="fa fa-internet-explorer mr-2"></i>{{ current_user.website|isempty('这家伙很懒没有留下个人网站!') }}</a>
             <br>
-            <div class="mt-2"><a href="/accounts/profile/edit/" class="btn btn-outline-success mr-2">资料编辑</a><a href="/accounts/password/change/" class="btn btn-outline-danger">修改密码</a></div>
+            <div class="mt-2"><a href="/accounts/profile/edit/" class="btn btn-outline-success mr-2">资料编辑</a><a
+                    href="/accounts/password/change/" class="btn btn-outline-danger">修改密码</a></div>
         </div>
     </div>
+    <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+            <a class="nav-link {% if tabName == 'index' %}active{% endif %} text-info-a" href="{{ url_for('accounts_bp.profile', user_id=current_user.id) }}"><i class="fa fa-photo"></i> 动态</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-info-a {% if tabName == 'notify' %}active{% endif %}" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
+                <span class="badge badge-secondary">{{ notifies|length }}</span>
+                {% if nft_counts %}
+                    <span class="badge badge-info">{{ nft_counts }}</span>
+                {% endif %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-info-a {% if tabName == 'login' %}active{% endif %}" href="{{ url_for('accounts_bp.login_record') }}"><i class="fa fa-history"></i> 登录日志</a>
+        </li>
+    </ul>
 {% endmacro %}
 
 {% macro markdownHelp() %}

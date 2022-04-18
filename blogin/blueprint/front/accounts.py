@@ -39,6 +39,20 @@ def profile(user_id):
                            photoComments=photo_comments, notifies=notifies, pagination=pagination)
 
 
+@accounts_bp.route('/profile/login-record')
+@login_required
+def login_record():
+    page = request.args.get('page', 1, type=int)
+    pagination = LoginLog.query.filter_by(user_id=current_user.id).order_by(LoginLog.timestamp.desc()).paginate(
+        page=page,
+        per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
+    logs = pagination.items
+    print(logs)
+    notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
+        order_by(Notification.timestamp.desc()).all()
+    return render_template('main/profile/login-record.html', logs=logs, notifies=notifies, pagination=pagination)
+
+
 @accounts_bp.route('/password/change/', methods=['GET', 'POST'])
 @login_required
 @confirm_required
