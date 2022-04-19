@@ -47,7 +47,6 @@ def login_record():
         page=page,
         per_page=current_app.config['LOGIN_LOG_PER_PAGE'])
     logs = pagination.items
-    print(logs)
     notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
         order_by(Notification.timestamp.desc()).all()
     return render_template('main/profile/login-record.html', logs=logs, notifies=notifies, pagination=pagination)
