@@ -18,28 +18,28 @@ from blogin.models import User, LoginLog, BlogComment, PhotoComment, Notificatio
 accounts_bp = Blueprint('accounts_bp', __name__, url_prefix='/accounts')
 
 
-@accounts_bp.route('/profile/<int:user_id>/')
+@accounts_bp.route('/profile')
 @login_required
-def profile(user_id):
-    if user_id != current_user.id:
-        flash('您无法访问他人的主页!', 'info')
-        return redirect(url_for('.profile', user_id=current_user.id))
-    page = request.args.get('page', 1, type=int)
-    pagination = LoginLog.query.filter_by(user_id=user_id).order_by(LoginLog.timestamp.desc()).paginate(page=page,
-                                                                                                        per_page=
-                                                                                                        current_app.config[
-                                                                                                            'LOGIN_LOG_PER_PAGE'])
-    logs = pagination.items
-
+def profile():
+    user_id = current_user.id
     blog_comments = BlogComment.query.filter_by(author_id=user_id).order_by(BlogComment.timestamp.desc()).all()
     photo_comments = PhotoComment.query.filter_by(author_id=user_id).order_by(PhotoComment.timestamp.desc()).all()
     notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
         order_by(Notification.timestamp.desc()).all()
-    return render_template('main/profile/account-profile.html', logs=logs, blogComments=blog_comments,
-                           photoComments=photo_comments, notifies=notifies, pagination=pagination)
+    return render_template('main/profile/account-profile.html',
+                           blogComments=blog_comments,
+                           photoComments=photo_comments)
 
 
-@accounts_bp.route('/profile/login-record')
+@accounts_bp.route('/notifications')
+@login_required
+def notifications():
+    notifies = Notification.query.filter_by(receive_id=current_user.id, read=0). \
+        order_by(Notification.timestamp.desc()).all()
+    return render_template('main/profile/notifications.html', notifies=notifies)
+
+
+@accounts_bp.route('/login-record')
 @login_required
 def login_record():
     page = request.args.get('page', 1, type=int)

@@ -272,7 +272,7 @@
             <a class="nav-link {% if tabName == 'index' %}active{% endif %} text-info-a" href="{{ url_for('accounts_bp.profile', user_id=current_user.id) }}"><i class="fa fa-photo"></i> 动态</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-info-a {% if tabName == 'notify' %}active{% endif %}" data-toggle="tab" href="#notReadNotification"><i class="fa fa-bell"></i> 未读
+            <a class="nav-link text-info-a {% if tabName == 'notify' %}active{% endif %}"  href="{{ url_for('accounts_bp.notifications') }}"><i class="fa fa-bell"></i> 未读
                 <span class="badge badge-secondary">{{ notifies|length }}</span>
                 {% if nft_counts %}
                     <span class="badge badge-info">{{ nft_counts }}</span>

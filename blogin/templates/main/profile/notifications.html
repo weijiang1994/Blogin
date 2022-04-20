@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "macro.html" import render_pagination, profile_header with context %}
+{% block title %}
+    {{ current_user.username }}的登录日志
+{% endblock %}
+{% block content %}
+    {{ moment.locale(auto_detect=True) }}
+    <main>
+        <div class="container mt-3">
+            {% include "_flash.html" %}
+            {{ profile_header('notify') }}
+            <div class="mt-2 mb-2">
+                {% if notifies %}
+                    <div class="text-muted float-right"><span style="min-height: 8px;" class="badge badge-danger"><a
+                            style="color: inherit; text-decoration: none;" href="/accounts/mark-all/">全部标记为已读</a></span>
+                    </div>
+                    <br>
+                    <hr>
+                    {% for notify in notifies %}
+                        <div>
+                            <div class="float-right text-muted"><span class="badge badge-light"><a
+                                    style="color: inherit; text-decoration: none;"
+                                    href="/accounts/mark/{{ notify.id }}/">已读</a></span></div>
+                            <span style="font-size: 14px;" class="text-muted"><i
+                                    class="fa fa-clock-o"></i> {{ moment(notify.timestamp, local=True).fromNow(refresh=True) }}</span>
+                            <p>用户<strong>{{ notify.send_user }}</strong>在
+                                {% if notify.type == 0 %}
+                                    <span class="badge badge-dark">博客</span>
+                                    <a href="/blog/article/{{ notify.target_id }}">{{ notify.target_name }}</a>
+                                {% else %}
+                                    <span class="badge badge-success">照片</span>
+                                    <a href="/gallery/photo/{{ notify.target_id }}">{{ notify.target_name }}</a>
+                                {% endif %}
+                                回复你</p>
+                            <h6>{{ notify.msg|safe }}</h6>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                {% else %}
+                    <div>您还没有新消息!</div>
+                {% endif %}
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
