@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-03-02 15:55+0800\n"
+"POT-Creation-Date: 2022-04-29 11:43+0800\n"
 "PO-Revision-Date: 2022-02-24 17:48+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -23,6 +23,7 @@ msgid "Home"
 msgstr "主页"
 
 #: blogin/templates/base.html:74 blogin/templates/main/gallery.html:27
+#: blogin/templates/main/profile/account-profile.html:21
 msgid "Gallery"
 msgstr "相册"
 
@@ -235,6 +236,10 @@ msgstr "总共被点赞%(loves)s次"
 #: blogin/templates/main/index.html:55
 msgid "More post"
 msgstr "查看更多当前分类下博客"
+
+#: blogin/templates/main/profile/account-profile.html:18
+msgid "Blog"
+msgstr ""
 
 #: blogin/templates/main/tool/code-format.html:4
 #: blogin/templates/main/tool/code-format.html:9
