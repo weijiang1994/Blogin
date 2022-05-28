@@ -7,10 +7,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}{% endblock %} - Blogin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"
-                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
         <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
+        <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ck.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
@@ -21,17 +20,14 @@
             <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/light/' + light) }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/light.css') }}">
         {% else %}
-            {#            <link rel="stylesheet" href="{{ get_theme('dark_theme') }}">#}
             <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/dark/' + dark) }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}">
         {% endif %}
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.15.0/dist/umd/popper.min.js"
-                integrity="sha256-fTuUgtT7O2rqoImwjrhDgbXTKUwyxxujIMRIK7TbuNU=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/gh/weijiang1994/BlogCDN@1.1/bootstrap4/bootstrap.4.3.1.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
-              integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-        {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment-with-locales.min.js') }}
-        <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
+        <script src="{{ url_for('static', filename='popper.js-1.15.0/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap-4.5.3-dist/js/bootstrap.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
+        {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
+        <script src="{{ url_for('static', filename='echarts-4.9.0/dist/echarts.js') }}"></script>
         <style>
             .gray-a {
                 text-decoration: none;
@@ -54,6 +50,7 @@
         </script>
     </head>
 {% endblock %}
+
 {% block nav %}
     <nav style="flex: none" class="navbar navbar-expand-lg bg-nav justify-content-between">
         <a class="navbar-brand nav-text" href="/">
