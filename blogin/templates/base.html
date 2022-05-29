@@ -23,7 +23,7 @@
             <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/dark/' + dark) }}">
             <link rel="stylesheet" href="{{ url_for('static', filename = 'css/dark.css') }}">
         {% endif %}
-        <script src="{{ url_for('static', filename='popper.js-1.15.0/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='popper/popper.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap-4.5.3-dist/js/bootstrap.min.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
         {{ moment.include_moment(local_js=url_for('static', filename='js/moment-with-locales.min.js')) }}
