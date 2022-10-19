@@ -289,12 +289,23 @@
     color: black;
 }
 
+@font-face {
+    font-family: 'YeZiGongChangZuiHanJiangXingCao';
+    src: url('/static/fonts/YeZiGongChangZuiHanJiangXingCao-2.ttf');
+}
+
+@font-face {
+    font-family: 'ShangShouBeiKaiTi';
+    src: url('/static/fonts/ShangShouBeiKaiTi-2.ttf');
+}
+
 .ci-content{
-    margin-bottom: 10px;
-    font-family: 华文楷体, 华文楷体, kait,宋体，微软雅黑;
+    font-family: YeZiGongChangZuiHanJiangXingCao, 华文楷体, kait, 宋体，微软雅黑, sans-serif;
     padding: 15px;
     border-radius: 5px;
     background-image: url('/static/img/peom-bg.JPG');
+    color: #000000;
+    font-size: 24px;
 }
 
 .p-page{
