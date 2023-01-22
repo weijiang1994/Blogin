@@ -1,130 +1,112 @@
 <!DOCTYPE html>
 {% extends "bootstrap/base.html" %}
-{% block head%}
+{% block head %}
     <!--suppress ALL -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} - Blogin</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery/jquery-3.5.1.min.js') }}"></script>
+
+    {#    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.4/jquery.min.js"></script>#}
     <!--<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap3@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
+    {#    <link href="https://cdn.jsdelivr.net/npm/bootstrap3@3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap4/light/flatly.bootstrap.min.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/backend.css') }}">
     <script src="/static/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap3@3.3.5/dist/js/bootstrap.min.js"></script>
-{#    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+    <script src="{{ url_for('static', filename='bootstrap-4.5.3-dist/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
+
+    {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap3@3.3.5/dist/js/bootstrap.min.js"></script>#}
+    {#    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">#}
+
+    {#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">#}
 {% endblock %}
 {% block navbar %}
     <div class="header-page">
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                        <span class="sr-only">Dashboard</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Blogin</a>
-                </div>
-                <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li id="homePageLi"> <a href="/backend/admin/index/"><i class="fa fa-home"></i> 后台</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-cubes"></i> 内容
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-book"></i> 博客</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/admin/blog/create/"><i class="fa fa-plus-square"></i> 新增博客</a></li>
-                                        <li><a href="/backend/admin/blog/edit/"><i class="fa fa-edit"></i> 编辑博客</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-photo"></i> 相册</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/photo/add/"><i class="fa fa-plus-square"></i> 增加照片</a></li>
-                                        <li><a href="/backend/photo/edit/"><i class="fa fa-edit"></i> 编辑照片</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-podcast"></i> 计划</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/plan/add/"><i class="fa fa-plus-square"></i> 增加计划</a></li>
-                                        <li><a href="/backend/plan/edit/"><i class="fa fa-edit"></i> 编辑计划</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-free-code-camp"></i> 互动
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/backend/interactive/index/"><i class="fa fa-user-md"></i> 用户管理</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-comment"></i> 评论管理</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/interactive/blog-comment/"><i class="fa fa-file-text"></i> 博客</a></li>
-                                        <li><a href="/backend/interactive/photo-comment/"><i class="fa fa-file-photo-o"></i> 相册</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-vcard"></i> 其他
-                                <b class="caret"></b>
-                            </a>
-
-                            <ul class="dropdown-menu">
-                                <li><a href="/backend/soul/"><i class="fa fa-edit"></i> 毒鸡汤</a></li>
-                                <li><a href="/backend/config-theme/"><i class="fa fa-circle"></i> 主题配置</a></li>
-                                <li><a href="/backend/one/content/"><i class="fa fa-edit"></i> 一句话</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-file-text"></i> 诗词</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/poem/"><i class="fa fa-line-chart"></i> 诗</a></li>
-                                        <li><a href="/backend/ci/"><i class="fa fa-edit"></i> 词</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-line-chart"></i> 时间线</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/timeline/add/"><i class="fa fa-line-chart"></i> 新增时间线</a></li>
-                                        <li><a href="/backend/timeline/edit/"><i class="fa fa-edit"></i> 编辑时间线</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-link"></i> 友链</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/flink/add/"><i class="fa fa-link fa-plus"></i> 新增友链</a></li>
-                                        <li><a href="/backend/flink/edit/"><i class="fa fa-edit"></i> 编辑友链</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" onclick="return false"><i class="fa fa-server"></i> 服务器</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="/backend/logs/"><i class="fa fa-file-code-o"></i> 运行日志</a></li>
-                                        <li><a href="/backend/server-status/"><i class="fa fa-server"></i> 服务器状态</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <nav class="navbar navbar-expand-sm container">
+            <!-- Brand -->
+            <a class="navbar-brand text-dark" href="/backend/admin/index/">Blogin</a>
+            <!-- Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardrop" data-toggle="dropdown">
+                        内容
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/backend/admin/blog/create/">新增博客</a>
+                        <a class="dropdown-item" href="/backend/admin/blog/edit/">编辑博客</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/photo/add/">新增照片</a>
+                        <a class="dropdown-item" href="/backend/photo/edit/">编辑照片</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/plan/add/">新增计划</a>
+                        <a class="dropdown-item" href="/backend/plan/edit/">编辑计划</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardrop" data-toggle="dropdown">
+                        互动
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/backend/interactive/index/">用户管理</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/interactive/blog-comment/">博客评论</a>
+                        <a class="dropdown-item" href="/backend/interactive/photo-comment/">相册评论</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardrop" data-toggle="dropdown">
+                        文学
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/backend/one/content/">一句话</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/soul/">毒鸡汤</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/poem/">诗</a>
+                        <a class="dropdown-item" href="/backend/ci/">词</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardrop" data-toggle="dropdown">
+                        其他
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/backend/timeline/add/">新增时间线</a>
+                        <a class="dropdown-item" href="/backend/timeline/edit/">编辑时间线</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/flink/add/">新增友链</a>
+                        <a class="dropdown-item" href="/backend/flink/edit/">编辑友链</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/backend/config-theme/">主题配置</a>
+                        <a class="dropdown-item" href="/backend/logs/">运行日志</a>
+                        <a class="dropdown-item" href="/backend/server-status/">服务器状态</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
     </div>
 {% endblock %}
 {% block content %}
 {% endblock %}
 {% block scripts %}
+    <script>
+        $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+            }
+
+            var $subMenu = $(this).next('.dropdown-menu');
+
+            $subMenu.toggleClass('show');
+
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                $('.dropdown-submenu .show').removeClass('show');
+            });
+
+            return false;
+        });
+    </script>
 {% endblock %}

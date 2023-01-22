@@ -1,7 +1,9 @@
 {% extends "backend/base.html" %}
 {% block head %}
     {{ super() }}
-    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>
+{#    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js"></script>#}
+    <script src="{{ url_for('static', filename='echarts-4.9.0/dist/echarts.js') }}"></script>
+
     <style>
         .card-body{
             border: #cccccc 2px solid;
