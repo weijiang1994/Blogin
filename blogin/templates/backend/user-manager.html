@@ -44,20 +44,20 @@
                             <td><i class="fa fa-clock-o"></i> {{ user.recent_login }}</td>
                             <td>
                                 {% if user.statuses.id == 1 %}
-                                    <span class="label label-success"><i class="fa fa-star"></i> {{ user.statuses.name }}</span>
+                                    <span class="badge badge-success"><i class="fa fa-star"></i> {{ user.statuses.name }}</span>
                                 {% else %}
-                                    <span class="label label-danger"> <i class="fa fa-remove"></i> {{ user.statuses.name }}</span>
+                                    <span class="badge badge-danger"> <i class="fa fa-remove"></i> {{ user.statuses.name }}</span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if user.confirm == 0 %}
-                                    <span class="label label-warning">未确认</span>
+                                    <span class="badge badge-warning">未确认</span>
                                 {% else %}
-                                    <span class="label label-success">已确认</span>
+                                    <span class="badge badge-success">已确认</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <span class="label label-info">{{ user.third_party.name }}</span>
+                                <span class="badge badge-info">{{ user.third_party.name }}</span>
                             </td>
                             <td>
                                 <div class="dropdown">
