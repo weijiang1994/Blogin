@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends "bootstrap/base.html" %}
+{#{% extends "bootstrap/base.html" %}#}
 {% block head %}
     <!--suppress ALL -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
     <link rel="icon" href="{{ url_for('static', filename = 'favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/backend.css') }}">
     <script src="/static/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="{{ url_for('static', filename='bootstrap-4.5.3-dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap-4.5.3-dist/js/bootstrap.bundle.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
 
     {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap3@3.3.5/dist/js/bootstrap.min.js"></script>#}
@@ -23,11 +23,15 @@
     {#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">#}
 {% endblock %}
 {% block navbar %}
-    <div class="header-page">
-        <nav class="navbar navbar-expand-sm container">
-            <!-- Brand -->
-            <a class="navbar-brand text-dark" href="/backend/admin/index/">Blogin</a>
-            <!-- Links -->
+    <nav class="navbar navbar-expand-lg bg-nav container">
+        <!-- Brand -->
+        <a class="navbar-brand text-dark" href="/backend/admin/index/">Blogin</a>
+        <button class="navbar-toggler {% if request.cookies.get('blog_theme', 'light')=='dark' %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}"
+                type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Links -->
+        <div class="navbar-collapse collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-dark" href="#" id="navbardrop" data-toggle="dropdown">
@@ -85,8 +89,8 @@
                     </div>
                 </li>
             </ul>
-        </nav>
-    </div>
+        </div>
+    </nav>
 {% endblock %}
 {% block content %}
 {% endblock %}
