@@ -10,7 +10,7 @@ from apscheduler.executors.base import BaseExecutor
 from flask import current_app
 from blogin.extension import db, aps, rd, mail
 import datetime
-from blogin.utils import github_social, get_md5, get_current_time, log_util
+from blogin.utils import github_social, get_md5, get_current_time, log_util, read_config
 from blogin.setting import basedir
 from blogin.emails import send_network_warning_email
 import traceback
@@ -147,6 +147,11 @@ def update_bd_token():
 
 @aps.task('interval', id='network_monitor', minutes=1)
 def network_monitor():
+    config = read_config()
+    if not config.getboolean('admin', 'monitors'):
+        logger.info('流量监控功能未开启!')
+        return
+
     # 获取检测检测时间段
     scan_time = datetime.datetime.now()
     times = []

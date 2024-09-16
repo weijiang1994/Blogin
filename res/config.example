@@ -11,3 +11,4 @@ dark_theme = darkly
 [admin]
 author_email = example@mail.com
 gallery_slogan = sample text
+monitors = True
