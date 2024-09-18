@@ -7,15 +7,19 @@
 """
 import atexit
 import platform
+import logging
+import logging
 from logging.handlers import RotatingFileHandler
+import os
+
 from flask import Flask, render_template, url_for, session
 from flask_wtf.csrf import CSRFError
 import click
+
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
-    oauth, aps, cache, babel
+    oauth, aps, cache, babel, jwt
 from blogin.monitor import start_monitor_thread
 from blogin.setting import basedir
-import os
 from blogin.blueprint.front.blog import blog_bp
 from blogin.blueprint.backend.blog_bp import be_blog_bp
 from blogin.blueprint.backend.photo_bp import be_photo_bp
@@ -35,7 +39,7 @@ from blogin.setting import config
 from blogin.models import *
 from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, BOOTSTRAP_SUFFIX, read_config
 from blogin import task
-import logging
+from blogin.api import register_restful_api
 
 
 def create_app(config_name=None):
@@ -122,6 +126,7 @@ def register_extension(app: Flask):
     whooshee.init_app(app)
     oauth.init_app(app)
     babel.init_app(app)
+    jwt.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': 'redis'})
     if config_ini.getboolean('base', 'scheduler'):
         scheduler_init(app)
@@ -172,6 +177,7 @@ def scheduler_init(app):
 
 # 注册蓝图
 def register_blueprint(app: Flask):
+    register_restful_api(app)
     app.register_blueprint(blog_bp)
     app.register_blueprint(be_blog_bp)
     app.register_blueprint(be_photo_bp)

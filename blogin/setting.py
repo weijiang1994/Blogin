@@ -7,6 +7,8 @@
 """
 import os
 import sys
+import datetime
+
 from dotenv import load_dotenv
 
 load_dotenv('.env')
@@ -85,6 +87,15 @@ class BaseConfig:
     BABEL_DEFAULT_LOCALE = 'zh'
     BABEL_DEFAULT_TIMEZONE = 'UTC+8'
     BABEL_TRANSLATION_DIRECTORIES = basedir + '/translations'
+
+    # jwt config
+    JWT_SECRET_KEY = 'a3e847bc-5707-11ec-9608-9f9d60f7ad70'
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(hours=24 * 3)
+    JWT_TOKEN_LOCATION = ['cookies', 'headers', 'json', 'query_string']
+    JWT_HEADER_NAME = 'Access-Token'
+    JWT_ACCESS_COOKIE_NAME = 'Access-Token'
+    JWT_QUERY_STRING_NAME = 'access_token'
+    JWT_REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=15)
 
 
 class DevelopmentConfig(BaseConfig):

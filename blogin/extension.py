@@ -22,7 +22,9 @@ from flask_apscheduler import APScheduler
 import redis
 from flask_caching import Cache
 from flask_babel import Babel
+from flask_jwt_extended import JWTManager
 
+jwt = JWTManager()
 db = SQLAlchemy()
 migrate = Migrate()
 bootstrap = Bootstrap()
@@ -51,6 +53,3 @@ def load_user(user_id):
 login_manager.login_view = 'auth_bp.login'
 login_manager.login_message = u'请先登陆!'
 login_manager.login_message_category = 'danger'
-
-
-

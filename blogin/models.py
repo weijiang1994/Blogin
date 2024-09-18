@@ -5,11 +5,33 @@
 @File    : models
 @Software: PyCharm
 """
-from datetime import datetime
+from datetime import datetime, date
+
 from flask_avatars import Identicon
 from blogin.extension import db, whooshee
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+
+
+class Mixin:
+
+    def to_dict(
+            self,
+            datetime_fmt='%Y-%m-%d %H:%M:%S',
+            date_fmt='%Y-%m-%d',
+            special_col={}
+    ):
+        result = {}
+        for col in self.__table__.columns:
+            if col.name in special_col.keys():
+                result[col.name] = special_col.get(col.name)(getattr(self, col.name))
+            elif isinstance(getattr(self, col.name), datetime):
+                result[col.name] = getattr(self, col.name).strftime(datetime_fmt)
+            elif isinstance(getattr(self, col.name), date):
+                result[col.name] = getattr(self, col.name).strftime(date_fmt)
+            else:
+                result[col.name] = getattr(self, col.name)
+        return result
 
 
 class Notification(db.Model):
@@ -28,7 +50,7 @@ class Notification(db.Model):
     receive_user = db.relationship('User', back_populates='receive_notify')
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, Mixin):
     __tablename__ = 'user'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='user id', autoincrement=True)
@@ -117,7 +139,7 @@ class Role(db.Model):
 
 
 @whooshee.register_model('title', 'content', 'introduce')
-class Blog(db.Model):
+class Blog(db.Model, Mixin):
     __tablename__ = 'blog'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='blog id', autoincrement=True)
