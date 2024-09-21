@@ -11,6 +11,17 @@ from flask_avatars import Identicon
 from blogin.extension import db, whooshee
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy.ext.declarative import declared_attr
+
+
+class TimeMixin:
+    @declared_attr
+    def created_at(cls):
+        return db.Column(db.DateTime, default=datetime.now)
+
+    @declared_attr
+    def updated_at(cls):
+        return db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 class Mixin:
@@ -159,6 +170,7 @@ class Blog(db.Model, Mixin):
     comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
     state = db.relationship('States', back_populates='blog')
     blog_history = db.relationship('BlogHistory', back_populates='blog', cascade='all')
+    banner = db.relationship('Banner', back_populates='blog')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
@@ -531,3 +543,13 @@ class MessageBorder(db.Model):
     flag = db.Column(db.INTEGER, default=0, comment='is it not effect?')
     plain_text = db.Column(db.TEXT, nullable=False)
     msg_user = db.relationship('User', back_populates='msg_border')
+
+
+class BlogBanner(db.Model, Mixin, TimeMixin):
+    __tablename__ = 'blog_banner'
+
+    id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
+    blog_id = db.Column(db.INTEGER, db.ForeignKey('blog.id'))
+
+    blog = db.relationship('Blog', back_populates='blog_banner')
+
