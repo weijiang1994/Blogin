@@ -10,7 +10,7 @@ from sqlalchemy import or_
 from blogin.extension import jwt
 from blogin.models import User
 from blogin.responses import R
-from blogin.decorators import get_params
+from blogin.api.decorators import get_params
 
 
 api_auth_bp = Blueprint('api_auth_bp', __name__, url_prefix='/api/auth')
@@ -69,3 +69,13 @@ def user_identity_lookup(user):
 @jwt.user_loader_callback_loader
 def user_loader_callback(identity):
     return User.query.get(identity) if identity else None
+
+
+@jwt.unauthorized_loader
+def unauthorized_loader_callback(callback):
+    return R.error(401, '接口权限校验失败，请登录后重试')
+
+
+@jwt.expired_token_loader
+def expired_token_loader_callback():
+    return R.error(401, '登录已过期，请重新登录')

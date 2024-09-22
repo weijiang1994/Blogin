@@ -8,7 +8,7 @@ from flask import Blueprint, request
 
 from blogin.responses import R
 from blogin.models import Blog
-from blogin.decorators import get_params
+from blogin.api.decorators import get_params
 
 index_bp = Blueprint('index_bp', __name__, url_prefix='/api')
 
