@@ -170,7 +170,7 @@ class Blog(db.Model, Mixin):
     comments = db.relationship('BlogComment', back_populates='blog', cascade='all')
     state = db.relationship('States', back_populates='blog')
     blog_history = db.relationship('BlogHistory', back_populates='blog', cascade='all')
-    banner = db.relationship('Banner', back_populates='blog')
+    banner = db.relationship('BlogBanner', back_populates='blog', cascade='all')
 
     def __repr__(self):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
@@ -551,5 +551,5 @@ class BlogBanner(db.Model, Mixin, TimeMixin):
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     blog_id = db.Column(db.INTEGER, db.ForeignKey('blog.id'))
 
-    blog = db.relationship('Blog', back_populates='blog_banner')
+    blog = db.relationship('Blog', back_populates='banner')
 
