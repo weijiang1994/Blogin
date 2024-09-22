@@ -9,6 +9,7 @@ from flask import Blueprint, request
 from blogin.responses import R
 from blogin.models import Blog
 from blogin.api.decorators import get_params
+from blogin.utils import config_ini
 
 index_bp = Blueprint('index_bp', __name__, url_prefix='/api')
 
@@ -25,7 +26,7 @@ def index(page):
     )
     blogs = paginations.items
     return R.success(
-        blogs=[blog.to_dict(special_col={'pre_img': lambda x: 'http://localhost:5000' + x}) for blog in blogs],
+        blogs=[blog.to_dict(special_col={'pre_img': lambda x: config_ini.get('server', 'host') + x}) for blog in blogs],
         has_next=paginations.has_next,
         has_prev=paginations.has_prev,
         page=page,
