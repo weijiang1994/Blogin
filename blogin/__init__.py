@@ -62,7 +62,7 @@ def create_app(config_name=None):
     @babel.localeselector
     def get_language():
         from flask import request
-        cookie = request.cookies.get('local-language')
+        cookie = request.cookies.get('local-language') or 'zh'
         if cookie in ['zh', 'en']:
             return cookie
 
