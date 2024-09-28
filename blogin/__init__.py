@@ -12,6 +12,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+from flask_cors import CORS
 from flask import Flask, render_template, url_for, session
 from flask_wtf.csrf import CSRFError
 import click
@@ -128,6 +129,7 @@ def register_extension(app: Flask):
     babel.init_app(app)
     jwt.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': 'redis'})
+    CORS(app)
     if config_ini.getboolean('base', 'scheduler'):
         scheduler_init(app)
 
