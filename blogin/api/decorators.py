@@ -7,7 +7,7 @@ file: decorators.py
 from functools import wraps
 
 from flask_jwt_extended import current_user
-from flask import request
+from flask import request, jsonify
 
 from blogin.models import Blog, User
 from blogin.responses import R
