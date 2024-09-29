@@ -12,7 +12,6 @@ from blogin.models import User
 from blogin.responses import R
 from blogin.api.decorators import get_params
 
-
 api_auth_bp = Blueprint('api_auth_bp', __name__, url_prefix='/api/auth')
 
 
@@ -28,13 +27,15 @@ def login(username, password):
         User.email == username
     )).first()
     if user is None or not user.check_password(password):
-        return R.error(401, 'username or password error')
+        return R.error(401, '用户名或密码错误')
 
     access_token = create_access_token(identity=user)
-    return R.success(data=dict(
-        access_token=access_token,
-        user=user.to_dict()
-    ))
+    return R.success(
+        msg='登录成功',
+        data=dict(
+            access_token=access_token,
+            user=user.to_dict()
+        ))
 
 
 @api_auth_bp.route('/info', methods=['GET'])
