@@ -29,3 +29,29 @@ def overview():
             visit_count=visit_count
         )
     )
+
+
+@api_index_bp.route('/traffic', methods=['GET'])
+@jwt_required
+def get_recent_7days_traffics():
+    days = []
+    result = []
+    vst_data = []
+    cst_data = []
+    lst_data = []
+    td = datetime.date.today()
+    vsts = VisitStatistics.query.filter(VisitStatistics.date > td - timedelta(days=7)).all()
+    csts = CommentStatistics.query.filter(CommentStatistics.date > td - timedelta(days=7)).all()
+    lsts = LikeStatistics.query.filter(LikeStatistics.date > td - timedelta(days=7)).all()
+    for vst in vsts:
+        days.append(str(vst.date))
+        vst_data.append(vst.times)
+    for cst in csts:
+        cst_data.append(cst.times)
+    for lst in lsts:
+        lst_data.append(lst.times)
+
+    result.append(vst_data)
+    result.append(cst_data)
+    result.append(lst_data)
+    return R.success(data={'result': result, 'days': days})
