@@ -4,11 +4,15 @@ file: __init__.py.py
 @time: 2024/9/17 0:21
 @desc:
 """
+import datetime
+from datetime import timedelta
+
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
+from sqlalchemy.sql.expression import func
 
 from blogin.api.decorators import get_params
-from blogin.models import Blog, User, BlogComment, VisitStatistics
+from blogin.models import Blog, User, BlogComment, VisitStatistics, CommentStatistics, LikeStatistics, Photo, LikePhoto
 from blogin.responses import R
 
 api_index_bp = Blueprint('api_index_bp', __name__, url_prefix='/api/index')
@@ -55,3 +59,64 @@ def get_recent_7days_traffics():
     result.append(cst_data)
     result.append(lst_data)
     return R.success(data={'result': result, 'days': days})
+
+
+@api_index_bp.route('/top', methods=['GET'])
+@jwt_required
+def top():
+    blogs = Blog.query.order_by(Blog.read_times.desc()).limit(5)
+    photoes = Photo.query.join(
+        LikePhoto,
+        LikePhoto.img_id == Photo.id
+    ).group_by(
+        LikePhoto.img_id
+    ).order_by(func.COUNT(LikePhoto.img_id)).with_entities(
+        Photo.id, Photo.title, Photo.create_time, func.COUNT(LikePhoto.img_id).label('like_times')
+    ).limit(5)
+    return R.success(data=dict(
+        blogs=[dict(
+            title=blog.title,
+            count=blog.read_times,
+            created_at=blog.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+        ) for blog in blogs],
+        photoes=[dict(
+            title=photo.title,
+            like_times=photo.like_times,
+            created_at=photo.create_time.strftime('%Y-%m-%m %H:%M:%S'),
+        ) for photo in photoes]))
+
+
+@api_index_bp.route('/rate', methods=['GET'])
+@jwt_required
+def rate():
+    blog_count = Blog.query.count()
+    comment_count = BlogComment.query.count()
+    photo_count = Photo.query.count()
+    return R.success(
+        data=[
+            dict(value=blog_count, name='博客'),
+            dict(value=comment_count, name='评论'),
+            dict(value=photo_count, name='图片')
+        ]
+    )
+
+
+@api_index_bp.route('/recent', methods=['GET'])
+@jwt_required
+def recent():
+    blogs = Blog.query.order_by(Blog.create_time.desc()).limit(10)
+    photoes = Photo.query.order_by(Photo.create_time.desc()).limit(6)
+    return R.success(
+        data=dict(
+            blogs=[dict(
+                id=blog.id,
+                title=blog.title,
+                created_at=blog.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+            ) for blog in blogs],
+            photoes=[dict(
+                id=photo.id,
+                url=photo.url(),
+                created_at=photo.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+            ) for photo in photoes]
+        )
+    )
