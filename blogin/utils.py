@@ -32,7 +32,6 @@ from PIL import Image, ImageDraw, ImageFont
 from blogin.extension import db
 from blogin.setting import basedir
 from imageio import imread
-from blogin.models import Contribute
 from bs4 import BeautifulSoup
 import logging
 from logging.handlers import RotatingFileHandler
@@ -267,11 +266,7 @@ def github_social():
     return star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info
 
 
-def update_contribution():
-    td = datetime.date.today()
-    con = Contribute.query.filter_by(date=td).first()
-    if con:
-        con.contribute_counts += 1
+
 
 
 # IP查询工具配置

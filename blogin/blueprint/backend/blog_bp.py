@@ -12,9 +12,10 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
 from blogin.blueprint.backend.forms import PostForm, EditPostForm
-from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog, PostContent
+from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog, PostContent, \
+    update_contribution
 from blogin.extension import db
-from blogin.utils import get_current_time, create_path, update_contribution, get_md5
+from blogin.utils import get_current_time, create_path, get_md5
 from flask_login import login_required
 from blogin.decorators import permission_required, db_exception_handle
 import datetime

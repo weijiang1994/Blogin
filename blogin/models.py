@@ -7,11 +7,14 @@
 """
 from datetime import datetime, date
 
+from urllib.parse import urljoin
 from flask_avatars import Identicon
-from blogin.extension import db, whooshee
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declared_attr
+
+from blogin.extension import db, whooshee
+from blogin.utils import config_ini
 
 
 class TimeMixin:
@@ -250,9 +253,23 @@ class Photo(db.Model):
     save_path_s = db.Column(db.String(200), nullable=False, comment='small size')
     create_time = db.Column(db.DateTime, default=datetime.now)
     level = db.Column(db.INTEGER, default=0)
+
     tags = db.relationship('Tag', secondary=tagging, back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo', cascade='all')
     likes = db.relationship('LikePhoto', back_populates='photo', cascade='all')
+
+    def url(self, small=False):
+        """
+        获取图片的url
+
+        :param small: 是否获取缩略图
+        :return:
+        """
+
+        base_url = config_ini.get('server', 'host')
+        if small:
+            return urljoin(base_url, self.save_path_s)
+        return urljoin(base_url, self.save_path)
 
 
 @whooshee.register_model('name')
@@ -553,3 +570,9 @@ class BlogBanner(db.Model, Mixin, TimeMixin):
 
     blog = db.relationship('Blog', back_populates='banner')
 
+
+def update_contribution():
+    td = date.today()
+    con = Contribute.query.filter_by(date=td).first()
+    if con:
+        con.contribute_counts += 1
