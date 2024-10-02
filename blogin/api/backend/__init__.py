@@ -11,7 +11,7 @@ from flask import Blueprint
 from flask_jwt_extended import jwt_required
 from sqlalchemy.sql.expression import func
 
-from blogin.api.decorators import get_params
+from blogin.api.decorators import get_params, check_permission
 from blogin.models import Blog, User, BlogComment, VisitStatistics, CommentStatistics, LikeStatistics, Photo, LikePhoto
 from blogin.responses import R
 
@@ -20,6 +20,7 @@ api_index_bp = Blueprint('api_index_bp', __name__, url_prefix='/api/index')
 
 @api_index_bp.route('/overview', methods=['GET'])
 @jwt_required
+@check_permission
 def overview():
     blog_count = Blog.query.count()
     user_count = User.query.count()
@@ -37,6 +38,7 @@ def overview():
 
 @api_index_bp.route('/traffic', methods=['GET'])
 @jwt_required
+@check_permission
 def get_recent_7days_traffics():
     days = []
     result = []
@@ -63,6 +65,7 @@ def get_recent_7days_traffics():
 
 @api_index_bp.route('/top', methods=['GET'])
 @jwt_required
+@check_permission
 def top():
     blogs = Blog.query.order_by(Blog.read_times.desc()).limit(5)
     photoes = Photo.query.join(
@@ -88,6 +91,7 @@ def top():
 
 @api_index_bp.route('/rate', methods=['GET'])
 @jwt_required
+@check_permission
 def rate():
     blog_count = Blog.query.count()
     comment_count = BlogComment.query.count()
@@ -103,6 +107,7 @@ def rate():
 
 @api_index_bp.route('/recent', methods=['GET'])
 @jwt_required
+@check_permission
 def recent():
     blogs = Blog.query.order_by(Blog.create_time.desc()).limit(10)
     photoes = Photo.query.order_by(Photo.create_time.desc()).limit(6)
