@@ -121,6 +121,9 @@ class User(db.Model, UserMixin, Mixin):
                 self.roles = Role.query.filter_by(name='USER').first()
             db.session.commit()
 
+    def url_for_avatar(self):
+        return urljoin(config_ini.get('server', 'host'), self.avatar)
+
 
 class LoginLog(db.Model):
     __tablename__ = 'login_log'

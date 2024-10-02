@@ -8,7 +8,7 @@ import datetime
 from datetime import timedelta
 
 from flask import Blueprint
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from sqlalchemy.sql.expression import func
 
 from blogin.api.decorators import get_params, check_permission
@@ -123,5 +123,21 @@ def recent():
                 url=photo.url(),
                 created_at=photo.create_time.strftime('%Y-%m-%d %H:%M:%S'),
             ) for photo in photoes]
+        )
+    )
+
+
+@api_index_bp.route('/user/info', methods=['GET'])
+@jwt_required
+@check_permission
+def user_info():
+    user = User.query.filter(User.id == current_user.id).first()
+    return R.success(
+        data=dict(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            created_at=user.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+            avatar=user.url_for_avatar()
         )
     )
