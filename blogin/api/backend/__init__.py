@@ -132,12 +132,4 @@ def recent():
 @check_permission
 def user_info():
     user = User.query.filter(User.id == current_user.id).first()
-    return R.success(
-        data=dict(
-            id=user.id,
-            username=user.username,
-            email=user.email,
-            created_at=user.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-            avatar=user.url_for_avatar()
-        )
-    )
+    return R.success(data=user.info())

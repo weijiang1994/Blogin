@@ -124,6 +124,20 @@ class User(db.Model, UserMixin, Mixin):
     def url_for_avatar(self):
         return urljoin(config_ini.get('server', 'host'), self.avatar)
 
+    def info(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'website': self.website,
+            'avatar': self.url_for_avatar(),
+            'slogan': self.slogan,
+            'create_time': self.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'recent_login': self.recent_login.strftime('%Y-%m-%d %H:%M:%S'),
+            'status': self.status,
+            'role': self.roles.name
+        }
+
 
 class LoginLog(db.Model):
     __tablename__ = 'login_log'

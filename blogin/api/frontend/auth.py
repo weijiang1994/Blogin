@@ -35,13 +35,7 @@ def login(username, password):
         data=dict(
             access_token=access_token,
         ),
-        user=dict(
-            id=user.id,
-            username=user.username,
-            email=user.email,
-            created_at=user.create_time.strftime('%Y-%m-%d %H:%M:%S'),
-            avatar=user.url_for_avatar()
-        )
+        user=user.info()
     )
 
 
