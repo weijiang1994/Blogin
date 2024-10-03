@@ -221,7 +221,7 @@ class States(db.Model):
         db.session.commit()
 
 
-class BlogType(db.Model):
+class BlogType(db.Model, Mixin):
     __tablename__ = 'blog_type'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='blog type id', autoincrement=True)

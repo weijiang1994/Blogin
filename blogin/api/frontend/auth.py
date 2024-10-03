@@ -34,8 +34,15 @@ def login(username, password):
         msg='登录成功',
         data=dict(
             access_token=access_token,
-            user=user.to_dict()
-        ))
+        ),
+        user=dict(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            created_at=user.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+            avatar=user.url_for_avatar()
+        )
+    )
 
 
 @api_auth_bp.route('/info', methods=['GET'])

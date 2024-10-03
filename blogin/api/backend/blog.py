@@ -7,7 +7,7 @@ file: blog.py
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, current_user
 
-from blogin.models import Blog, BlogType, States
+from blogin.models import Blog, BlogType, States, BlogComment
 from blogin.responses import R
 from blogin.api.decorators import check_permission, get_params
 from blogin.utils import config_ini
@@ -22,20 +22,22 @@ def page_not_found(e):
 
 @blog_bp.route('/list', methods=['GET'])
 @get_params(
-    params=['page', 'status', 'keyword'],
-    types=[int, int, str],
+    params=['page', 'status', 'title', 'category'],
+    types=[int, int, str, int],
 )
 @jwt_required
 @check_permission
-def blog_list(page, status=0, keyword=''):
+def blog_list(page, status=0, title='', category=0):
     query = (Blog.id > 0,)
 
     if status:
         query += (Blog.delete_flag == status,)
 
-    if keyword:
-        query += (Blog.title.contains(keyword),)
-        query += (Blog.content.contains(keyword),)
+    if title:
+        query += (Blog.title.contains(title),)
+
+    if category:
+        query += (Blog.type_id == category,)
 
     blogs = Blog.query.filter(
         *query
@@ -44,9 +46,21 @@ def blog_list(page, status=0, keyword=''):
         page=page,
     )
 
+    data = []
+    for blog in blogs.items:
+        item = blog.to_dict(
+            special_col={
+                'pre_img': lambda x: config_ini.get('server', 'host') + x,
+                'is_private': lambda x: '私密' if x else '公开',
+            },
+        )
+        item['type'] = blog.blog_types.name
+        item['comment_times'] = len(blog.comments)
+        item['status'] = blog.state.name
+        data.append(item)
+
     return R.success(
-        data=[blog.to_dict(special_col={'pre_img': lambda x: config_ini.get('server', 'host') + x}) for blog in
-              blogs.items],
+        data=data,
         has_next=blogs.has_next,
         has_prev=blogs.has_prev,
         page=page,
@@ -54,7 +68,7 @@ def blog_list(page, status=0, keyword=''):
     )
 
 
-@blog_bp.route('/blog/delete/<blog_id>', methods=['POST'])
+@blog_bp.route('/delete/<blog_id>', methods=['POST'])
 @jwt_required
 @check_permission
 def delete(blog_id):
@@ -65,7 +79,7 @@ def delete(blog_id):
     return R.success(msg='博客删除成功')
 
 
-@blog_bp.route('/blog/recover/<blog_id>', methods=['POST'])
+@blog_bp.route('/recover/<blog_id>', methods=['POST'])
 @jwt_required
 @check_permission
 def recover(blog_id):
@@ -76,7 +90,7 @@ def recover(blog_id):
     return R.success(msg='博客恢复成功')
 
 
-@blog_bp.route('/blog/category/add', methods=['POST'])
+@blog_bp.route('/category/add', methods=['POST'])
 @get_params(
     params=['name', 'desc'],
     types=[str, str]
@@ -90,3 +104,14 @@ def blog_category_add(name, desc):
     db.session.add(cate)
     db.session.commit()
     return R.success(msg='添加成功')
+
+
+@blog_bp.route('/category/list', methods=['GET'])
+@jwt_required
+@check_permission
+def blog_category_list():
+    categories = BlogType.query.all()
+    data = []
+    for category in categories:
+        data.append(category.to_dict())
+    return R.success(data=data)
