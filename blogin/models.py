@@ -47,6 +47,14 @@ class Mixin:
                 result[col.name] = getattr(self, col.name)
         return result
 
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
 
 class Notification(db.Model):
     __tablename__ = 'notification'

@@ -92,18 +92,17 @@ def recover(blog_id):
 
 @blog_bp.route('/category/add', methods=['POST'])
 @get_params(
-    params=['name', 'desc'],
+    params=['name', 'description'],
     types=[str, str]
 )
 @jwt_required
 @check_permission
-def blog_category_add(name, desc):
+def blog_category_add(name, description):
     if BlogType.query.filter_by(name=name).first():
         return R.error(msg='分类已存在')
-    cate = BlogType(name=category_name, description=desc)
-    db.session.add(cate)
-    db.session.commit()
-    return R.success(msg='添加成功')
+    cate = BlogType(name=name, description=description)
+    cate.save()
+    return R.success(msg='博客分类添加成功')
 
 
 @blog_bp.route('/category/list', methods=['GET'])
