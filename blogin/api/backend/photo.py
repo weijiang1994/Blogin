@@ -4,7 +4,7 @@ file: photo.py
 @time: 2024/10/5 0:09
 @desc:
 """
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 from blogin.models import Photo
@@ -50,4 +50,18 @@ def photo_list(page, limit=12, keyword=''):
     return R.success(
         total=photos.total,
         data=data
+    )
+
+
+@api_photo_bp.route('/origin-image', methods=['GET'])
+@jwt_required
+@check_permission
+def origin_image():
+    photo_id = request.args.get('id')
+    photo = Photo.query.get(photo_id)
+    if not photo:
+        return R.not_found()
+
+    return R.success(
+        url=photo.url(small=False)
     )
