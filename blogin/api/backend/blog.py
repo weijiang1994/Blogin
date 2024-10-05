@@ -39,7 +39,9 @@ def blog_list(page, status=0, title='', category=0):
     if category:
         query += (Blog.type_id == category,)
 
-    blogs = Blog.query.filter(
+    blogs = Blog.query.order_by(
+        Blog.create_time.desc()
+    ).filter(
         *query
     ).paginate(
         per_page=10,
@@ -109,7 +111,7 @@ def blog_category_add(name, description):
 @jwt_required
 @check_permission
 def blog_category_list():
-    categories = BlogType.query.all()
+    categories = BlogType.query.order_by(BlogType.create_time.desc()).all()
     data = []
     for category in categories:
         data.append(category.to_dict())

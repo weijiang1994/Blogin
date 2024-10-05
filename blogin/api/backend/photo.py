@@ -23,7 +23,7 @@ api_photo_bp = Blueprint('api_photo_bp', __name__, url_prefix='/api/photo')
 )
 @jwt_required
 @check_permission
-def photo_list(page, limit=10, keyword=''):
+def photo_list(page, limit=12, keyword=''):
     query = (Photo.id > 0,)
 
     if keyword:
@@ -31,6 +31,8 @@ def photo_list(page, limit=10, keyword=''):
 
     photos = Photo.query.filter(
         *query
+    ).order_by(
+        Photo.create_time.desc()
     ).paginate(
         per_page=limit,
         page=page,
