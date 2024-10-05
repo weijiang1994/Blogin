@@ -17,17 +17,20 @@ api_photo_bp = Blueprint('api_photo_bp', __name__, url_prefix='/api/photo')
 
 @api_photo_bp.route('/list', methods=['GET'])
 @get_params(
-    params=['page', 'limit', 'keyword'],
-    types=[int, int, str],
+    params=['page', 'limit', 'name', 'level'],
+    types=[int, int, str, str],
     remove_none=True
 )
 @jwt_required
 @check_permission
-def photo_list(page, limit=12, keyword=''):
+def photo_list(page, limit=12, name='', level=None):
     query = (Photo.id > 0,)
 
-    if keyword:
-        query += (Photo.title.contains(keyword),)
+    if name:
+        query += (Photo.title.contains(name),)
+
+    if level is not None:
+        query += (Photo.level == level,)
 
     photos = Photo.query.filter(
         *query
