@@ -268,7 +268,7 @@ tagging = db.Table('tagging',
 
 
 @whooshee.register_model('title', 'description')
-class Photo(db.Model):
+class Photo(db.Model, Mixin):
     __tablename__ = 'photo'
 
     id = db.Column(db.INTEGER, primary_key=True, nullable=False, comment='photo id', autoincrement=True)

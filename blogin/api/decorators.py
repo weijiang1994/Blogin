@@ -16,7 +16,7 @@ from blogin.responses import R
 def check_permission(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if current_user.role_id == 1:
+        if current_user and current_user.role_id == 1:
             return func(*args, **kwargs)
         return R.access_denied()
 
