@@ -120,7 +120,7 @@ def recent():
             ) for blog in blogs],
             photoes=[dict(
                 id=photo.id,
-                url=photo.url(),
+                url=photo.url(small=True),
                 created_at=photo.create_time.strftime('%Y-%m-%d %H:%M:%S'),
             ) for photo in photoes]
         )
