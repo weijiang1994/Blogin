@@ -68,3 +68,45 @@ def origin_image():
     return R.success(
         url=photo.url(small=False)
     )
+
+
+@api_photo_bp.route('/detail/<int:photo_id>', methods=['GET'])
+@jwt_required
+@check_permission
+def photo_detail(photo_id):
+    photo = Photo.query.get(photo_id)
+    if not photo:
+        return R.not_found()
+
+    item = photo.to_dict()
+    item['tags'] = [tag.name for tag in photo.tags]
+    item['comments'] = len(photo.comments)
+    item['likes'] = len(photo.likes)
+    item['url'] = photo.url(small=True)
+
+    return R.success(
+        data=item
+    )
+
+
+@api_photo_bp.route('/edit', methods=['POST'])
+@jwt_required
+@check_permission
+def photo_edit():
+    data = request.json
+    photo_id = data.get('id')
+    title = data.get('title')
+    level = data.get('level')
+    tags = data.get('tags')
+    description = data.get('description')
+
+    photo = Photo.query.get(photo_id)
+    if not photo:
+        return R.not_found(msg='照片不存在')
+    photo.update(
+        title=title,
+        level=level,
+        description=description,
+    )
+    photo.update_tags(tags)
+    return R.success()

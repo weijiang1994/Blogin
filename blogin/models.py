@@ -55,6 +55,12 @@ class Mixin:
             db.session.rollback()
             raise e
 
+    def update(self, **kwargs):
+        for attr, value in kwargs.items():
+            if hasattr(self, attr):
+                setattr(self, attr, value)
+        self.save()
+
 
 class Notification(db.Model):
     __tablename__ = 'notification'
@@ -295,6 +301,21 @@ class Photo(db.Model, Mixin):
         if small:
             return urljoin(base_url, self.save_path_s)
         return urljoin(base_url, self.save_path)
+
+    def update_tags(self, tags):
+        """
+        更新图片的标签
+
+        :param tags: list
+        :return:
+        """
+        self.tags = []
+        for tag in tags:
+            t = Tag.query.filter_by(name=tag).first()
+            if t is None:
+                t = Tag(name=tag)
+            self.tags.append(t)
+        self.save()
 
 
 @whooshee.register_model('name')
