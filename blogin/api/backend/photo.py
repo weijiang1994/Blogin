@@ -5,7 +5,7 @@ file: photo.py
 @desc:
 """
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 
 from blogin.models import Photo
 from blogin.api.decorators import get_params, check_permission
@@ -110,3 +110,23 @@ def photo_edit():
     )
     photo.update_tags(tags)
     return R.success()
+
+
+@api_photo_bp.route('add', methods=['POST'])
+@jwt_required
+@check_permission
+def photo_add():
+    title = request.form.get('title')
+    level = request.form.get('level')
+    tags = request.form.get('tags')
+    description = request.form.get('description')
+    photo = Photo(
+        title=title,
+        level=level,
+        description=description,
+        save_path='',
+        save_path_s=''
+    )
+    photo.save_photo(request.files.get('file'), current_user.id)
+    photo.update_tags(tags.split(','))
+    return R.success(msg='相片添加成功')

@@ -1093,3 +1093,18 @@ class Lunar(object):
         stJd = 365.24219878 * (year - 1900) + s_stAccInfo[st] / 86400.0
 
         return base1900_SlightColdJD + stJd
+
+
+def generate_thumbnail(path):
+    """
+    生成缩略图
+    :param path: 文件路径
+    :return: 返回缩略图，缩小尺寸到原来的三分之一
+    """
+    img = Image.open(path)
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    width = img.size[0]
+    height = img.size[1]
+    img = img.resize((int(width * 0.3), int(height * 0.3)), Image.ANTIALIAS)
+    return img

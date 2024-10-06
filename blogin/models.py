@@ -6,15 +6,18 @@
 @Software: PyCharm
 """
 from datetime import datetime, date
+import os
 
 from urllib.parse import urljoin
 from flask_avatars import Identicon
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declared_attr
+from flask import current_app
+
 
 from blogin.extension import db, whooshee
-from blogin.utils import config_ini
+from blogin.utils import config_ini, basedir, generate_thumbnail, create_path
 
 
 class TimeMixin:
@@ -315,6 +318,35 @@ class Photo(db.Model, Mixin):
             if t is None:
                 t = Tag(name=tag)
             self.tags.append(t)
+        self.save()
+
+    def save_photo(self, file, user_id):
+        """
+        保存图片
+
+        :param user_id: 用户ID
+        :param file: FileStorage 上传的文件
+        :return:
+        """
+
+        # 相片保存在当前日期的文件夹中
+        img_file = str(user_id) + file.filename
+        folder = str(datetime.now()).split(' ')[0]
+        create_path(basedir + '/uploads/gallery/' + folder)
+        file.save(basedir + '/uploads/gallery/' + folder + '/' + img_file)
+
+        # 云服务器带宽过低,当图片太大在相册加载太慢，所以这里生成相片缩略图 > 1M
+        if os.path.getsize(basedir + '/uploads/gallery/' + folder + '/' + img_file) > \
+                current_app.config.get('PHOTO_NEED_RESIZE'):
+            small_img = generate_thumbnail(basedir + '/uploads/gallery/' + folder + '/' + img_file)
+            small_img.save(basedir + '/uploads/gallery/' + folder + '/' + 'small'+img_file)
+            small_path = '/gallery/' + folder + '/' + 'small'+img_file
+        else:
+            small_path = '/gallery/' + folder + '/' + img_file
+
+        img_path = '/gallery/' + folder + '/' + img_file
+        self.save_path = img_path
+        self.save_path_s = small_path
         self.save()
 
 
