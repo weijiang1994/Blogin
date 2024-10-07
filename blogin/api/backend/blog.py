@@ -27,7 +27,7 @@ def page_not_found(e):
 )
 @jwt_required
 @check_permission
-def blog_list(page, status=0, title='', category=0):
+def blog_list(page=1, status=0, title='', category=0):
     query = (Blog.id > 0,)
 
     if status:

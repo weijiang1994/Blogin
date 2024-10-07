@@ -23,7 +23,7 @@ api_photo_bp = Blueprint('api_photo_bp', __name__, url_prefix='/api/photo')
 )
 @jwt_required
 @check_permission
-def photo_list(page, limit=12, name='', level=None):
+def photo_list(page=1, limit=12, name='', level=None):
     query = (Photo.id > 0,)
 
     if name:
