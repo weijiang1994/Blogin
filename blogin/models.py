@@ -213,7 +213,7 @@ class Blog(db.Model, Mixin):
         return '<title> %s <introduce> %s' % (self.title, self.introduce)
 
 
-class BlogComment(db.Model):
+class BlogComment(db.Model, Mixin):
     __tablename__ = 'blog_comment'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
@@ -358,7 +358,7 @@ class Tag(db.Model):
     photos = db.relationship('Photo', secondary=tagging, back_populates='tags')
 
 
-class PhotoComment(db.Model):
+class PhotoComment(db.Model, Mixin):
     __tablename__ = 'photo_comment'
 
     id = db.Column(db.INTEGER, primary_key=True)
