@@ -600,7 +600,7 @@ class ContributeDetail(db.Model):
     cont = db.relationship('Contribute', back_populates='con_detail')
 
 
-class OneSentence(db.Model):
+class OneSentence(db.Model, Mixin):
     __tablename__ = 'one_sentence'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
