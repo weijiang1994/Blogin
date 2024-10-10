@@ -4,6 +4,8 @@ file: contents.py
 @time: 2024/10/7 23:08
 @desc:
 """
+import re
+
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
@@ -68,4 +70,44 @@ def djt_list():
     return R.success(
         total=souls.total,
         data=[soul.to_dict() for soul in souls.items]
+    )
+
+
+@api_contents_bp.route('/poem/list', methods=['GET'])
+@get_params(
+    params=['page', 'limit', 'title', 'author', 'dynasty'],
+    types=[int, int, str, str, str],
+    remove_none=True
+)
+@jwt_required
+@check_permission
+def poem_list(page=1, limit=15, title=None, author=None, dynasty=None):
+    query = (Poem.id > 0,)
+    if title:
+        query += (Poem.title.contains(title),)
+    if author:
+        query += (Poet.name.contains(author),)
+    if dynasty:
+        query += (Dynasty.name.contains(dynasty),)
+
+    poems = Poem.query.filter(
+        *query
+    ).order_by(
+        Poem.id.desc()
+    ).paginate(
+        per_page=limit,
+        page=page
+    )
+
+    data = []
+    for poem in poems.items:
+        item = poem.to_dict()
+        item['author'] = poem.poets.name
+        item['dynasty'] = poem.poets.dynasties.name
+        # 。分割诗句并保留句号
+        item['content'] = re.sub(r'(?<=[。！？；])', '\n', poem.content)
+        data.append(item)
+    return R.success(
+        total=poems.total,
+        data=data
     )

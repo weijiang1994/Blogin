@@ -505,7 +505,7 @@ class SongCiAuthor(db.Model):
     cis = db.relationship('SongCi', back_populates='authors', cascade='all')
 
 
-class Poem(db.Model):
+class Poem(db.Model, Mixin):
     __tablename__ = 'poem'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
