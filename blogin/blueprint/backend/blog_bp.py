@@ -152,6 +152,10 @@ def blog_content_edit(blog_id):
 
         update_contribution()
         history_file_path = basedir + '/history/' + get_md5(get_current_time()) + '.txt'
+
+        if not os.path.exists(basedir + '/history/'):
+            os.makedirs(basedir + '/history/')
+
         with open(history_file_path, 'w', encoding='utf-8') as f:
             f.write(history_content)
         bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=datetime.datetime.now())
