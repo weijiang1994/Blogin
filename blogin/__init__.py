@@ -45,7 +45,7 @@ from blogin.api import register_restful_api
 
 def create_app(config_name=None):
     if config_name is None:
-        config_name = os.getenv('FLASK_CONFIG', 'development')
+        config_name = os.getenv('FLASK_CONFIG', 'production')
     app = Flask('blogin')
     app.jinja_env.filters['split'] = split_space
     app.jinja_env.filters['ssplit'] = super_split
@@ -128,7 +128,7 @@ def register_extension(app: Flask):
     oauth.init_app(app)
     babel.init_app(app)
     jwt.init_app(app)
-    cache.init_app(app, config={'CACHE_TYPE': 'redis'})
+    cache.init_app(app)
     CORS(app)
     if config_ini.getboolean('base', 'scheduler'):
         scheduler_init(app)
@@ -207,28 +207,18 @@ def register_cmd(app: Flask):
             db.drop_all()
             click.echo('Drop tables.')
         db.create_all()
-        click.echo('Initialized database.')
-
-    @app.cli.command()
-    def init():
-        """Initialized Blogin"""
-        click.echo('Initializing the database...')
-        db.drop_all()
-        db.create_all()
-
         click.echo('Initializing the roles and permissions...')
         Role.init_role()
-
+        click.echo('Initializing the states...')
+        States.init_states()
+        click.echo('Initializing the third party login...')
+        ThirdParty.init_tp()
+        click.echo('Initialized database.')
         click.echo('Done.')
 
     @app.cli.command()
     def admin():
         try:
-            db.drop_all()
-            db.create_all()
-            Role.init_role()
-            States.init_states()
-            ThirdParty.init_tp()
             username = input('请输入超级管理员用户名:')
             email = input('请输入超级管理员邮箱:')
             pwd = input('请输入超级管理员密码:')
@@ -250,6 +240,23 @@ def register_cmd(app: Flask):
             traceback.print_exc()
             db.session.rollback()
             click.echo('操作出现异常,退出...')
+
+    @app.cli.command()
+    def admin_docker():
+        default_pwd = os.getenv('SUPER_USER_PWD', '12345678')
+        super_user = User(
+            username='admin',
+            password=default_pwd,
+            email=os.getenv('SUPER_USER_EMAIL', 'admin@exmpale.com'),
+            confirm=1,
+            role_id=1
+        )
+        super_user.set_password(default_pwd)
+        db.session.add(super_user)
+        db.session.commit()
+        click.echo('超级管理员创建成功!')
+        click.echo('应用初始化成功!')
+        click.echo('程序退出...')
 
     @app.cli.command()
     def addtp():

@@ -6,6 +6,7 @@
 @Software: PyCharm
 """
 import datetime
+import os
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -35,7 +36,11 @@ share = Share()
 avatar = Avatars()
 mail = Mail()
 whooshee = Whooshee()
-pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
+pool = redis.ConnectionPool(
+    host=os.getenv('REDIS_HOST', 'localhost'), 
+    port=os.getenv('REDIS_PORT', 6379),
+    decode_responses=True
+)
 rd = redis.Redis(connection_pool=pool)
 oauth = OAuth()
 aps = APScheduler()

@@ -54,6 +54,16 @@ class BaseConfig:
     SQLALCHEMY_ECHO = False
     DATABASE_USER = os.getenv('DATABASE_USER', 'root')
     DATABASE_PWD = os.getenv('DATABASE_PWD')
+    DATABASE_HOST = os.getenv('DATABASE_HOST', 'localhost')
+    DATABASE_NAME = os.getenv('DATABASE_NAME', 'blog')
+
+    # REDIS configure
+    REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+    REDIS_PORT = os.getenv('REDIS_PORT', 6379)
+
+    # Flask-Caching configure
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}"
 
     # DEFAULT AVATAR CONFIGURE
     AVATARS_SAVE_PATH = BLOGIN_UPLOAD_PATH + '/avatars/'
@@ -111,9 +121,13 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@localhost/blog?charset=utf8mb4'.format(BaseConfig.DATABASE_USER,
-                                                                                            BaseConfig.DATABASE_PWD)
-    REDIS_URL = "redis://localhost"
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4'.format(
+        BaseConfig.DATABASE_USER,
+        BaseConfig.DATABASE_PWD,
+        BaseConfig.DATABASE_HOST,
+        BaseConfig.DATABASE_NAME
+    )
+    REDIS_URL = "redis://{}:{}".format(BaseConfig.REDIS_HOST, BaseConfig.REDIS_PORT)
 
 
 config = {

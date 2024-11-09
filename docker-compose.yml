@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.23
+    container_name: blogin-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123123
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PWD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/services/blogin/database:/var/lib/mysql
+    networks:
+      - blogin-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+  
+  redis:
+    image: redis:latest
+    container_name: blogin-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - blogin-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  blogin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blogin
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - blogin-network
+    environment:
+      - REDIS_HOST=blogin-redis
+      - REDIS_PORT=6379
+    volumes:
+      - .:/app
+      - /data/services/blogin/logs:/var/logs
+
+networks:
+  blogin-network:

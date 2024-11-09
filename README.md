@@ -335,7 +335,7 @@
 
    ```shell
      cd Blogin
-     pip install -r requirements.txt -i https://pypi.douban.com/simple
+     pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
    ```
 
 5. 初始化数据库
@@ -357,7 +357,28 @@
    ```
    打开 http://127.0.0.1:5000 就可以看到页面了。
 
-   
+### Docker部署
+
+首先确保在`.env` 文件中配置好了信息，通过下面的命令构建docker容器
+
+```shell
+sudo docker-compose up --build d
+```
+
+初始化数据库的表信息
+
+```shell
+# 初始化数据库迁移
+sudo docker exec blogin /bin/bash -c "flask db init"
+# 初始化数据库表
+sudo docker exec blogin /bin/bash -c "flask initdb"
+# 创建默认管理员账号
+sudo docker exec blogin /bin/bash -c "flask admin-docker"
+```
+
+浏览器访问 http://127.0.0.1:8000 即可看到效果。
+
+
 7. issue
 
    如果在运行过程中有任何问题出现，欢迎issue~
