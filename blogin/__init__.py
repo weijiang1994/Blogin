@@ -230,6 +230,7 @@ def register_cmd(app: Flask):
 
             super_user = User(username=username, email=email, password=pwd, confirm=1, role_id=1)
             super_user.set_password(pwd)
+            super_user.set_admin()
             db.session.add(super_user)
             db.session.commit()
             click.echo('超级管理员创建成功!')
@@ -243,6 +244,10 @@ def register_cmd(app: Flask):
 
     @app.cli.command()
     def admin_docker():
+        if User.query.filter_by(username='admin').first():
+            click.echo('超级管理员已存在, 退出...', color='red')
+            return
+
         default_pwd = os.getenv('SUPER_USER_PWD', '12345678')
         super_user = User(
             username='admin',
@@ -252,10 +257,11 @@ def register_cmd(app: Flask):
             role_id=1
         )
         super_user.set_password(default_pwd)
+        super_user.set_admin()
         db.session.add(super_user)
         db.session.commit()
         click.echo('超级管理员创建成功!')
-        click.echo('应用初始化成功!')
+        click.echo(f'账号: admin, 密码: {default_pwd}')
         click.echo('程序退出...')
 
     @app.cli.command()

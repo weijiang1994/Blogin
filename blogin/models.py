@@ -131,12 +131,12 @@ class User(db.Model, UserMixin, Mixin):
         db.session.commit()
 
     def set_role(self):
-        if self.roles is None:
-            if self.email == '804022023@qq.com' or self.email == 'weijiang1994_1@qq.com':
-                self.roles = Role.query.filter_by(name='ADMIN').first()
-            else:
-                self.roles = Role.query.filter_by(name='USER').first()
-            db.session.commit()
+        self.roles = Role.query.filter_by(name='USER').first()
+        db.session.commit()
+
+    def set_admin(self):
+        self.roles = Role.query.filter_by(name='ADMIN').first()
+        db.session.commit()
 
     def url_for_avatar(self):
         return urljoin(config_ini.get('server', 'host'), self.avatar)
