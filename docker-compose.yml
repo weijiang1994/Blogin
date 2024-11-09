@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_USER: ${DATABASE_USER}
       MYSQL_PASSWORD: ${DATABASE_PWD}
+      TZ: Asia/Shanghai
+      LANG: C.UTF-8
     ports:
       - "3306:3306"
     volumes:
@@ -27,6 +29,9 @@ services:
     container_name: blogin-redis
     ports:
       - "6379:6379"
+    environment:
+      TZ: Asia/Shanghai
+      LANG: C.utf8
     networks:
       - blogin-network
     healthcheck:
