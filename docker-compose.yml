@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   mysql:
@@ -22,7 +22,7 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 30s
+      # start_period: 30s
   
   redis:
     image: redis:latest
@@ -39,7 +39,7 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 30s
+      # start_period: 30s
 
   blogin:
     build:
