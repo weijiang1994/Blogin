@@ -102,7 +102,7 @@ def update_github_avatar():
 
 
 # noinspection PyBroadException
-@aps.task('interval', id='update_github_info', max_instances=1, minutes=10)
+@aps.task('interval', id='update_github_info', max_instances=1, minutes=60)
 def update_github_info():
     try:
         star, fork, watcher, star_dark, fork_dark, watcher_dark, user_info, repo_info = github_social()
@@ -150,7 +150,7 @@ def update_bd_token():
         logger.error('更新百度OCR失败，错误原因：\n' + traceback.format_exc())
 
 
-@aps.task('interval', id='network_monitor', minutes=1)
+@aps.task('interval', id='network_monitor', minutes=30)
 def network_monitor():
     config = read_config()
     if not config.getboolean('admin', 'monitors'):
