@@ -297,6 +297,14 @@ def register_cmd(app: Flask):
                                                                           str(blog.create_time).split(' ')[0][5:]])
         print(archives)
 
+    @app.cli.command()
+    def update_history():
+        bhs = BlogHistory.query.all()
+        for bh in bhs:
+            bh.save_path = bh.save_path.replace('/home/ubuntu/Blogin/', '')
+        db.session.commit()
+        print('修改成功')
+
 
 def register_log(app: Flask):
     app.logger.setLevel(logging.DEBUG)

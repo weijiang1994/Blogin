@@ -5,6 +5,7 @@
 @File    : blog_bp
 @Software: PyCharm
 """
+import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
     LikeStatistics, CommentStatistics, Tag, User, FriendLink, Contribute, Plan, BlogHistory, PostContent, MessageBorder, \
@@ -13,7 +14,7 @@ from blogin.extension import db, rd, cache, babel
 from flask_login import current_user, login_required
 from blogin.decorators import statistic_traffic
 import datetime
-from blogin.utils import redirect_back, github_social, BOOTSTRAP_SUFFIX
+from blogin.utils import redirect_back, github_social, BOOTSTRAP_SUFFIX, basedir
 from blogin.emails import send_comment_email
 from blogin.task import get_one
 from flask_babel import gettext as _
@@ -99,7 +100,7 @@ def blog_cate(cate_id):
 @blog_bp.route('/blog/history/<h_id>/')
 def blog_history(h_id):
     bh = BlogHistory.query.get_or_404(h_id)
-    with open(bh.save_path, 'r', encoding='utf-8') as f:
+    with open(os.path.join(basedir, bh.save_path), 'r', encoding='utf-8') as f:
         content = f.read()
     blog = Blog.query.get_or_404(bh.blog_id)
     return render_template('main/blog-history.html', content=content, blog=blog)

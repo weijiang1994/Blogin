@@ -158,7 +158,7 @@ def blog_content_edit(blog_id):
 
         with open(history_file_path, 'w', encoding='utf-8') as f:
             f.write(history_content)
-        bh = BlogHistory(blog_id=blog.id, save_path=history_file_path, timestamps=datetime.datetime.now())
+        bh = BlogHistory(blog_id=blog.id, save_path=history_file_path.replace(basedir), timestamps=datetime.datetime.now())
         db.session.add(bh)
         db.session.commit()
 
