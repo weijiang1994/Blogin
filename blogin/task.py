@@ -32,19 +32,24 @@ def get_one():
         with db.app.app_context():
             date = datetime.date.today()
             one = OneSentence.query.filter_by(day=date).first()
+            import requests
+            from bs4 import BeautifulSoup
+            res = requests.get('http://wufazhuce.com/', timeout=30)
+            bs = BeautifulSoup(res.text, 'html.parser')
+            attr = {'class': 'fp-one-cita'}
+            d = bs.find_all('div', attrs=attr)
             if not one:
-                import requests
-                from bs4 import BeautifulSoup
-                res = requests.get('http://wufazhuce.com/', timeout=30)
-                bs = BeautifulSoup(res.text, 'html.parser')
-                attr = {'class': 'fp-one-cita'}
-                d = bs.find_all('div', attrs=attr)
                 one = OneSentence(content=d[0].text, day=date)
                 db.session.add(one)
                 db.session.commit()
                 logger.info('插入每日一句成功')
-                rd.set('one', d[0].text)
-    except:
+            else:
+                one.content = d[0].text
+                db.session.commit()
+                logger.info('更新每日一句成功')
+            rd.set('one', d[0].text)
+    except Exception as e:
+        logger.error('插入每日一句失败,错误原因:\n' + str(e.args))
         logger.error('插入每日一句失败,错误原因:\n' + traceback.format_exc())
 
 

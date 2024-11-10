@@ -152,7 +152,8 @@ def log_util(log_name, log_path, max_size=2 * 1024 * 1024, backup_count=10):
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     file_handler = RotatingFileHandler(log_path + '/' + log_name,
                                        maxBytes=max_size,
-                                       backupCount=backup_count
+                                       backupCount=backup_count,
+                                       encoding='utf-8'
                                        )
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
