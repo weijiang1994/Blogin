@@ -146,7 +146,7 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,---------------')
-        except IOError:
+        except BlockingIOError:
             app.logger.debug('Scheduler already running (lock held), skipping init.')
         except Exception:
             app.logger.exception('Scheduler init failed unexpectedly.')
@@ -164,7 +164,7 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,----------------')
-        except IOError:
+        except BlockingIOError:
             app.logger.debug('Scheduler already running (lock held), skipping init.')
         except Exception:
             app.logger.exception('Scheduler init failed unexpectedly.')

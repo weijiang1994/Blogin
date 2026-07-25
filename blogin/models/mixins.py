@@ -2,7 +2,7 @@
 # coding:utf-8
 Models package — shared mixins.
 """
-from datetime import datetime
+from datetime import datetime, date
 
 from sqlalchemy.ext.declarative import declared_attr
 
@@ -27,7 +27,6 @@ class Mixin:
             date_fmt='%Y-%m-%d',
             special_col={}
     ):
-        from datetime import date
         result = {}
         for col in self.__table__.columns:
             if col.name in special_col.keys():

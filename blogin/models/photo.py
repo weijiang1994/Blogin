@@ -78,7 +78,8 @@ class Photo(db.Model, Mixin):
         :param file: FileStorage 上传的文件
         :return:
         """
-        img_file = str(user_id) + '_' + secure_filename(file.filename)
+        ts = str(int(datetime.now().timestamp()))
+        img_file = f'{user_id}_{ts}_{secure_filename(file.filename)}'
         folder = str(datetime.now()).split(' ')[0]
         create_path(basedir + '/uploads/gallery/' + folder)
         file.save(basedir + '/uploads/gallery/' + folder + '/' + img_file)

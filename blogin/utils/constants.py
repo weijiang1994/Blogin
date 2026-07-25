@@ -34,7 +34,7 @@ IP_QUERY = "http://ip-api.com/json/{}?lang=zh-CN&fields=status,message,country,r
 IP_REG = r'((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))'
 
 OCR_URL = 'https://aip.baidubce.com/rest/2.0/ocr/v1/'
-OCR_TOKEN = config_ini.get('baidu', 'token') if config_ini.has_option('baidu', 'token') else ''
+OCR_TOKEN = config_ini.get('baidu', 'token', fallback='')
 OCR_HEADERS = {'content-type': 'application/x-www-form-urlencoded'}
 OCR_CATEGORY = {
     '文字识别': 'accurate_basic',

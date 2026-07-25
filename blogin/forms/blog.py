@@ -5,7 +5,7 @@
 @File    : forms
 @Software: PyCharm
 """
-from datetime import datetime
+from datetime import datetime, date
 
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
@@ -119,5 +119,5 @@ class AddPlanForm(FlaskForm):
     total = StringField(u'总进度', validators=[DataRequired()],
                         render_kw={'class': '', 'rows': 50, 'type': 'number', 'placeholder': '请输入计划的总进度'}
                         )
-    timestamps = DateField(u'开始时间', default=datetime.today)
+    timestamps = DateField(u'开始时间', default=date.today)
     submit = SubmitField(u'添加计划')
