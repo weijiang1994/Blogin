@@ -2,6 +2,9 @@
 # coding:utf-8
 Lunar (Chinese traditional calendar) calculation utility.
 """
+import datetime
+
+
 class Lunar(object):
     # ******************************************************************************
     # 下面为阴历计算所需的数据,为节省存储空间,所以采用下面比较变态的存储方法.

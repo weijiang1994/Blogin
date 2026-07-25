@@ -146,8 +146,10 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,---------------')
+        except IOError:
+            app.logger.debug('Scheduler already running (lock held), skipping init.')
         except Exception:
-            app.logger.debug('Scheduler already running, skipping init.')
+            app.logger.exception('Scheduler init failed unexpectedly.')
 
         def unlock():
             fcntl.flock(f, fcntl.LOCK_UN)
@@ -162,8 +164,10 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,----------------')
+        except IOError:
+            app.logger.debug('Scheduler already running (lock held), skipping init.')
         except Exception:
-            app.logger.debug('Scheduler already running, skipping init.')
+            app.logger.exception('Scheduler init failed unexpectedly.')
 
         def _unlock_file():
             try:
