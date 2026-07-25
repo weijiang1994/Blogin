@@ -21,11 +21,6 @@ logger = log_util(log_name='task.log',
                   log_path=log_path)
 
 
-def write_task_log(info):
-    with open(basedir + '/logs/task.log', 'a') as f:
-        f.write(str(datetime.datetime.now()) + " " + info + '\n')
-
-
 @aps.task('cron', id='get_one', day='*', hour='08', minute='10', second='00')
 def get_one():
     try:

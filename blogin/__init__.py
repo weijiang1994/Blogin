@@ -8,15 +8,13 @@
 import atexit
 import platform
 import logging
-import logging
 from logging.handlers import RotatingFileHandler
 import os
 
 from flask_cors import CORS
-from flask import Flask, render_template, url_for, session
+from flask import Flask, render_template
 from flask_wtf.csrf import CSRFError
-import click
-
+from blogin.commands import register_cmd
 from blogin.extension import db, bootstrap, moment, ckeditor, migrate, login_manager, share, avatar, mail, whooshee, \
     oauth, aps, cache, babel, jwt
 from blogin.monitor import start_monitor_thread
@@ -37,7 +35,7 @@ from blogin.blueprint.front.oauth import oauth_bp
 from blogin.blueprint.front.rss import rss_bp
 from blogin.blueprint.front.msg_border import msg_border_bp
 from blogin.setting import config
-from blogin.models import *
+from blogin.models import User, Role, BlogType, Blog
 from blogin.utils import split_space, super_split, conv_list, is_empty, config_ini, BOOTSTRAP_SUFFIX, read_config
 from blogin import task
 from blogin.api import register_restful_api
@@ -148,8 +146,8 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,---------------')
-        except:
-            pass
+        except Exception:
+            app.logger.debug('Scheduler already running, skipping init.')
 
         def unlock():
             fcntl.flock(f, fcntl.LOCK_UN)
@@ -164,14 +162,14 @@ def scheduler_init(app):
             aps.init_app(app)
             aps.start()
             app.logger.debug('Scheduler Started,----------------')
-        except:
-            pass
+        except Exception:
+            app.logger.debug('Scheduler already running, skipping init.')
 
         def _unlock_file():
             try:
                 f.seek(0)
                 msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
-            except:
+            except Exception:
                 pass
 
         atexit.register(_unlock_file)
@@ -195,115 +193,6 @@ def register_blueprint(app: Flask):
     app.register_blueprint(oauth_bp)
     app.register_blueprint(rss_bp)
     app.register_blueprint(msg_border_bp)
-
-
-def register_cmd(app: Flask):
-    @app.cli.command()
-    @click.option('--drop', is_flag=True, help='Drop database and create a new database')
-    def initdb(drop):
-        """Initialize the database."""
-        if drop:
-            click.confirm('This operation will delete the database, do you want to continue?', abort=True)
-            db.drop_all()
-            click.echo('Drop tables.')
-        db.create_all()
-        click.echo('Initializing the roles and permissions...')
-        Role.init_role()
-        click.echo('Initializing the states...')
-        States.init_states()
-        click.echo('Initializing the third party login...')
-        ThirdParty.init_tp()
-        click.echo('Initialized database.')
-        click.echo('Done.')
-
-    @app.cli.command()
-    def admin():
-        try:
-            username = input('请输入超级管理员用户名:')
-            email = input('请输入超级管理员邮箱:')
-            pwd = input('请输入超级管理员密码:')
-            confirm = input('请确认密码:')
-            if pwd != confirm:
-                click.echo('两次密码不一致')
-                click.echo('退出当前操作')
-                return
-
-            super_user = User(username=username, email=email, password=pwd, confirm=1, role_id=1)
-            super_user.set_password(pwd)
-            super_user.set_admin()
-            db.session.add(super_user)
-            db.session.commit()
-            click.echo('超级管理员创建成功!')
-            click.echo('应用初始化成功!')
-            click.echo('程序退出...')
-        except:
-            import traceback
-            traceback.print_exc()
-            db.session.rollback()
-            click.echo('操作出现异常,退出...')
-
-    @app.cli.command()
-    def admin_docker():
-        if User.query.filter_by(username='admin').first():
-            click.echo('超级管理员已存在, 退出...', color='red')
-            return
-
-        default_pwd = os.getenv('SUPER_USER_PWD', '12345678')
-        super_user = User(
-            username='admin',
-            password=default_pwd,
-            email=os.getenv('SUPER_USER_EMAIL', 'admin@exmpale.com'),
-            confirm=1,
-            role_id=1
-        )
-        super_user.set_password(default_pwd)
-        super_user.set_admin()
-        db.session.add(super_user)
-        db.session.commit()
-        click.echo('超级管理员创建成功!')
-        click.echo(f'账号: admin, 密码: {default_pwd}')
-        click.echo('程序退出...')
-
-    @app.cli.command()
-    def addtp():
-        third_party_name = input('请输入第三方登录方式:')
-        tp = ThirdParty(name=third_party_name)
-        db.session.add(tp)
-        db.session.commit()
-        print('添加成功')
-
-    @app.cli.command()
-    def archive():
-        blogs = Blog.query.filter_by(delete_flag=1).order_by(Blog.create_time.desc()).all()
-        archives = {}
-        for blog in blogs:
-            current_year = blog.create_time.year
-            current_month = blog.create_time.month
-            # 如果当前年份不存在,那么当前月份也不存在
-            if not archives.get(current_year):
-                # 记录当前年份以及当前月份
-                archives[current_year] = {current_month: []}
-                archives.get(current_year).get(current_month).append([blog.id, blog.title,
-                                                                      str(blog.create_time).split(' ')[0][5:]])
-            else:
-                # 如果当前年份存在,月份不存在,则更新一条数据到当前年份中
-                if not archives.get(current_year).get(current_month):
-                    archives.get(current_year).update({current_month: []})
-                    archives.get(current_year).get(current_month).append([blog.id, blog.title,
-                                                                          str(blog.create_time).split(' ')[0][5:]])
-                else:
-                    # 年月都存在则直接将数据拼接到后面
-                    archives.get(current_year).get(current_month).append([blog.id, blog.title,
-                                                                          str(blog.create_time).split(' ')[0][5:]])
-        print(archives)
-
-    @app.cli.command()
-    def update_history():
-        bhs = BlogHistory.query.all()
-        for bh in bhs:
-            bh.save_path = bh.save_path.replace('/home/ubuntu/Blogin/', '')
-        db.session.commit()
-        print('修改成功')
 
 
 def register_log(app: Flask):

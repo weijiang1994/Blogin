@@ -24,7 +24,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 
 @blog_bp.route('/', methods=['GET'])
 @blog_bp.route('/index/', methods=['GET'])
-@statistic_traffic(db, VisitStatistics)
+@statistic_traffic(VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
     pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0
@@ -108,7 +108,7 @@ def blog_history(h_id):
 
 
 @blog_bp.route('/loveme/')
-@statistic_traffic(db, LikeStatistics)
+@statistic_traffic(LikeStatistics)
 def love_me():
     love = LoveMe.query.first()
     if love is None:
@@ -133,7 +133,7 @@ def love_me():
 
 @blog_bp.route('/blog/comment/', methods=['GET', 'POST'])
 @login_required
-@statistic_traffic(db, CommentStatistics)
+@statistic_traffic(CommentStatistics)
 def new_comment():
     comment = request.form.get('comment')
     blog_id = request.form.get('blogID')

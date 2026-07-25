@@ -12,7 +12,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect,
     send_from_directory
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
-from blogin.blueprint.backend.forms import PostForm, EditPostForm
+from blogin.forms.blog import PostForm, EditPostForm
 from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog, PostContent, \
     update_contribution
 from blogin.extension import db
