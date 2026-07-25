@@ -5,6 +5,7 @@
 @File    : blog_bp
 @Software: PyCharm
 """
+import json
 import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
@@ -35,7 +36,7 @@ def index():
     loves = LoveMe.query.first()
     loves = 0 if loves is None else loves.counts
     plans = Plan.query.filter_by(is_done=0).all()
-    su = User.query.filter(User.email == '804022023@qq.com').first()
+    su = User.query.filter(User.email == current_app.config.get('ADMIN_EMAIL', '')).first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0
                                              ).order_by(MessageBorder.timestamps.desc()).all()[0:5]
@@ -74,7 +75,7 @@ def blog_article(blog_id):
     # 获取目录
     content = PostContent.query.filter_by(post_id=blog.id).first()
     if content:
-        content = eval(content.content)
+        content = json.loads(content.content)
 
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
@@ -138,7 +139,7 @@ def new_comment():
     blog_id = request.form.get('blogID')
     reply_id = request.form.get('replyID')
     parent_id = request.form.get('parentID')
-    admin = User.query.filter_by(email='804022023@qq.com').first()
+    admin = User.query.filter_by(email=current_app.config.get('ADMIN_EMAIL', '')).first()
     author = current_user._get_current_object()
     notify = comment
     blog = Blog.query.get_or_404(blog_id)

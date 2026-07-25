@@ -375,14 +375,14 @@ def redirect_back(default='blog_bp.index', **kwargs):
 
 
 def allow_img_file(filename):
-    suffix = filename.split('.')[0]
+    suffix = filename.rsplit('.', 1)[-1].lower()
     if suffix not in ['jpg', 'png', 'jpeg']:
         return False
     return True
 
 
 def allow_txt_file(filename):
-    suffix = filename.split('.')[0]
+    suffix = filename.rsplit('.', 1)[-1].lower()
     if suffix != 'txt':
         return False
     return True
@@ -427,9 +427,6 @@ def resize_img(path, w_zoom, h_zoom):
     height = img.size[1]
     img = img.resize((int(width * w_zoom), int(height * h_zoom)), Image.ANTIALIAS)
     return img
-
-
-import hashlib
 
 
 def get_md5(s):

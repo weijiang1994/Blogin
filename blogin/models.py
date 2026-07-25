@@ -552,7 +552,7 @@ class Contribute(db.Model):
     __tablename__ = 'contribute'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='table id')
-    date = db.Column(db.DATE, default=datetime.today(), comment='contribute date')
+    date = db.Column(db.DATE, default=datetime.today, comment='contribute date')
     contribute_counts = db.Column(db.INTEGER, default=0)
 
     con_detail = db.relationship('ContributeDetail', back_populates='cont', cascade='all')
@@ -566,7 +566,7 @@ class Plan(db.Model):
     total = db.Column(db.INTEGER, nullable=False)
     done_count = db.Column(db.INTEGER, nullable=False, default=0)
     is_done = db.Column(db.INTEGER, default=0, nullable=False)
-    timestamps = db.Column(db.DATE, default=datetime.today())
+    timestamps = db.Column(db.DATE, default=datetime.today)
     done_time = db.Column(db.DATE)
 
 
@@ -593,7 +593,7 @@ class ContributeDetail(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     cont_id = db.Column(db.INTEGER, db.ForeignKey('contribute.id'))
-    timestamps = db.Column(db.DateTime, default=datetime.now().strftime('%H:%m:%S'))
+    timestamps = db.Column(db.DateTime, default=datetime.now)
     title = db.Column(db.String(256), default='', nullable=False)
     detail_link = db.Column(db.String(256), default='', nullable=False)
 
@@ -605,7 +605,7 @@ class OneSentence(db.Model, Mixin):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     content = db.Column(db.String(512), default='', nullable=False)
-    day = db.Column(db.DATE, default=datetime.today())
+    day = db.Column(db.DATE, default=datetime.today)
 
 
 class DraftBlog(db.Model):
