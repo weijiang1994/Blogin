@@ -5,13 +5,14 @@
 @File    : blog_bp
 @Software: PyCharm
 """
+import json
 import os
 from bs4 import BeautifulSoup
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for, current_app, \
     send_from_directory
 from flask_ckeditor import upload_fail, upload_success
 from blogin import basedir
-from blogin.blueprint.backend.forms import PostForm, EditPostForm
+from blogin.forms.blog import PostForm, EditPostForm
 from blogin.models import BlogType, Blog, States, BlogHistory, ContributeDetail, DraftBlog, PostContent, \
     update_contribution
 from blogin.extension import db
@@ -82,7 +83,7 @@ def blog_create():
         cate.counts += 1
         update_contribution()
         db.session.add(blg)
-        db.session.add(PostContent(content=str(catalogue), post_id=blg.id))
+        db.session.add(PostContent(content=json.dumps(catalogue), post_id=blg.id))
         db.session.commit()
         return redirect(url_for('blog_bp.index'))
     else:
@@ -146,9 +147,9 @@ def blog_content_edit(blog_id):
         catalogue = [link.get('id') for link in bs.find_all('a') if link.get('id')]
         post_cate = PostContent.query.filter_by(post_id=blog.id).first()
         if post_cate:
-            post_cate.content = str(catalogue)
+            post_cate.content = json.dumps(catalogue)
         else:
-            db.session.add(PostContent(content=str(catalogue), post_id=blog.id))
+            db.session.add(PostContent(content=json.dumps(catalogue), post_id=blog.id))
 
         update_contribution()
         history_file_path = basedir + '/history/' + get_md5(get_current_time()) + '.txt'

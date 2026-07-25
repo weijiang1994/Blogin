@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from flask import Blueprint, render_template, send_from_directory, request, flash, redirect, url_for, jsonify, session
 from flask_login import current_user, login_required
 
-from blogin.blueprint.backend.forms import TimelineForm, AddFlinkForm, AddPlanForm
+from blogin.forms.blog import TimelineForm, AddFlinkForm, AddPlanForm
 from blogin import basedir
 from blogin.decorators import permission_required
 from blogin.models import Timeline, FriendLink, States, Soul, Plan, OneSentence

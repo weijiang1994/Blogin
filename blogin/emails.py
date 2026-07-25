@@ -1,10 +1,3 @@
-"""
-# coding:utf-8
-@Time    : 2020/9/21
-@Author  : jiangwei
-@File    : emails
-@Software: PyCharm
-"""
 from threading import Thread
 
 from flask import current_app, render_template
@@ -19,17 +12,6 @@ def _send_async_mail(app, msg):
 
 
 def send_mail(to_email, subject, template, **kwargs):
-    message = Message(current_app.config['BLOGIN_MAIL_SUBJECT_PRE'] + subject, recipients=[to_email],
-                      sender=current_app.config['MAIL_USERNAME'])
-    message.body = render_template(template + '.txt', **kwargs)
-    message.html = render_template(template + '.html', **kwargs)
-    app = current_app._get_current_object()
-    th_send = Thread(target=_send_async_mail, args=(app, message))
-    th_send.start()
-    return th_send
-
-
-def send_server_warning_mail(to_email, subject, template, **kwargs):
     message = Message(current_app.config['BLOGIN_MAIL_SUBJECT_PRE'] + subject, recipients=[to_email],
                       sender=current_app.config['MAIL_USERNAME'])
     message.body = render_template(template + '.txt', **kwargs)
@@ -59,7 +41,7 @@ def send_reset_password_email(user, token, ver_code):
 
 def send_network_warning_email(blacklist):
     send_mail(subject='WARNING',
-              to_email='804022023@qq.com',
+              to_email=current_app.config.get('ADMIN_EMAIL', ''),
               template='email/network-warning',
               blacklist=blacklist)
 
@@ -74,7 +56,7 @@ def send_comment_email(user, blog):
 
 def send_server_warning_mail(cpu_rate, mem_rate):
     send_mail(subject='WARNING!',
-              to_email='804022023@qq.com',
+              to_email=current_app.config.get('ADMIN_EMAIL', ''),
               template='email/warning',
               cpu_rate=cpu_rate,
               mem_rate=mem_rate)

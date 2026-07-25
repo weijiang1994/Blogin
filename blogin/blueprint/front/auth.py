@@ -15,7 +15,7 @@ from blogin.forms.forms import ResetPwdForm
 from blogin.forms.auth import RegisterForm, LoginForm
 from blogin.models import User, LoginLog
 from blogin.extension import db
-from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token, generate_ver_code
+from blogin.utils import get_ip_real_add, generate_token, Operations, validate_token, generate_ver_code, is_safe_url
 from blogin.emails import send_confirm_email, send_reset_password_email
 from blogin.extension import rd
 
@@ -73,10 +73,13 @@ def login():
                 db.session.add(login_log)
                 db.session.commit()
                 flash('登录成功!', 'success')
-                if request.args.get('next'):
-                    return redirect(url_for(request.args.next))
-                print(request.referrer)
-                return redirect(request.referrer)
+                next_url = request.args.get('next')
+                if next_url and is_safe_url(next_url):
+                    return redirect(next_url)
+                referrer = request.referrer
+                if referrer and is_safe_url(referrer):
+                    return redirect(referrer)
+                return redirect(url_for('blog_bp.index'))
         elif user is None:
             flash('无效的邮箱或用户名.', 'danger')
         else:

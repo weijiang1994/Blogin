@@ -41,7 +41,7 @@ def set_admin(user_id):
 @permission_required
 def set_user(user_id):
     user = User.query.get_or_404(user_id)
-    if user.email == '804022023@qq.com':
+    if user.email == current_app.config.get('ADMIN_EMAIL', ''):
         flash('该账号是超级号，禁止操作!', 'danger')
         return redirect(url_for('.index'))
     user.role_id = 2
@@ -55,7 +55,7 @@ def set_user(user_id):
 @permission_required
 def lock(user_id):
     user = User.query.get_or_404(user_id)
-    if user.email == '804022023@qq.com':
+    if user.email == current_app.config.get('ADMIN_EMAIL', ''):
         flash('该账号是超级号，禁止操作!', 'danger')
         return redirect(url_for('.index'))
     user.status = 2

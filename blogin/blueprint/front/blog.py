@@ -5,6 +5,7 @@
 @File    : blog_bp
 @Software: PyCharm
 """
+import json
 import os
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, jsonify, abort
 from blogin.models import Blog, BlogType, LoveMe, LoveInfo, BlogComment, Photo, Notification, Timeline, VisitStatistics, \
@@ -23,7 +24,7 @@ blog_bp = Blueprint('blog_bp', __name__)
 
 @blog_bp.route('/', methods=['GET'])
 @blog_bp.route('/index/', methods=['GET'])
-@statistic_traffic(db, VisitStatistics)
+@statistic_traffic(VisitStatistics)
 def index():
     page = request.args.get('page', 1, type=int)
     pagination = Blog.query.filter(Blog.delete_flag == 1, Blog.is_private == 0
@@ -35,7 +36,7 @@ def index():
     loves = LoveMe.query.first()
     loves = 0 if loves is None else loves.counts
     plans = Plan.query.filter_by(is_done=0).all()
-    su = User.query.filter(User.email == '804022023@qq.com').first()
+    su = User.query.filter(User.email == current_app.config.get('ADMIN_EMAIL', '')).first()
     flinks = FriendLink.query.filter(FriendLink.flag == 1).all()
     msg_borders = MessageBorder.query.filter(MessageBorder.flag == 0, MessageBorder.parent_id == 0
                                              ).order_by(MessageBorder.timestamps.desc()).all()[0:5]
@@ -74,7 +75,7 @@ def blog_article(blog_id):
     # 获取目录
     content = PostContent.query.filter_by(post_id=blog.id).first()
     if content:
-        content = eval(content.content)
+        content = json.loads(content.content)
 
     for comment in comments:
         reply = BlogComment.query.filter_by(parent_id=comment.id, delete_flag=0). \
@@ -107,7 +108,7 @@ def blog_history(h_id):
 
 
 @blog_bp.route('/loveme/')
-@statistic_traffic(db, LikeStatistics)
+@statistic_traffic(LikeStatistics)
 def love_me():
     love = LoveMe.query.first()
     if love is None:
@@ -132,13 +133,13 @@ def love_me():
 
 @blog_bp.route('/blog/comment/', methods=['GET', 'POST'])
 @login_required
-@statistic_traffic(db, CommentStatistics)
+@statistic_traffic(CommentStatistics)
 def new_comment():
     comment = request.form.get('comment')
     blog_id = request.form.get('blogID')
     reply_id = request.form.get('replyID')
     parent_id = request.form.get('parentID')
-    admin = User.query.filter_by(email='804022023@qq.com').first()
+    admin = User.query.filter_by(email=current_app.config.get('ADMIN_EMAIL', '')).first()
     author = current_user._get_current_object()
     notify = comment
     blog = Blog.query.get_or_404(blog_id)

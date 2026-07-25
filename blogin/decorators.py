@@ -58,16 +58,16 @@ def db_exception_handle(db):
     return decorator
 
 
-def statistic_traffic(db, obj):
+def statistic_traffic(obj):
     """
     网站今日访问量、评论量、点赞量统计装饰器
-    :param db: 数据库操作对象
     :param obj: 统计模型类别(VisitStatistics,CommentStatistics,LikeStatistics)
     :return:
     """
     def decorator(func):
         @wraps(func)
         def decorated_function(*args, **kwargs):
+            from blogin.extension import db
             td = date.today()
             vst = obj.query.filter_by(date=td).first()
             if vst is None:

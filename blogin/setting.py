@@ -21,14 +21,6 @@ else:
     prefix = 'sqlite:////'
 
 
-class Operators:
-    def __init__(self):
-        pass
-
-    CONFIRM = 'confirm'
-    RESET_PASSWORD = 'reset-password'
-
-
 class BaseConfig:
     BLOG_THEMES = {'light': 'light', 'dark': 'dark'}
     # Paginate configure
@@ -70,6 +62,7 @@ class BaseConfig:
 
     # Mail configure
     BLOGIN_EMAIL_PRE = '[Blogin.] '
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', '')
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = 465
     MAIL_USE_SSL = True
@@ -99,7 +92,7 @@ class BaseConfig:
     BABEL_TRANSLATION_DIRECTORIES = basedir + '/translations'
 
     # jwt config
-    JWT_SECRET_KEY = 'a3e847bc-5707-11ec-9608-9f9d60f7ad70'
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'change-me-in-production')
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(hours=24 * 3)
     JWT_TOKEN_LOCATION = ['cookies', 'headers', 'json', 'query_string']
     JWT_HEADER_NAME = 'Access-Token'

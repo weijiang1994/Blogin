@@ -12,7 +12,7 @@ from PIL import Image
 from flask import Blueprint, render_template, flash, redirect, url_for, current_app, request
 from flask_login import login_required, current_user
 from blogin.setting import basedir
-from blogin.blueprint.backend.forms import AddPhotoForm, EditPhotoInfoForm
+from blogin.forms.blog import AddPhotoForm, EditPhotoInfoForm
 from blogin.models import Photo, Tag, update_contribution
 from blogin.utils import create_path
 from blogin.extension import db
