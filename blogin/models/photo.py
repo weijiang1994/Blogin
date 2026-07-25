@@ -7,6 +7,7 @@ from datetime import datetime
 from urllib.parse import urljoin
 
 from flask import current_app
+from werkzeug.utils import secure_filename
 
 from blogin.extension import db, whooshee
 from blogin.models.mixins import Mixin
@@ -77,7 +78,7 @@ class Photo(db.Model, Mixin):
         :param file: FileStorage 上传的文件
         :return:
         """
-        img_file = str(user_id) + file.filename
+        img_file = str(user_id) + secure_filename(file.filename)
         folder = str(datetime.now()).split(' ')[0]
         create_path(basedir + '/uploads/gallery/' + folder)
         file.save(basedir + '/uploads/gallery/' + folder + '/' + img_file)

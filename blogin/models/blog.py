@@ -120,7 +120,7 @@ class Contribute(db.Model):
     __tablename__ = 'contribute'
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True, comment='table id')
-    date = db.Column(db.DATE, default=datetime.today, comment='contribute date')
+    date = db.Column(db.DATE, default=date.today, comment='contribute date')
     contribute_counts = db.Column(db.INTEGER, default=0)
 
     con_detail = db.relationship('ContributeDetail', back_populates='cont', cascade='all')
@@ -146,7 +146,7 @@ class Plan(db.Model):
     total = db.Column(db.INTEGER, nullable=False)
     done_count = db.Column(db.INTEGER, nullable=False, default=0)
     is_done = db.Column(db.INTEGER, default=0, nullable=False)
-    timestamps = db.Column(db.DATE, default=datetime.today)
+    timestamps = db.Column(db.DATE, default=date.today)
     done_time = db.Column(db.DATE)
 
 

@@ -2,7 +2,7 @@
 # coding:utf-8
 Miscellaneous models: Soul, Timeline, FriendLink, One, OneSentence, MessageBorder.
 """
-from datetime import datetime
+from datetime import datetime, date
 
 from blogin.extension import db
 from blogin.models.core import States
@@ -51,7 +51,7 @@ class OneSentence(db.Model):
 
     id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
     content = db.Column(db.String(512), default='', nullable=False)
-    day = db.Column(db.DATE, default=datetime.today)
+    day = db.Column(db.DATE, default=date.today)
 
 
 class MessageBorder(db.Model):

@@ -13,6 +13,7 @@ from bleach import clean, linkify
 from markdown import markdown
 from PIL import Image
 from flask import Blueprint, render_template, request, jsonify, send_from_directory, flash, abort
+from werkzeug.utils import secure_filename
 from sqlalchemy.sql.expression import func
 from blogin.setting import basedir
 from blogin.utils import allow_img_file, OCR, IPQuery, IP_REG, WordCloud, GoogleTranslation, TRAN_LANGUAGE, \
@@ -65,7 +66,7 @@ def index():
 def ocr():
     if request.method == 'POST':
         img = request.files['image']
-        filename = img.filename
+        filename = secure_filename(img.filename)
         if allow_img_file(filename):
             return jsonify({'tag': 0, 'info': '请上传jpg/png格式图片!'})
         img.save(basedir + '/uploads/ocr/' + filename)
@@ -101,7 +102,7 @@ def word_cloud():
         if bg == 'None':
             bg = None
         img = request.files['img']
-        filename = img.filename
+        filename = secure_filename(img.filename)
         img.save(basedir + '/uploads/wordcloud/' + filename)
         if tag == '0':
             content = request.form.get('content')

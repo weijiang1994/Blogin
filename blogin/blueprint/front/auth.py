@@ -76,7 +76,10 @@ def login():
                 next_url = request.args.get('next')
                 if next_url and is_safe_url(next_url):
                     return redirect(next_url)
-                return redirect(request.referrer or url_for('blog_bp.index'))
+                referrer = request.referrer
+                if referrer and is_safe_url(referrer):
+                    return redirect(referrer)
+                return redirect(url_for('blog_bp.index'))
         elif user is None:
             flash('无效的邮箱或用户名.', 'danger')
         else:
